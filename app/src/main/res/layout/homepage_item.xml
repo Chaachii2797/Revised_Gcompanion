@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_screen1">
+
+    <TextView
+        android:id="@+id/fetch_diy_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="DIY Name"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_light"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+
+    <ImageView
+        android:id="@+id/fetch_image"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:src="@drawable/add"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp" />
+
+    <TextView
+        android:id="@+id/fetch_diy_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fetch_image"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/background_light"
+        android:textSize="23dp"
+        android:text="Price: " />
+
+</RelativeLayout>

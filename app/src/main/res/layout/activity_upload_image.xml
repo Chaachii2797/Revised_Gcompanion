@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imgUpload"
+        android:layout_width="284dp"
+        android:layout_height="362dp"
+        app:srcCompat="@drawable/frame_border"
+        tools:layout_editor_absoluteX="50dp"
+        tools:layout_editor_absoluteY="51dp"
+        android:layout_marginTop="63dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/imgUpload"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp"
+        android:onClick="true"
+        android:background="@drawable/shape"
+        android:backgroundTint="@color/bg_screen2"
+        android:clickable="true"
+        android:text="SAVE"
+        android:textColor="@android:color/background_light"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="436dp" />
+</RelativeLayout>

@@ -40,9 +40,10 @@
         <activity android:name=".Wishlists" />
         <activity android:name=".SalesReport" />
         <activity android:name=".About" />
-        <activity android:name=".UploadImage" />
         <activity android:name=".CaptureDIY" />
         <activity android:name=".HomePageActivity" />
+        <activity android:name=".DIYActivity" />
+        <activity android:name=".UploadImage" />
 
     </application>
 

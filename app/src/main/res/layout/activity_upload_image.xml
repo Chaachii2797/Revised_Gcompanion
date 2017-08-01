@@ -2,28 +2,51 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/imgUpload"
         android:layout_width="284dp"
-        android:layout_height="362dp"
+        android:layout_height="250dp"
         app:srcCompat="@drawable/frame_border"
         tools:layout_editor_absoluteX="50dp"
         tools:layout_editor_absoluteY="51dp"
-        android:layout_marginTop="63dp"
+        android:layout_marginTop="38dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+    <EditText
+    android:layout_width="284dp"
+    android:layout_height="40dp"
+    android:layout_marginTop="36dp"
+    android:layout_below="@+id/imgUpload"
+    android:layout_alignLeft="@+id/imgUpload"
+    android:layout_alignStart="@+id/imgUpload"
+    android:hint="Name"
+        android:id="@+id/etName" />
+
+    <EditText
+        android:id="@+id/etCategory"
+        android:layout_width="284dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/etName"
+        android:layout_alignStart="@+id/etName"
+        android:layout_below="@+id/etName"
+        android:hint="Category" />
+
+    <EditText
+        android:id="@+id/etPrice"
+        android:layout_width="284dp"
+        android:layout_height="40dp"
+        android:hint="Price"
+        android:layout_below="@+id/etCategory"
+        android:layout_alignLeft="@+id/etCategory"
+        android:layout_alignStart="@+id/etCategory" />
 
     <Button
         android:id="@+id/buttonSave"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_below="@+id/imgUpload"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="39dp"
         android:onClick="true"
         android:background="@drawable/shape"
         android:backgroundTint="@color/bg_screen2"
@@ -31,5 +54,9 @@
         android:text="SAVE"
         android:textColor="@android:color/background_light"
         tools:layout_editor_absoluteX="157dp"
-        tools:layout_editor_absoluteY="436dp" />
+        tools:layout_editor_absoluteY="436dp"
+        android:layout_below="@+id/etPrice"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp" />
+
 </RelativeLayout>

@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         home = (ImageButton) findViewById(R.id.ibHome);
+        diyCom = (ImageButton) findViewById(R.id.ibDIY);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab1 = (FloatingActionButton) findViewById(R.id.fab1);
@@ -109,6 +110,8 @@ public class MainActivity extends AppCompatActivity
         fab3.setOnClickListener(this);
 
         home.setOnClickListener(this);
+        diyCom.setOnClickListener(this);
+
 
         home.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +122,13 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+        diyCom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,DIYActivity.class);
+                startActivity(intent);
+            }
+        });
 
         fab1.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)

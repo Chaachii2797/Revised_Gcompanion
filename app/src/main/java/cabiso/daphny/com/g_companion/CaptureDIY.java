@@ -68,7 +68,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         mProgressDialog = new ProgressDialog(this);
         imgViewPhoto = (ImageView) findViewById(R.id.photoSaver);
         btnSave = (Button) findViewById(R.id.btnSave);
-        price = (EditText) findViewById(R.id.etPrice);
+        price = (EditText) findViewById(R.id.etMaterials);
         diyName = (EditText) findViewById(R.id.etName);
         category = (EditText) findViewById(R.id.etCategory);
         //  btnShow = (Button) findViewById(R.id.btnShow);

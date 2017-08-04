@@ -12,36 +12,49 @@
         app:srcCompat="@drawable/frame_border"
         tools:layout_editor_absoluteX="50dp"
         tools:layout_editor_absoluteY="51dp"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="27dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
     <EditText
     android:layout_width="284dp"
     android:layout_height="40dp"
-    android:layout_marginTop="36dp"
-    android:layout_below="@+id/imgUpload"
-    android:layout_alignLeft="@+id/imgUpload"
-    android:layout_alignStart="@+id/imgUpload"
-    android:hint="Name"
-        android:id="@+id/etName" />
+    android:layout_marginTop="11dp"
+        android:hint="Name"
+        android:id="@+id/etName"
+        android:layout_below="@+id/imgUpload"
+        android:layout_alignLeft="@+id/imgUpload"
+        android:layout_alignStart="@+id/imgUpload" />
 
-    <EditText
-        android:id="@+id/etCategory"
-        android:layout_width="284dp"
-        android:layout_height="40dp"
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
         android:layout_alignLeft="@+id/etName"
         android:layout_alignStart="@+id/etName"
         android:layout_below="@+id/etName"
-        android:hint="Category" />
+        android:textSize="20dp"
+        android:textStyle="bold"
+        tools:text="Materials Used:" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="150dp"
+        android:layout_height="30dp"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        tools:text="Materials Used:"
+        android:layout_below="@+id/etMaterials"
+        android:layout_alignLeft="@+id/etMaterials"
+        android:layout_alignStart="@+id/etMaterials" />
 
     <EditText
-        android:id="@+id/etPrice"
+        android:id="@+id/etMaterials"
         android:layout_width="284dp"
         android:layout_height="40dp"
-        android:hint="Price"
-        android:layout_below="@+id/etCategory"
-        android:layout_alignLeft="@+id/etCategory"
-        android:layout_alignStart="@+id/etCategory" />
+        android:layout_alignLeft="@+id/textView11"
+        android:layout_alignStart="@+id/textView11"
+        android:layout_below="@+id/textView11"
+        android:hint="Materials (separate with ,)" />
 
     <Button
         android:id="@+id/buttonSave"
@@ -55,8 +68,29 @@
         android:textColor="@android:color/background_light"
         tools:layout_editor_absoluteX="157dp"
         tools:layout_editor_absoluteY="436dp"
-        android:layout_below="@+id/etPrice"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp" />
+        android:layout_marginBottom="11dp" />
+
+    <Spinner
+        android:id="@+id/qtySpin"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/etMaterials"
+        android:layout_alignRight="@+id/etMaterials"
+        android:layout_below="@+id/etMaterials" />
+
+    <EditText
+        android:id="@+id/etProcedures"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/qtySpin"
+        android:layout_alignRight="@+id/qtySpin"
+        android:layout_below="@+id/textView12"
+        android:ems="10"
+        android:hint="Procedures"
+        android:inputType="textPersonName"
+        android:layout_alignLeft="@+id/textView12"
+        android:layout_alignStart="@+id/textView12" />
 
 </RelativeLayout>

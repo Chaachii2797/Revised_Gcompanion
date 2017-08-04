@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -33,7 +35,8 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
 
     private static int RESULT_LOAD_IMAGE = 1;
     private ImageView imgView;
-    private EditText etname, etcategory, etprice;
+    private EditText etname, etmaterials, etprocedures;
+    private Spinner spinnerqty;
     private Button button;
 
     private ProgressDialog mProgressDialog;
@@ -58,8 +61,9 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
 
         imgView = (ImageView) findViewById(R.id.imgUpload);
         etname = (EditText) findViewById(R.id.etName);
-        etcategory = (EditText) findViewById(R.id.etCategory);
-        etprice = (EditText)findViewById(R.id.etPrice);
+        etmaterials = (EditText) findViewById(R.id.etMaterials);
+        etprocedures = (EditText) findViewById(R.id.etProcedures);
+        spinnerqty = (Spinner)findViewById(R.id.qtySpin);
 
         button = (Button) findViewById(R.id.buttonSave);
         button.setOnClickListener(this);
@@ -86,25 +90,27 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         String name = etname.getText().toString();
-        String price = etprice.getText().toString();
-        String category = etcategory.getText().toString();
+        String materials = etmaterials.getText().toString();
+        String procedures = etprocedures.getText().toString();
+        String quantity = etprocedures.getText().toString();
 
         Intent intent = new Intent(UploadImage.this,DIYActivity.class);
         startActivity(intent);
 
-        DIYMethods items = new DIYMethods(name,price,category);
+        DIYMethods items = new DIYMethods(name,materials,procedures, quantity);
         databaseReference.push().setValue(items);
 
         if (name.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Price?", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "DIY Name?", Toast.LENGTH_SHORT).show();
             return;
-        }
-        if (price.isEmpty()){
-            Toast.makeText(getApplicationContext(), "DIY name?", Toast.LENGTH_SHORT).show();
+        }if (materials.isEmpty()){
+            Toast.makeText(getApplicationContext(), "Materials?", Toast.LENGTH_SHORT).show();
             return;
-        }
-        if (category.isEmpty()){
-            Toast.makeText(getApplicationContext(), "Category?", Toast.LENGTH_SHORT).show();
+        }if (procedures.isEmpty()){
+            Toast.makeText(getApplicationContext(), "Procedures?", Toast.LENGTH_SHORT).show();
+            return;
+        }if (quantity.isEmpty()){
+            Toast.makeText(getApplicationContext(), "Quantity?", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -182,6 +188,11 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
             }
             imgView.setImageURI(ImagePathAndName);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     private void showProgressDialog() {

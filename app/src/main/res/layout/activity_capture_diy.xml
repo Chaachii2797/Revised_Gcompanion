@@ -19,7 +19,7 @@
         android:layout_marginBottom="17dp" />
 
     <EditText
-        android:id="@+id/etPrice"
+        android:id="@+id/etMaterials"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="1dp"
@@ -39,8 +39,8 @@
         android:hint="DIY Name:"
         android:inputType="textPersonName"
         android:layout_above="@+id/etCategory"
-        android:layout_alignLeft="@+id/etPrice"
-        android:layout_alignStart="@+id/etPrice"
+        android:layout_alignLeft="@+id/etMaterials"
+        android:layout_alignStart="@+id/etMaterials"
         android:layout_marginBottom="22dp" />
 
     <EditText
@@ -60,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="250dp"
         app:srcCompat="@drawable/add"
-        android:layout_above="@+id/etPrice"
+        android:layout_above="@+id/etMaterials"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="13dp" />

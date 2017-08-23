@@ -14,12 +14,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
 import clarifai2.api.ClarifaiBuilder;
@@ -36,6 +39,11 @@ public class MainActivity extends AppCompatActivity
     private Animation fab_open, fab_close, rotate_forward, rotate_backward;
 
 
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
+    private DatabaseReference mDatabaseReference;
+    private String mUsername;
+    private String mPhotoUrl;
 
     // private final ClarifaiClient clarifaiClient = new ClarifaiBuilder("{b7aa33dc206c40a4b9cffc09a2e72a9d}").buildSync();
 
@@ -52,6 +60,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initialize Firebase Auth
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -217,8 +228,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
+        switch(id){
+            case R.id.logoff:
+                FirebaseAuth.getInstance().signOut();
+                Intent intent1=new Intent(this,Login.class);
+                startActivity(intent1);
+                return true;
+            case R.id.profile:
+                Intent intent2=new Intent(this,MyProfileActivity.class);
+                startActivity(intent2);
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

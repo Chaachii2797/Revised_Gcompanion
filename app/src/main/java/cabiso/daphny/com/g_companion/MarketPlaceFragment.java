@@ -6,10 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,7 +64,7 @@ public class MarketPlaceFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_main, container, false);
+        View view = inflater.inflate(R.layout.app_bar_main, container, false);
 
         Context context = view.getContext();
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
@@ -113,37 +111,6 @@ public class MarketPlaceFragment extends Fragment{
                 catch(Exception e){
                     Log.d("Exception", "Failed to fetch product Picture");
                 }
-
-//                 Get product picture in a native way
-//                if(model.productPictureURLs!=null){
-//                    StorageReference pictureReference = FirebaseStorage.getInstance().getReferenceFromUrl(model.productPictureURLs.get(0));
-//                    try{
-//                        productImageTempFile = File.createTempFile("images","jpg");
-//                    }
-//                    catch(IOException io){
-//                        Log.d("Exception caught", io.toString());
-//                    }
-//
-//                    pictureReference.getFile(productImageTempFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-//                        @Override
-//                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-//                            final BitmapFactory.Options options = new BitmapFactory.Options();
-//                            options.inJustDecodeBounds = true;
-//                            BitmapFactory.decodeFile(productImageTempFile.getPath(), options);
-//
-//                            options.inSampleSize = calculateInSampleSize(options, 75, 75);
-//                            // Decode bitmap with inSampleSize set
-//                            options.inJustDecodeBounds = false;
-//                            Bitmap bitmap = BitmapFactory.decodeFile(productImageTempFile.getPath(), options);
-//                            viewHolder.mProductImageView.setImageBitmap(bitmap);
-//                        }
-//                    }).addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//
-//                        }
-//                    });
-//                }
 
 
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {

@@ -20,25 +20,21 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
+
     <include
         android:id="@+id/include"
         layout="@layout/content_main" />
 
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="441dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_height="match_parent"
+        android:layout_marginTop="130dp"
         tools:context="cabiso.daphny.com.g_companion.MarketPlaceFragment"
         tools:listitem="@layout/recycler_item" />
-
-    <FrameLayout
-        android:id="@+id/theFragmentFrame"
-        android:layout_width="match_parent"
-        android:layout_height="444dp"
-        android:layout_gravity="center">
-    </FrameLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab3"
@@ -88,6 +84,13 @@
         app:pressedTranslationZ="12dp"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/add" />
+
+    <FrameLayout
+        android:id="@+id/theFragmentFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -18,7 +18,6 @@ public class MainContent extends AppCompatActivity {
     private ImageButton notif;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +35,6 @@ public class MainContent extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
 
 
     }

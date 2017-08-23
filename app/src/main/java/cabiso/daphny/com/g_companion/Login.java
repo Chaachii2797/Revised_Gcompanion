@@ -30,7 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener{
 
-    private Button login;
+   private Button login;
     private Button withGoogle;
     private EditText email;
     private EditText password;
@@ -130,7 +130,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                             }
                         }
                     });
-            }
+        }
     }
 
     private void getCurrentUser(){

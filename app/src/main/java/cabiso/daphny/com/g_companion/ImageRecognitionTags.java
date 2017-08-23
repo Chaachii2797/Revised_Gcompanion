@@ -20,8 +20,8 @@ import java.util.List;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiResponse;
+import clarifai2.dto.input.ClarifaiImage;
 import clarifai2.dto.input.ClarifaiInput;
-import clarifai2.dto.input.image.ClarifaiImage;
 import clarifai2.dto.model.ConceptModel;
 import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
@@ -36,14 +36,20 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
     private ImageView imageView;
     private Button diyBtn;
-    private Button sellBtn;
     private TextView tvTag;
 
     private ArrayList<String> tags = new ArrayList<>();
 
 
-    private final ClarifaiClient clarifaiClient = new ClarifaiBuilder(API_Credentials.CLIENT_ID,
-            API_Credentials.CLIENT_SECRET).buildSync();
+    final ClarifaiClient client;
+
+    public ImageRecognitionTags() {
+        client = new ClarifaiBuilder("b7aa33dc206c40a4b9cffc09a2e72a9d").buildSync();
+    }
+
+
+    // private final ClarifaiClient clarifaiClient = new ClarifaiBuilder(API_Credentials.CLIENT_ID,
+            //API_Credentials.CLIENT_SECRET).buildSync();
 
 
     @Override
@@ -53,7 +59,6 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
         //  firstFrame = (FrameLayout)findViewById(R.id.FirstFrame);
         diyBtn = (Button)findViewById(R.id.btnDIY);
-        sellBtn = (Button)findViewById(R.id.btnSell);
         imageView = (ImageView)findViewById(R.id.imgPhotoSaver);
         tvTag = (TextView) findViewById(R.id.tvTag);
 
@@ -64,7 +69,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 clearFields();
-                Intent intent = new Intent(ImageRecognitionTags.this,MainActivity.class);
+                Intent intent = new Intent(ImageRecognitionTags.this, DIYList.class);
                 startActivity(intent);
             }
         });
@@ -86,8 +91,8 @@ public class ImageRecognitionTags extends AppCompatActivity{
     }
 
     public void printTags() {
-        String results = "First 3 tags: ";
-        for(int i = 0; i < 3; i++) {
+        String results = "First tag: ";
+        for(int i = 0; i < 1; i++) {
             results += "\n" + tags.get(i);
         }
         tvTag.setText(results);
@@ -117,10 +122,11 @@ public class ImageRecognitionTags extends AppCompatActivity{
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 90, stream);
                         byte[] byteArray = stream.toByteArray();
-                        final ConceptModel general = clarifaiClient.getDefaultModels().generalModel();
-                        return general.predict()
+                        final ConceptModel general = client.getDefaultModels().generalModel();
+                        return client.getDefaultModels().generalModel().predict()
                                 .withInputs(ClarifaiInput.forImage(ClarifaiImage.of(byteArray)))
                                 .executeSync();
+
                     }
 
                     // Handling API response and then collecting and printing tags

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">G Companion</string>
 
+    <string name="sign_out">Sign Out</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -13,4 +15,20 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="loading">Loading....</string>
+
+    <string name="registerIntroText">Register</string>
+    <string name="usernameHint">Username</string>
+    <string name="emailHint">Email</string>
+    <string name="passwordHint">Password</string>
+    <string name="confirmPasswordHint">Confirm password</string>
+    <string name="firstNameHint">First name</string>
+    <string name="lastNameHint">Last name</string>
+    <string name="cityHint">City</string>
+    <string name="addressHint">Address</string>
+    <string name="phoneHint">Phone</string>
+    <string name="registerButton">Register</string>
+    <string name="loginText">Login</string>
+    <string name="passwordHintLogIn">Password</string>
+    <string name="emailHintLogIn">Email</string>
+    <string name="signInButton">Sign in</string>
 </resources>

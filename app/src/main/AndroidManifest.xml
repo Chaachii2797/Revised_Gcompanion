@@ -61,6 +61,7 @@
         <activity android:name=".DIYActivity" />
         <activity android:name=".UploadImage" />
         <activity android:name=".DIYList" />
+        <activity android:name=".Recommend.RecommendActivity" />
 
         <activity android:name=".AddProductActivity" />
         <activity android:name=".MyProfileActivity" />

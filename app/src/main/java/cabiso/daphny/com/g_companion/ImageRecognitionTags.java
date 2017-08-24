@@ -13,10 +13,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import cabiso.daphny.com.g_companion.Recommend.RecommendActivity;
+import cabiso.daphny.com.g_companion.Recommend.RecommendSaveTag;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiResponse;
@@ -39,7 +44,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
     private TextView tvTag;
 
     private ArrayList<String> tags = new ArrayList<>();
-
+    private DatabaseReference databaseReference;
 
     final ClarifaiClient client;
 
@@ -57,6 +62,8 @@ public class ImageRecognitionTags extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_recog_tag);
 
+        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Recommend").push();
+
         //  firstFrame = (FrameLayout)findViewById(R.id.FirstFrame);
         diyBtn = (Button)findViewById(R.id.btnDIY);
         imageView = (ImageView)findViewById(R.id.imgPhotoSaver);
@@ -68,8 +75,16 @@ public class ImageRecognitionTags extends AppCompatActivity{
         diyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String results = " ";
+                for(int i = 0; i < 1; i++) {
+                    results += " " + tags.get(i);
+                }
+                RecommendSaveTag save = new RecommendSaveTag(results);
+                databaseReference.push().setValue(save);
+
                 clearFields();
-                Intent intent = new Intent(ImageRecognitionTags.this, DIYList.class);
+                Intent intent = new Intent(ImageRecognitionTags.this, RecommendActivity.class);
                 startActivity(intent);
             }
         });

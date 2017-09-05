@@ -22,7 +22,7 @@ import cabiso.daphny.com.g_companion.Model.UploadItems;
 import cabiso.daphny.com.g_companion.R;
 import cabiso.daphny.com.g_companion.UploadDIYAdapter;
 
-public class Recommend_Activity extends AppCompatActivity {
+public class Bottle_Recommend extends AppCompatActivity {
 
     public TextView name,material;
     private List<DIYrecommend> diyList;

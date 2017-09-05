@@ -57,6 +57,8 @@
         <activity android:name=".Recommend.RecommendActivity" />
         <activity android:name=".AddProductActivity" />
         <activity android:name=".MyProfileActivity" />
+        <activity android:name=".Recommend.Bottle_Recommend" />
+        <activity android:name=".Recommend.Paper_Recommend" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -70,7 +72,9 @@
 
         <activity android:name=".ProductDetailViewActivity" />
         <activity android:name=".ChatWithSellerActivity" />
-        <activity android:name=".Recommend.Recommend_Activity"></activity>
+        <activity android:name=".Recommend.Recommend_Activity" />
+        <activity android:name=".Recommend.Bottle_Recommend" />
+        <activity android:name=".Recommend.Paper_Recommend"></activity>
     </application>
 
 </manifest>

@@ -25,6 +25,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Paper_Recommend;
 import cabiso.daphny.com.g_companion.Recommend.RecommendActivity;
 import cabiso.daphny.com.g_companion.Recommend.RecommendSaveTag;
 import cabiso.daphny.com.g_companion.Recommend.Recommend_Activity;
@@ -83,13 +85,26 @@ public class ImageRecognitionTags extends AppCompatActivity{
                 String results = " ";
                 for(int i = 0; i < 1; i++) {
                     results += " " + tags.get(i);
+
+                    if(tags.get(i).equals("bottle")){
+                        Toast.makeText(getApplication(), "Result "+results, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(ImageRecognitionTags.this, Bottle_Recommend.class);
+                        Toast.makeText(ImageRecognitionTags.this,"bottle",Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
+                    }else if(results.equals("paper")){
+                        clearFields();
+                        Intent intent = new Intent(ImageRecognitionTags.this, Paper_Recommend.class);
+                        Toast.makeText(ImageRecognitionTags.this,"paper",Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
+                    }
                 }
 
 
-                clearFields();
-                Intent intent = new Intent(ImageRecognitionTags.this, Recommend_Activity.class);
-                Toast.makeText(ImageRecognitionTags.this,"chaachii",Toast.LENGTH_SHORT).show();
-                startActivity(intent);
+
+//                clearFields();
+//                Intent intent = new Intent(ImageRecognitionTags.this, Recommend_Activity.class);
+//                Toast.makeText(ImageRecognitionTags.this,"chaachii",Toast.LENGTH_SHORT).show();
+//                startActivity(intent);
 
             }
         });

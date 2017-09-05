@@ -146,7 +146,6 @@ public class ImageRecognitionTags extends AppCompatActivity{
                         return client.getDefaultModels().generalModel().predict()
                                 .withInputs(ClarifaiInput.forImage(ClarifaiImage.of(byteArray)))
                                 .executeSync();
-
                     }
 
                     // Handling API response and then collecting and printing tags

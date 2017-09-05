@@ -29,6 +29,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import cabiso.daphny.com.g_companion.Model.DIYMethods;
+import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 
 
 public class UploadImage extends AppCompatActivity implements View.OnClickListener{
@@ -36,16 +37,13 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
     private static int RESULT_LOAD_IMAGE = 1;
     private ImageView imgView;
     private EditText etname, etmaterials, etprocedures;
-    private Spinner spinnerqty;
     private Button button;
 
     private ProgressDialog mProgressDialog;
     private StorageReference mStorageRef;
     private DatabaseReference databaseReference;
-    private String userid;
     private FirebaseAuth mAuth;
     private Uri ImagePathAndName, downloadUri;
-    private Bitmap bitmap;
     String file_name;
 
     @Override
@@ -54,36 +52,20 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
         setContentView(R.layout.activity_upload_image);
 
         mStorageRef = FirebaseStorage.getInstance().getReference("Upload Images");
-        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Methods").push();
-        mAuth = FirebaseAuth.getInstance();
-        final FirebaseUser user = mAuth.getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Methods").child("category").child("bottle").push();
+//        mAuth = FirebaseAuth.getInstance();
+//        final FirebaseUser user = mAuth.getCurrentUser();
 //        userid = user.getUid();
 
         imgView = (ImageView) findViewById(R.id.imgUpload);
         etname = (EditText) findViewById(R.id.etName);
         etmaterials = (EditText) findViewById(R.id.etMaterials);
         etprocedures = (EditText) findViewById(R.id.etProcedures);
-        spinnerqty = (Spinner)findViewById(R.id.qtySpin);
 
         button = (Button) findViewById(R.id.buttonSave);
         button.setOnClickListener(this);
 
         fetchImage();
-//
-//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-//        databaseReference.child("DIY_dummy_post_picture").child("mkQTrSDvyWUPBLOGiBSsltrWQBV2").addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                DIY_dummy_post_picture diy_dummy_post_picture = dataSnapshot.getValue(DIY_dummy_post_picture.class);
-//                diy_dummy_post_picture.getPictures();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
     }
 
 
@@ -92,12 +74,12 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
         String name = etname.getText().toString();
         String materials = etmaterials.getText().toString();
         String procedures = etprocedures.getText().toString();
-        String quantity = etprocedures.getText().toString();
+        String image = imgView.getDrawable().toString();
 
         Intent intent = new Intent(UploadImage.this,DIYActivity.class);
         startActivity(intent);
 
-        DIYMethods items = new DIYMethods(name,materials,procedures, quantity);
+        DIYrecommend items = new DIYrecommend(name,materials,procedures,image);
         databaseReference.push().setValue(items);
 
         if (name.isEmpty()) {
@@ -108,9 +90,6 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
             return;
         }if (procedures.isEmpty()){
             Toast.makeText(getApplicationContext(), "Procedures?", Toast.LENGTH_SHORT).show();
-            return;
-        }if (quantity.isEmpty()){
-            Toast.makeText(getApplicationContext(), "Quantity?", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -124,7 +103,8 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     downloadUri = taskSnapshot.getDownloadUrl();
-                    databaseReference.child("Image_URL").setValue(downloadUri.toString());
+                    mStorageRef.putFile(downloadUri);
+                    databaseReference.child("DIY_Methods").setValue(downloadUri.toString());
                     Glide.with(getApplicationContext())
                             .load(downloadUri)
                             .crossFade()
@@ -138,30 +118,6 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
                 }
             });
 
-
-//        if (v == button) {
-//            Toast.makeText(UploadImage.this, "YEEEEEEEES!" + userid, Toast.LENGTH_SHORT).show();
-////            uploadImage(ImagePathAndName);
-////            StorageReference filePath = mStorageRef.child(userid).child(ImagePathAndName.getLastPathSegment());
-//
-//            StorageReference filePath = mStorageRef.child(userid).child(file_name);
-//            Log.d("GWAPA", "CHAACHII"+file_name);
-//            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-//            showProgressDialog();
-//            filePath.putFile(ImagePathAndName).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-////                    downloadUri = taskSnapshot.getDownloadUrl();
-////                    Picasso.with(UploadImage.this).load(downloadUri.toString()).into(imgView);
-//                    String image = file_name;
-////                    DIY_dummy_post_picture diy_dummy_post_picture = new DIY_dummy_post_picture()
-//                    Toast.makeText(UploadImage.this,"Successfully uploaded image!",Toast.LENGTH_SHORT).show();
-//                    Intent intent = new Intent(UploadImage.this,MainActivity.class);
-//                    startActivity(intent);
-//                    hideProgressDialog();
-//                }
-//            });
-//        }else{Toast.makeText(UploadImage.this,"Failed to upload image!",Toast.LENGTH_SHORT).show();}
     }
 
     private void fetchImage(){

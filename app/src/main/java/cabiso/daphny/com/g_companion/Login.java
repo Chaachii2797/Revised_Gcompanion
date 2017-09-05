@@ -84,16 +84,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         }
     }
 
-//    private void signOutGoogle() {
-//        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-//                new ResultCallback<Status>() {
-//                    @Override
-//                    public void onResult(Status status) {
-//                        updateUI(false);
-//                    }
-//                });
-//    }
-
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {

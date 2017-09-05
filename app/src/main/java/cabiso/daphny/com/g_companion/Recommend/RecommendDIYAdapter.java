@@ -22,13 +22,13 @@ import cabiso.daphny.com.g_companion.R;
  * Created by cicctuser on 7/31/2017.
  */
 
-public class RecommendDIYAdapter extends ArrayAdapter<UploadItems> {
+public class RecommendDIYAdapter extends ArrayAdapter<DIYrecommend> {
 
     private Activity context;
     private int resource;
-    private List<UploadItems> listDIY;
+    private List<DIYrecommend> listDIY;
 
-    public RecommendDIYAdapter(@NonNull Activity context, @LayoutRes int resource, @NonNull List<UploadItems> objects) {
+    public RecommendDIYAdapter(@NonNull Activity context, @LayoutRes int resource, @NonNull List<DIYrecommend> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -46,7 +46,7 @@ public class RecommendDIYAdapter extends ArrayAdapter<UploadItems> {
         ImageView img = (ImageView) v.findViewById(R.id.fetch_image);
 
         tvPrice.setText(listDIY.get(position).getDiyName());
-        tvName.setText(listDIY.get(position).getDiyPrice());
+        tvName.setText(listDIY.get(position).getImage_URL());
         Glide.with(context).load(listDIY.get(position).getImage_URL()).into(img);
 
         return v;

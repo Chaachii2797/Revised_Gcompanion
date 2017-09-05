@@ -23,6 +23,8 @@ public class DIYCommunity extends Fragment {
         View view = inflater.inflate(R.layout.fragment_diys, container, false);
 
         return view;
+
+
     }
 
 }

@@ -6,13 +6,13 @@ package cabiso.daphny.com.g_companion.Recommend;
 
 public class DIYrecommend {
 
-    private String Image_URL, diyName, diyPrice, diyCategory;
+    private String Image_URL, diyName, diymaterial, diyprocedure;
 
-    public DIYrecommend(String image_URL, String diyName, String diyPrice, String diyCategory) {
+    public DIYrecommend(String image_URL, String diyName, String diymaterial, String diyprocedure) {
         Image_URL = image_URL;
         this.diyName = diyName;
-        this.diyPrice = diyPrice;
-        this.diyCategory = diyCategory;
+        this.diymaterial = diymaterial;
+        this.diyprocedure = diyprocedure;
     }
 
     public DIYrecommend(){
@@ -34,20 +34,20 @@ public class DIYrecommend {
         this.diyName = diyName;
     }
 
-    public String getDiyPrice() {
-        return diyPrice;
+    public String getDiymaterial() {
+        return diymaterial;
     }
 
-    public void setDiyPrice(String diyPrice) {
-        this.diyPrice = diyPrice;
+    public void setDiymaterial(String diymaterial) {
+        this.diymaterial = diymaterial;
     }
 
-    public String getDiyCategory() {
-        return diyCategory;
+    public String getDiyprocedure() {
+        return diyprocedure;
     }
 
-    public void setDiyCategory(String diyCategory) {
-        this.diyCategory = diyCategory;
+    public void setDiyprocedure(String diyprocedure) {
+        this.diyprocedure = diyprocedure;
     }
 }
 

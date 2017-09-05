@@ -72,14 +72,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="11dp" />
 
-    <Spinner
-        android:id="@+id/qtySpin"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/etMaterials"
-        android:layout_alignRight="@+id/etMaterials"
-        android:layout_below="@+id/etMaterials" />
-
     <EditText
         android:id="@+id/etProcedures"
         android:layout_width="wrap_content"

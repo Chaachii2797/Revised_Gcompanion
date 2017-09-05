@@ -7,14 +7,19 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -22,6 +27,7 @@ import java.util.List;
 
 import cabiso.daphny.com.g_companion.Recommend.RecommendActivity;
 import cabiso.daphny.com.g_companion.Recommend.RecommendSaveTag;
+import cabiso.daphny.com.g_companion.Recommend.Recommend_Activity;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiResponse;
@@ -45,6 +51,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
     private ArrayList<String> tags = new ArrayList<>();
     private DatabaseReference databaseReference;
+    private FirebaseDatabase mRef;
 
     final ClarifaiClient client;
 
@@ -62,14 +69,11 @@ public class ImageRecognitionTags extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_recog_tag);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Recommend").push();
 
         //  firstFrame = (FrameLayout)findViewById(R.id.FirstFrame);
         diyBtn = (Button)findViewById(R.id.btnDIY);
         imageView = (ImageView)findViewById(R.id.imgPhotoSaver);
         tvTag = (TextView) findViewById(R.id.tvTag);
-
-
 
 
         diyBtn.setOnClickListener(new View.OnClickListener() {
@@ -80,12 +84,13 @@ public class ImageRecognitionTags extends AppCompatActivity{
                 for(int i = 0; i < 1; i++) {
                     results += " " + tags.get(i);
                 }
-                RecommendSaveTag save = new RecommendSaveTag(results);
-                databaseReference.push().setValue(save);
+
 
                 clearFields();
-                Intent intent = new Intent(ImageRecognitionTags.this, RecommendActivity.class);
+                Intent intent = new Intent(ImageRecognitionTags.this, Recommend_Activity.class);
+                Toast.makeText(ImageRecognitionTags.this,"chaachii",Toast.LENGTH_SHORT).show();
                 startActivity(intent);
+
             }
         });
         dispatchTakePictureIntent();

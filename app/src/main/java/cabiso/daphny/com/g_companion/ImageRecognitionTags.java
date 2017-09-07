@@ -82,6 +82,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
+
                 String results = " ";
                 for(int i = 0; i < 1; i++) {
                     results += " " + tags.get(i);
@@ -98,8 +99,6 @@ public class ImageRecognitionTags extends AppCompatActivity{
                         startActivity(intent);
                     }
                 }
-
-
 
 //                clearFields();
 //                Intent intent = new Intent(ImageRecognitionTags.this, Recommend_Activity.class);

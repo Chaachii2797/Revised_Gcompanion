@@ -24,7 +24,7 @@ import cabiso.daphny.com.g_companion.UploadDIYAdapter;
 
 public class Bottle_Recommend extends AppCompatActivity {
 
-    public TextView name,material;
+    public TextView name,material, procedure;
     private List<DIYrecommend> diyList;
     private RecommendDIYAdapter adapter;
     String nm, mtrial;
@@ -37,6 +37,7 @@ public class Bottle_Recommend extends AppCompatActivity {
 
         name = (TextView)findViewById(R.id.tvDiyName);
         material = (TextView)findViewById(R.id.tvDiyMaterial);
+        procedure = (TextView)findViewById(R.id.tvProcedure);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please Wait loading DIYs.....");
@@ -48,15 +49,19 @@ public class Bottle_Recommend extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot postSnapshot:dataSnapshot.getChildren()){
-                    DIYrecommend recommend = postSnapshot.getValue(DIYrecommend.class);
-                    String nm = "Procedure: "+recommend.getDiyprocedure().toString();
-                    String mtrial = "Material: "+recommend.getDiymaterial().toString();
+                DIYrecommend recommend = dataSnapshot.getValue(DIYrecommend.class);
 
-                    name.setText(nm);
-                    material.setText(mtrial);
-                    progressDialog.dismiss();
-                }
+                String nm = "Name: "+recommend.getDiyName();
+                String mtrial = "Material: "+recommend.getDiymaterial();
+                String proc = "Procedure: "+recommend.getDiyprocedure();
+                String id = dataSnapshot.getKey();
+                Toast.makeText(getApplication(),"ID: "+id,Toast.LENGTH_SHORT).show();
+
+                name.setText(nm);
+                material.setText(mtrial);
+                procedure.setText(proc);
+
+                progressDialog.dismiss();
             }
 
             @Override

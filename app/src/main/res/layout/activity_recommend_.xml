@@ -48,4 +48,16 @@
         android:text="TextView"
         android:textSize="20dp" />
 
+    <TextView
+        android:id="@+id/tvProcedure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvDiyMaterial"
+        android:text="TextView"
+        android:textSize="20dp" />
+
 </RelativeLayout>

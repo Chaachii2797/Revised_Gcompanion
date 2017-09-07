@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -51,8 +52,7 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_image);
 
-        mStorageRef = FirebaseStorage.getInstance().getReference("Upload Images");
-        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Methods").child("category").child("bottle").push();
+
 //        mAuth = FirebaseAuth.getInstance();
 //        final FirebaseUser user = mAuth.getCurrentUser();
 //        userid = user.getUid();
@@ -71,7 +71,9 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        String name = etname.getText().toString();
+        mStorageRef = FirebaseStorage.getInstance().getReference("Upload Images");
+        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Methods").child("category").child("bottle").getRef().push();
+        final String name = etname.getText().toString() ;
         String materials = etmaterials.getText().toString();
         String procedures = etprocedures.getText().toString();
         String image = imgView.getDrawable().toString();
@@ -79,25 +81,18 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
         Intent intent = new Intent(UploadImage.this,DIYActivity.class);
         startActivity(intent);
 
-        DIYrecommend items = new DIYrecommend(name,materials,procedures,image);
+        DIYrecommend items = new DIYrecommend(image,name, materials,procedures);
+        Toast.makeText(this,"KEY: "+name,Toast.LENGTH_SHORT).show();
+        Log.d("FILE_NAME "+file_name,"get Name");
         databaseReference.push().setValue(items);
 
-        if (name.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "DIY Name?", Toast.LENGTH_SHORT).show();
-            return;
-        }if (materials.isEmpty()){
-            Toast.makeText(getApplicationContext(), "Materials?", Toast.LENGTH_SHORT).show();
-            return;
-        }if (procedures.isEmpty()){
-            Toast.makeText(getApplicationContext(), "Procedures?", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Toast.makeText(getApplicationContext(), "Updated Info", Toast.LENGTH_SHORT).show();
-
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(materials) || TextUtils.isEmpty(procedures)
+                || TextUtils.isEmpty(image)){
+            Toast.makeText(this, "Empty fields, Please make sure to input fields", Toast.LENGTH_SHORT).show();
+        }else{
             StorageReference filePath = mStorageRef.child(file_name);
-            Log.d("GWAPA", "CHAACHII"+file_name);
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            Toast.makeText(this,"FILE NAME "+file_name,Toast.LENGTH_SHORT).show();
+//            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(name);
             showProgressDialog();
             filePath.putFile(ImagePathAndName).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -105,6 +100,7 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
                     downloadUri = taskSnapshot.getDownloadUrl();
                     mStorageRef.putFile(downloadUri);
                     databaseReference.child("DIY_Methods").setValue(downloadUri.toString());
+                    Toast.makeText(getApplication(),"ID: "+databaseReference.getKey(),Toast.LENGTH_SHORT).show();
                     Glide.with(getApplicationContext())
                             .load(downloadUri)
                             .crossFade()
@@ -117,6 +113,42 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
                     hideProgressDialog();
                 }
             });
+        }
+//        if (name.isEmpty()) {
+//            Toast.makeText(getApplicationContext(), "DIY Name?", Toast.LENGTH_SHORT).show();
+//            return;
+//        }if (materials.isEmpty()){
+//            Toast.makeText(getApplicationContext(), "Materials?", Toast.LENGTH_SHORT).show();
+//            return;
+//        }if (procedures.isEmpty()){
+//            Toast.makeText(getApplicationContext(), "Procedures?", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+
+//        Toast.makeText(getApplicationContext(), "Updated Info", Toast.LENGTH_SHORT).show();
+//
+//            StorageReference filePath = mStorageRef.child(file_name);
+//            Log.d("GWAPA", "CHAACHII"+file_name);
+//            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+//            showProgressDialog();
+//            filePath.putFile(ImagePathAndName).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                    downloadUri = taskSnapshot.getDownloadUrl();
+//                    mStorageRef.putFile(downloadUri);
+//                    databaseReference.child("DIY_Methods").setValue(downloadUri.toString());
+//                    Glide.with(getApplicationContext())
+//                            .load(downloadUri)
+//                            .crossFade()
+//                            .placeholder(R.drawable.add)
+//                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
+//                            .into(imgView);
+//                    Toast.makeText(UploadImage.this,"Successfully uploaded image!",Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(UploadImage.this,DIYActivity.class);
+//                    startActivity(intent);
+//                    hideProgressDialog();
+//                }
+//            });
 
     }
 

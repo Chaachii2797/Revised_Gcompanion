@@ -72,7 +72,8 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         mStorageRef = FirebaseStorage.getInstance().getReference("Upload Images");
-        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Methods").child("category").child("bottle").getRef().push();
+        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Methods").child("category").child("bottle");
+
         final String name = etname.getText().toString() ;
         String materials = etmaterials.getText().toString();
         String procedures = etprocedures.getText().toString();
@@ -84,6 +85,7 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
         DIYrecommend items = new DIYrecommend(image,name, materials,procedures);
         Toast.makeText(this,"KEY: "+name,Toast.LENGTH_SHORT).show();
         Log.d("FILE_NAME "+file_name,"get Name");
+        String key = databaseReference.getKey();
         databaseReference.push().setValue(items);
 
         if (TextUtils.isEmpty(name) || TextUtils.isEmpty(materials) || TextUtils.isEmpty(procedures)
@@ -99,7 +101,7 @@ public class UploadImage extends AppCompatActivity implements View.OnClickListen
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     downloadUri = taskSnapshot.getDownloadUrl();
                     mStorageRef.putFile(downloadUri);
-                    databaseReference.child("DIY_Methods").setValue(downloadUri.toString());
+//                    databaseReference.child("DIY_Methods").setValue(downloadUri.toString());
                     Toast.makeText(getApplication(),"ID: "+databaseReference.getKey(),Toast.LENGTH_SHORT).show();
                     Glide.with(getApplicationContext())
                             .load(downloadUri)

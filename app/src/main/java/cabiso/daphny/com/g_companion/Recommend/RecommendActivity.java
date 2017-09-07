@@ -38,7 +38,7 @@ public class RecommendActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recommend);
+        setContentView(R.layout.activity_recommend_bottle);
 
         diyList = new ArrayList<>();
         lv = (ListView) findViewById(R.id.list_view_upload_diy);

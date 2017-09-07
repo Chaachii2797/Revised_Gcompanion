@@ -24,12 +24,16 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <ListView
-        android:id="@+id/list_view_upload_diy"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvDiyName"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="46dp" />
+        android:layout_below="@+id/textView13"
+        android:text="TextView"
+        android:textSize="20dp" />
+
 </RelativeLayout>

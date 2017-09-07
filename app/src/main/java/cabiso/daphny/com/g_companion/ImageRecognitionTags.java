@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -27,9 +26,6 @@ import java.util.List;
 
 import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import cabiso.daphny.com.g_companion.Recommend.Paper_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.RecommendActivity;
-import cabiso.daphny.com.g_companion.Recommend.RecommendSaveTag;
-import cabiso.daphny.com.g_companion.Recommend.Recommend_Activity;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiResponse;

@@ -105,22 +105,22 @@ public class MainActivity extends AppCompatActivity
         diyCom.setOnClickListener(this);
 
 
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,HomePageActivity.class);
-                startActivity(intent);
-            }
-        });
+//        home.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MainActivity.this,HomePageActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
 
-        diyCom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,DIYActivity.class);
-                startActivity(intent);
-            }
-        });
+//        diyCom.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(MainActivity.this,DIYActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         fab1.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity
         fab3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,UploadImage.class);
+                Intent intent = new Intent(MainActivity.this,CaptureDIY.class);
                 startActivity(intent);
 
                 //   TODO: Snack bar for camera permission

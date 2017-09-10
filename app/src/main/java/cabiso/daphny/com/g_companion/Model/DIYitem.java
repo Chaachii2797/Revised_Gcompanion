@@ -50,4 +50,3 @@ public class DIYitem {
         this.diyCategory = diyCategory;
     }
 }
-

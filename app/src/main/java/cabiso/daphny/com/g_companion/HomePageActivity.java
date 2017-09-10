@@ -66,7 +66,7 @@ public class HomePageActivity extends AppCompatActivity {
                     diyList.add(img);
                 }
                 //init adapter
-                adapter = new DIYListAdapter(HomePageActivity.this, R.layout.homepage_item, diyList);
+                adapter = new DIYListAdapter(HomePageActivity.this, R.layout.fragment_ui_items, diyList);
                 //set adapter for listview
                 lv.setAdapter(adapter);
             }
@@ -77,6 +77,9 @@ public class HomePageActivity extends AppCompatActivity {
             }
         });
 
+        //     recyclerView = (RecyclerView) findViewById(R.id.show_diy_recycler_view);
+        //    recyclerView.setLayoutManager(new LinearLayoutManager(HomePageActivity.this));
+        //  Toast.makeText(HomePageActivity.this, "Wait! Fetching data....", Toast.LENGTH_SHORT).show();
 
     }
 }

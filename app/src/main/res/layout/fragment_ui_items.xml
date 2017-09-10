@@ -34,8 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/fetch_image"
         android:layout_centerHorizontal="true"
+        android:text="Procedures:"
         android:textColor="@android:color/background_light"
-        android:textSize="23dp"
-        android:text="Price: " />
+        android:textSize="23dp" />
 
 </RelativeLayout>

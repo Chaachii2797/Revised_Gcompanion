@@ -41,7 +41,7 @@ public class UploadDIYAdapter extends ArrayAdapter<UploadItems> {
 
         View v = inflater.inflate(resource, null);
         TextView tvName = (TextView) v.findViewById(R.id.fetch_item_name);
-        TextView tvPrice = (TextView) v.findViewById(R.id.fetch_item_procedure);
+        TextView tvPrice = (TextView) v.findViewById(R.id.fetch_item_price);
         ImageView img = (ImageView) v.findViewById(R.id.fetch_image);
 
         tvPrice.setText(listDIY.get(position).getDiyName());

@@ -1,88 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imgUpload"
-        android:layout_width="284dp"
-        android:layout_height="250dp"
-        app:srcCompat="@drawable/frame_border"
-        tools:layout_editor_absoluteX="50dp"
-        tools:layout_editor_absoluteY="51dp"
-        android:layout_marginTop="27dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-    <EditText
-    android:layout_width="284dp"
-    android:layout_height="40dp"
-    android:layout_marginTop="11dp"
-        android:hint="Name"
-        android:id="@+id/etName"
-        android:layout_below="@+id/imgUpload"
-        android:layout_alignLeft="@+id/imgUpload"
-        android:layout_alignStart="@+id/imgUpload" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="150dp"
-        android:layout_height="30dp"
-        android:layout_alignLeft="@+id/etName"
-        android:layout_alignStart="@+id/etName"
-        android:layout_below="@+id/etName"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        tools:text="Materials Used:" />
-
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="150dp"
-        android:layout_height="30dp"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        tools:text="Materials Used:"
-        android:layout_below="@+id/etMaterials"
-        android:layout_alignLeft="@+id/etMaterials"
-        android:layout_alignStart="@+id/etMaterials" />
-
-    <EditText
-        android:id="@+id/etMaterials"
-        android:layout_width="284dp"
-        android:layout_height="40dp"
-        android:layout_alignLeft="@+id/textView11"
-        android:layout_alignStart="@+id/textView11"
-        android:layout_below="@+id/textView11"
-        android:hint="Materials (separate with ,)" />
 
     <Button
-        android:id="@+id/buttonSave"
+        android:id="@+id/btnSave"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:onClick="true"
-        android:background="@drawable/shape"
         android:backgroundTint="@color/bg_screen2"
+        android:text="SAVE Details"
         android:clickable="true"
-        android:text="SAVE"
         android:textColor="@android:color/background_light"
-        tools:layout_editor_absoluteX="157dp"
-        tools:layout_editor_absoluteY="436dp"
+        android:background="@drawable/shape"
+        android:layout_marginBottom="13dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="11dp" />
+        android:layout_centerHorizontal="true" />
 
     <EditText
-        android:id="@+id/etProcedures"
+        android:id="@+id/etPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/qtySpin"
-        android:layout_alignRight="@+id/qtySpin"
-        android:layout_below="@+id/textView12"
+        android:elevation="1dp"
         android:ems="10"
-        android:hint="Procedures"
+        android:hint="Price:"
         android:inputType="textPersonName"
-        android:layout_alignLeft="@+id/textView12"
-        android:layout_alignStart="@+id/textView12" />
+        android:numeric="integer|signed|decimal"
+        android:layout_above="@+id/etName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp" />
+
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="DIY Name:"
+        android:inputType="textPersonName"
+        android:layout_above="@+id/etCategory"
+        android:layout_alignLeft="@+id/etPrice"
+        android:layout_alignStart="@+id/etPrice"
+        android:layout_marginBottom="22dp" />
+
+    <EditText
+        android:id="@+id/etCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Category:"
+        android:inputType="textPersonName"
+        android:layout_marginBottom="12dp"
+        android:layout_above="@+id/btnSave"
+        android:layout_alignLeft="@+id/etName"
+        android:layout_alignStart="@+id/etName" />
+
+    <ImageView
+        android:id="@+id/photoSaver"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        app:srcCompat="@drawable/add"
+        android:layout_above="@+id/etPrice"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="13dp" />
+
 
 </RelativeLayout>

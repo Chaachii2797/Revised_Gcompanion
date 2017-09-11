@@ -47,7 +47,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     private Bitmap bitmap;
     private FirebaseDatabase database;
 
-    private static final int CAMERA_REQUEST_CODE=1;
+    private static final int RESULT_LOAD_IMAGE=1;
 
 
     @Override
@@ -126,16 +126,15 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     //request to capture image!
     private void dispatchTakePictureIntent(){
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
-        }
+        Intent ImageIntent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI); //implicit intent
+        CaptureDIY.this.startActivityForResult(ImageIntent,RESULT_LOAD_IMAGE);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CAMERA_REQUEST_CODE && resultCode ==RESULT_OK){
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode ==RESULT_OK){
             mImageUrl = data.getData();
             imgViewPhoto.setImageURI(mImageUrl);
             StorageReference filePath = mStorageRef.child(mImageUrl.getLastPathSegment());

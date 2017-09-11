@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="360dp"
-    android:layout_height="100dp"
+    android:layout_height="match_parent"
     android:layout_marginBottom="10dp"
     android:layout_marginRight="10dp"
     android:layout_marginLeft="10dp"
@@ -13,13 +13,6 @@
     android:paddingTop="10dp"
     android:background="@color/background_material_light">
 
-    <ListView
-        android:id="@+id/lvView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </ListView>
-
     <TextView
         android:id="@+id/tvDiyName"
         android:layout_width="wrap_content"
@@ -29,8 +22,8 @@
         android:layout_below="@+id/textView13"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/tvDiyMaterial"
-        android:layout_alignEnd="@+id/tvDiyMaterial" />
+        android:layout_toLeftOf="@+id/imgView"
+        android:layout_toStartOf="@+id/imgView" />
 
     <TextView
         android:id="@+id/tvDiyMaterial"
@@ -38,9 +31,11 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textSize="20dp"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/tvDiyName"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/imgView"
+        android:layout_toStartOf="@+id/imgView" />
 
     <TextView
         android:id="@+id/tvDiyProcedure"
@@ -48,9 +43,11 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textSize="20dp"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/tvDiyMaterial"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/imgView"
+        android:layout_toStartOf="@+id/imgView" />
 
     <ImageView
         android:id="@+id/imgView"
@@ -60,5 +57,13 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         app:srcCompat="@mipmap/loading" />
+
+    <ListView
+        android:id="@+id/lvView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/imgView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

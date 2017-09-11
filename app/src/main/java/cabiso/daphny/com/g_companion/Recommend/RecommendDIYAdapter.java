@@ -22,7 +22,7 @@ import cabiso.daphny.com.g_companion.R;
  * Created by cicctuser on 7/31/2017.
  */
 
-public class RecommendDIYAdapter extends ArrayAdapter<DIYrecommend> {
+public class RecommendDIYAdapter<S> extends ArrayAdapter<DIYrecommend> {
 
     private Activity context;
     private int resource;
@@ -42,11 +42,13 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYrecommend> {
 
         View v = inflater.inflate(resource, null);
         TextView tvName = (TextView) v.findViewById(R.id.fetch_item_name);
-        TextView tvPrice = (TextView) v.findViewById(R.id.fetch_item_price);
+        TextView tvProcedure = (TextView) v.findViewById(R.id.fetch_item_procedure);
+        TextView tvMaterial = (TextView) v.findViewById(R.id.fetch_item_material);
         ImageView img = (ImageView) v.findViewById(R.id.fetch_image);
 
-        tvPrice.setText(listDIY.get(position).getDiyName());
-        tvName.setText(listDIY.get(position).getImage_URL());
+        tvProcedure.setText(listDIY.get(position).getDiyprocedure());
+        tvMaterial.setText(listDIY.get(position).getDiymaterial());
+        tvName.setText(listDIY.get(position).getDiyName());
         Glide.with(context).load(listDIY.get(position).getImage_URL()).into(img);
 
         return v;

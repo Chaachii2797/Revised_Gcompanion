@@ -32,9 +32,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     private ImageView imgViewPhoto;
     private Button btnSave;
-    private EditText price;
     private EditText diyName;
-    private EditText category;
+    private EditText diyMaterials;
+    private EditText diyProcedures;
     private  Button btnShow;
 
     private ProgressDialog mProgressDialog;
@@ -58,8 +58,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         database = FirebaseDatabase.getInstance();
         mStorage = FirebaseStorage.getInstance();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Details").push();
-        mStorageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://g-companion.appspot.com/").child("add_DIY");
+        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Methods").child("category").child("bottle").push();
+        mStorageRef = FirebaseStorage.getInstance().getReference("add_DIY");
 
         //mAuth = FirebaseAuth.getInstance();
         // final FirebaseUser user = mAuth.getCurrentUser();
@@ -68,13 +68,11 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         mProgressDialog = new ProgressDialog(this);
         imgViewPhoto = (ImageView) findViewById(R.id.photoSaver);
         btnSave = (Button) findViewById(R.id.btnSave);
-        price = (EditText) findViewById(R.id.etMaterials);
         diyName = (EditText) findViewById(R.id.etName);
-        category = (EditText) findViewById(R.id.etCategory);
-        //  btnShow = (Button) findViewById(R.id.btnShow);
+        diyMaterials = (EditText) findViewById(R.id.etMaterials);
+        diyProcedures = (EditText) findViewById(R.id.etProcedures);
 
         btnSave.setOnClickListener(this);
-        //  btnShow.setOnClickListener(this);
 
         dispatchTakePictureIntent();
      /*  btnShow.setOnClickListener(new View.OnClickListener() {
@@ -92,30 +90,31 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     public void onClick(View v) {
 
         String dName = diyName.getText().toString();
-        String dPrice = price.getText().toString();
-        String dCategory = category.getText().toString();
+        String dMaterials = diyMaterials.getText().toString();
+        String dProcedures = diyProcedures.getText().toString();
+
 
         Intent intent = new Intent(CaptureDIY.this,HomePageActivity.class);
         startActivity(intent);
 
-        DIYDetails details = new DIYDetails(dName, dPrice, dCategory);
+        DIYDetails details = new DIYDetails(dName, dMaterials, dProcedures);
         databaseReference.push().setValue(details);
 
-        price.setText("");
         diyName.setText("");
-        category.setText("");
+        diyMaterials.setText("");
+        diyProcedures.setText("");
 
 
         if (dName.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "Price?", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "DIY Name?", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (dPrice.isEmpty()){
-            Toast.makeText(getApplicationContext(), "DIY name?", Toast.LENGTH_SHORT).show();
+        if (dMaterials.isEmpty()){
+            Toast.makeText(getApplicationContext(), "DIY Materials?", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (dCategory.isEmpty()){
-            Toast.makeText(getApplicationContext(), "Category?", Toast.LENGTH_SHORT).show();
+        if (dProcedures.isEmpty()){
+            Toast.makeText(getApplicationContext(), "DIY Procedures?", Toast.LENGTH_SHORT).show();
             return;
         }
 

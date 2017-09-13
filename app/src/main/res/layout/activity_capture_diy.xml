@@ -19,51 +19,50 @@
         android:layout_marginBottom="17dp" />
 
     <EditText
-        android:id="@+id/etMaterials"
+        android:id="@+id/etName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="1dp"
         android:ems="10"
-        android:hint="Price:"
-        android:inputType="textPersonName"
-        android:numeric="integer|signed|decimal"
-        android:layout_above="@+id/etName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp" />
-
-    <EditText
-        android:id="@+id/etName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
         android:hint="DIY Name:"
         android:inputType="textPersonName"
-        android:layout_above="@+id/etCategory"
-        android:layout_alignLeft="@+id/etMaterials"
-        android:layout_alignStart="@+id/etMaterials"
-        android:layout_marginBottom="22dp" />
+        android:layout_marginBottom="14dp"
+        android:layout_above="@+id/etMaterials"
+        android:layout_centerHorizontal="true" />
 
     <EditText
-        android:id="@+id/etCategory"
+        android:id="@+id/etMaterials"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="14dp"
         android:ems="10"
-        android:hint="Category:"
+        android:hint="Materials:"
         android:inputType="textPersonName"
-        android:layout_marginBottom="12dp"
-        android:layout_above="@+id/btnSave"
+        android:layout_above="@+id/etProcedures"
         android:layout_alignLeft="@+id/etName"
         android:layout_alignStart="@+id/etName" />
+
+    <EditText
+        android:id="@+id/etProcedures"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="37dp"
+        android:ems="10"
+        android:hint="Procedures:"
+        android:inputType="textPersonName"
+        android:layout_above="@+id/btnSave"
+        android:layout_alignLeft="@+id/etMaterials"
+        android:layout_alignStart="@+id/etMaterials" />
 
     <ImageView
         android:id="@+id/photoSaver"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         app:srcCompat="@drawable/add"
-        android:layout_above="@+id/etMaterials"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="13dp" />
+        android:layout_marginTop="22dp" />
 
 
 </RelativeLayout>

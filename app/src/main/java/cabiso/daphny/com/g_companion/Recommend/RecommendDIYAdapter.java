@@ -41,7 +41,7 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYrecommend> {
 
         View v = inflater.inflate(resource, null);
         TextView tvName = (TextView) v.findViewById(R.id.get_nameRecommend);
-        ImageView img = (ImageView) v.findViewById(R.id.get_imageRecommend);
+        ImageView img = (ImageView) v.findViewById(R.id.fetch_recom_image);
 
      //   tvProcedure.setText(listDIY.get(position).getDiyprocedure());
        // tvMaterial.setText(listDIY.get(position).getDiymaterial());

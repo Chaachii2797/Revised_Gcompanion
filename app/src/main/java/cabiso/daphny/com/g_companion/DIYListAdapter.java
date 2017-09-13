@@ -15,19 +15,19 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import cabiso.daphny.com.g_companion.Model.DIYitem;
+import cabiso.daphny.com.g_companion.Model.DIYDetails;
 
 /**
  * Created by Lenovo on 7/31/2017.
  */
 
-public class DIYListAdapter extends ArrayAdapter<DIYitem> {
+public class DIYListAdapter extends ArrayAdapter<DIYDetails> {
 
     private Activity context;
     private int resource;
-    private List<DIYitem> listDIY;
+    private List<DIYDetails> listDIY;
 
-    public DIYListAdapter(@NonNull Activity context, @LayoutRes int resource, @NonNull List<DIYitem> objects) {
+    public DIYListAdapter(@NonNull Activity context, @LayoutRes int resource, @NonNull List<DIYDetails> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -40,12 +40,12 @@ public class DIYListAdapter extends ArrayAdapter<DIYitem> {
         LayoutInflater inflater = context.getLayoutInflater();
 
         View v = inflater.inflate(resource, null);
-        TextView tvName = (TextView) v.findViewById(R.id.fetch_diy_name);
-        TextView tvPrice = (TextView) v.findViewById(R.id.fetch_diy_price);
-        ImageView img = (ImageView) v.findViewById(R.id.get_imageRecommend);
+        TextView tvName = (TextView) v.findViewById(R.id.fetch_recom_diy_name);
+        //TextView tvPrice = (TextView) v.findViewById(R.id.fetch_diy_price);
+        ImageView img = (ImageView) v.findViewById(R.id.fetch_recom_image);
 
-      //  tvPrice.setText(listDIY.get(position).getDiyName());
-       // tvName.setText(listDIY.get(position).getDiyPrice());
+      //  tvPrice.setText(listDIY.get(position).getDIYPrice());
+        tvName.setText(listDIY.get(position).getDiyName());
         Glide.with(context).load(listDIY.get(position).getImage_URL()).into(img);
 
         return v;

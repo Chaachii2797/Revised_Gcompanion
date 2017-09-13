@@ -7,14 +7,27 @@ package cabiso.daphny.com.g_companion.Model;
 public class DIYDetails{
 
     private String diyName;
-    private String diyPrice;
-    private String diyCategory;
+    private String diyMaterials;
+    private String diyProcedures;
+    private String Image_URL;
 
 
-    public DIYDetails(String diyName, String diyPrice, String diyCategory) {
+    public DIYDetails(String diyName, String diyMaterials, String diyProcedures, String image_URL) {
         this.diyName = diyName;
-        this.diyPrice = diyPrice;
-        this.diyCategory = diyCategory;
+        this.diyMaterials = diyMaterials;
+        this.diyProcedures = diyProcedures;
+        this.Image_URL = image_URL;
+
+    }
+
+    public DIYDetails(String dName, String dMaterials, String dProcedures) {
+        this.diyName = dName;
+        this.diyMaterials = dMaterials;
+        this.diyProcedures = dProcedures;
+    }
+
+    public DIYDetails(){
+
     }
 
 
@@ -27,20 +40,28 @@ public class DIYDetails{
         this.diyName = diyName;
     }
 
-    public String getDiyPrice() {
-        return diyPrice;
+    public String getDiyMaterials() {
+        return diyMaterials;
     }
 
-    public void setDiyPrice(String diyPrice) {
-        this.diyPrice = diyPrice;
+    public void setDiyMaterials(String diyMaterials) {
+        this.diyMaterials = diyMaterials;
     }
 
-    public String getDiyCategory() {
-        return diyCategory;
+    public String getDiyProcedures() {
+        return diyProcedures;
     }
 
-    public void setDiyCategory(String diyCategory) {
-        this.diyCategory = diyCategory;
+    public void setDiyProcedures(String diyProcedures) {
+        this.diyProcedures = diyProcedures;
+    }
+
+    public String getImage_URL() {
+        return Image_URL;
+    }
+
+    public void setImage_URL(String image_URL) {
+        Image_URL = image_URL;
     }
 }
 

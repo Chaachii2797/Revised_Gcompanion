@@ -16,7 +16,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import cabiso.daphny.com.g_companion.Model.DIYitem;
+import cabiso.daphny.com.g_companion.Model.DIYDetails;
 
 /**
  * Created by Lenovo on 7/31/2017.
@@ -24,7 +24,7 @@ import cabiso.daphny.com.g_companion.Model.DIYitem;
 
 public class HomePageActivity extends AppCompatActivity {
 
-    private List<DIYitem> diyList;
+    private List<DIYDetails> diyList;
     private ListView lv;
     private DIYListAdapter adapter;
     private ProgressDialog progressDialog;
@@ -54,7 +54,7 @@ public class HomePageActivity extends AppCompatActivity {
         progressDialog.show();
 
         database = FirebaseDatabase.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Details");
+        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Methods").child("category").child("bottle");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -63,11 +63,11 @@ public class HomePageActivity extends AppCompatActivity {
 
                 //fetch images from firebase
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    DIYitem img = snapshot.getValue(DIYitem.class);
+                    DIYDetails img = snapshot.getValue(DIYDetails.class);
                     diyList.add(img);
                 }
                 //init adapter
-                adapter = new DIYListAdapter(HomePageActivity.this, R.layout.fragment_ui_items, diyList);
+                adapter = new DIYListAdapter(HomePageActivity.this, R.layout.homepage_item, diyList);
                 //set adapter for listview
                 lv.setAdapter(adapter);
             }

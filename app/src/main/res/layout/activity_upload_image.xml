@@ -27,24 +27,24 @@
         android:hint="Price:"
         android:inputType="textPersonName"
         android:numeric="integer|signed|decimal"
-        android:layout_above="@+id/etName"
+        android:layout_above="@+id/etMaterials"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="15dp" />
 
     <EditText
-        android:id="@+id/etName"
+        android:id="@+id/etMaterials"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="DIY Name:"
         android:inputType="textPersonName"
-        android:layout_above="@+id/etCategory"
+        android:layout_above="@+id/etProcedures"
         android:layout_alignLeft="@+id/etPrice"
         android:layout_alignStart="@+id/etPrice"
         android:layout_marginBottom="22dp" />
 
     <EditText
-        android:id="@+id/etCategory"
+        android:id="@+id/etProcedures"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -52,8 +52,8 @@
         android:inputType="textPersonName"
         android:layout_marginBottom="12dp"
         android:layout_above="@+id/btnSave"
-        android:layout_alignLeft="@+id/etName"
-        android:layout_alignStart="@+id/etName" />
+        android:layout_alignLeft="@+id/etMaterials"
+        android:layout_alignStart="@+id/etMaterials" />
 
     <ImageView
         android:id="@+id/photoSaver"

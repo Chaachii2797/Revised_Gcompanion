@@ -8,21 +8,21 @@
     android:background="@color/bg_screen1">
 
     <TextView
-        android:id="@+id/fetch_diy_name"
+        android:id="@+id/fetch_recom_diy_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
         android:text="DIY Name"
         android:textAlignment="center"
         android:textColor="@android:color/background_light"
         android:textSize="23sp"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:textStyle="bold" />
 
 
     <ImageView
-        android:id="@+id/get_imageRecommend"
+        android:id="@+id/fetch_recom_image"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:src="@drawable/add"
@@ -34,7 +34,7 @@
         android:id="@+id/fetch_diy_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/get_imageRecommend"
+        android:layout_below="@+id/fetch_recom_image"
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/background_light"
         android:textSize="23dp"

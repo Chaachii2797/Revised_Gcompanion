@@ -6,16 +6,16 @@ package cabiso.daphny.com.g_companion.Model;
 
 public class DIYitem {
 
-    private String Image_URL, diyName, diyPrice, diyCategory;
+    private String Image_URL, diyName, diyMaterials, diyProcedures;
 
-    public DIYitem(String image_URL, String diyName, String diyPrice, String diyCategory) {
+    public DIYitem(String image_URL, String diyName, String diyMaterials, String diyProcedures) {
         Image_URL = image_URL;
         this.diyName = diyName;
-        this.diyPrice = diyPrice;
-        this.diyCategory = diyCategory;
+        this.diyMaterials = diyMaterials;
+        this.diyProcedures = diyProcedures;
     }
 
-    public DIYitem(){
+    public DIYitem(String dName, String dMaterials, String dProcedures){
     }
 
     public String getImage_URL() {
@@ -34,19 +34,51 @@ public class DIYitem {
         this.diyName = diyName;
     }
 
-    public String getDiyPrice() {
-        return diyPrice;
+    public String getDiyMaterials() {
+        return diyMaterials;
     }
 
-    public void setDiyPrice(String diyPrice) {
-        this.diyPrice = diyPrice;
+    public void setDiyMaterials(String diyMaterials) {
+        this.diyMaterials = diyMaterials;
     }
 
-    public String getDiyCategory() {
-        return diyCategory;
+    public String getDiyProcedures() {
+        return diyProcedures;
     }
 
-    public void setDiyCategory(String diyCategory) {
-        this.diyCategory = diyCategory;
+    public void setDiyProcedures(String diyProcedures) {
+        this.diyProcedures = diyProcedures;
     }
+
+    //    public String getImage_URL() {
+//        return Image_URL;
+//    }
+//
+//    public void setImage_URL(String image_URL) {
+//        Image_URL = image_URL;
+//    }
+//
+//    public String getDiyName() {
+//        return diyName;
+//    }
+//
+//    public void setDiyName(String diyName) {
+//        this.diyName = diyName;
+//    }
+//
+//    public String getDiyPrice() {
+//        return diyMaterials;
+//    }
+//
+//    public void setDiyPrice(String diyPrice) {
+//        this.diyMaterials = diyPrice;
+//    }
+//
+//    public String getDiyCategory() {
+//        return diyProcedures;
+//    }
+//
+//    public void setDiyCategory(String diyCategory) {
+//        this.diyProcedures = diyCategory;
+//    }
 }

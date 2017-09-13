@@ -6,8 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.Fragment_BottleRecommend;
 import cabiso.daphny.com.g_companion.Recommend.Paper_Recommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
@@ -53,7 +50,7 @@ public class ImageRecognitionTags extends AppCompatActivity {
     final ClarifaiClient client;
 
     public ImageRecognitionTags() {
-        client = new ClarifaiBuilder("b7aa33dc206c40a4b9cffc09a2e72a9d").buildSync();
+        client = new ClarifaiBuilder("cb169e9d3f9e4ec5a7769cc0422f3162").buildSync();
     }
 
 

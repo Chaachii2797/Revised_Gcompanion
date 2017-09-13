@@ -18,8 +18,6 @@ class ProductInfo {
 
     }
 
-
-
     ProductInfo(String title, String desc, String price, String negotiable, List<String> productPictureURLs, String ownerUserID){
         this.title = title;
         this.desc = desc;

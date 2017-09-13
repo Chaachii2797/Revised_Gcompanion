@@ -22,7 +22,7 @@
 
 
     <ImageView
-        android:id="@+id/fetch_image"
+        android:id="@+id/get_imageRecommend"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:src="@drawable/add"
@@ -34,7 +34,7 @@
         android:id="@+id/fetch_diy_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/fetch_image"
+        android:layout_below="@+id/get_imageRecommend"
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/background_light"
         android:textSize="23dp"

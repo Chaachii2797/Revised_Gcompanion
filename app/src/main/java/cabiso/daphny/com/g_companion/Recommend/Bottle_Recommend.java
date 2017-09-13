@@ -1,85 +1,91 @@
 package cabiso.daphny.com.g_companion.Recommend;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.R;
 
+/**
+ * Created by Lenovo on 7/31/2017.
+ */
+
 public class Bottle_Recommend extends AppCompatActivity {
 
-    private List<String> diys = new ArrayList<>();
-    private RecommendDIYAdapter<String> adapter;
-    private ArrayList<DIYrecommend> diYrecommends = new ArrayList<>();
-    private TextView name, material, procedure;
-    private ImageView loadview;
+    private List<DIYrecommend> diyList;
     private ListView lv;
+    private ImageView loadview;
+    private RecommendDIYAdapter adapter;
+    private ProgressDialog progressDialog;
 
-    public ProgressDialog progressDialog;
+    //  RecyclerView recyclerView;
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
+    private StorageReference mStorageRef;
+
+    //private FirebaseRecyclerAdapter<DIYitem, HomePageActivityViewHolder> mFirebaseAdapter;
+    private LinearLayoutManager mLinearLayoutManager;
+
+    public Bottle_Recommend() {
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend_bottle);
 
-        name = (TextView)findViewById(R.id.tvDiyName);
-        material = (TextView)findViewById(R.id.tvDiyMaterial);
-        procedure = (TextView)findViewById(R.id.tvDiyProcedure);
-        loadview = (ImageView)findViewById(R.id.imgView);
+        diyList = new ArrayList<>();
         lv = (ListView) findViewById(R.id.lvView);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please Wait loading DIYs.....");
         progressDialog.show();
 
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("DIY_Methods").child("category").child("bottle");
+
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                progressDialog.dismiss();
 
-                for(DataSnapshot postSnapshot:dataSnapshot.getChildren()){
-                    Log.d("POSTSNAPSHOT: "+postSnapshot.getValue()," ");
+                //fetch images from firebase
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    DIYrecommend img = snapshot.getValue(DIYrecommend.class);
+                    String image = img.getImage_URL();
+                    diyList.add(img);
+
+                    //init adapter
+                    adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
+                    //set adapter for listview
+                    lv.setAdapter(adapter);
                 }
 
-//                    DIYrecommend recommend  = postSnapshot.getValue(DIYrecommend.class);
-//                    Toast.makeText(getApplication(),"GET DIYS: "+diyList,Toast.LENGTH_SHORT).show();
-//                    diyList.add(recommend);
-//
-//                    String nm =  "NAME: "+recommend.getDiyName();
-//                    String mat = "MATERIAL: "+recommend.getDiymaterial();
-//                    String pro = "PROCEDURE: "+recommend.getDiyprocedure();
-//                    String image = recommend.getImage_URL();
-//
-//                    name.setText(nm);
-//                    material.setText(mat);
-//                    procedure.setText(pro);
-//                    //init adapter
-//                    adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.fragment_ui_items, diyList);
-//                    //set adapter for listview
-//                    lv.setAdapter(adapter)
-//                }
-//                name.setText(getDiy);
-                progressDialog.dismiss();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("Error: ","The read failed!"+databaseError.getMessage());
+                progressDialog.dismiss();
             }
         });
+
+        //     recyclerView = (RecyclerView) findViewById(R.id.show_diy_recycler_view);
+        //    recyclerView.setLayoutManager(new LinearLayoutManager(HomePageActivity.this));
+        //  Toast.makeText(HomePageActivity.this, "Wait! Fetching data....", Toast.LENGTH_SHORT).show();
+
     }
 }

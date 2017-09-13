@@ -1,62 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="360dp"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="10dp"
-    android:layout_marginRight="10dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginTop="50dp"
-    android:paddingBottom="10dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="10dp"
     android:background="@color/background_material_light">
-
-    <TextView
-        android:id="@+id/tvDiyName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="20dp"
-        android:layout_below="@+id/textView13"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/imgView"
-        android:layout_toStartOf="@+id/imgView" />
-
-    <TextView
-        android:id="@+id/tvDiyMaterial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="20dp"
-        android:layout_below="@+id/tvDiyName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/imgView"
-        android:layout_toStartOf="@+id/imgView" />
-
-    <TextView
-        android:id="@+id/tvDiyProcedure"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="20dp"
-        android:layout_below="@+id/tvDiyMaterial"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/imgView"
-        android:layout_toStartOf="@+id/imgView" />
-
-    <ImageView
-        android:id="@+id/imgView"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        app:srcCompat="@mipmap/loading" />
 
     <ListView
         android:id="@+id/lvView"

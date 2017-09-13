@@ -28,6 +28,7 @@ public class HomePageActivity extends AppCompatActivity {
     private ListView lv;
     private DIYListAdapter adapter;
     private ProgressDialog progressDialog;
+
     //  RecyclerView recyclerView;
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;

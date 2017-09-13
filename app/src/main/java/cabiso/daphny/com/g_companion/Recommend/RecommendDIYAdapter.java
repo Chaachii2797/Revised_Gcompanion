@@ -21,7 +21,7 @@ import cabiso.daphny.com.g_companion.R;
  * Created by cicctuser on 7/31/2017.
  */
 
-public class RecommendDIYAdapter<S> extends ArrayAdapter<DIYrecommend> {
+public class RecommendDIYAdapter extends ArrayAdapter<DIYrecommend> {
 
     private Activity context;
     private int resource;
@@ -40,10 +40,8 @@ public class RecommendDIYAdapter<S> extends ArrayAdapter<DIYrecommend> {
         LayoutInflater inflater = context.getLayoutInflater();
 
         View v = inflater.inflate(resource, null);
-        TextView tvName = (TextView) v.findViewById(R.id.fetch_item_name);
-       // TextView tvProcedure = (TextView) v.findViewById(R.id.fetch_item_procedure);
-       // TextView tvMaterial = (TextView) v.findViewById(R.id.fetch_item_material);
-        ImageView img = (ImageView) v.findViewById(R.id.fetch_image);
+        TextView tvName = (TextView) v.findViewById(R.id.get_nameRecommend);
+        ImageView img = (ImageView) v.findViewById(R.id.get_imageRecommend);
 
      //   tvProcedure.setText(listDIY.get(position).getDiyprocedure());
        // tvMaterial.setText(listDIY.get(position).getDiymaterial());

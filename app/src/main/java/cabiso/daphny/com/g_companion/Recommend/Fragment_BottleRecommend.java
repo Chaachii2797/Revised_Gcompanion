@@ -1,10 +1,11 @@
-package cabiso.daphny.com.g_companion;
+package cabiso.daphny.com.g_companion.Recommend;
+
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,94 +27,81 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
-/**
- * Created by Lenovo on 8/22/2017.
- */
+import cabiso.daphny.com.g_companion.MarketPlaceFragment;
+import cabiso.daphny.com.g_companion.R;
 
-public class MarketPlaceFragment extends Fragment{
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class Fragment_BottleRecommend extends Fragment {
 
     private DatabaseReference mDatabaseReference;
-    private DatabaseReference marketplaceReference;
+    private DatabaseReference diyMethod;
     private RecyclerView recyclerView;
     private OnListFragmentInteractionListener mListener;
     File productImageTempFile = null;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public MarketPlaceFragment() {
+    public Fragment_BottleRecommend() {
+        // Required empty public constructor
     }
 
-
-    public static MarketPlaceFragment newInstance() {
-        MarketPlaceFragment fragment = new MarketPlaceFragment();
+    public static Fragment_BottleRecommend newInstance() {
+        Fragment_BottleRecommend fragment = new Fragment_BottleRecommend();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        marketplaceReference = mDatabaseReference.child("marketplace");
-
+        diyMethod = mDatabaseReference.child("DIY_Method").child("category").child("bottle");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.app_bar_main, container, false);
-
+        // Inflate the layout for this fragment
         Context context = view.getContext();
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-
-
         return view;
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
-        FirebaseRecyclerAdapter<ProductInfo, ItemViewHolder> adapter =
-                new FirebaseRecyclerAdapter<ProductInfo, ItemViewHolder>(ProductInfo.class,
-                R.layout.recycler_item,ItemViewHolder.class, marketplaceReference ) {
-
+        FirebaseRecyclerAdapter<CategoryInfo, ItemViewHolder> adapter =
+                new FirebaseRecyclerAdapter<CategoryInfo, ItemViewHolder>
+                        (CategoryInfo.class,R.layout.recycler_item,ItemViewHolder.class,diyMethod) {
             @Override
-            protected void populateViewHolder(final ItemViewHolder viewHolder, ProductInfo model, final int position) {
-                Log.d("Firebase download", model.title);
-                viewHolder.mNameView.setText(model.title);
-                viewHolder.mDescriptionView.setText(model.desc);
-                viewHolder.mPriceView.setText(model.price);
-                try{
-                    String productPictureURL = model.productPictureURLs.get(0);
-                    Log.d("ppURL", productPictureURL);
-                    StorageReference pictureReference = FirebaseStorage.getInstance().getReferenceFromUrl(productPictureURL);
+            protected void populateViewHolder(final ItemViewHolder viewHolder, CategoryInfo model, final int position) {
+                Log.d("Firebase download", model.name);
+                viewHolder.mNameView.setText(model.name);
+                viewHolder.mMaterialView.setText(model.material);
+                viewHolder.mProcedureView.setText(model.procedure);
+                try {
+                    String categoryPictureURL = model.categoryPictureURLs.get(0);
+                    Log.d("ppURL", categoryPictureURL);
+                    StorageReference pictureReference = FirebaseStorage.getInstance().getReferenceFromUrl(categoryPictureURL);
                     pictureReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            // Got the download URL for 'users/me/profile.png'
-                            // Pass it to Picasso to download, show in ImageView and caching
                             Log.d("Product Picture URI is", uri.toString());
-                            Picasso.with(getContext()).load(uri).resize(75, 75).into(viewHolder.mProductImageView);
+                            Picasso.with(getContext()).load(uri).resize(75, 75).into(viewHolder.mcategoryImageView);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            // Handle any errors
+                        public void onFailure(@NonNull Exception e) {
+
                         }
                     });
-
-
                 }
                 catch(Exception e){
                     Log.d("Exception", "Failed to fetch product Picture");
                 }
-
-
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -127,49 +115,31 @@ public class MarketPlaceFragment extends Fragment{
             }
         };
         recyclerView.setAdapter(adapter);
-
-    }
-
-    public int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        // Raw height and width of image
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-        if (height > reqHeight || width > reqWidth) {
-            final int halfHeight = height / 2;
-            final int halfWidth = width / 2;
-            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-            // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) >= reqHeight
-                    && (halfWidth / inSampleSize) >= reqWidth) {
-                inSampleSize *= 2;
-            }
-        }
-        return inSampleSize;
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
 
         public final View mView;
         public final TextView mNameView;
-        public final TextView mDescriptionView;
-        public final TextView mPriceView;
-        public final ImageView mProductImageView;
+        public final TextView mMaterialView;
+        public final TextView mProcedureView;
+        public final ImageView mcategoryImageView;
 
         public ItemViewHolder(View view){
             super(view);
             mView = view;
             mNameView = (TextView) view.findViewById(R.id.item_name);
-            mDescriptionView = (TextView) view.findViewById(R.id.item_description);
-            mPriceView = (TextView) view.findViewById(R.id.item_price);
-            mProductImageView = (ImageView) view.findViewById(R.id.item_icon);
+            mMaterialView = (TextView) view.findViewById(R.id.item_description);
+            mProcedureView = (TextView) view.findViewById(R.id.item_price);
+            mcategoryImageView = (ImageView) view.findViewById(R.id.item_icon);
 
         }
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
+        if (context instanceof MarketPlaceFragment.OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
@@ -183,17 +153,8 @@ public class MarketPlaceFragment extends Fragment{
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(DatabaseReference ref);
     }
+
 }

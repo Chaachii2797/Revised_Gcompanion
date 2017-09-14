@@ -45,7 +45,8 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYrecommend> {
 
      //   tvProcedure.setText(listDIY.get(position).getDiyprocedure());
        // tvMaterial.setText(listDIY.get(position).getDiymaterial());
-        tvName.setText(listDIY.get(position).getDiyName());
+       // tvName.setText((CharSequence) listDIY.get(position).getDiyName());
+      //  tvName.setText(listDIY.get(position).getDiyName());
         Glide.with(context).load(listDIY.get(position).getImage_URL()).into(img);
 
         return v;

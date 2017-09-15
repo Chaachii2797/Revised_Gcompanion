@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 import cabiso.daphny.com.g_companion.Recommend.Paper_Recommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
@@ -43,7 +44,7 @@ public class ImageRecognitionTags extends AppCompatActivity {
     private Button diyBtn;
     private TextView tvTag;
 
-    private ArrayList<String> tags = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
     private DatabaseReference databaseReference;
     private FirebaseDatabase mRef;
 
@@ -79,7 +80,7 @@ public class ImageRecognitionTags extends AppCompatActivity {
                 for(int i = 0; i < 1; i++) {
                     results += " " + tags.get(i);
 
-                    if(tags.get(i).equals("bottle")){
+                    if(tags.get(i).equals("bottle") || tags.get(i).equals("drink") ||tags.get(i).equals("container")){
                         Toast.makeText(getApplication(), "Result "+results, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(ImageRecognitionTags.this, Bottle_Recommend.class);
                         Toast.makeText(ImageRecognitionTags.this,"bottle",Toast.LENGTH_SHORT).show();

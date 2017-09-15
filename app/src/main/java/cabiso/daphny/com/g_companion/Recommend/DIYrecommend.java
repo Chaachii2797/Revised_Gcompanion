@@ -49,5 +49,7 @@ public class DIYrecommend {
     public void setDiyprocedure(String diyprocedure) {
         this.diyprocedure = diyprocedure;
     }
+
+
 }
 

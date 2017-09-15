@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +37,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     private EditText diyMaterials;
     private EditText diyProcedures;
     private  Button btnShow;
+    private Uri downloadUrl;
 
     private ProgressDialog mProgressDialog;
     // private String mUsername;
@@ -58,7 +60,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         database = FirebaseDatabase.getInstance();
         mStorage = FirebaseStorage.getInstance();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Methods").child("category").child("bottle").push();
+        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Methods").child("category").child("bottle");
         mStorageRef = FirebaseStorage.getInstance().getReference("add_DIY");
 
         //mAuth = FirebaseAuth.getInstance();
@@ -93,7 +95,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         String dMaterials = diyMaterials.getText().toString();
         String dProcedures = diyProcedures.getText().toString();
 
-
         Intent intent = new Intent(CaptureDIY.this,HomePageActivity.class);
         startActivity(intent);
 
@@ -103,27 +104,26 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         diyName.setText("");
         diyMaterials.setText("");
         diyProcedures.setText("");
-
-
-        if (dName.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "DIY Name?", Toast.LENGTH_SHORT).show();
-            return;
+//        if (dName.isEmpty()) {
+//            Toast.makeText(getApplicationContext(), "DIY Name?", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (dMaterials.isEmpty()){
+//            Toast.makeText(getApplicationContext(), "DIY Materials?", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (dProcedures.isEmpty()){
+//            Toast.makeText(getApplicationContext(), "DIY Procedures?", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+        if(TextUtils.isEmpty(dName) || TextUtils.isEmpty(dMaterials) || TextUtils.isEmpty(dProcedures)){
+            Toast.makeText(getApplicationContext(), "Please fill out necessary details", Toast.LENGTH_SHORT).show();
         }
-        if (dMaterials.isEmpty()){
-            Toast.makeText(getApplicationContext(), "DIY Materials?", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (dProcedures.isEmpty()){
-            Toast.makeText(getApplicationContext(), "DIY Procedures?", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         Toast.makeText(getApplicationContext(), "Updated Info", Toast.LENGTH_SHORT).show();
-
     }
 
 
-    //request to capture image!
+    //request to get image!
     private void dispatchTakePictureIntent(){
         Intent ImageIntent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI); //implicit intent
@@ -144,10 +144,10 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             filePath.putFile(mImageUrl).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Uri downloadUrl =taskSnapshot.getDownloadUrl();
+                    downloadUrl=taskSnapshot.getDownloadUrl();
 
                     //  DIYDetails details = new DIYDetails(null, mUsername, downloadUrl.toString());
-                    databaseReference.child("Image_URL").setValue(downloadUrl.toString());
+                    databaseReference.getRef().child("Image_URL").setValue(downloadUrl.toString());
 
                     Glide.with(getApplicationContext())
                             .load(downloadUrl)

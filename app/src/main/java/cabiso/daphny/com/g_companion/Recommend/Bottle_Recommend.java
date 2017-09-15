@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -15,7 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import cabiso.daphny.com.g_companion.R;
 
@@ -25,7 +27,7 @@ import cabiso.daphny.com.g_companion.R;
 
 public class Bottle_Recommend extends AppCompatActivity {
 
-    private List<DIYrecommend> diyList;
+    private ArrayList<DIYrecommend> diyList = new ArrayList<>();
     private ListView lv;
     private ImageView loadview;
     private RecommendDIYAdapter adapter;
@@ -48,13 +50,14 @@ public class Bottle_Recommend extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend_bottle);
 
-        diyList = new ArrayList<>();
         lv = (ListView) findViewById(R.id.lvView);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please Wait loading DIYs.....");
         progressDialog.show();
 
+        //init adapter
+        adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
         database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("DIY_Methods").child("category").child("bottle");
 
@@ -65,14 +68,23 @@ public class Bottle_Recommend extends AppCompatActivity {
 
                 //fetch images from firebase
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    HashMap<String, Long> m = (HashMap<String, Long>) snapshot.getValue();
                     DIYrecommend img = snapshot.getValue(DIYrecommend.class);
-                    String image = img.getImage_URL();
+                    Log.d("test", String.valueOf(m.get("diyName")));
+                    Log.d("NAME: "+m.get("diyName"), "");
+                    String codeValue = img.getDiyName();
+                    Log.d("VALUE: "+codeValue,"");
+
                     diyList.add(img);
 
-                    //init adapter
-                    adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
                     //set adapter for listview
                     lv.setAdapter(adapter);
+//                    lv.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//
+//                        }
+//                    });
                 }
 
             }

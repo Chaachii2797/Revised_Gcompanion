@@ -40,21 +40,18 @@ public class DIYListAdapter extends ArrayAdapter<DIYDetails> {
         LayoutInflater inflater = context.getLayoutInflater();
 
         View v = inflater.inflate(resource, null);
-        TextView tvRecomName = (TextView) v.findViewById(R.id.fetch_recom_diy_name);
-       // TextView tvPrice = (TextView) v.findViewById(R.id.fetch_diy_procedure);
+
+        TextView tvName = (TextView) v.findViewById(R.id.fetch_recom_diy_name);
+        //TextView tvPrice = (TextView) v.findViewById(R.id.fetch_diy_price);
         ImageView img = (ImageView) v.findViewById(R.id.fetch_recom_image);
+
+        //tvName.setText(listDIY.get(position).getDiyName());
+       // tvName.setText(listDIY.get(position).getDiyPrice());
 
         final DIYDetails sd = (DIYDetails) this.getItem(position);
 
-       // tvRecomName.setText(sd.getDiyName());
-        //img.setText("allocated seats: " + sd.getSectionSeats());
+        tvName.setText("DIY Name: " + sd.getDiyName());
 
-
-        tvRecomName.setText("DIY Name:  " + sd.getDiyName());
-
-        // tvPrice.setText(listDIY.get(position).getDiyProcedures());
-       // tvRecomName.setText(listDIY.get(position).getDiyName());
-       // tvRecomName.setText(listDIY.get(position).getDiyName());
         Glide.with(context).load(listDIY.get(position).getImage_URL()).into(img);
 
         return v;

@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -17,7 +15,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import cabiso.daphny.com.g_companion.R;
 
@@ -67,15 +64,22 @@ public class Bottle_Recommend extends AppCompatActivity {
                 progressDialog.dismiss();
 
                 //fetch images from firebase
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    HashMap<String, Long> m = (HashMap<String, Long>) snapshot.getValue();
-                    DIYrecommend img = snapshot.getValue(DIYrecommend.class);
-                    Log.d("test", String.valueOf(m.get("diyName")));
-                    Log.d("NAME: "+m.get("diyName"), "");
-                    String codeValue = img.getDiyName();
-                    Log.d("VALUE: "+codeValue,"");
+//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                    HashMap<String, Long> m = (HashMap<String, Long>) snapshot.getValue();
+//                    DIYrecommend img = snapshot.getValue(DIYrecommend.class);
+//                    Log.d("test", String.valueOf(m.get("diyName")));
+//                    Log.d("NAME: "+m.get("diyName"), "");
+//                    String codeValue = img.getDiyName();
+//                    Log.d("VALUE: "+codeValue,"");
 
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    DIYrecommend img = snapshot.getValue(DIYrecommend.class);
                     diyList.add(img);
+                }
+                //init adapter
+                adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
+                //set adapter for listview
+                lv.setAdapter(adapter);
 
                     //set adapter for listview
                     lv.setAdapter(adapter);
@@ -87,13 +91,13 @@ public class Bottle_Recommend extends AppCompatActivity {
 //                    });
                 }
 
-            }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                progressDialog.dismiss();
+
             }
+
         });
+
 
         //     recyclerView = (RecyclerView) findViewById(R.id.show_diy_recycler_view);
         //    recyclerView.setLayoutManager(new LinearLayoutManager(HomePageActivity.this));

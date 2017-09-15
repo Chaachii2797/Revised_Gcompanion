@@ -46,6 +46,7 @@ public class HomePageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
+
         diyList = new ArrayList<>();
         lv = (ListView) findViewById(R.id.list_view_diy);
 

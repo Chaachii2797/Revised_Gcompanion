@@ -60,7 +60,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         database = FirebaseDatabase.getInstance();
         mStorage = FirebaseStorage.getInstance();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Methods").child("category").child("bottle");
+        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Methods").child("category").child("bottle").push();
         mStorageRef = FirebaseStorage.getInstance().getReference("add_DIY");
 
         //mAuth = FirebaseAuth.getInstance();
@@ -136,6 +136,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         if (requestCode == RESULT_LOAD_IMAGE && resultCode ==RESULT_OK){
             mImageUrl = data.getData();
             imgViewPhoto.setImageURI(mImageUrl);
+
             StorageReference filePath = mStorageRef.child(mImageUrl.getLastPathSegment());
 
             mProgressDialog.setMessage("Uploading image....");
@@ -144,10 +145,10 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             filePath.putFile(mImageUrl).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    downloadUrl=taskSnapshot.getDownloadUrl();
+                    Uri downloadUrl =taskSnapshot.getDownloadUrl();
 
                     //  DIYDetails details = new DIYDetails(null, mUsername, downloadUrl.toString());
-                    databaseReference.getRef().child("Image_URL").setValue(downloadUrl.toString());
+                    databaseReference.child("Image_URL").setValue(downloadUrl.toString());
 
                     Glide.with(getApplicationContext())
                             .load(downloadUrl)

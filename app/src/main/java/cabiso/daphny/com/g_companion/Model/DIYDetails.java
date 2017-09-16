@@ -12,13 +12,13 @@ public class DIYDetails{
     private String Image_URL;
 
 
-    public DIYDetails(String diyName, String diyMaterials, String diyProcedures, String image_URL) {
-        this.diyName = diyName;
-        this.diyMaterials = diyMaterials;
-        this.diyProcedures = diyProcedures;
-        this.Image_URL = image_URL;
-
-    }
+//    public DIYDetails(String diyName, String diyMaterials, String diyProcedures, String image_URL) {
+//        this.diyName = diyName;
+//        this.diyMaterials = diyMaterials;
+//        this.diyProcedures = diyProcedures;
+//        this.Image_URL = image_URL;
+//
+//    }
 
     public DIYDetails(String dName, String dMaterials, String dProcedures) {
         this.diyName = dName;

@@ -23,4 +23,12 @@
     <string name="appicon">AppIcon</string>
     <string name="login_background">login_background</string>
     <string name="sign_up">SIGN UP</string>
+
+    <string-array name="categories">
+        <item>Select Category</item>
+        <item>Bottle</item>
+        <item>Paper</item>
+        <item>Plastic</item>
+        <item>Rubber</item>
+    </string-array>
 </resources>

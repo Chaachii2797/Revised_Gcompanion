@@ -1,68 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
-
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:backgroundTint="@color/bg_screen2"
-        android:text="SAVE Details"
-        android:clickable="true"
-        android:textColor="@android:color/background_light"
-        android:background="@drawable/shape"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="17dp" />
 
     <EditText
-        android:id="@+id/etName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:elevation="1dp"
-        android:ems="10"
-        android:hint="DIY Name:"
-        android:inputType="textPersonName"
-        android:layout_marginBottom="14dp"
-        android:layout_above="@+id/etMaterials"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:id="@+id/etMaterials"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="14dp"
-        android:ems="10"
-        android:hint="Materials:"
-        android:inputType="textPersonName"
-        android:layout_above="@+id/etProcedures"
-        android:layout_alignLeft="@+id/etName"
-        android:layout_alignStart="@+id/etName" />
-
-    <EditText
-        android:id="@+id/etProcedures"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="37dp"
-        android:ems="10"
-        android:hint="Procedures:"
-        android:inputType="textPersonName"
-        android:layout_above="@+id/btnSave"
-        android:layout_alignLeft="@+id/etMaterials"
-        android:layout_alignStart="@+id/etMaterials" />
-
-    <ImageView
-        android:id="@+id/photoSaver"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        app:srcCompat="@drawable/add"
-        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_diy_name"
+        android:hint="DIY Name"
+        android:layout_above="@+id/add_diy_material"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_diy_material"
+        android:hint="DIY Materials"
+        android:layout_above="@+id/add_diy_procedure"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_diy_procedure"
+        android:hint="DIY Procedures"
+        android:layout_above="@+id/add_submit_diy"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="22dp" />
+        android:layout_marginBottom="83dp" />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:id="@+id/add_product_image_plus_icon"
+        android:src="@drawable/add"
+        android:layout_above="@+id/category"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="11dp" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Category: "
+        android:textSize="20dp"
+        android:id="@+id/category"
+        android:layout_alignBottom="@+id/add_diy_name"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="41dp" />
+
+    <Button
+        android:id="@+id/add_submit_diy"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/shape"
+        android:backgroundTint="@color/bg_screen2"
+        android:onClick="onClick"
+        android:text="ADD DIY"
+        android:textColor="@android:color/background_light"
+        tools:layout_editor_absoluteX="311dp"
+        tools:layout_editor_absoluteY="473dp" />
+
+    <TextView
+        android:id="@+id/textView24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:text="Add DIY"
+        android:textSize="20sp" />
 </RelativeLayout>

@@ -42,6 +42,8 @@ import java.util.List;
  * Created by Lenovo on 8/22/2017.
  */
 
+import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
+
 import static cabiso.daphny.com.g_companion.MyProfileActivity.REQUEST_IMAGE_CAPTURE;
 
 public class AddProductActivity extends AppCompatActivity{
@@ -84,8 +86,8 @@ public class AddProductActivity extends AppCompatActivity{
         productImagesStorageReference = storageReference.child("ProductImages"+"/"+currentKey);
 
         final EditText title = (EditText)findViewById(R.id.add_product_title);
-        final EditText desc = (EditText)findViewById(R.id.add_product_description);
-        final EditText price = (EditText) findViewById(R.id.add_product_price);
+        final EditText desc = (EditText)findViewById(R.id.add_diy_material);
+        final EditText price = (EditText) findViewById(R.id.add_diy_procedure);
 
         productImagesRecyclerViewAdapter = new ProductImagesRecyclerViewAdapter();
         final RecyclerView productImagesRecyclerView = (RecyclerView) findViewById(R.id.add_product_images_recycler_view);
@@ -99,12 +101,16 @@ public class AddProductActivity extends AppCompatActivity{
                 dispatchTakePictureIntent();
             }
         });
-        Button submitButton = (Button) findViewById(R.id.add_product_submit_button);
+
+        Button submitButton = (Button) findViewById(R.id.add_submit_diy);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentProductReference.setValue(new ProductInfo(title.getText().toString(), desc.getText().toString(), price.getText().toString(), "yes", productPictureURLList, userID));
+                currentProductReference.setValue(new ProductInfo(title.getText().toString(), desc.getText().toString(),
+                        price.getText().toString(), "yes", productPictureURLList, userID));
+
                 imageFromUri();
+
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
                 startActivity(intent);
             }
@@ -172,6 +178,7 @@ public class AddProductActivity extends AppCompatActivity{
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                 }
             });
+
             productPictureURLList.add(pictureRef.toString());
             currentProductReference.child("productPictureURLs").setValue(productPictureURLList);
         }

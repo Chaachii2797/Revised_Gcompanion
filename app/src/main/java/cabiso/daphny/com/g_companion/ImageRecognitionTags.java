@@ -3,9 +3,12 @@ package cabiso.daphny.com.g_companion;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import cabiso.daphny.com.g_companion.Fragments.Recommendation;
 import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 import cabiso.daphny.com.g_companion.Recommend.Paper_Recommend;
@@ -36,7 +40,7 @@ import clarifai2.dto.prediction.Concept;
  * Created by Lenovo on 7/30/2017.
  */
 
-public class ImageRecognitionTags extends AppCompatActivity {
+public class ImageRecognitionTags extends AppCompatActivity implements Recommendation.OnFragmentInteractionListener{
 
     static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
 
@@ -85,6 +89,10 @@ public class ImageRecognitionTags extends AppCompatActivity {
                         Intent intent = new Intent(ImageRecognitionTags.this, Bottle_Recommend.class);
                         Toast.makeText(ImageRecognitionTags.this,"bottle",Toast.LENGTH_SHORT).show();
                         startActivity(intent);
+
+//                       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_recommendation,new Recommendation())
+//                               .addToBackStack(null).commit();
+
                     }else if(results.equals("paper")){
                         clearFields();
                         Intent intent = new Intent(ImageRecognitionTags.this, Paper_Recommend.class);
@@ -186,4 +194,13 @@ public class ImageRecognitionTags extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onFragmentInteraction(DatabaseReference ref) {
+
+    }
 }

@@ -43,11 +43,12 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYrecommend> {
         LayoutInflater inflater = context.getLayoutInflater();
 
         View v = inflater.inflate(resource, null);
-        TextView tvName = (TextView) v.findViewById(R.id.get_nameRecommend);
-        ImageView img = (ImageView) v.findViewById(R.id.get_recom_image);
+        TextView tvName = (TextView) v.findViewById(R.id.get_diyName);
+        ImageView img = (ImageView) v.findViewById(R.id.diy_item_icon);
 
         tvName.setText("DIY Name: " + listDIY.get(position).getDiyName());
 //        Glide.with(context).load(listDIY.get(position).getImage_URL()).into(img);
+        Glide.with(context).load(listDIY.get(position).getDiyImageUrl()).into(img);
         return v;
     }
 }

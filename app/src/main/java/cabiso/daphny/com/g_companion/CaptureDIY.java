@@ -104,7 +104,7 @@ public class CaptureDIY extends AppCompatActivity{
             public void onClick(View v) {
                 Toast.makeText(CaptureDIY.this,"IMAGE URL: "+diyPictureURLList,Toast.LENGTH_SHORT).show();
                 currentProductReference.setValue(new DIYrecommend(name.getText().toString(), material.getText().toString(),
-                        procedure.getText().toString()), diyPictureURLList);
+                        procedure.getText().toString()),diyPictureURLList.get(0));
 
                 imageFromUri();
 
@@ -113,7 +113,6 @@ public class CaptureDIY extends AppCompatActivity{
             }
         });
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -140,6 +139,7 @@ public class CaptureDIY extends AppCompatActivity{
             try{
                 photoFile = createImageFile();
             }
+
             catch(IOException io){
                 Log.d("Exception caught", io.toString());
             }
@@ -198,8 +198,6 @@ public class CaptureDIY extends AppCompatActivity{
             currentProductReference.child("diyPictureURLs").setValue(diyPictureURLList);
         }
     }
-
-
 
     public class ItemViewHolder extends RecyclerView.ViewHolder{
         public View view;

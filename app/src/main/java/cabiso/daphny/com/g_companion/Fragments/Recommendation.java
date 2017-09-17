@@ -1,11 +1,9 @@
-package cabiso.daphny.com.g_companion.Recommend;
-
+package cabiso.daphny.com.g_companion.Fragments;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,79 +25,83 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
-import cabiso.daphny.com.g_companion.MarketPlaceFragment;
 import cabiso.daphny.com.g_companion.R;
+import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 
 /**
  * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link Recommendation.OnFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link Recommendation#newInstance} factory method to
+ * create an instance of this fragment.
  */
-public class Fragment_BottleRecommend extends Fragment {
+public class Recommendation extends Fragment {
 
+    private OnFragmentInteractionListener mListener;
     private DatabaseReference mDatabaseReference;
-    private DatabaseReference diyMethod;
+    private DatabaseReference diys;
     private RecyclerView recyclerView;
-    private OnListFragmentInteractionListener mListener;
-    File productImageTempFile = null;
+    File diyImageTempFile = null;
 
-    public Fragment_BottleRecommend() {
+
+    public Recommendation() {
         // Required empty public constructor
     }
 
-    public static Fragment_BottleRecommend newInstance() {
-        Fragment_BottleRecommend fragment = new Fragment_BottleRecommend();
+    public static Recommendation newInstance(String param1, String param2) {
+        Recommendation fragment = new Recommendation();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        diyMethod = mDatabaseReference.child("DIY_Method").child("category").child("bottle");
+        diys = mDatabaseReference.child("DIY_Method").child("category");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.app_bar_main, container, false);
-        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.for_recommendation, container, false);
+
         Context context = view.getContext();
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseRecyclerAdapter<CategoryInfo, ItemViewHolder> adapter =
-                new FirebaseRecyclerAdapter<CategoryInfo, ItemViewHolder>
-                        (CategoryInfo.class,R.layout.recycler_item,ItemViewHolder.class,diyMethod) {
+        FirebaseRecyclerAdapter<DIYrecommend, ItemViewHolder> adapter =
+                new FirebaseRecyclerAdapter<DIYrecommend, ItemViewHolder>
+                        (DIYrecommend.class,R.layout.recommend_ui,ItemViewHolder.class,diys) {
             @Override
-            protected void populateViewHolder(final ItemViewHolder viewHolder, CategoryInfo model, final int position) {
-                Log.d("Firebase download", model.name);
-                viewHolder.mNameView.setText(model.name);
-                viewHolder.mMaterialView.setText(model.material);
-                viewHolder.mProcedureView.setText(model.procedure);
-                try {
-                    String categoryPictureURL = model.categoryPictureURLs.get(0);
-                    Log.d("ppURL", categoryPictureURL);
-                    StorageReference pictureReference = FirebaseStorage.getInstance().getReferenceFromUrl(categoryPictureURL);
-                    pictureReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            protected void populateViewHolder(final ItemViewHolder viewHolder, DIYrecommend model, final int position) {
+                viewHolder.mNameView.setText(model.diyName);
+                try{
+                    String diyPictureURL = model.diyImageUrl.get(0);
+                    Log.d("ppURL", diyPictureURL);
+                    StorageReference diyReference = FirebaseStorage.getInstance().getReferenceFromUrl(diyPictureURL);
+                    diyReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
                             Log.d("Product Picture URI is", uri.toString());
-                            Picasso.with(getContext()).load(uri).resize(75, 75).into(viewHolder.mcategoryImageView);
+                            Picasso.with(getContext()).load(uri).resize(75, 75).into(viewHolder.mDIYImageView);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public void onFailure(@NonNull Exception e) {
-
+                        public void onFailure(@NonNull Exception exception) {
+                            // Handle any errors
                         }
                     });
                 }
-                catch(Exception e){
+                catch (Exception e){
                     Log.d("Exception", "Failed to fetch product Picture");
                 }
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -108,30 +110,34 @@ public class Fragment_BottleRecommend extends Fragment {
                         if (null != mListener) {
                             // Notify the active callbacks interface (the activity, if the
                             // fragment is attached to one) that an item has been selected.
-                            mListener.onListFragmentInteraction(getRef(position));
+                            mListener.onFragmentInteraction(getRef(position));
                         }
                     }
                 });
             }
         };
+
         recyclerView.setAdapter(adapter);
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
 
         public final View mView;
         public final TextView mNameView;
-        public final TextView mMaterialView;
-        public final TextView mProcedureView;
-        public final ImageView mcategoryImageView;
+        public final ImageView mDIYImageView;
 
         public ItemViewHolder(View view){
             super(view);
             mView = view;
-            mNameView = (TextView) view.findViewById(R.id.item_name);
-            mMaterialView = (TextView) view.findViewById(R.id.item_description);
-            mProcedureView = (TextView) view.findViewById(R.id.item_price);
-            mcategoryImageView = (ImageView) view.findViewById(R.id.diy_item_icon);
+            mNameView = (TextView) view.findViewById(R.id.get_diyName);
+            mDIYImageView = (ImageView) view.findViewById(R.id.diy_item_icon);
 
         }
     }
@@ -139,11 +145,11 @@ public class Fragment_BottleRecommend extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof MarketPlaceFragment.OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -153,8 +159,19 @@ public class Fragment_BottleRecommend extends Fragment {
         mListener = null;
     }
 
-    public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(DatabaseReference ref);
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(DatabaseReference ref);
     }
-
 }

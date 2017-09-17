@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -29,6 +30,7 @@ public class Bottle_Recommend extends AppCompatActivity {
     private ImageView loadview;
     private RecommendDIYAdapter adapter;
     private ProgressDialog progressDialog;
+    private RecyclerView recyclerView;
 
     //  RecyclerView recyclerView;
     private FirebaseDatabase database;
@@ -46,6 +48,7 @@ public class Bottle_Recommend extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend_bottle);
+        recyclerView = (RecyclerView) findViewById(R.id.list);
 
         lv = (ListView) findViewById(R.id.lvView);
 
@@ -81,15 +84,15 @@ public class Bottle_Recommend extends AppCompatActivity {
                 //set adapter for listview
                 lv.setAdapter(adapter);
 
-                    //set adapter for listview
-                    lv.setAdapter(adapter);
+                //set adapter for listview
+                lv.setAdapter(adapter);
 //                    lv.setOnClickListener(new View.OnClickListener() {
 //                        @Override
 //                        public void onClick(View v) {
 //
 //                        }
 //                    });
-                }
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

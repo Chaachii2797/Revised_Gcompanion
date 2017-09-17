@@ -70,8 +70,6 @@ public class MarketPlaceFragment extends Fragment{
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-
-
         return view;
     }
 
@@ -162,7 +160,7 @@ public class MarketPlaceFragment extends Fragment{
             mNameView = (TextView) view.findViewById(R.id.item_name);
             mDescriptionView = (TextView) view.findViewById(R.id.item_description);
             mPriceView = (TextView) view.findViewById(R.id.item_price);
-            mProductImageView = (ImageView) view.findViewById(R.id.item_icon);
+            mProductImageView = (ImageView) view.findViewById(R.id.diy_item_icon);
 
         }
     }

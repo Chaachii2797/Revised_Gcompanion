@@ -1,32 +1,29 @@
 package cabiso.daphny.com.g_companion.Recommend;
 
-import android.net.Uri;
-
-import java.util.List;
-
 /**
  * Created by Lenovo on 7/30/2017.
  */
 
 public class DIYrecommend {
 
-    public String diyName, diymaterial, diyprocedure;
-    public List<String> diyImageUrl;
-    public DIYrecommend(String diyName, String diymaterial, String diyprocedure, List<String> diyImageUrl) {
-        this.diyName = diyName;
-        this.diymaterial = diymaterial;
-        this.diyprocedure = diyprocedure;
-        this.diyImageUrl = diyImageUrl;
-    }
+    private String Image_URL, diyName, diymaterial, diyprocedure;
 
-
-    public DIYrecommend(String diyName, String diymaterial, String diyprocedure) {
+    public DIYrecommend(String image_URL, String diyName, String diymaterial, String diyprocedure) {
+        Image_URL = image_URL;
         this.diyName = diyName;
         this.diymaterial = diymaterial;
         this.diyprocedure = diyprocedure;
     }
-//
+
     public DIYrecommend(){
+    }
+
+    public String getImage_URL() {
+        return Image_URL;
+    }
+
+    public void setImage_URL(String image_URL) {
+        Image_URL = image_URL;
     }
 
     public String getDiyName() {
@@ -53,12 +50,6 @@ public class DIYrecommend {
         this.diyprocedure = diyprocedure;
     }
 
-    public List<String> getDiyImageUrl() {
-        return diyImageUrl;
-    }
 
-    public void setDiyImageUrl(List<String> diyImageUrl) {
-        this.diyImageUrl = diyImageUrl;
-    }
 }
 

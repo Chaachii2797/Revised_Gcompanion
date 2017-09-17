@@ -59,7 +59,7 @@ public class Bottle_Recommend extends AppCompatActivity {
         //init adapter
         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
         database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("DIY_Methods").child("category");
+        DatabaseReference myRef = database.getReference("DIY_Methods").child("category").child("bottle");
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override

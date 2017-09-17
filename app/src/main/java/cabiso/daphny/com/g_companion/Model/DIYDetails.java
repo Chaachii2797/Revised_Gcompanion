@@ -26,10 +26,7 @@ public class DIYDetails{
         this.diyProcedures = dProcedures;
     }
 
-    public DIYDetails(){
-
-    }
-
+    public DIYDetails(){}
 
 
     public String getDiyName() {

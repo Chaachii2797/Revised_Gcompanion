@@ -3,12 +3,9 @@ package cabiso.daphny.com.g_companion;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -23,9 +20,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import cabiso.daphny.com.g_companion.Fragments.Recommendation;
 import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 import cabiso.daphny.com.g_companion.Recommend.Paper_Recommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
@@ -40,7 +35,7 @@ import clarifai2.dto.prediction.Concept;
  * Created by Lenovo on 7/30/2017.
  */
 
-public class ImageRecognitionTags extends AppCompatActivity implements Recommendation.OnFragmentInteractionListener{
+public class ImageRecognitionTags extends AppCompatActivity{
 
     static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
 
@@ -194,13 +189,4 @@ public class ImageRecognitionTags extends AppCompatActivity implements Recommend
 
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
-
-    @Override
-    public void onFragmentInteraction(DatabaseReference ref) {
-
-    }
 }

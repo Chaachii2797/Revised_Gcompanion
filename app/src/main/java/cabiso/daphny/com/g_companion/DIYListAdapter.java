@@ -45,12 +45,12 @@ public class DIYListAdapter extends ArrayAdapter<DIYDetails> {
         //TextView tvPrice = (TextView) v.findViewById(R.id.fetch_diy_price);
         ImageView img = (ImageView) v.findViewById(R.id.fetch_recom_image);
 
-        //tvName.setText(listDIY.get(position).getDiyName());
+        tvName.setText(listDIY.get(position).getDiyName());
        // tvName.setText(listDIY.get(position).getDiyPrice());
 
-        final DIYDetails sd = (DIYDetails) this.getItem(position);
-
-        tvName.setText("DIY Name: " + sd.getDiyName());
+//        final DIYDetails sd = (DIYDetails) this.getItem(position);
+//
+//       tvName.setText("DIY Name: " + sd.getDiyName());
 
         Glide.with(context).load(listDIY.get(position).getImage_URL()).into(img);
 

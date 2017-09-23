@@ -40,7 +40,6 @@ public class HomePageActivity extends AppCompatActivity {
     public HomePageActivity() {
 
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

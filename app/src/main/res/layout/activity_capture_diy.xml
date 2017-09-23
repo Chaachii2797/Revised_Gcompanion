@@ -14,15 +14,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/add_diy_name"
         android:hint="DIY Name"
-        android:layout_above="@+id/add_diy_material"
+        android:layout_below="@+id/cbBottle"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="14dp" />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/add_diy_material"
         android:hint="DIY Materials"
-        android:layout_above="@+id/add_diy_procedure"
+        android:layout_below="@+id/add_diy_name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
     <EditText
@@ -30,31 +31,29 @@
         android:layout_height="wrap_content"
         android:id="@+id/add_diy_procedure"
         android:hint="DIY Procedures"
-        android:layout_above="@+id/add_submit_diy"
+        android:layout_below="@+id/add_diy_material"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="83dp" />
+        android:layout_alignParentStart="true" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:id="@+id/add_product_image_plus_icon"
         android:src="@drawable/add"
-        android:layout_above="@+id/category"
+        android:layout_below="@+id/textView24"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="11dp" />
+        android:layout_marginTop="16dp" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="Category: "
         android:textSize="20dp"
         android:id="@+id/category"
-        android:layout_alignBottom="@+id/add_diy_name"
+        android:layout_below="@+id/add_product_image_plus_icon"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="41dp" />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:id="@+id/add_submit_diy"
@@ -79,4 +78,50 @@
         android:layout_marginTop="25dp"
         android:text="Add DIY"
         android:textSize="20sp" />
+
+    <CheckBox
+        android:id="@+id/cbBottle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bottle"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="25dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <CheckBox
+        android:id="@+id/cbRubber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rubber"
+        android:layout_alignBaseline="@+id/cbBottle"
+        android:layout_alignBottom="@+id/cbBottle"
+        android:layout_toLeftOf="@+id/cbPaper"
+        android:layout_toStartOf="@+id/cbPaper" />
+
+    <CheckBox
+        android:id="@+id/cbPaper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Paper"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_alignBaseline="@+id/cbRubber"
+        android:layout_alignBottom="@+id/cbRubber"
+        android:layout_toLeftOf="@+id/cbWood"
+        android:layout_toStartOf="@+id/cbWood" />
+
+    <CheckBox
+        android:id="@+id/cbWood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wood"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_alignBaseline="@+id/cbPaper"
+        android:layout_alignBottom="@+id/cbPaper"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>

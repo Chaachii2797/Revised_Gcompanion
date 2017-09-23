@@ -58,12 +58,69 @@
     <ImageView
         android:id="@+id/photoSaver"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         app:srcCompat="@drawable/add"
-        android:layout_above="@+id/etName"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="13dp" />
+        android:layout_marginTop="23dp" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Category:"
+        android:textSize="20dp"
+        android:layout_below="@+id/photoSaver"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="17dp"
+        android:layout_marginStart="17dp" />
+
+    <CheckBox
+        android:id="@+id/cbBottle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bottle"
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/textView13"
+        android:layout_alignEnd="@+id/textView13" />
+
+    <CheckBox
+        android:id="@+id/cbPaper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@+id/cbBottle"
+        android:layout_toRightOf="@+id/cbBottle"
+        android:text="Paper" />
+
+    <CheckBox
+        android:id="@+id/cbRubber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rubber"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_alignBaseline="@+id/cbPaper"
+        android:layout_alignBottom="@+id/cbPaper"
+        android:layout_toRightOf="@+id/cbPaper"
+        android:layout_toEndOf="@+id/cbPaper" />
+
+    <CheckBox
+        android:id="@+id/cbWood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wood"
+        android:layout_alignBaseline="@+id/cbRubber"
+        android:layout_alignBottom="@+id/cbRubber"
+        android:layout_toRightOf="@+id/cbRubber"
+        android:layout_toEndOf="@+id/cbRubber"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp" />
 
 
 </RelativeLayout>

@@ -56,6 +56,8 @@
         <activity android:name=".MyProfileActivity" />
         <activity android:name=".Recommend.Bottle_Recommend" />
         <activity android:name=".Recommend.Paper_Recommend" />
+        <activity android:name=".Recommend.Rubber_Recommend"/>
+        <activity android:name=".Recommend.Wood_Recommend"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

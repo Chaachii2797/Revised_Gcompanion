@@ -1,140 +1,273 @@
 package cabiso.daphny.com.g_companion;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
-import cabiso.daphny.com.g_companion.Model.DIYDetails;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Lenovo on 8/22/2017.
  */
 
+import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
+import cabiso.daphny.com.g_companion.Recommend.Paper_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Rubber_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Wood_Recommend;
+
 public class CaptureDIY extends AppCompatActivity implements View.OnClickListener{
 
-    private ImageView imgViewPhoto;
-    private Button btnSave;
-    private EditText diyName;
-    private EditText diyMaterials;
-    private EditText diyProcedures;
-    private Uri downloadUrl;
+    private DatabaseReference marketplaceReference;
+    private DatabaseReference currentProductReference;
+    private DatabaseReference productImageURLsReference;
 
-    private ProgressDialog mProgressDialog;
+    private StorageReference storageReference;
+    private StorageReference diyImagesStorageReference;
 
-    private DatabaseReference databaseReference;
-    private StorageReference mStorageRef;
-    private Uri mImageUrl ;
+    private FirebaseUser mFirebaseUser;
+    private String userID;
+    private String imageFileName;
 
-    private static final int RESULT_LOAD_IMAGE=1;
+    private Uri diyPictureUri;
 
+    private static final int SELECT_PHOTO = 100;
+    private static final int MAX_LENGTH = 100;
+    private String currentKey;
+    CheckBox bottle, paper, rubber, wood;
+    Button submitButton;
+    EditText name, material, procedure;
+    ImageView imgView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload_image);
+        setContentView(R.layout.activity_capture_diy);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("DIY_Methods").child("category").child("bottle").push();
-        mStorageRef = FirebaseStorage.getInstance().getReference("Upload_DIY");
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        userID = mFirebaseUser.getUid();
 
+        name = (EditText)findViewById(R.id.add_diy_name);
+        material = (EditText)findViewById(R.id.add_diy_material);
+        procedure = (EditText) findViewById(R.id.add_diy_procedure);
+        imgView = (ImageView) findViewById(R.id.add_product_image_plus_icon);
+        bottle = (CheckBox)findViewById(R.id.cbBottle);
+        paper = (CheckBox)findViewById(R.id.cbPaper);
+        rubber = (CheckBox)findViewById(R.id.cbRubber);
+        wood = (CheckBox)findViewById(R.id.cbWood);
 
-        //mAuth = FirebaseAuth.getInstance();
-        // final FirebaseUser user = mAuth.getCurrentUser();
-        //userid = user.getUid();
+        bottle.setOnClickListener(this);
+        paper.setOnClickListener(this);
+        rubber.setOnClickListener(this);
+        wood.setOnClickListener(this);
 
-        mProgressDialog = new ProgressDialog(this);
-        imgViewPhoto = (ImageView) findViewById(R.id.photoSaver);
-        btnSave = (Button) findViewById(R.id.btnSave);
-        diyName = (EditText) findViewById(R.id.etName);
-        diyMaterials = (EditText) findViewById(R.id.etMaterials);
-        diyProcedures = (EditText) findViewById(R.id.etProcedures);
+        final ImageView addProductImagePlusIcon = (ImageView) findViewById(R.id.add_product_image_plus_icon);
+        addProductImagePlusIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage();
+            }
+        });
 
-        btnSave.setOnClickListener(this);
-
-        dispatchTakePictureIntent();
-
+        submitButton = (Button) findViewById(R.id.add_submit_diy);
     }
-
 
     @Override
     public void onClick(View v) {
-        String dName = diyName.getText().toString();
-        String dMaterials = diyMaterials.getText().toString();
-        String dProcedures = diyProcedures.getText().toString();
+        switch (v.getId()){
+            case R.id.add_submit_diy:
+                submitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (bottle.isChecked()){
+                            marketplaceReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("category").child("bottle");
+                            Random generator = new Random();
+                            StringBuilder randomStringBuilder = new StringBuilder();
+                            int randomLength = generator.nextInt(MAX_LENGTH);
+                            char tempChar;
+                            for (int i = 0; i < randomLength; i++){
+                                tempChar = (char) (generator.nextInt(96) + 32);
+                                randomStringBuilder.append(tempChar);
+                            }
+                            storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://g-companion.appspot.com/");
+                            storageReference.child("add_DIY").child("bottles"+randomLength).putFile(diyPictureUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                    String upload = marketplaceReference.push().getKey();
+                                    marketplaceReference.child(upload).setValue(recommend);
+                                    Picasso.with(CaptureDIY.this).load(downloadUrl).into(imgView);
+                                    Intent intent = new Intent(CaptureDIY.this,Bottle_Recommend.class);
+                                    startActivity(intent);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
 
-        Intent intent = new Intent(CaptureDIY.this, HomePageActivity.class);
-        startActivity(intent);
+                                }
+                            });
+                        }
+                        else if(paper.isChecked()){
+                            marketplaceReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("category").child("paper");
 
-        DIYDetails details = new DIYDetails(dName, dMaterials, dProcedures);
-        databaseReference.push().setValue(details);
+                            Random generator = new Random();
+                            StringBuilder randomStringBuilder = new StringBuilder();
+                            int randomLength = generator.nextInt(MAX_LENGTH);
+                            char tempChar;
+                            for (int i = 0; i < randomLength; i++){
+                                tempChar = (char) (generator.nextInt(96) + 32);
+                                randomStringBuilder.append(tempChar);
+                            }
+                            storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://g-companion.appspot.com/");
+                            storageReference.child("add_DIY").child("papers"+randomLength).putFile(diyPictureUri).addOnSuccessListener
+                                    (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                            DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
+                                                    ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            String upload = marketplaceReference.push().getKey();
+                                            marketplaceReference.child(upload).setValue(recommend);
+                                            Picasso.with(CaptureDIY.this).load(downloadUrl).into(imgView);
+                                            Intent intent = new Intent(CaptureDIY.this,Paper_Recommend.class);
+                                            startActivity(intent);
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(CaptureDIY.this,"Error in uploading!",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                        else if(rubber.isChecked()){
+                            marketplaceReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("category").child("rubber");
 
-        diyName.setText("");
-        diyMaterials.setText("");
-        diyProcedures.setText("");
+                            Random generator = new Random();
+                            StringBuilder randomStringBuilder = new StringBuilder();
+                            int randomLength = generator.nextInt(MAX_LENGTH);
+                            char tempChar;
+                            for (int i = 0; i < randomLength; i++){
+                                tempChar = (char) (generator.nextInt(96) + 32);
+                                randomStringBuilder.append(tempChar);
+                            }
+                            storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://g-companion.appspot.com/");
+                            storageReference.child("add_DIY").child("rubber"+randomLength).putFile(diyPictureUri).addOnSuccessListener
+                                    (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                            DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
+                                                    ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            String upload = marketplaceReference.push().getKey();
+                                            marketplaceReference.child(upload).setValue(recommend);
+                                            Picasso.with(CaptureDIY.this).load(downloadUrl).into(imgView);
+                                            Intent intent = new Intent(CaptureDIY.this,Rubber_Recommend.class);
+                                            startActivity(intent);
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(CaptureDIY.this,"Error in uploading!",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                        else if(wood.isChecked()){
+                            marketplaceReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("category").child("wood");
 
-        if (TextUtils.isEmpty(dName) || TextUtils.isEmpty(dMaterials) || TextUtils.isEmpty(dProcedures)) {
-            Toast.makeText(getApplicationContext(), "Please fill out necessary details", Toast.LENGTH_SHORT).show();
+                            Random generator = new Random();
+                            StringBuilder randomStringBuilder = new StringBuilder();
+                            int randomLength = generator.nextInt(MAX_LENGTH);
+                            char tempChar;
+                            for (int i = 0; i < randomLength; i++){
+                                tempChar = (char) (generator.nextInt(96) + 32);
+                                randomStringBuilder.append(tempChar);
+                            }
+                            storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://g-companion.appspot.com/");
+                            storageReference.child("add_DIY").child("woods"+randomLength).putFile(diyPictureUri).addOnSuccessListener
+                                    (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                            DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
+                                                    ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            String upload = marketplaceReference.push().getKey();
+                                            marketplaceReference.child(upload).setValue(recommend);
+                                            Picasso.with(CaptureDIY.this).load(downloadUrl).into(imgView);
+                                            Intent intent = new Intent(CaptureDIY.this,Wood_Recommend.class);
+                                            startActivity(intent);
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(CaptureDIY.this,"Error in uploading!",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+                });
+                break;
         }
-        Toast.makeText(getApplicationContext(), "Updated Info", Toast.LENGTH_SHORT).show();
     }
 
-
-        //request to get image!
-    private void dispatchTakePictureIntent(){
-        Intent ImageIntent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI); //implicit intent
-        CaptureDIY.this.startActivityForResult(ImageIntent,RESULT_LOAD_IMAGE);
+    public void selectImage(){
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
     }
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK) {
-            mImageUrl = data.getData();
-            imgViewPhoto.setImageURI(mImageUrl);
-            StorageReference filePath = mStorageRef.child(mImageUrl.getLastPathSegment());
-
-            mProgressDialog.setMessage("Uploading image....");
-            mProgressDialog.show();
-
-            filePath.putFile(mImageUrl).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    downloadUrl = taskSnapshot.getDownloadUrl();
-
-                    //  DIYDetails details = new DIYDetails(null, mUsername, downloadUrl.toString());
-                    databaseReference.child("Image_URL").setValue(downloadUrl.toString());
-
-                    Glide.with(getApplicationContext())
-                            .load(downloadUrl)
-                            .crossFade()
-                            .placeholder(R.drawable.add)
-                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                            .into(imgViewPhoto);
-                    Toast.makeText(getApplicationContext(), "Updated", Toast.LENGTH_SHORT).show();
-                    mProgressDialog.dismiss();
+        switch (requestCode){
+            case SELECT_PHOTO:
+                if(resultCode == RESULT_OK){
+                    Toast.makeText(CaptureDIY.this,"Image selected, click on upload button",Toast.LENGTH_SHORT).show();
+                    diyPictureUri = data.getData();
+                    imgView.setImageURI(diyPictureUri);
                 }
-            });
-
         }
     }
 
-}
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        imageFileName = "JPEG_"+timeStamp+"_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir );
+        diyPictureUri = Uri.fromFile(image);
+        return image;
+    }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+    }
+}

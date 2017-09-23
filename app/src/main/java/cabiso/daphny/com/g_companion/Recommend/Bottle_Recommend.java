@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,11 +44,8 @@ public class Bottle_Recommend extends AppCompatActivity {
 
     //  RecyclerView recyclerView;
     private FirebaseDatabase database;
-    private DatabaseReference databaseReference;
-    private StorageReference mStorageRef;
-
-    //private FirebaseRecyclerAdapter<DIYitem, HomePageActivityViewHolder> mFirebaseAdapter;
-    private LinearLayoutManager mLinearLayoutManager;
+    private String userID;
+    private FirebaseUser mFirebaseUser;
 
     public Bottle_Recommend() {
 
@@ -58,14 +57,15 @@ public class Bottle_Recommend extends AppCompatActivity {
         setContentView(R.layout.activity_recommend_bottle);
         recyclerView = (RecyclerView) findViewById(R.id.list);
 
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        userID = mFirebaseUser.getUid();
+
         lv = (ListView) findViewById(R.id.lvView);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please Wait loading DIYs.....");
         progressDialog.show();
 
-        //init adapter
-        adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
         database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("DIY_Methods").child("category").child("bottle");
 

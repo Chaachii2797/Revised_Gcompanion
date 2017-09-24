@@ -27,6 +27,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Map;
 
+import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.R;
 
 /**
@@ -106,5 +107,11 @@ public class Rubber_Recommend extends AppCompatActivity {
             }
 
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Rubber_Recommend.this, MainActivity.class);
+        startActivity(intent);
     }
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/addToCommunity"
+        android:title="Add to Community"></item>
+
+    <item android:id="@+id/addToMarket"
+        android:title="Add to Market"></item>
+</menu>

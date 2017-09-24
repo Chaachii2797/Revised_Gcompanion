@@ -268,6 +268,10 @@ public class MainActivity extends AppCompatActivity
                 Intent chat = new Intent(MainActivity.this,Messaging.class);
                 startActivity(chat);
                 break;
+            case R.id.nav_diy:
+                Intent diy = new Intent(MainActivity.this,MyDiys.class);
+                startActivity(diy);
+                break;
             case R.id.nav_calendar:
                 Intent calendar = new Intent(MainActivity.this,Calendar.class);
                 startActivity(calendar);

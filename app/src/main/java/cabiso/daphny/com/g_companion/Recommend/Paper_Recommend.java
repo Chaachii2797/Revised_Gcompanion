@@ -1,6 +1,7 @@
 package cabiso.daphny.com.g_companion.Recommend;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Map;
 
+import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.R;
 
 /**
@@ -42,7 +44,6 @@ public class Paper_Recommend extends AppCompatActivity {
     private String userID;
     private FirebaseUser mFirebaseUser;
 
-    //private FirebaseRecyclerAdapter<DIYitem, HomePageActivityViewHolder> mFirebaseAdapter;
     private LinearLayoutManager mLinearLayoutManager;
 
     public Paper_Recommend() {
@@ -73,16 +74,6 @@ public class Paper_Recommend extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 progressDialog.dismiss();
-
-                //fetch images from firebase
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    HashMap<String, Long> m = (HashMap<String, Long>) snapshot.getValue();
-//                    DIYrecommend img = snapshot.getValue(DIYrecommend.class);
-//                    Log.d("test", String.valueOf(m.get("diyName")));
-//                    Log.d("NAME: "+m.get("diyName"), "");
-//                    String codeValue = img.getDiyName();
-//                    Log.d("VALUE: "+codeValue,"");
-
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
                     DIYrecommend img = snapshot.getValue(DIYrecommend.class);
@@ -97,12 +88,6 @@ public class Paper_Recommend extends AppCompatActivity {
 
                 //set adapter for listview
                 lv.setAdapter(adapter);
-//                    lv.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                        }
-//                    });
             }
 
             @Override
@@ -111,11 +96,11 @@ public class Paper_Recommend extends AppCompatActivity {
             }
 
         });
+    }
 
-
-        //     recyclerView = (RecyclerView) findViewById(R.id.show_diy_recycler_view);
-        //    recyclerView.setLayoutManager(new LinearLayoutManager(HomePageActivity.this));
-        //  Toast.makeText(HomePageActivity.this, "Wait! Fetching data....", Toast.LENGTH_SHORT).show();
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Paper_Recommend.this, MainActivity.class);
+        startActivity(intent);
     }
 }

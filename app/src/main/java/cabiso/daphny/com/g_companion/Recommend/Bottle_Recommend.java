@@ -9,6 +9,9 @@ import android.support.v7.widget.ActionMenuView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -27,6 +30,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Map;
 
+import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.R;
 
 /**
@@ -104,7 +108,12 @@ public class Bottle_Recommend extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Bottle_Recommend.this, MainActivity.class);
+        startActivity(intent);
     }
 }

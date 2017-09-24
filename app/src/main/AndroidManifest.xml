@@ -54,10 +54,12 @@
         <activity android:name=".HomePageActivity" />
         <activity android:name=".AddProductActivity" />
         <activity android:name=".MyProfileActivity" />
+        <activity android:name=".MyDiys" />
+        <activity android:name=".SellMyDIYs" />
         <activity android:name=".Recommend.Bottle_Recommend" />
         <activity android:name=".Recommend.Paper_Recommend" />
-        <activity android:name=".Recommend.Rubber_Recommend"/>
-        <activity android:name=".Recommend.Wood_Recommend"/>
+        <activity android:name=".Recommend.Rubber_Recommend" />
+        <activity android:name=".Recommend.Wood_Recommend" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -72,7 +74,9 @@
         <activity android:name=".ProductDetailViewActivity" />
         <activity android:name=".ChatWithSellerActivity" />
         <activity android:name=".Recommend.Bottle_Recommend" />
-        <activity android:name=".Recommend.Paper_Recommend"></activity>
+        <activity android:name=".Recommend.Paper_Recommend" />
+        <activity android:name=".MyDiys" />
+        <activity android:name=".SellMyDIYs"></activity>
     </application>
 
 </manifest>

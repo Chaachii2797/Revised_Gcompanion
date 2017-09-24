@@ -19,6 +19,11 @@
             android:title="Chat" />
 
         <item
+            android:id="@+id/nav_diy"
+            android:icon="@mipmap/diy_logo"
+            android:title="My DIYs" />
+
+        <item
             android:id="@+id/nav_calendar"
             android:icon="@drawable/ic_calendar"
             android:title="Calendar" />

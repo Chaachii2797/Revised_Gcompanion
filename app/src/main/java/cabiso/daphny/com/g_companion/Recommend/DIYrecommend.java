@@ -1,9 +1,5 @@
 package cabiso.daphny.com.g_companion.Recommend;
 
-import android.net.Uri;
-
-import java.util.List;
-
 /**
  * Created by Lenovo on 7/30/2017.
  */

@@ -2,12 +2,16 @@ package cabiso.daphny.com.g_companion.Recommend;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,9 +22,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Map;
 
+import cabiso.daphny.com.g_companion.DIYDataActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.R;
 
@@ -86,8 +92,42 @@ public class Paper_Recommend extends AppCompatActivity {
                 //set adapter for listview
                 lv.setAdapter(adapter);
 
-                //set adapter for listview
-                lv.setAdapter(adapter);
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+//                        Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
+                        Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName() +
+                                diyList.get(position).diymaterial + diyList.get(position).diyprocedure +
+                                diyList.get(position).diyImageUrl, Toast.LENGTH_SHORT).show();
+
+
+                        DIYrecommend selectedItem = adapter.getItem(position);
+                        //To-DO get you data from the ItemDetails Getter
+                        // selectedItem.getImage() or selectedItem.getName() .. etc
+                        // the  send the data using intent when opening another activity
+                        Intent intent = new Intent(Paper_Recommend.this, DIYDataActivity.class);
+                        //  intent.putExtra("image",selectedItem.getDiyImageUrl().toString());
+                        intent.putExtra("name",selectedItem.getDiyName());
+                        intent.putExtra("procedures", selectedItem.getDiyprocedure());
+                        intent.putExtra("materials", selectedItem.getDiymaterial());
+
+
+                        view.buildDrawingCache();
+                        Bitmap image= view.getDrawingCache();
+
+                        Bundle extras = new Bundle();
+                        extras.putParcelable("imagebitmap", image);
+
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] byteArray = stream.toByteArray();
+
+                        intent.putExtra("image", byteArray);
+
+                        startActivity(intent);
+                    }
+                });
             }
 
             @Override

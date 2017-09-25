@@ -81,8 +81,6 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        home = (ImageButton) findViewById(R.id.ibHome);
-        diyCom = (ImageButton) findViewById(R.id.ibDIY);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab1 = (FloatingActionButton) findViewById(R.id.fab1);
@@ -99,10 +97,6 @@ public class MainActivity extends AppCompatActivity
         fab1.setOnClickListener(this);
         fab2.setOnClickListener(this);
         fab3.setOnClickListener(this);
-
-
-        home.setOnClickListener(this);
-        diyCom.setOnClickListener(this);
 
 
 //        home.setOnClickListener(new View.OnClickListener() {

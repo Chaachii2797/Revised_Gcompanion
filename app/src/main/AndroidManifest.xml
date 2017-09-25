@@ -73,10 +73,8 @@
 
         <activity android:name=".ProductDetailViewActivity" />
         <activity android:name=".ChatWithSellerActivity" />
-        <activity android:name=".Recommend.Bottle_Recommend" />
-        <activity android:name=".Recommend.Paper_Recommend" />
-        <activity android:name=".MyDiys" />
-        <activity android:name=".SellMyDIYs"></activity>
+        <activity android:name=".DIYDataActivity" />
+
     </application>
 
 </manifest>

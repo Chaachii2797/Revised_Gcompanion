@@ -79,19 +79,26 @@ public class ImageRecognitionTags extends AppCompatActivity{
                 for(int i = 0; i < 1; i++) {
                     results += " " + tags.get(i);
 
-                    if(tags.get(i).equals("bottle") || tags.get(i).equals("drink") ||tags.get(i).equals("container")){
-                        Toast.makeText(getApplication(), "Result "+results, Toast.LENGTH_SHORT).show();
+                    if(tags.get(i).equals("bottle") || tags.get(i).equals("drink") ||tags.get(i).equals("container")
+                            || tags.get(i).equals("plastic")) {
+                        Toast.makeText(getApplication(), "Result: " + results, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(ImageRecognitionTags.this, Bottle_Recommend.class);
-                        Toast.makeText(ImageRecognitionTags.this,"bottle",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ImageRecognitionTags.this, "bottle", Toast.LENGTH_SHORT).show();
                         startActivity(intent);
 
 //                       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_recommendation,new Recommendation())
 //                               .addToBackStack(null).commit();
+                    }if(tags.get(i).equals("paper") || tags.get(i).equals("document") || tags.get(i).equals("newspaper")
+                            || tags.get(i).equals("sheet")|| tags.get(i).equals("form")){
+                            Toast.makeText(getApplication(), "Result: "+results, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(ImageRecognitionTags.this, Paper_Recommend.class);
+                            Toast.makeText(ImageRecognitionTags.this,"paper",Toast.LENGTH_SHORT).show();
+                            startActivity(intent);
 
-                    }else if(results.equals("paper")){
+                    }else if(results.equals("wood")){
                         clearFields();
                         Intent intent = new Intent(ImageRecognitionTags.this, Paper_Recommend.class);
-                        Toast.makeText(ImageRecognitionTags.this,"paper",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ImageRecognitionTags.this,"wood",Toast.LENGTH_SHORT).show();
                         startActivity(intent);
                     }
                 }

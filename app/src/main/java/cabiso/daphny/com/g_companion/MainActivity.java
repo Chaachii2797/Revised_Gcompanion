@@ -14,7 +14,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -220,28 +219,28 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.main_menu, menu);
+//        return true;
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        int id = item.getItemId();
-        switch(id){
-            case R.id.logoff:
-                FirebaseAuth.getInstance().signOut();
-                Intent intent1=new Intent(this,Login.class);
-                startActivity(intent1);
-                return true;
-            case R.id.profile:
-                Intent intent2=new Intent(this,MyProfileActivity.class);
-                startActivity(intent2);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item){
+//        int id = item.getItemId();
+//        switch(id){
+//            case R.id.logoff:
+//                FirebaseAuth.getInstance().signOut();
+//                Intent intent1=new Intent(this,Login.class);
+//                startActivity(intent1);
+//                return true;
+//            case R.id.profile:
+//                Intent intent2=new Intent(this,MyProfileActivity.class);
+//                startActivity(intent2);
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -255,8 +254,8 @@ public class MainActivity extends AppCompatActivity
         android.support.v4.app.FragmentTransaction ft;
         switch (itemID){
             case R.id.nav_profile:
-                Intent prof = new Intent(MainActivity.this,Profile.class);
-                startActivity(prof);
+                Intent intent2=new Intent(this,MyProfileActivity.class);
+                startActivity(intent2);
                 break;
             case R.id.nav_chat:
                 Intent chat = new Intent(MainActivity.this,Messaging.class);
@@ -283,8 +282,9 @@ public class MainActivity extends AppCompatActivity
                 startActivity(about);
                 break;
             case R.id.nav_logout:
-                Intent logout = new Intent(MainActivity.this,WelcomeActivity.class);
-                startActivity(logout);
+                FirebaseAuth.getInstance().signOut();
+                Intent intent1=new Intent(this,Login.class);
+                startActivity(intent1);
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

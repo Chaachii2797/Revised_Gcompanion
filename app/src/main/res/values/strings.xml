@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">G Companion</string>
+    <string name="app_name">G-Companion</string>
 
     <string name="sign_out">Sign Out</string>
 
@@ -23,6 +23,9 @@
     <string name="appicon">AppIcon</string>
     <string name="login_background">login_background</string>
     <string name="sign_up">SIGN UP</string>
+
+    <string name="srch">Search</string>
+
 
     <string-array name="categories">
         <item>Select Category</item>

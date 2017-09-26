@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,10 +53,16 @@ public class DIYDataActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
 
 
-        diy_name = (TextView) findViewById(R.id.diy_name);
+       // diy_name = (TextView) findViewById(R.id.diy_name);
         diy_image =(ImageView) findViewById(R.id.diy_image);
         diy_materials = (TextView) findViewById(R.id.diy_materials);
         diy_procedures = (TextView) findViewById(R.id.diy_procedures);
+
+        diy_procedures.setMovementMethod(new ScrollingMovementMethod());
+        diy_materials.setMovementMethod(new ScrollingMovementMethod());
+
+
+
 
 
 //        Intent i = getIntent();
@@ -67,7 +74,7 @@ public class DIYDataActivity extends AppCompatActivity {
 
         getIntent().getStringExtra("image");
         int imageID =getIntent().getIntExtra("image",0);
-        getIntent().getStringExtra("name");
+     //   getIntent().getStringExtra("name");
         getIntent().getStringExtra("materials");
         getIntent().getStringExtra("procedures");
 
@@ -90,7 +97,7 @@ public class DIYDataActivity extends AppCompatActivity {
 
   //      diy_image.setImageResource(imageID);
 
-        diy_name.setText(getIntent().getStringExtra("name"));
+//        diy_name.setText(getIntent().getStringExtra("name"));
         diy_materials.setText(getIntent().getStringExtra("materials"));
         diy_procedures.setText(getIntent().getStringExtra("procedures"));
 

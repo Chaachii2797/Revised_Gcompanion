@@ -108,7 +108,7 @@ public class Paper_Recommend extends AppCompatActivity {
                         // the  send the data using intent when opening another activity
                         Intent intent = new Intent(Paper_Recommend.this, DIYDataActivity.class);
                         //  intent.putExtra("image",selectedItem.getDiyImageUrl().toString());
-                        intent.putExtra("name",selectedItem.getDiyName());
+                     //   intent.putExtra("name",selectedItem.getDiyName());
                         intent.putExtra("procedures", selectedItem.getDiyprocedure());
                         intent.putExtra("materials", selectedItem.getDiymaterial());
 

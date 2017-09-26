@@ -22,6 +22,8 @@ import java.util.List;
 
 import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import cabiso.daphny.com.g_companion.Recommend.Paper_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Rubber_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Wood_Recommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiResponse;
@@ -80,33 +82,32 @@ public class ImageRecognitionTags extends AppCompatActivity{
                     results += " " + tags.get(i);
 
                     if(tags.get(i).equals("bottle") || tags.get(i).equals("drink") ||tags.get(i).equals("container")
-                            || tags.get(i).equals("plastic")) {
+                            || tags.get(i).equals("plastic")|| tags.get(i).equals("gallon")|| tags.get(i).equals("jug")) {
                         Toast.makeText(getApplication(), "Result: " + results, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(ImageRecognitionTags.this, Bottle_Recommend.class);
                         Toast.makeText(ImageRecognitionTags.this, "bottle", Toast.LENGTH_SHORT).show();
                         startActivity(intent);
 
-//                       getSupportFragmentManager().beginTransaction().replace(R.id.fragment_recommendation,new Recommendation())
-//                               .addToBackStack(null).commit();
                     }if(tags.get(i).equals("paper") || tags.get(i).equals("document") || tags.get(i).equals("newspaper")
-                            || tags.get(i).equals("sheet")|| tags.get(i).equals("form")){
-                            Toast.makeText(getApplication(), "Result: "+results, Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(ImageRecognitionTags.this, Paper_Recommend.class);
-                            Toast.makeText(ImageRecognitionTags.this,"paper",Toast.LENGTH_SHORT).show();
-                            startActivity(intent);
-
-                    }else if(results.equals("wood")){
-                        clearFields();
+                            || tags.get(i).equals("sheet")|| tags.get(i).equals("form")|| tags.get(i).equals("magazines")) {
+                        Toast.makeText(getApplication(), "Result: " + results, Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(ImageRecognitionTags.this, Paper_Recommend.class);
+                        Toast.makeText(ImageRecognitionTags.this, "paper", Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
+
+                    }if(tags.get(i).equals("wood")){
+                        Toast.makeText(getApplication(), "Result: "+results, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(ImageRecognitionTags.this, Wood_Recommend.class);
                         Toast.makeText(ImageRecognitionTags.this,"wood",Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
+
+                    }else if(results.equals("tire")){
+                        clearFields();
+                        Intent intent = new Intent(ImageRecognitionTags.this, Rubber_Recommend.class);
+                        Toast.makeText(ImageRecognitionTags.this,"tire",Toast.LENGTH_SHORT).show();
                         startActivity(intent);
                     }
                 }
-
-//                clearFields();
-//                Intent intent = new Intent(ImageRecognitionTags.this, Recommend_Activity.class);
-//                Toast.makeText(ImageRecognitionTags.this,"chaachii",Toast.LENGTH_SHORT).show();
-//                startActivity(intent);
 
             }
         });

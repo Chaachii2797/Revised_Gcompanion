@@ -31,9 +31,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -43,7 +41,7 @@ import java.util.Random;
 import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 import cabiso.daphny.com.g_companion.Recommend.Paper_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.Rubber_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Cup_Recommend;
 import cabiso.daphny.com.g_companion.Recommend.Wood_Recommend;
 
 public class CaptureDIY extends AppCompatActivity implements View.OnClickListener{
@@ -62,7 +60,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     private static final int SELECT_PHOTO = 100;
     private static final int MAX_LENGTH = 100;
-    CheckBox bottle, paper, rubber, wood;
+    CheckBox bottle, paper, cup, wood;
     Button submitButton;
     EditText name, material, procedure;
     ImageView imgView;
@@ -81,12 +79,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         imgView = (ImageView) findViewById(R.id.add_product_image_plus_icon);
         bottle = (CheckBox)findViewById(R.id.cbBottle);
         paper = (CheckBox)findViewById(R.id.cbPaper);
-        rubber = (CheckBox)findViewById(R.id.cbRubber);
+        cup = (CheckBox)findViewById(R.id.cbCup);
         wood = (CheckBox)findViewById(R.id.cbWood);
 
         bottle.setOnClickListener(this);
         paper.setOnClickListener(this);
-        rubber.setOnClickListener(this);
+        cup.setOnClickListener(this);
         wood.setOnClickListener(this);
 
         final ImageView addProductImagePlusIcon = (ImageView) findViewById(R.id.add_product_image_plus_icon);
@@ -216,10 +214,10 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         }
                     });
                 }
-                else if(rubber.isChecked()){
+                else if(cup.isChecked()){
                     //reference to DIY_Methods database firebase
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
-                            .child("category").child("rubber");
+                            .child("category").child("cup");
                     //reference to all diys database firebase
                     allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
                     //reference to by user database firebase
@@ -235,7 +233,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     String saltStr = salt.toString();
                     //reference to database storage
                     storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://g-companion.appspot.com/");
-                    storageReference.child("add_DIY").child("rubbers").child(saltStr+"").putFile(diyPictureUri).addOnSuccessListener
+                    storageReference.child("add_DIY").child("cup").child(saltStr+"").putFile(diyPictureUri).addOnSuccessListener
                             (new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -254,7 +252,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     allDIYDatabaseReference.child(upload).setValue(recommend);
                                     Picasso.with(CaptureDIY.this).load(downloadUrl).into(imgView);
                                     //direct to another activity
-                                    Intent intent = new Intent(CaptureDIY.this,Rubber_Recommend.class);
+                                    Intent intent = new Intent(CaptureDIY.this,Cup_Recommend.class);
                                     startActivity(intent);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -389,7 +387,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         }
                     });
                 }
-                else if(rubber.isChecked()){
+                else if(cup.isChecked()){
                     //reference to Diys by users
                     userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
                     //generate random unique ID for image to database storage
@@ -403,7 +401,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     String saltStr = salt.toString();
                     //reference to database storage
                     storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://g-companion.appspot.com/");
-                    storageReference.child("add_DIY").child("rubbers").child(saltStr+"").putFile(diyPictureUri).addOnSuccessListener
+                    storageReference.child("add_DIY").child("cup").child(saltStr+"").putFile(diyPictureUri).addOnSuccessListener
                             (new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

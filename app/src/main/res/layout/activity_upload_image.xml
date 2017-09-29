@@ -99,7 +99,7 @@
         android:text="Paper" />
 
     <CheckBox
-        android:id="@+id/cbRubber"
+        android:id="@+id/cbCup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Rubber"
@@ -115,10 +115,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Wood"
-        android:layout_alignBaseline="@+id/cbRubber"
-        android:layout_alignBottom="@+id/cbRubber"
-        android:layout_toRightOf="@+id/cbRubber"
-        android:layout_toEndOf="@+id/cbRubber"
+        android:layout_alignBaseline="@+id/cbCup"
+        android:layout_alignBottom="@+id/cbCup"
+        android:layout_toRightOf="@+id/cbCup"
+        android:layout_toEndOf="@+id/cbCup"
         android:layout_marginLeft="12dp"
         android:layout_marginStart="12dp" />
 

@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
 
                 //   TODO: Snack bar for camera permission
-                Snackbar.make(v, "Waiting.......", Snackbar.LENGTH_LONG)
+                Snackbar.make(v, "Wait...", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

@@ -63,6 +63,8 @@
         <activity android:name=".Recommend.Cup_Recommend" />
         <activity android:name=".Recommend.Tire_Recommend" />
         <activity android:name=".Recommend.Utensils_Recommend" />
+        <activity android:name=".Recommend.Glass_Recommend" />
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"

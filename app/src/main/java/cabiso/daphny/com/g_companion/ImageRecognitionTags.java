@@ -126,7 +126,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
                         Toast.makeText(ImageRecognitionTags.this, "glass", Toast.LENGTH_SHORT).show();
                         startActivity(intent);
 
-                    } else if(results.equals("tire")){
+                    }else if(results.equals("tire")){
                         clearFields();
                         Intent intent = new Intent(ImageRecognitionTags.this, Rubber_Recommend.class);
                         Toast.makeText(ImageRecognitionTags.this,"tire",Toast.LENGTH_SHORT).show();

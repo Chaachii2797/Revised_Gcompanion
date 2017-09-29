@@ -60,7 +60,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     private static final int SELECT_PHOTO = 100;
     private static final int MAX_LENGTH = 100;
-    CheckBox bottle, paper, cup, wood;
+    CheckBox bottle, paper, cup, wood, tire, glass;
     Button submitButton;
     EditText name, material, procedure;
     ImageView imgView;
@@ -81,11 +81,15 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         paper = (CheckBox)findViewById(R.id.cbPaper);
         cup = (CheckBox)findViewById(R.id.cbCup);
         wood = (CheckBox)findViewById(R.id.cbWood);
+        tire = (CheckBox)findViewById(R.id.cbTire);
+        glass = (CheckBox)findViewById(R.id.cbGlass);
 
         bottle.setOnClickListener(this);
         paper.setOnClickListener(this);
         cup.setOnClickListener(this);
         wood.setOnClickListener(this);
+        tire.setOnClickListener(this);
+        glass.setOnClickListener(this);
 
         final ImageView addProductImagePlusIcon = (ImageView) findViewById(R.id.add_product_image_plus_icon);
         addProductImagePlusIcon.setOnClickListener(new View.OnClickListener() {
@@ -282,6 +286,100 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     //reference to database storage
                     storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://g-companion.appspot.com/");
                     storageReference.child("add_DIY").child("woods").child(saltStr+"").putFile(diyPictureUri).addOnSuccessListener
+                            (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    //get downloadUrl from storage
+                                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    //get text input and save new object
+                                    DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                    //assign string upload to database reference
+                                    String upload = databaseReference.push().getKey();
+                                    //upload data to database reference
+                                    databaseReference.child(upload).setValue(recommend);
+                                    //upload data to DIYs by users
+                                    userDatabaseReference.child(upload).setValue(recommend);
+                                    //upload data to all diys in database
+                                    allDIYDatabaseReference.child(upload).setValue(recommend);
+                                    Picasso.with(CaptureDIY.this).load(downloadUrl).into(imgView);
+                                    //direct to another activity
+                                    Intent intent = new Intent(CaptureDIY.this,Wood_Recommend.class);
+                                    startActivity(intent);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(CaptureDIY.this,"Error in uploading!",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }else if(tire.isChecked()){
+                    //reference to database firebase
+                    databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
+                            .child("category").child("tire");
+                    //reference to all diys database firebase
+                    allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
+                    //reference to by user database firebase
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    //generate random unique ID for image to database storage
+                    String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+                    StringBuilder salt = new StringBuilder();
+                    Random rnd = new Random();
+                    while (salt.length() < 18) { // length of the random string.
+                        int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+                        salt.append(SALTCHARS.charAt(index));
+                    }
+                    String saltStr = salt.toString();
+                    //reference to database storage
+                    storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://g-companion.appspot.com/");
+                    storageReference.child("add_DIY").child("tire").child(saltStr+"").putFile(diyPictureUri).addOnSuccessListener
+                            (new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    //get downloadUrl from storage
+                                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    //get text input and save new object
+                                    DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                    //assign string upload to database reference
+                                    String upload = databaseReference.push().getKey();
+                                    //upload data to database reference
+                                    databaseReference.child(upload).setValue(recommend);
+                                    //upload data to DIYs by users
+                                    userDatabaseReference.child(upload).setValue(recommend);
+                                    //upload data to all diys in database
+                                    allDIYDatabaseReference.child(upload).setValue(recommend);
+                                    Picasso.with(CaptureDIY.this).load(downloadUrl).into(imgView);
+                                    //direct to another activity
+                                    Intent intent = new Intent(CaptureDIY.this,Wood_Recommend.class);
+                                    startActivity(intent);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(CaptureDIY.this,"Error in uploading!",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }else if(glass.isChecked()){
+                    //reference to database firebase
+                    databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
+                            .child("category").child("glass");
+                    //reference to all diys database firebase
+                    allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
+                    //reference to by user database firebase
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    //generate random unique ID for image to database storage
+                    String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+                    StringBuilder salt = new StringBuilder();
+                    Random rnd = new Random();
+                    while (salt.length() < 18) { // length of the random string.
+                        int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+                        salt.append(SALTCHARS.charAt(index));
+                    }
+                    String saltStr = salt.toString();
+                    //reference to database storage
+                    storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://g-companion.appspot.com/");
+                    storageReference.child("add_DIY").child("glass").child(saltStr+"").putFile(diyPictureUri).addOnSuccessListener
                             (new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

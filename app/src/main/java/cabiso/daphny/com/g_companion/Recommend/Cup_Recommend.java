@@ -67,9 +67,9 @@ public class Cup_Recommend extends AppCompatActivity {
             progressDialog.show();
 
             database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("DIY_Methods").child("category").child("cup");
+            DatabaseReference myRef = database.getReference("DIY_Methods").child("category");
 
-            myRef.addValueEventListener(new ValueEventListener() {
+            myRef.child("cup").orderByChild("diyName").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     progressDialog.dismiss();

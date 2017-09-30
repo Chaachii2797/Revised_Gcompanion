@@ -40,8 +40,10 @@ import java.util.Random;
 
 import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
+import cabiso.daphny.com.g_companion.Recommend.Glass_Recommend;
 import cabiso.daphny.com.g_companion.Recommend.Paper_Recommend;
 import cabiso.daphny.com.g_companion.Recommend.Cup_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Tire_Recommend;
 import cabiso.daphny.com.g_companion.Recommend.Wood_Recommend;
 
 public class CaptureDIY extends AppCompatActivity implements View.OnClickListener{
@@ -152,7 +154,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "bottle");
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to DIY_Methods database reference
@@ -198,7 +200,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "paper");
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
@@ -245,7 +247,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "cup");
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
@@ -293,7 +295,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "wood");
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
@@ -340,7 +342,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "tire");
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
@@ -351,7 +353,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     allDIYDatabaseReference.child(upload).setValue(recommend);
                                     Picasso.with(CaptureDIY.this).load(downloadUrl).into(imgView);
                                     //direct to another activity
-                                    Intent intent = new Intent(CaptureDIY.this,Wood_Recommend.class);
+                                    Intent intent = new Intent(CaptureDIY.this,Tire_Recommend.class);
                                     startActivity(intent);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -387,7 +389,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "glass");
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
@@ -398,7 +400,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     allDIYDatabaseReference.child(upload).setValue(recommend);
                                     Picasso.with(CaptureDIY.this).load(downloadUrl).into(imgView);
                                     //direct to another activity
-                                    Intent intent = new Intent(CaptureDIY.this,Wood_Recommend.class);
+                                    Intent intent = new Intent(CaptureDIY.this,Glass_Recommend.class);
                                     startActivity(intent);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
@@ -432,7 +434,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "bottle");
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -469,7 +471,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "paper");
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -507,7 +509,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "cup");
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -546,7 +548,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "wood");
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -584,7 +586,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "tire");
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -622,7 +624,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString());
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "glass");
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users

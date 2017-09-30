@@ -62,16 +62,18 @@ public class Sold_Activity extends AppCompatActivity {
             progressDialog.show();
 
             database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("Sold_Items").child(userID);
+            DatabaseReference myRef = database.getReference();
 
-            myRef.addValueEventListener(new ValueEventListener() {
+            myRef.child("Sold_Items").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     progressDialog.dismiss();
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         ProductInfo img = snapshot.getValue(ProductInfo.class);
+                        if(img.getOwnerUserID().equals(userID)){
                             diyList.add(img);
+                        }
                     }
                     //init adapter
                     adapter = new Items_Adapter(Sold_Activity.this, R.layout.recommend_ui, diyList);

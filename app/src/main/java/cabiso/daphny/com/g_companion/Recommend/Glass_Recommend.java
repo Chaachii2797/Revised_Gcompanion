@@ -67,9 +67,9 @@ public class Glass_Recommend extends AppCompatActivity{
             progressDialog.show();
 
             database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("DIY_Methods").child("category").child("glass");
+            DatabaseReference myRef = database.getReference("DIY_Methods").child("category");
 
-            myRef.addValueEventListener(new ValueEventListener() {
+            myRef.child("glass").orderByValue().addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     progressDialog.dismiss();

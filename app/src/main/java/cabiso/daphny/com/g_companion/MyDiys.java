@@ -47,6 +47,7 @@ public class MyDiys extends AppCompatActivity {
     private FirebaseUser mFirebaseUser;
 
     private DatabaseReference databaseReference;
+    private DatabaseReference categoryReference;
     public MyDiys() {
 
     }
@@ -133,7 +134,15 @@ public class MyDiys extends AppCompatActivity {
                 String material = diyList.get(listPosition).getDiymaterial();
                 String procedure = diyList.get(listPosition).getDiyprocedure();
                 String imageURL = diyList.get(listPosition).getDiyImageUrl();
-                DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL);
+                String category = diyList.get(listPosition).getCategory();
+                if(category.equals("bottle")){
+                    categoryReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
+                            .child("category").child("bottle");
+                    DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL, userID, category);
+                    String upload = categoryReference.push().getKey();
+                    categoryReference.child(upload).setValue(diYrecommend);
+                }
+                DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL, userID, category);
                 String upload = databaseReference.push().getKey();
                 databaseReference.child(upload).setValue(diYrecommend);
                 Toast.makeText(MyDiys.this, "CLicked! COMMUNITY" + diyList.get(listPosition).getDiyName(), Toast.LENGTH_SHORT).show();

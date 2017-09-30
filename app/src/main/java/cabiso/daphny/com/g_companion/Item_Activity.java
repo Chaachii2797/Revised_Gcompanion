@@ -91,8 +91,9 @@ public class Item_Activity extends AppCompatActivity {
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                             ProductInfo itemRef = adapter.getItem(position);
+//                            adapter.remove(adapter.getItem(position));
+//                            adapter.notifyDataSetChanged();
                             Toast toast = Toast.makeText(Item_Activity.this, itemRef.title
                                     + "\n" + itemRef.ownerUserID + "\n" + itemRef.price + "\n" + itemRef.desc + "\n"
                                     + itemRef.getProductPictureURLs().get(0), Toast.LENGTH_SHORT);
@@ -127,7 +128,7 @@ public class Item_Activity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.sold_item:
                 int listPosition = info.position;
-                itemReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items").child(userID);
+                itemReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items");
                 String title = diyList.get(listPosition).title;
                 String description = diyList.get(listPosition).desc;
                 String price = diyList.get(listPosition).price;

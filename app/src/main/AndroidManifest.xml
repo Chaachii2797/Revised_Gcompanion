@@ -65,7 +65,6 @@
         <activity android:name=".Recommend.Utensils_Recommend" />
         <activity android:name=".Recommend.Glass_Recommend" />
 
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="cabiso.daphny.com.g_companion"
@@ -79,7 +78,8 @@
         <activity android:name=".ProductDetailViewActivity" />
         <activity android:name=".ChatWithSellerActivity" />
         <activity android:name=".DIYDataActivity" />
-
+        <activity android:name=".Item_Activity" />
+        <activity android:name=".Sold_Activity"></activity>
     </application>
 
 </manifest>

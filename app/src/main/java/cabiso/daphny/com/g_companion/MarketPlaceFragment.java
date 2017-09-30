@@ -82,7 +82,6 @@ public class MarketPlaceFragment extends Fragment{
 
             @Override
             protected void populateViewHolder(final ItemViewHolder viewHolder, ProductInfo model, final int position) {
-                Log.d("Firebase download", model.title);
                 viewHolder.mNameView.setText(model.title);
                 viewHolder.mDescriptionView.setText(model.desc);
                 viewHolder.mPriceView.setText(model.price);

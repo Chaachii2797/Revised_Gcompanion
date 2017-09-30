@@ -265,6 +265,14 @@ public class MainActivity extends AppCompatActivity
                 Intent diy = new Intent(MainActivity.this,MyDiys.class);
                 startActivity(diy);
                 break;
+            case R.id.nav_item:
+                Intent item = new Intent(MainActivity.this,Item_Activity.class);
+                startActivity(item);
+                break;
+            case R.id.nav_sold:
+                Intent sold = new Intent(MainActivity.this,Sold_Activity.class);
+                startActivity(sold);
+                break;
             case R.id.nav_calendar:
                 Intent calendar = new Intent(MainActivity.this,Calendar.class);
                 startActivity(calendar);

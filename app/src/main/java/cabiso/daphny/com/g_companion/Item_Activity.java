@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,7 +25,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
@@ -32,12 +35,11 @@ import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
  * Created by Lenovo on 7/31/2017.
  */
 
-public class MyDiys extends AppCompatActivity {
+public class Item_Activity extends AppCompatActivity {
 
-    private ArrayList<DIYrecommend> diyList = new ArrayList<>();
+    private ArrayList<ProductInfo> diyList = new ArrayList<>();
     private ListView lv;
-    private ImageView loadview;
-    private RecommendDIYAdapter adapter;
+    private Items_Adapter adapter;
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
 
@@ -46,15 +48,15 @@ public class MyDiys extends AppCompatActivity {
     private String userID;
     private FirebaseUser mFirebaseUser;
 
-    private DatabaseReference databaseReference;
-    public MyDiys() {
+    private DatabaseReference itemReference;
+    public Item_Activity() {
 
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_diys);
+        setContentView(R.layout.activity_item_);
 
             recyclerView = (RecyclerView) findViewById(R.id.list);
 
@@ -68,7 +70,7 @@ public class MyDiys extends AppCompatActivity {
             progressDialog.show();
 
             database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("DIYs_By_Users").child(userID);
+            DatabaseReference myRef = database.getReference("marketplace");
 
             myRef.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -76,13 +78,13 @@ public class MyDiys extends AppCompatActivity {
                     progressDialog.dismiss();
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        DIYrecommend img = snapshot.getValue(DIYrecommend.class);
-                        diyList.add(img);
+                        ProductInfo img = snapshot.getValue(ProductInfo.class);
+                        if (img.getOwnerUserID().toString().equals(userID)) {
+                            diyList.add(img);
+                        }
                     }
-
                     //init adapter
-                    adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
-
+                    adapter = new Items_Adapter(Item_Activity.this, R.layout.recommend_ui, diyList);
                     //set adapter for listview
                     lv.setAdapter(adapter);
                     registerForContextMenu(lv);
@@ -90,26 +92,23 @@ public class MyDiys extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-//                        Intent intent = new Intent(Bottle_Recommend.this,ViewDIY.class);
-//                        startActivity(intent);
-                            DIYrecommend itemRef = adapter.getItem(position);
-                            adapter.remove(itemRef);
-                            adapter.notifyDataSetChanged();
-                            Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
-                                            + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
-                                    Toast.LENGTH_SHORT);
+                            ProductInfo itemRef = adapter.getItem(position);
+                            Toast toast = Toast.makeText(Item_Activity.this, itemRef.title
+                                    + "\n" + itemRef.ownerUserID + "\n" + itemRef.price + "\n" + itemRef.desc + "\n"
+                                    + itemRef.getProductPictureURLs().get(0), Toast.LENGTH_SHORT);
                             toast.show();
                         }
                     });
                 }
+
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
             });
         }else{
-            Toast.makeText(MyDiys.this, "Wala pay DIY na add!",Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(MyDiys.this,MainActivity.class);
+            Toast.makeText(Item_Activity.this, "Wala pa kay tinda na add!",Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Item_Activity.this,MainActivity.class);
             startActivity(intent);
         }
     }
@@ -118,34 +117,27 @@ public class MyDiys extends AppCompatActivity {
         super.onCreateContextMenu(menu, v, menuInfo);
         if (v.getId()==R.id.lvView) {
             MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.menu_from_mydiys, menu);
+            inflater.inflate(R.menu.menu_for_myitems, menu);
         }
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        switch (item.getItemId()) {
-            case R.id.addToCommunity:
+        switch (item.getItemId()){
+            case R.id.sold_item:
                 int listPosition = info.position;
-                databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
-                String name = diyList.get(listPosition).getDiyName();
-                String material = diyList.get(listPosition).getDiymaterial();
-                String procedure = diyList.get(listPosition).getDiyprocedure();
-                String imageURL = diyList.get(listPosition).getDiyImageUrl();
-                DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL);
-                String upload = databaseReference.push().getKey();
-                databaseReference.child(upload).setValue(diYrecommend);
-                Toast.makeText(MyDiys.this, "CLicked! COMMUNITY" + diyList.get(listPosition).getDiyName(), Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.addToMarket:
-                Intent intent = new Intent(MyDiys.this, SellMyDIYs.class);
-                startActivity(intent);
-                Toast.makeText(MyDiys.this, "CLicked! MY DIYS", Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
-    }
+                itemReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items").child(userID);
+                String title = diyList.get(listPosition).title;
+                String description = diyList.get(listPosition).desc;
+                String price = diyList.get(listPosition).price;
+                String negotiable = diyList.get(listPosition).negotiable;
+                List productPictureURLs = diyList.get(listPosition).productPictureURLs;
+                ProductInfo product = new ProductInfo(title, description, price, negotiable,productPictureURLs, userID);
+                String upload = itemReference.push().getKey();
+                itemReference.child(upload).setValue(product);
 
+        }
+        return super.onContextItemSelected(item);
+    }
 }

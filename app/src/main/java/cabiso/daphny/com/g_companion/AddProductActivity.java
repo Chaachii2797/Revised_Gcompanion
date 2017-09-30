@@ -74,13 +74,13 @@ public class AddProductActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_product);
 
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        userID = mFirebaseUser.getUid();
+
         marketplaceReference = FirebaseDatabase.getInstance().getReference().child("marketplace");
 
         currentProductReference=marketplaceReference.push();
         currentKey=currentProductReference.getKey();
-
-        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        userID = mFirebaseUser.getUid();
 
         storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://g-companion.appspot.com/");
         productImagesStorageReference = storageReference.child("ProductImages"+"/"+currentKey);

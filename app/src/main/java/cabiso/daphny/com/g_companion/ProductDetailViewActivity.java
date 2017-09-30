@@ -107,7 +107,6 @@ public class ProductDetailViewActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
-
     }
 
     public class ProductImagesViewPagerAdapter extends PagerAdapter {

@@ -60,82 +60,88 @@ public class Paper_Recommend extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_paper__recommend);
-        recyclerView = (RecyclerView) findViewById(R.id.list);
 
-        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        userID = mFirebaseUser.getUid();
+            recyclerView = (RecyclerView) findViewById(R.id.list);
 
-        lv = (ListView) findViewById(R.id.lvView);
+            mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            userID = mFirebaseUser.getUid();
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Please Wait loading DIYs.....");
-        progressDialog.show();
+            lv = (ListView) findViewById(R.id.lvView);
+            if(lv!=null) {
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Please Wait loading DIYs.....");
+            progressDialog.show();
 
-        //init adapter
-        adapter = new RecommendDIYAdapter(Paper_Recommend.this, R.layout.recommend_ui, diyList);
-        database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("DIY_Methods").child("category").child("paper");
+            //init adapter
+            adapter = new RecommendDIYAdapter(Paper_Recommend.this, R.layout.recommend_ui, diyList);
+            database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference("DIY_Methods").child("category").child("paper");
 
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                progressDialog.dismiss();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                    DIYrecommend img = snapshot.getValue(DIYrecommend.class);
-                    String image = (String) map.get("0");
-                    diyList.add(img);
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    progressDialog.dismiss();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                        DIYrecommend img = snapshot.getValue(DIYrecommend.class);
+                        String image = (String) map.get("0");
+                        diyList.add(img);
 
-                }
-                //init adapter
-                adapter = new RecommendDIYAdapter(Paper_Recommend.this, R.layout.recommend_ui, diyList);
-                //set adapter for listview
-                lv.setAdapter(adapter);
+                    }
+                    //init adapter
+                    adapter = new RecommendDIYAdapter(Paper_Recommend.this, R.layout.recommend_ui, diyList);
+                    //set adapter for listview
+                    lv.setAdapter(adapter);
 
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 //                        Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
-                        Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName() +
-                                diyList.get(position).diymaterial + diyList.get(position).diyprocedure +
-                                diyList.get(position).diyImageUrl, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName() +
+                                    diyList.get(position).diymaterial + diyList.get(position).diyprocedure +
+                                    diyList.get(position).diyImageUrl, Toast.LENGTH_SHORT).show();
 
 
-                        DIYrecommend selectedItem = adapter.getItem(position);
-                        //To-DO get you data from the ItemDetails Getter
-                        // selectedItem.getImage() or selectedItem.getName() .. etc
-                        // the  send the data using intent when opening another activity
-                        Intent intent = new Intent(Paper_Recommend.this, DIYDataActivity.class);
-                        //  intent.putExtra("image",selectedItem.getDiyImageUrl().toString());
-                     //   intent.putExtra("name",selectedItem.getDiyName());
-                        intent.putExtra("procedures", selectedItem.getDiyprocedure());
-                        intent.putExtra("materials", selectedItem.getDiymaterial());
+                            DIYrecommend selectedItem = adapter.getItem(position);
+                            //To-DO get you data from the ItemDetails Getter
+                            // selectedItem.getImage() or selectedItem.getName() .. etc
+                            // the  send the data using intent when opening another activity
+                            Intent intent = new Intent(Paper_Recommend.this, DIYDataActivity.class);
+                            //  intent.putExtra("image",selectedItem.getDiyImageUrl().toString());
+                            //   intent.putExtra("name",selectedItem.getDiyName());
+                            intent.putExtra("procedures", selectedItem.getDiyprocedure());
+                            intent.putExtra("materials", selectedItem.getDiymaterial());
 
 
-                        view.buildDrawingCache();
-                        Bitmap image= view.getDrawingCache();
+                            view.buildDrawingCache();
+                            Bitmap image = view.getDrawingCache();
 
-                        Bundle extras = new Bundle();
-                        extras.putParcelable("imagebitmap", image);
+                            Bundle extras = new Bundle();
+                            extras.putParcelable("imagebitmap", image);
 
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] byteArray = stream.toByteArray();
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                            byte[] byteArray = stream.toByteArray();
 
-                        intent.putExtra("image", byteArray);
+                            intent.putExtra("image", byteArray);
 
-                        startActivity(intent);
-                    }
-                });
-            }
+                            startActivity(intent);
+                        }
+                    });
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
+                }
 
-        });
+            });
+        }else{
+            Toast.makeText(Paper_Recommend.this, "No available DIY for this category!",Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Paper_Recommend.this,MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override

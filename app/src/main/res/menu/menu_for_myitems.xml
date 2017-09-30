@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/sold_item"
+        android:title="Sold"></item>
+
+    <item android:id="@+id/biid_item"
+        android:title="Free Bidding"></item>
+
+    <item android:id="@+id/biid_increment_item"
+        android:title="Incremental Bidding"></item>
+</menu>

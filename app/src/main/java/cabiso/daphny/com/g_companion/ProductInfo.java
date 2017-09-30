@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Lenovo on 8/22/2017.
  */
 
-class ProductInfo {
+public class ProductInfo {
     public String title;
     public String desc;
     public String price;
@@ -25,5 +25,21 @@ class ProductInfo {
         this.negotiable = negotiable;
         this.productPictureURLs = productPictureURLs;
         this.ownerUserID = ownerUserID;
+    }
+
+    public String getOwnerUserID() {
+        return ownerUserID;
+    }
+
+    public void setOwnerUserID(String ownerUserID) {
+        this.ownerUserID = ownerUserID;
+    }
+
+    public List<String> getProductPictureURLs() {
+        return productPictureURLs;
+    }
+
+    public void setProductPictureURLs(List<String> productPictureURLs) {
+        this.productPictureURLs = productPictureURLs;
     }
 }

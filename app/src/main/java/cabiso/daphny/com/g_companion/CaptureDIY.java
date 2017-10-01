@@ -34,17 +34,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
+import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Cup_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
+import cabiso.daphny.com.g_companion.Recommend.Glass_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Paper_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Tire_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Wood_Recommend;
+
 /**
  * Created by Lenovo on 8/22/2017.
  */
 
-import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
-import cabiso.daphny.com.g_companion.Recommend.Glass_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.Paper_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.Cup_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.Tire_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.Wood_Recommend;
 
 public class CaptureDIY extends AppCompatActivity implements View.OnClickListener{
 
@@ -216,7 +217,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                         @Override
-                        public void onFailure(@NonNull Exception e) {Toast.makeText(CaptureDIY.this,"Error in uploading!",Toast.LENGTH_SHORT).show();
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(CaptureDIY.this,"Error in uploading!",Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

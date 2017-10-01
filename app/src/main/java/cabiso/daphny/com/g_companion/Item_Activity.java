@@ -3,16 +3,13 @@ package cabiso.daphny.com.g_companion;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -28,8 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
-import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
-import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
 /**
  * Created by Lenovo on 7/31/2017.
@@ -87,6 +82,7 @@ public class Item_Activity extends AppCompatActivity {
                     adapter = new Items_Adapter(Item_Activity.this, R.layout.recommend_ui, diyList);
                     //set adapter for listview
                     lv.setAdapter(adapter);
+                    final int count =lv.getAdapter().getCount();
                     registerForContextMenu(lv);
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -96,7 +92,7 @@ public class Item_Activity extends AppCompatActivity {
 //                            adapter.notifyDataSetChanged();
                             Toast toast = Toast.makeText(Item_Activity.this, itemRef.title
                                     + "\n" + itemRef.ownerUserID + "\n" + itemRef.price + "\n" + itemRef.desc + "\n"
-                                    + itemRef.getProductPictureURLs().get(0), Toast.LENGTH_SHORT);
+                                    + itemRef.getProductPictureURLs().get(0) + "\n" + count, Toast.LENGTH_SHORT);
                             toast.show();
                         }
                     });
@@ -128,6 +124,7 @@ public class Item_Activity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.sold_item:
                 int listPosition = info.position;
+                final int count =lv.getAdapter().getCount();
                 itemReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items");
                 String title = diyList.get(listPosition).title;
                 String description = diyList.get(listPosition).desc;

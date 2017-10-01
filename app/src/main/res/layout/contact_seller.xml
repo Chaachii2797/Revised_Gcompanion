@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialog"
+    android:layout_width="300dp"
+    android:layout_height="250dp"
+    android:background="?attr/colorPrimaryDark">
+
+    <TextView
+        android:id="@+id/contact_prompt_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp"
+        android:text="Choose how to contact seller: "
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold">
+
+    </TextView>
+
+    <Button
+        android:id="@+id/chat"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/contact_prompt_header"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="21dp"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:text="CHAT"
+        android:textSize="24sp">
+
+    </Button>
+
+    <Button
+        android:id="@+id/call"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/chat"
+        android:layout_alignStart="@+id/chat"
+        android:layout_below="@+id/chat"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:text="CALL"
+        android:autoLink="phone"
+        android:textSize="18sp">
+
+    </Button>
+
+    <Button
+        android:id="@+id/sms"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/cancel"
+        android:layout_alignEnd="@+id/chat"
+        android:layout_alignRight="@+id/chat"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:text="SMS"
+        android:textSize="18sp">
+
+    </Button>
+
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/call"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="Cancel"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+</RelativeLayout>

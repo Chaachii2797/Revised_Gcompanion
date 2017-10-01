@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,17 +32,24 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.stepstone.apprating.AppRatingDialog;
+import com.stepstone.apprating.listener.RatingDialogListener;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+
+import static cabiso.daphny.com.g_companion.R.id.user_ratings;
 
 /**
  * Created by Lenovo on 8/22/2017.
  */
 
-public class MyProfileActivity extends AppCompatActivity{
+public class MyProfileActivity extends AppCompatActivity implements RatingDialogListener {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser user;
     private DatabaseReference mDatabaseReference;
@@ -73,7 +82,6 @@ public class MyProfileActivity extends AppCompatActivity{
                 "file_upload UPLOAD FILE");
         userStorageReference = storageReference.child("UserStorage"+"/"+userID);
 
-
         setContentView(R.layout.activity_my_profile);
 
         final EditText profile_username = (EditText) findViewById(R.id.profile_name);
@@ -82,6 +90,30 @@ public class MyProfileActivity extends AppCompatActivity{
         final EditText profile_phone = (EditText)findViewById(R.id.profile_phone);
         final EditText profile_address = (EditText) findViewById(R.id.profile_address);
         profile_picture = (ImageView) findViewById(R.id.profile_picture);
+        final TextView rate = (TextView) findViewById(user_ratings);
+
+        rate.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                new AppRatingDialog.Builder()
+                        .setPositiveButtonText("Submit")
+                        .setNegativeButtonText("Cancel")
+                        .setNoteDescriptions(Arrays.asList("Very Bad", "Not good", "Quite ok", "Very Good", "Excellent !!!"))
+                        .setDefaultRating(2)
+                        .setTitle("Rate this seller")
+                        .setDescription("Please select some stars and give your feedback")
+                        .setTitleTextColor(R.color.titleTextColor)
+                        .setDescriptionTextColor(R.color.contentTextColor)
+                        .setHint("Please write your comment here ...")
+                        .setHintTextColor(R.color.hintTextColor)
+                        .setCommentTextColor(R.color.commentTextColor)
+                        .setCommentBackgroundColor(R.color.bg_screen2)
+                        .setWindowAnimation(R.style.MyDialogFadeAnimation)
+                        .create(MyProfileActivity.this)
+                        .show();
+
+            }
+        });
 
         final StorageReference pictureReference = userStorageReference.child("profilePicture.jpg");
         try{
@@ -125,6 +157,8 @@ public class MyProfileActivity extends AppCompatActivity{
                     Log.d("profile", userProfileInfo.phone);
                     profile_address.setText(userProfileInfo.address);
                     Log.d("address", userProfileInfo.address);
+                    rate.setText(Integer.toString(userProfileInfo.userRating));
+
                 }
 
             }
@@ -141,8 +175,12 @@ public class MyProfileActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 if (user != null) {
-                    if(profile_username.getText()!=null&&profile_email.getText()!=null&&profile_password.getText()!=null&&profile_phone.getText()!=null&&profile_address.getText()!=null){
-                        userdataReference.child(user.getUid().toString()).setValue(new UserProfileInfo(profile_username.getText().toString(),profile_email.getText().toString(), profile_phone.getText().toString(), profile_address.getText().toString()));
+                    if(profile_username.getText()!=null&&profile_email.getText()!=null&&profile_password.getText()
+                            !=null&&profile_phone.getText()!=null&&profile_address.getText()!=null){
+                        userdataReference.child(user.getUid().toString()).setValue
+                                (new UserProfileInfo(profile_username.getText().toString(),profile_email.getText().toString(),
+                                        profile_phone.getText().toString(), profile_address.getText().toString(),
+                                        Integer.parseInt((String) rate.getText())));
                     }
                 }
             }
@@ -227,5 +265,20 @@ public class MyProfileActivity extends AppCompatActivity{
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
             }
         });
+    }
+
+    @Override
+    public void onPositiveButtonClicked(int rate, @NotNull String comment) {
+
+        TextView rates = (TextView) findViewById(user_ratings);
+//        int total = 0;
+//        total = rate++;
+//        int average = total/rate;
+        rates.setText(Integer.toString(rate));
+        Toast.makeText(MyProfileActivity.this,"Rate : " + rate + "\n Comment : " + comment,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNegativeButtonClicked() {
     }
 }

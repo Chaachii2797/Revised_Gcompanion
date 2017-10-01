@@ -34,4 +34,11 @@
         <item>Plastic</item>
         <item>Rubber</item>
     </string-array>
+
+    <!-- Ratings Dialog-->
+    <string name="send_review">Send review</string>
+    <string name="cancel">Cancel</string>
+    <string name="title">App rating</string>
+    <string name="description">Please write your feedback</string>
+
 </resources>

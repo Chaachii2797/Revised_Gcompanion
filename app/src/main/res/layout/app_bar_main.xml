@@ -77,13 +77,13 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="70dp"
-        android:layout_height="80dp"
+        android:layout_height="70dp"
         android:layout_gravity="bottom|end"
         app:elevation="6dp"
         app:backgroundTint="@color/bg_screen1"
         app:pressedTranslationZ="12dp"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/add" />
+        android:src="@drawable/add"/>
 
     <FrameLayout
         android:id="@+id/theFragmentFrame"

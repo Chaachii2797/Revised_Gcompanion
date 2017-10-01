@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -61,16 +61,19 @@ public class Sold_Activity extends AppCompatActivity {
             progressDialog.setMessage("Please Wait loading DIYs.....");
             progressDialog.show();
 
+
             database = FirebaseDatabase.getInstance();
             DatabaseReference myRef = database.getReference();
 
-            myRef.child("Sold_Items").addValueEventListener(new ValueEventListener() {
+            myRef.child("Sold_Items").orderByChild("title").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     progressDialog.dismiss();
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Log.e(String.valueOf(snapshot.getRef()), snapshot.getChildrenCount() + "");
                         ProductInfo img = snapshot.getValue(ProductInfo.class);
+
                         if(img.getOwnerUserID().equals(userID)){
                             diyList.add(img);
                         }
@@ -79,6 +82,7 @@ public class Sold_Activity extends AppCompatActivity {
                     adapter = new Items_Adapter(Sold_Activity.this, R.layout.recommend_ui, diyList);
                     //set adapter for listview
                     lv.setAdapter(adapter);
+                    final int count =lv.getAdapter().getCount();
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -86,8 +90,10 @@ public class Sold_Activity extends AppCompatActivity {
                             ProductInfo itemRef = adapter.getItem(position);
                             Toast toast = Toast.makeText(Sold_Activity.this, itemRef.title
                                     + "\n" + itemRef.ownerUserID + "\n" + itemRef.price + "\n" + itemRef.desc + "\n"
-                                    + itemRef.getProductPictureURLs().get(0), Toast.LENGTH_SHORT);
+                                    + itemRef.getProductPictureURLs().get(0) + "\n" + count, Toast.LENGTH_SHORT);
                             toast.show();
+
+
                         }
                     });
                 }

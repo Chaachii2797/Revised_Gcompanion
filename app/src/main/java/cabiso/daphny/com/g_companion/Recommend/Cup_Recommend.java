@@ -25,7 +25,6 @@ import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.DIYDataActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
-import cabiso.daphny.com.g_companion.MyDiys;
 import cabiso.daphny.com.g_companion.R;
 
 /**

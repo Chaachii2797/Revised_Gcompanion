@@ -27,7 +27,9 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/productImagesViewPager"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="330dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:background="@android:color/white" />
 
             <android.support.v7.widget.Toolbar
@@ -47,14 +49,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
-        app:behavior_overlapTop="30dp"
+        app:behavior_overlapTop="40dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            app:cardElevation="5dp"
+            app:cardElevation="10dp"
             app:contentPadding="10dp">
 
             <LinearLayout
@@ -75,52 +77,43 @@
                         android:layout_below="@+id/textView16"
                         android:layout_centerHorizontal="true"
                         android:text="Title of the Product"
-                        android:textSize="20dp"
+                        android:textSize="24sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/productPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_above="@+id/productStatus"
-                        android:layout_alignLeft="@+id/productDescription"
-                        android:layout_alignStart="@+id/productDescription"
-                        android:text="$1000"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:text="1000"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:layout_alignTop="@+id/textView17"
+                        android:layout_alignRight="@+id/textView20"
+                        android:layout_alignEnd="@+id/textView20" />
 
                     <TextView
                         android:id="@+id/productPriceStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/productPrice"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_below="@+id/textView17"
+                        android:layout_marginEnd="11dp"
+                        android:layout_marginRight="11dp"
                         android:text="Fixed/Negotiable"
                         android:textSize="18sp" />
 
 
                     <TextView
-                        android:id="@+id/productStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignEnd="@+id/productDescription"
-                        android:layout_alignRight="@+id/productDescription"
-                        android:layout_below="@+id/productPriceStyle"
-                        android:layout_marginTop="11dp"
-                        android:text="New/Used"
-                        android:textSize="18sp" />
-
-                    <TextView
                         android:id="@+id/productDescription"
                         android:layout_width="270dp"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/productStatus"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginTop="5dp"
                         android:text="This is the description of the book given by the used which is limited to 100 words which gives a synopsis or the outline of the contents of the story or what ever he wants to convey us throught it"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_below="@+id/textView20"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="11dp" />
 
                     <TextView
                         android:id="@+id/textView16"
@@ -129,25 +122,28 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
+                        android:layout_marginTop="14dp"
                         android:text="Product Name:" />
 
                     <TextView
                         android:id="@+id/textView17"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="11dp"
+                        android:text="Price:"
                         android:layout_below="@+id/productTitle"
-                        android:text="Price:" />
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
 
                     <TextView
                         android:id="@+id/textView20"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_above="@+id/productDescription"
+                        android:layout_marginTop="17dp"
+                        android:text="Item Description:"
+                        android:layout_below="@+id/productPrice"
                         android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:text="Item Description:" />
+                        android:layout_alignParentStart="true" />
 
                 </RelativeLayout>
 
@@ -159,15 +155,16 @@
 
                     <TextView
                         android:id="@+id/productOwnerContact"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignEnd="@+id/chatWithSellerButton"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignRight="@+id/chatWithSellerButton"
-                        android:layout_marginTop="13dp"
+                        android:layout_marginTop="23dp"
+                        android:gravity="center"
                         android:text="Seller Info"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
 
                     <TextView
                         android:id="@+id/textView21"
@@ -186,7 +183,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="12dp"
                         android:text="Martin"
-                        android:textSize="20dp"
+                        android:textSize="24sp"
                         android:textStyle="bold" />
 
 
@@ -194,10 +191,10 @@
                         android:id="@+id/textView22"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_above="@+id/productOwnerAddress"
+                        android:text="Address:"
+                        android:layout_below="@+id/productOwnerName"
                         android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:text="Address:" />
+                        android:layout_alignParentStart="true" />
 
                     <TextView
                         android:id="@+id/productOwnerAddress"
@@ -205,43 +202,40 @@
                         android:layout_height="wrap_content"
                         android:text="740 WestCott Street   Apt 3  Syracuse    NY  13210"
                         android:textSize="18sp"
-                        android:layout_above="@+id/textView23"
+                        android:layout_below="@+id/textView22"
                         android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_marginBottom="10dp" />
+                        android:layout_alignParentStart="true" />
 
                     <TextView
                         android:id="@+id/textView23"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_above="@+id/productOwnerPhone"
-                        android:layout_alignEnd="@+id/textView21"
+                        android:text="Contact No.:"
+                        android:layout_alignTop="@+id/productOwnerPhone"
                         android:layout_alignRight="@+id/textView21"
-                        android:text="Contact No.:" />
+                        android:layout_alignEnd="@+id/textView21" />
 
                     <TextView
                         android:id="@+id/productOwnerPhone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/productOwnerAddress"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="17dp"
                         android:text="315-420-4196"
-                        android:textSize="18sp"
-                        android:layout_above="@+id/chatWithSellerButton"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true" />
+                        android:textSize="18sp" />
 
                     <Button
-                        android:id="@+id/chatWithSellerButton"
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:id="@+id/btn_contact_seller"
+                        android:layout_width="250dp"
+                        android:layout_height="50dp"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
-                        android:background="@drawable/shape"
-                        android:backgroundTint="@color/bg_screen2"
-                        android:onClick="onClick"
-                        android:text="CHAT"
-                        android:textColor="@android:color/background_light"
-                        tools:layout_editor_absoluteX="311dp"
-                        tools:layout_editor_absoluteY="473dp" />
+                        android:layout_marginBottom="12dp"
+                        android:background="@android:color/black"
+                        android:text="CONTACT SELLER"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp" />
 
                 </RelativeLayout>
             </LinearLayout>

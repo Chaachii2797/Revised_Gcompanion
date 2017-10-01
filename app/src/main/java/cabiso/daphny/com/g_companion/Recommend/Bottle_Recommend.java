@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -25,7 +26,6 @@ import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.DIYDataActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
-import cabiso.daphny.com.g_companion.MyDiys;
 import cabiso.daphny.com.g_companion.ProductInfo;
 import cabiso.daphny.com.g_companion.R;
 
@@ -77,6 +77,10 @@ public class Bottle_Recommend extends AppCompatActivity {
                         for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             ProductInfo info = snapshot.getValue(ProductInfo.class);
 //                            infoList.add(info);
+
+                            //Log para sa Sold_Items(makita rang mga sold)
+                            Log.e(String.valueOf(snapshot.getRef()), snapshot.getChildrenCount() + "");
+
                             if (info.getOwnerUserID().toString().equals(userID)) {
                                 //ERROR PANI DAPITA.. uhuhuhuhu .. kailangan kwaon ang count sa ownerid gkan sa sold para ma sort...
                                 int count = Integer.parseInt(userID);
@@ -116,7 +120,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                                                 intent.putExtra("procedures", selectedItem.getDiyprocedure());
                                                 intent.putExtra("materials", selectedItem.getDiymaterial());
 
-
+                                                //get image and display to listview by view
                                                 view.buildDrawingCache();
                                                 Bitmap image = view.getDrawingCache();
 

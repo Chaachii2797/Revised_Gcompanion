@@ -11,7 +11,6 @@ class UserProfileInfo {
     public String phone;
     public int userRating;
 
-
     UserProfileInfo(){
 
     }
@@ -22,7 +21,6 @@ class UserProfileInfo {
         this.username = username;
         this.phone = phone;
         this.userRating = userRating;
-
     }
 
     public String getAddress() {
@@ -64,4 +62,5 @@ class UserProfileInfo {
     public void setUserRating(int userRating) {
         this.userRating = userRating;
     }
+
 }

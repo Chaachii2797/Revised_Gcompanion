@@ -27,6 +27,7 @@ public class ProductInfo {
         this.ownerUserID = ownerUserID;
     }
 
+
     public String getOwnerUserID() {
         return ownerUserID;
     }

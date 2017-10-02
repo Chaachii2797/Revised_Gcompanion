@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
+import cabiso.daphny.com.g_companion.Model.ForCounter_Rating;
 
 /**
  * Created by Lenovo on 7/31/2017.
@@ -61,11 +62,10 @@ public class Sold_Activity extends AppCompatActivity {
             progressDialog.setMessage("Please Wait loading DIYs.....");
             progressDialog.show();
 
-
             database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference();
+            DatabaseReference myRef = database.getReference("Sold_Items").child(userID);
 
-            myRef.child("Sold_Items").orderByChild("title").addValueEventListener(new ValueEventListener() {
+            myRef.orderByChild("title").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     progressDialog.dismiss();
@@ -73,9 +73,19 @@ public class Sold_Activity extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Log.e(String.valueOf(snapshot.getRef()), snapshot.getChildrenCount() + "");
                         ProductInfo img = snapshot.getValue(ProductInfo.class);
-
+                        String count="";
                         if(img.getOwnerUserID().equals(userID)){
                             diyList.add(img);
+//                            count = String.valueOf(String.valueOf(snapshot.getChildrenCount()).equals(userID));
+                            count = String.valueOf(diyList.size());
+                            Toast.makeText(Sold_Activity.this,"count: "+count,Toast.LENGTH_SHORT).show();
+                            DatabaseReference reference = database.getReference("to_recommend").child(userID);
+
+                            ForCounter_Rating counter_rating = new ForCounter_Rating();
+                            counter_rating.setSold(count);
+                            counter_rating.setOwnerID(userID);
+                            reference.setValue(counter_rating);
+
                         }
                     }
                     //init adapter
@@ -90,9 +100,8 @@ public class Sold_Activity extends AppCompatActivity {
                             ProductInfo itemRef = adapter.getItem(position);
                             Toast toast = Toast.makeText(Sold_Activity.this, itemRef.title
                                     + "\n" + itemRef.ownerUserID + "\n" + itemRef.price + "\n" + itemRef.desc + "\n"
-                                    + itemRef.getProductPictureURLs().get(0) + "\n" + count, Toast.LENGTH_SHORT);
+                                    + itemRef.getProductPictureURLs().toString() + "\n" + count, Toast.LENGTH_SHORT);
                             toast.show();
-
 
                         }
                     });

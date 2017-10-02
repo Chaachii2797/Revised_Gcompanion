@@ -125,7 +125,7 @@ public class Item_Activity extends AppCompatActivity {
             case R.id.sold_item:
                 int listPosition = info.position;
                 final int count =lv.getAdapter().getCount();
-                itemReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items");
+                itemReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items").child(userID);
                 String title = diyList.get(listPosition).title;
                 String description = diyList.get(listPosition).desc;
                 String price = diyList.get(listPosition).price;

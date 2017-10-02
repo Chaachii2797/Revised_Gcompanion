@@ -59,6 +59,7 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
     private FirebaseStorage mStorage;
     private StorageReference storageReference;
     private StorageReference userStorageReference;
+    private FirebaseDatabase database;
     private File profileImage;
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -72,6 +73,7 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
         mFirebaseAuth = FirebaseAuth.getInstance();
         user = mFirebaseAuth.getCurrentUser();
         userID = user.getUid();
+
         Log.d("USER ID", userID);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
@@ -148,19 +150,17 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
             public void onDataChange(DataSnapshot dataSnapshot) {
                 userProfileInfo = dataSnapshot.getValue(UserProfileInfo.class);
                 if(userProfileInfo!=null){
-                    Log.d("username", userProfileInfo.username);
+                  //  Log.d("username", userProfileInfo.username);
                     profile_username.setText(userProfileInfo.username);
-                    Log.d("username", userProfileInfo.username);
+                   // Log.d("username", userProfileInfo.username);
                     profile_email.setText(userProfileInfo.email);
-                    Log.d("email", userProfileInfo.email);
+                    //Log.d("email", userProfileInfo.email);
                     profile_phone.setText(userProfileInfo.phone);
-                    Log.d("profile", userProfileInfo.phone);
+                    //Log.d("profile", userProfileInfo.phone);
                     profile_address.setText(userProfileInfo.address);
-                    Log.d("address", userProfileInfo.address);
+                    //Log.d("address", userProfileInfo.address);
                     rate.setText(Integer.toString(userProfileInfo.userRating));
-
                 }
-
             }
 
             @Override
@@ -170,7 +170,7 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
         });
 
         Button submitButton = (Button) findViewById(R.id.profile_submit);
-
+        database = FirebaseDatabase.getInstance();
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

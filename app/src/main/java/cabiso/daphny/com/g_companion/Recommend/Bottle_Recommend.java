@@ -70,56 +70,58 @@ public class Bottle_Recommend extends AppCompatActivity {
         progressDialog.setMessage("Please Wait loading DIYs.....");
         progressDialog.show();
 
+            final DatabaseReference myRef = database.getReference("to_recommend").child("category");
+            myRef.child("bottle").orderByChild("sold").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    progressDialog.dismiss();
 
-        final DatabaseReference myRef = database.getReference("DIY_Methods").child("category");
-        myRef.child("bottle").orderByChild("diyownerID").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                progressDialog.dismiss();
-                for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    DIYrecommend img = snapshot.getValue(DIYrecommend.class);
-                    diyList.add(img);
-                }
-                //init adapter
-                adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
-                //set adapter for listview
-                lv.setAdapter(adapter);
-                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                  Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
-                        Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName() +
-                                diyList.get(position).diymaterial + diyList.get(position).diyprocedure +
-                                diyList.get(position).diyImageUrl, Toast.LENGTH_SHORT).show();
-                        DIYrecommend selectedItem = adapter.getItem(position);
-                        //To-DO get you data from the ItemDetails Getter
-                        // selectedItem.getImage() or selectedItem.getName() .. etc
-                        // the  send the data using intent when opening another activity
-                        Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
-                        //  intent.putExtra("image",selectedItem.getDiyImageUrl().toString());
-                        // intent.putExtra("name",selectedItem.getDiyName());
-                        intent.putExtra("procedures", selectedItem.getDiyprocedure());
-                        intent.putExtra("materials", selectedItem.getDiymaterial());
+                    for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            DIYrecommend img = snapshot.getValue(DIYrecommend.class);
+                            diyList.add(img);
 
-                        view.buildDrawingCache();
-                        Bitmap image = view.getDrawingCache();
-                        Bundle extras = new Bundle();
-                        extras.putParcelable("imagebitmap", image);
-
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] byteArray = stream.toByteArray();
-                        intent.putExtra("image", byteArray);
-                        startActivity(intent);
                     }
-                });
-            }
+                    //init adapter
+                    adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
+                    //set adapter for listview
+                    lv.setAdapter(adapter);
+                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                  Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
+                            Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName() +
+                                    diyList.get(position).diymaterial + diyList.get(position).diyprocedure +
+                                    diyList.get(position).diyImageUrl, Toast.LENGTH_SHORT).show();
+                            DIYrecommend selectedItem = adapter.getItem(position);
+                            //To-DO get you data from the ItemDetails Getter
+                            // selectedItem.getImage() or selectedItem.getName() .. etc
+                            // the  send the data using intent when opening another activity
+                            Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
+                            //  intent.putExtra("image",selectedItem.getDiyImageUrl().toString());
+                            // intent.putExtra("name",selectedItem.getDiyName());
+                            intent.putExtra("procedures", selectedItem.getDiyprocedure());
+                            intent.putExtra("materials", selectedItem.getDiymaterial());
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                            view.buildDrawingCache();
+                            Bitmap image = view.getDrawingCache();
+                            Bundle extras = new Bundle();
+                            extras.putParcelable("imagebitmap", image);
 
-            }
-        });
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                            byte[] byteArray = stream.toByteArray();
+                            intent.putExtra("image", byteArray);
+                            startActivity(intent);
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
 
         //end of
     }

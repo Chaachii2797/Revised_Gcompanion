@@ -273,6 +273,10 @@ public class MainActivity extends AppCompatActivity
                 Intent sold = new Intent(MainActivity.this,Sold_Activity.class);
                 startActivity(sold);
                 break;
+            case R.id.nav_pending:
+                Intent pending = new Intent(MainActivity.this,Pending_Activity.class);
+                startActivity(pending);
+                break;
             case R.id.nav_calendar:
                 Intent calendar = new Intent(MainActivity.this,Calendar.class);
                 startActivity(calendar);

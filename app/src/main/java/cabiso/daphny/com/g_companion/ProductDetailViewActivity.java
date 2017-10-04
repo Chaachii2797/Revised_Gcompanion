@@ -19,8 +19,11 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,6 +43,11 @@ import static cabiso.daphny.com.g_companion.R.id.btn_contact_seller;
 
 public class ProductDetailViewActivity extends AppCompatActivity{
     private DatabaseReference productReference;
+    private DatabaseReference pending_reference;
+    private FirebaseUser mFirebaseUser;
+    private FirebaseDatabase database;
+    private String userID;
+
     private ProductImagesViewPagerAdapter productImagesViewPagerAdapter;
     private ViewPager productImagesViewPager;
     private String sellerID;
@@ -50,6 +58,12 @@ public class ProductDetailViewActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail_view);
+
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        userID = mFirebaseUser.getUid();
+
+        pending_reference = FirebaseDatabase.getInstance().getReference("Pending_Items").child(userID);
+
         final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.main_collapsing);
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
         String productReferenceString = getIntent().getStringExtra("Product reference");
@@ -63,6 +77,7 @@ public class ProductDetailViewActivity extends AppCompatActivity{
         final TextView productOwnerAddressTextView = (TextView) findViewById(R.id.productOwnerAddress);
         final TextView productOwnerPhoneTextView = (TextView) findViewById(R.id.productOwnerPhone);
         final Button contact_seller = (Button) findViewById(btn_contact_seller);
+        final Button buy_item = (Button) findViewById(R.id.btn_buy_item);
 
         contact_seller.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -116,6 +131,34 @@ public class ProductDetailViewActivity extends AppCompatActivity{
                             return true;
                         }
                         return false;
+                    }
+                });
+            }
+        });
+
+        buy_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                productReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ProductInfo productInfo =  dataSnapshot.getValue(ProductInfo.class);
+                        String title = productInfo.getTitle();
+                        String desc = productInfo.getDesc();
+                        String price = productInfo.getPrice();
+                        String negotiable = productInfo.getNegotiable();
+                        List productURL = productInfo.getProductPictureURLs();
+                        String owner = productInfo.getOwnerUserID();
+
+                        ProductInfo info = new ProductInfo(title, desc, price, negotiable, productURL, owner);
+                        String upload_info = pending_reference.push().getKey();
+                        pending_reference.child(upload_info).setValue(info);
+                        Toast.makeText(getApplicationContext(), "Clicked Button BUY!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
                     }
                 });
             }

@@ -52,6 +52,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     private DatabaseReference databaseReference;
     private DatabaseReference userDatabaseReference;
     private DatabaseReference allDIYDatabaseReference;
+    private DatabaseReference pendingReference;
+    private FirebaseDatabase database;
 
     private StorageReference storageReference;
 
@@ -132,6 +134,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     //reference to database firebase
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
                             .child("category").child("bottle");
+                    //reference to to_recommend node in firebase
+                    pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend")
+                            .child("category").child("bottle");
                     //reference to all diys database firebase
                     allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
                     //reference to by user database firebase
@@ -160,6 +165,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     String upload = databaseReference.push().getKey();
                                     //upload data to DIY_Methods database reference
                                     databaseReference.child(upload).setValue(recommend);
+                                    //upload data to to_recommend node in database
+                                    pendingReference.child(upload).setValue(recommend);
                                     //upload data to by users database
                                     userDatabaseReference.child(upload).setValue(recommend);
                                     //upload data to all diys in database
@@ -178,6 +185,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 else if(paper.isChecked()){
                     //reference to database firebase
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
+                            .child("category").child("paper");
+                    //reference to to_recommend node in firebase
+                    pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
                             .child("category").child("paper");
                     //reference to all diys database firebase
                     allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
@@ -206,6 +216,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
                                     databaseReference.child(upload).setValue(recommend);
+                                    //upload data to to_recommend node in database
+                                    pendingReference.child(upload).setValue(recommend);
                                     //upload data to DIYs by users
                                     userDatabaseReference.child(upload).setValue(recommend);
                                     //upload data to all diys in database
@@ -225,6 +237,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 else if(cup.isChecked()){
                     //reference to DIY_Methods database firebase
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
+                            .child("category").child("cup");
+                    //reference to to_recommend node in firebase
+                    pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
                             .child("category").child("cup");
                     //reference to all diys database firebase
                     allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
@@ -254,6 +269,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
                                     databaseReference.child(upload).setValue(recommend);
+                                    //upload data to to_recommend node in database
+                                    pendingReference.child(upload).setValue(recommend);
                                     //upload data to DIYs by users
                                     userDatabaseReference.child(upload).setValue(recommend);
                                     //upload data to all diys in database
@@ -273,6 +290,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 else if(wood.isChecked()){
                     //reference to database firebase
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
+                            .child("category").child("wood");
+                    //reference to to_recommend node in firebase
+                    pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
                             .child("category").child("wood");
                     //reference to all diys database firebase
                     allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
@@ -302,6 +322,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
                                     databaseReference.child(upload).setValue(recommend);
+                                    //upload data to to_recommend node in database
+                                    pendingReference.child(upload).setValue(recommend);
                                     //upload data to DIYs by users
                                     userDatabaseReference.child(upload).setValue(recommend);
                                     //upload data to all diys in database
@@ -320,6 +342,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 }else if(tire.isChecked()){
                     //reference to database firebase
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
+                            .child("category").child("tire");
+                    //reference to to_recommend node in firebase
+                    pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
                             .child("category").child("tire");
                     //reference to all diys database firebase
                     allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
@@ -349,6 +374,10 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
                                     databaseReference.child(upload).setValue(recommend);
+                                    //upload data to to_recommend node in database
+                                    pendingReference.child(upload).setValue(recommend);
+                                    //upload data to to_recommend node in database
+                                    pendingReference.child(upload).setValue(recommend);
                                     //upload data to DIYs by users
                                     userDatabaseReference.child(upload).setValue(recommend);
                                     //upload data to all diys in database
@@ -367,6 +396,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 }else if(glass.isChecked()){
                     //reference to database firebase
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
+                            .child("category").child("glass");
+                    //reference to to_recommend node in firebase
+                    pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
                             .child("category").child("glass");
                     //reference to all diys database firebase
                     allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
@@ -396,6 +428,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
                                     databaseReference.child(upload).setValue(recommend);
+                                    //upload data to to_recommend node in database
+                                    pendingReference.child(upload).setValue(recommend);
                                     //upload data to DIYs by users
                                     userDatabaseReference.child(upload).setValue(recommend);
                                     //upload data to all diys in database

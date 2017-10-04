@@ -82,7 +82,7 @@ public class Item_Activity extends AppCompatActivity {
                     adapter = new Items_Adapter(Item_Activity.this, R.layout.recommend_ui, diyList);
                     //set adapter for listview
                     lv.setAdapter(adapter);
-                    final int count =lv.getAdapter().getCount();
+//                    final int count =lv.getAdapter().getCount();
                     registerForContextMenu(lv);
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
@@ -92,7 +92,7 @@ public class Item_Activity extends AppCompatActivity {
 //                            adapter.notifyDataSetChanged();
                             Toast toast = Toast.makeText(Item_Activity.this, itemRef.title
                                     + "\n" + itemRef.ownerUserID + "\n" + itemRef.price + "\n" + itemRef.desc + "\n"
-                                    + itemRef.getProductPictureURLs().get(0) + "\n" + count, Toast.LENGTH_SHORT);
+                                    + itemRef.getProductPictureURLs().get(0) + "\n" , Toast.LENGTH_SHORT);
                             toast.show();
                         }
                     });

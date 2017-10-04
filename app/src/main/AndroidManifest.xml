@@ -56,6 +56,7 @@
         <activity android:name=".MyProfileActivity" />
         <activity android:name=".MyDiys" />
         <activity android:name=".SellMyDIYs" />
+        <activity android:name=".Pending_Activity" />
         <activity android:name=".Recommend.Bottle_Recommend" />
         <activity android:name=".Recommend.Paper_Recommend" />
         <activity android:name=".Recommend.Rubber_Recommend" />
@@ -79,7 +80,8 @@
         <activity android:name=".ChatWithSellerActivity" />
         <activity android:name=".DIYDataActivity" />
         <activity android:name=".Item_Activity" />
-        <activity android:name=".Sold_Activity"></activity>
+        <activity android:name=".Sold_Activity" />
+        <activity android:name=".Pending_Activity"></activity>
     </application>
 
 </manifest>

@@ -138,7 +138,7 @@ public class MyDiys extends AppCompatActivity {
                 String category = diyList.get(listPosition).getCategory();
 
                 ForCounter_Rating counter_rating = new ForCounter_Rating();
-                long sold = counter_rating.getSold();
+                String sold = String.valueOf(counter_rating.getSold());
 
                 if(category.equals("bottle")){
                     categoryReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")

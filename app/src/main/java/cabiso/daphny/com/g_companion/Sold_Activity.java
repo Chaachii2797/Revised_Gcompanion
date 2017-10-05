@@ -87,9 +87,10 @@ public class Sold_Activity extends AppCompatActivity {
                                     .child(userID).child("sold_items");
 
                             ForCounter_Rating counter_rating = new ForCounter_Rating();
-                            counter_rating.setSold(count);
+                            counter_rating.setSold(String.valueOf(count));
                             counter_rating.setOwnerID(userID);
                             reference.setValue(counter_rating);
+
                             sold.setValue(counter_rating);
                         }
 

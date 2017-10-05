@@ -71,22 +71,22 @@ public class Bottle_Recommend extends AppCompatActivity {
         progressDialog.setMessage("Please Wait loading DIYs.....");
         progressDialog.show();
 
-        DatabaseReference myRef = database.getReference();
-        myRef.child("DIYs_By_Users").addChildEventListener(new ChildEventListener() {
+        DatabaseReference myRef = database.getReference("DIYs_By_Users");
+        myRef.child("bottle").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                for(final DataSnapshot snapshot:dataSnapshot.getChildren()){
-                    if(snapshot.hasChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if (snapshot.hasChildren()) {
+                        progressDialog.dismiss();
                         DIYrecommend img = snapshot.getValue(DIYrecommend.class);
                         diyList.add(img);
-                        Log.d("LOGGING: "+img.getDiyName(),"");
-                        Toast.makeText(getApplicationContext(), "KUHAA: "+img.getDiyName(),Toast.LENGTH_SHORT).show();
+                        Log.d("LOGGING: " + img.getDiyName(), "");
+                        Toast.makeText(getApplicationContext(), "KUHAA: " + img.getDiyName(), Toast.LENGTH_SHORT).show();
                     }
-                    progressDialog.dismiss();
-                    adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
-                    //set adapter for listview
-                    lv.setAdapter(adapter);
                 }
+                adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
+                //set adapter for listview
+                lv.setAdapter(adapter);
             }
 
             @Override
@@ -109,91 +109,7 @@ public class Bottle_Recommend extends AppCompatActivity {
 
             }
         });
-
-//            myRef.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    String userId = dataSnapshot.getKey();
-//                    progressDialog.dismiss();
-//                    // for category
-//                    for (DataSnapshot snapshotRef : dataSnapshot.getChildren()) {
-//                        DIYrecommend img = snapshotRef.getValue(DIYrecommend.class);
-//                            diyList.add(img);
-//                        Toast.makeText(getApplicationContext(), "userID"+img.getDiyownerID(),Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                    //init adapter
-//                    adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
-//                    //set adapter for listview
-//                    lv.setAdapter(adapter);
-//                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-////                  Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
-//                            Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName() +
-//                                    diyList.get(position).diymaterial + diyList.get(position).diyprocedure +
-//                                    diyList.get(position).diyImageUrl, Toast.LENGTH_SHORT).show();
-//                            DIYrecommend selectedItem = adapter.getItem(position);
-//                            //To-DO get you data from the ItemDetails Getter
-//                            // selectedItem.getImage() or selectedItem.getName() .. etc
-//                            // the  send the data using intent when opening another activity
-//                            Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
-//                            //  intent.putExtra("image",selectedItem.getDiyImageUrl().toString());
-//                            // intent.putExtra("name",selectedItem.getDiyName());
-//                            intent.putExtra("procedures", selectedItem.getDiyprocedure());
-//                            intent.putExtra("materials", selectedItem.getDiymaterial());
-//
-//                            view.buildDrawingCache();
-//                            Bitmap image = view.getDrawingCache();
-//                            Bundle extras = new Bundle();
-//                            extras.putParcelable("imagebitmap", image);
-//
-//                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                            byte[] byteArray = stream.toByteArray();
-//                            intent.putExtra("image", byteArray);
-//                            startActivity(intent);
-//                        }
-//                    });
-//                }
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
-        //end of
     }
-
-//    public void getHighSold(){
-//        userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("to_recommend");
-//        userDatabaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                String id = dataSnapshot.child("ownerID").getValue().toString();
-//                String sold = dataSnapshot.child("sold").getValue().toString();
-//                recommends.add(new Recommend().setId(id).setSold(sold));
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//        sortSold(recommends);
-//        Toast.makeText(this,recommends.get(0).getId()+" has the highest sold", Toast.LENGTH_SHORT).show();
-//    }
-//
-//    public void sortSold(ArrayList<Recommend> dataSet){
-//        for(int x = 0; x < dataSet.size(); x++){
-//            for(int y = 0; y < (x-(dataSet.size()))-1; y++){
-//                if(Integer.parseInt(dataSet.get(y).getSold()) >  Integer.parseInt(dataSet.get(y+1).getSold())){
-//                    String temp = dataSet.get(y).getSold();
-//                    dataSet.get(y).setSold(dataSet.get(y+1).getSold());
-//                    dataSet.get(y+1).setSold(temp);
-//                }
-//            }
-//        }
-//    }
 
     public void sort_to_recommend(){
         DatabaseReference myRef = database.getReference("Sold_Items");

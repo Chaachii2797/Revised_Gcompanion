@@ -171,7 +171,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     //get text input and save new object
 
                                     ForCounter_Rating counter_rating = new ForCounter_Rating();
-                                    long sold = counter_rating.getSold();
+                                    String sold = String.valueOf(counter_rating.getSold());
 
                                     final DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
                                             ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "bottle",sold);
@@ -225,7 +225,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                                     ForCounter_Rating counter_rating = new ForCounter_Rating();
-                                    long sold = counter_rating.getSold();
+                                    String sold = String.valueOf(counter_rating.getSold());
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
                                             ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "paper",sold);
@@ -281,7 +281,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                                     ForCounter_Rating counter_rating = new ForCounter_Rating();
-                                    long sold = counter_rating.getSold();
+                                    String sold = String.valueOf(counter_rating.getSold());
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
                                             ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "cup",sold);
@@ -337,7 +337,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                                     ForCounter_Rating counter_rating = new ForCounter_Rating();
-                                    long sold = counter_rating.getSold();
+                                    String sold = String.valueOf(counter_rating.getSold());
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
                                             ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "wood",sold);
@@ -392,7 +392,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                                     ForCounter_Rating counter_rating = new ForCounter_Rating();
-                                    long sold = counter_rating.getSold();
+                                    String sold = String.valueOf(counter_rating.getSold());
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
                                             ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "tire",sold);
@@ -447,7 +447,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                                     ForCounter_Rating counter_rating = new ForCounter_Rating();
-                                    long sold = counter_rating.getSold();
+                                    String sold = String.valueOf(counter_rating.getSold());
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
                                             ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "glass",sold);
@@ -497,7 +497,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                                     ForCounter_Rating counter_rating = new ForCounter_Rating();
-                                    long sold = counter_rating.getSold();
+                                    String sold = String.valueOf(counter_rating.getSold());
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
                                             ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "bottle",sold);
@@ -536,7 +536,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {//get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     ForCounter_Rating counter_rating = new ForCounter_Rating();
-                                    long sold = counter_rating.getSold();
+                                    String sold = String.valueOf(counter_rating.getSold());
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
                                             ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "paper",sold);
@@ -577,7 +577,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                                     ForCounter_Rating counter_rating = new ForCounter_Rating();
-                                    long sold = counter_rating.getSold();
+                                    String sold = String.valueOf(counter_rating.getSold());
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
                                             ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "cup",sold);
@@ -618,7 +618,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     //get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     ForCounter_Rating counter_rating = new ForCounter_Rating();
-                                    long sold = counter_rating.getSold();
+                                    String sold = String.valueOf(counter_rating.getSold());
 
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
@@ -660,7 +660,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                                     ForCounter_Rating counter_rating = new ForCounter_Rating();
-                                    long sold = counter_rating.getSold();
+                                    String sold = String.valueOf(counter_rating.getSold());
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
                                             ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "tire",sold);
@@ -700,7 +700,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     //get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     ForCounter_Rating counter_rating = new ForCounter_Rating();
-                                    long sold = counter_rating.getSold();
+                                    String sold = String.valueOf(counter_rating.getSold());
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
                                             ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "glass",sold);

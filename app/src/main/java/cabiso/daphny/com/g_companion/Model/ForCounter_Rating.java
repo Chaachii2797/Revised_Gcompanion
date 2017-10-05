@@ -5,22 +5,22 @@ package cabiso.daphny.com.g_companion.Model;
  */
 
 public class ForCounter_Rating {
-    long sold;
+    String sold;
     String ownerID;
 
     public ForCounter_Rating(){
 
     }
-    public ForCounter_Rating(long sold, String ownerID) {
+    public ForCounter_Rating(String sold, String ownerID) {
         this.sold = sold;
         this.ownerID = ownerID;
     }
 
-    public long getSold() {
+    public String getSold() {
         return sold;
     }
 
-    public void setSold(long sold) {
+    public void setSold(String sold) {
         this.sold = sold;
     }
 

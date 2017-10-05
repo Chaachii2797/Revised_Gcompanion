@@ -7,9 +7,9 @@ package cabiso.daphny.com.g_companion.Recommend;
 public class DIYrecommend {
 
     public String diyName, diymaterial, diyprocedure, diyImageUrl, diyownerID, category;
-    public long sold_items;
+    public String sold_items;
     public DIYrecommend(String diyName, String diymaterial, String diyprocedure, String diyImageUrl,
-                        String diyownerID, String category, long sold_items) {
+                        String diyownerID, String category, String sold_items) {
         this.diyName = diyName;
         this.diymaterial = diymaterial;
         this.diyprocedure = diyprocedure;
@@ -77,11 +77,11 @@ public class DIYrecommend {
         this.category = category;
     }
 
-    public long getSold_items() {
+    public String getSold_items() {
         return sold_items;
     }
 
-    public void setSold_items(long sold_items) {
+    public void setSold_items(String sold_items) {
         this.sold_items = sold_items;
     }
 }

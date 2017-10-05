@@ -81,15 +81,15 @@ public class Sold_Activity extends AppCompatActivity {
                             Toast.makeText(Sold_Activity.this,"count: "+count,Toast.LENGTH_SHORT).show();
 
 
-                                DatabaseReference reference = database.getReference("to_recommend");
+                                DatabaseReference reference = database.getReference("to_recommend").child("sold_items").child(userID);
 
                                 ForCounter_Rating counter_rating = new ForCounter_Rating();
                                 counter_rating.setSold(count);
                                 counter_rating.setOwnerID(userID);
 //                            reference.setValue(counter_rating);
 //                            String upload = reference.push().getKey();
-                                String upload = reference.getKey();
-                                reference.child(upload).setValue(counter_rating);
+                              //  String upload = reference.getKey();
+                                reference.setValue(counter_rating);
 
                         }
                     }

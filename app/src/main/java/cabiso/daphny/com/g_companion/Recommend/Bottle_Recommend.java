@@ -25,8 +25,6 @@ import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.DIYDataActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
-import cabiso.daphny.com.g_companion.Model.ForCounter_Rating;
-import cabiso.daphny.com.g_companion.MyDiys;
 import cabiso.daphny.com.g_companion.ProductInfo;
 import cabiso.daphny.com.g_companion.R;
 
@@ -70,8 +68,8 @@ public class Bottle_Recommend extends AppCompatActivity {
         progressDialog.setMessage("Please Wait loading DIYs.....");
         progressDialog.show();
 
-            final DatabaseReference myRef = database.getReference("to_recommend").child("category");
-            myRef.child("bottle").orderByChild("sold").addValueEventListener(new ValueEventListener() {
+            final DatabaseReference myRef = database.getReference("DIYs_By_Users").child(userID);
+            myRef.orderByChild("user_rating").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     progressDialog.dismiss();

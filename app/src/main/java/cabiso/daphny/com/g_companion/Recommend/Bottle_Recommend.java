@@ -82,7 +82,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                         Log.d("LOGGING: "+img.getDiyName(),"");
                         Toast.makeText(getApplicationContext(), "KUHAA: "+img.getDiyName(),Toast.LENGTH_SHORT).show();
                     }
-
+                    progressDialog.dismiss();
                     adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
                     //set adapter for listview
                     lv.setAdapter(adapter);

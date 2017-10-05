@@ -21,8 +21,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -30,10 +34,13 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
+import cabiso.daphny.com.g_companion.Model.ForCounter_Rating;
 import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import cabiso.daphny.com.g_companion.Recommend.Cup_Recommend;
 import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
@@ -50,9 +57,10 @@ import cabiso.daphny.com.g_companion.Recommend.Wood_Recommend;
 public class CaptureDIY extends AppCompatActivity implements View.OnClickListener{
 
     private DatabaseReference databaseReference;
+    private DatabaseReference chech_reference;
     private DatabaseReference userDatabaseReference;
     private DatabaseReference allDIYDatabaseReference;
-    private DatabaseReference pendingReference;
+    private DatabaseReference to_recommend_reference;
     private FirebaseDatabase database;
 
     private StorageReference storageReference;
@@ -116,6 +124,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         }
     }
 
+
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -135,12 +145,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
                             .child("category").child("bottle");
                     //reference to to_recommend node in firebase
-                    pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend")
+                    to_recommend_reference = FirebaseDatabase.getInstance().getReference("to_recommend")
                             .child("category").child("bottle");
                     //reference to all diys database firebase
                     allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
                     //reference to by user database firebase
-                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child("bottle").child(userID);
                     //generate random unique ID for image to database storage
                     String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     StringBuilder salt = new StringBuilder();
@@ -159,14 +169,18 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     //get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                     //get text input and save new object
-                                    DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "bottle");
+
+                                    ForCounter_Rating counter_rating = new ForCounter_Rating();
+                                    long sold = counter_rating.getSold();
+
+                                    final DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "bottle",sold);
                                     //assign string upload to database reference
-                                    String upload = databaseReference.push().getKey();
+                                    final String upload = databaseReference.push().getKey();
                                     //upload data to DIY_Methods database reference
                                     databaseReference.child(upload).setValue(recommend);
                                     //upload data to to_recommend node in database
-                                    pendingReference.child(upload).setValue(recommend);
+                                    to_recommend_reference.child(upload).setValue(recommend);
                                     //upload data to by users database
                                     userDatabaseReference.child(upload).setValue(recommend);
                                     //upload data to all diys in database
@@ -187,12 +201,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
                             .child("category").child("paper");
                     //reference to to_recommend node in firebase
-                    pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
+                    to_recommend_reference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
                             .child("category").child("paper");
                     //reference to all diys database firebase
                     allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
                     //reference to by user database firebase
-                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child("paper").child(userID);
                     //generate random unique ID for image to database storage
                     String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     StringBuilder salt = new StringBuilder();
@@ -209,15 +223,18 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {//get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                                    ForCounter_Rating counter_rating = new ForCounter_Rating();
+                                    long sold = counter_rating.getSold();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "paper");
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "paper",sold);
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
                                     databaseReference.child(upload).setValue(recommend);
                                     //upload data to to_recommend node in database
-                                    pendingReference.child(upload).setValue(recommend);
+                                    to_recommend_reference.child(upload).setValue(recommend);
                                     //upload data to DIYs by users
                                     userDatabaseReference.child(upload).setValue(recommend);
                                     //upload data to all diys in database
@@ -239,12 +256,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
                             .child("category").child("cup");
                     //reference to to_recommend node in firebase
-                    pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
+                    to_recommend_reference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
                             .child("category").child("cup");
                     //reference to all diys database firebase
                     allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
                     //reference to by user database firebase
-                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child("cup").child(userID);
                     //generate random unique ID for image to database storage
                     String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     StringBuilder salt = new StringBuilder();
@@ -262,15 +279,18 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     //get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                                    ForCounter_Rating counter_rating = new ForCounter_Rating();
+                                    long sold = counter_rating.getSold();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "cup");
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "cup",sold);
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
                                     databaseReference.child(upload).setValue(recommend);
                                     //upload data to to_recommend node in database
-                                    pendingReference.child(upload).setValue(recommend);
+                                    to_recommend_reference.child(upload).setValue(recommend);
                                     //upload data to DIYs by users
                                     userDatabaseReference.child(upload).setValue(recommend);
                                     //upload data to all diys in database
@@ -292,12 +312,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
                             .child("category").child("wood");
                     //reference to to_recommend node in firebase
-                    pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
+                    to_recommend_reference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
                             .child("category").child("wood");
                     //reference to all diys database firebase
                     allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
                     //reference to by user database firebase
-                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child("wood").child(userID);
                     //generate random unique ID for image to database storage
                     String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     StringBuilder salt = new StringBuilder();
@@ -315,15 +335,18 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     //get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                                    ForCounter_Rating counter_rating = new ForCounter_Rating();
+                                    long sold = counter_rating.getSold();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "wood");
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "wood",sold);
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
                                     databaseReference.child(upload).setValue(recommend);
                                     //upload data to to_recommend node in database
-                                    pendingReference.child(upload).setValue(recommend);
+                                    to_recommend_reference.child(upload).setValue(recommend);
                                     //upload data to DIYs by users
                                     userDatabaseReference.child(upload).setValue(recommend);
                                     //upload data to all diys in database
@@ -344,12 +367,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
                             .child("category").child("tire");
                     //reference to to_recommend node in firebase
-                    pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
+                    to_recommend_reference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
                             .child("category").child("tire");
                     //reference to all diys database firebase
                     allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
                     //reference to by user database firebase
-                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child("tire").child(userID);
                     //generate random unique ID for image to database storage
                     String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     StringBuilder salt = new StringBuilder();
@@ -367,17 +390,18 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     //get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                                    ForCounter_Rating counter_rating = new ForCounter_Rating();
+                                    long sold = counter_rating.getSold();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "tire");
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "tire",sold);
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
                                     databaseReference.child(upload).setValue(recommend);
                                     //upload data to to_recommend node in database
-                                    pendingReference.child(upload).setValue(recommend);
-                                    //upload data to to_recommend node in database
-                                    pendingReference.child(upload).setValue(recommend);
+                                    to_recommend_reference.child(upload).setValue(recommend);
                                     //upload data to DIYs by users
                                     userDatabaseReference.child(upload).setValue(recommend);
                                     //upload data to all diys in database
@@ -398,12 +422,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
                             .child("category").child("glass");
                     //reference to to_recommend node in firebase
-                    pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
+                    to_recommend_reference = FirebaseDatabase.getInstance().getReference("to_recommend").child(userID)
                             .child("category").child("glass");
                     //reference to all diys database firebase
                     allDIYDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
                     //reference to by user database firebase
-                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child("glass").child(userID);
                     //generate random unique ID for image to database storage
                     String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     StringBuilder salt = new StringBuilder();
@@ -421,15 +445,18 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     //get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                                    ForCounter_Rating counter_rating = new ForCounter_Rating();
+                                    long sold = counter_rating.getSold();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "glass");
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "glass",sold);
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
                                     databaseReference.child(upload).setValue(recommend);
                                     //upload data to to_recommend node in database
-                                    pendingReference.child(upload).setValue(recommend);
+                                    to_recommend_reference.child(upload).setValue(recommend);
                                     //upload data to DIYs by users
                                     userDatabaseReference.child(upload).setValue(recommend);
                                     //upload data to all diys in database
@@ -450,7 +477,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             case R.id.addToMyDIYs:
                 if (bottle.isChecked()){
                     //reference to Diys by users
-                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child("bottle").child(userID);
                     //generate random unique ID for image to database storage
                     String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     StringBuilder salt = new StringBuilder();
@@ -468,9 +495,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     //get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                                    ForCounter_Rating counter_rating = new ForCounter_Rating();
+                                    long sold = counter_rating.getSold();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "bottle");
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "bottle",sold);
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -488,7 +518,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 }
                 else if(paper.isChecked()){
                     //reference to Diys by users
-                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child("paper").child(userID);
                     //generate random unique ID for image to database storage
                     String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     StringBuilder salt = new StringBuilder();
@@ -505,9 +535,11 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {//get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    ForCounter_Rating counter_rating = new ForCounter_Rating();
+                                    long sold = counter_rating.getSold();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "paper");
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "paper",sold);
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -525,7 +557,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 }
                 else if(cup.isChecked()){
                     //reference to Diys by users
-                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child("cup").child(userID);
                     //generate random unique ID for image to database storage
                     String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     StringBuilder salt = new StringBuilder();
@@ -543,9 +575,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     //get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                                    ForCounter_Rating counter_rating = new ForCounter_Rating();
+                                    long sold = counter_rating.getSold();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "cup");
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "cup",sold);
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -564,7 +599,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 }
                 else if(wood.isChecked()){
                     //reference to DIYs by users
-                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child("wood").child(userID);
                     //generate random unique ID for image to database storage
                     String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     StringBuilder salt = new StringBuilder();
@@ -582,9 +617,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     //get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    ForCounter_Rating counter_rating = new ForCounter_Rating();
+                                    long sold = counter_rating.getSold();
+
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "wood");
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "wood",sold);
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -602,7 +640,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     });
                 }else if(tire.isChecked()){
                     //reference to DIYs by users
-                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child("tire").child(userID);
                     //generate random unique ID for image to database storage
                     String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     StringBuilder salt = new StringBuilder();
@@ -620,9 +658,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     //get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                                    ForCounter_Rating counter_rating = new ForCounter_Rating();
+                                    long sold = counter_rating.getSold();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "tire");
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "tire",sold);
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -640,7 +681,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     });
                 }else if(glass.isChecked()){
                     //reference to DIYs by users
-                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child(userID);
+                    userDatabaseReference = FirebaseDatabase.getInstance().getReference().child("DIYs_By_Users").child("glass").child(userID);
                     //generate random unique ID for image to database storage
                     String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                     StringBuilder salt = new StringBuilder();
@@ -658,9 +699,11 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     //get downloadUrl from storage
                                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    ForCounter_Rating counter_rating = new ForCounter_Rating();
+                                    long sold = counter_rating.getSold();
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(), material.getText().toString()
-                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "glass");
+                                            ,procedure.getText().toString(),taskSnapshot.getDownloadUrl().toString(), userID, "glass",sold);
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users

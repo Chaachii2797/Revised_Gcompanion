@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.Model.ForCounter_Rating;
+import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 
 /**
  * Created by Lenovo on 7/31/2017.
@@ -73,25 +74,25 @@ public class Sold_Activity extends AppCompatActivity {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Log.e(String.valueOf(snapshot.getRef()), snapshot.getChildrenCount() + "");
                         ProductInfo img = snapshot.getValue(ProductInfo.class);
-                        String count="";
-                        if(img.getOwnerUserID().equals(userID)){
+                        long count=0;
+                        if(img.getOwnerUserID().equals(userID)) {
+//                            img.setProductID(snapshot.getKey());
                             diyList.add(img);
-//                            count = String.valueOf(String.valueOf(snapshot.getChildrenCount()).equals(userID));
-                            count = String.valueOf(diyList.size());
-                            Toast.makeText(Sold_Activity.this,"count: "+count,Toast.LENGTH_SHORT).show();
+//                          count = String.valueOf(String.valueOf(snapshot.getChildrenCount()).equals(userID));
+                            count = diyList.size();
+                            Toast.makeText(Sold_Activity.this, "count: " + count, Toast.LENGTH_SHORT).show();
 
+                            DatabaseReference reference = database.getReference("to_recommend").child("sold_items").child(userID);
 
-                                DatabaseReference reference = database.getReference("to_recommend").child("sold_items").child(userID);
-
-                                ForCounter_Rating counter_rating = new ForCounter_Rating();
-                                counter_rating.setSold(count);
-                                counter_rating.setOwnerID(userID);
-//                            reference.setValue(counter_rating);
-//                            String upload = reference.push().getKey();
-                              //  String upload = reference.getKey();
-                                reference.setValue(counter_rating);
-
+                            ForCounter_Rating counter_rating = new ForCounter_Rating();
+                            counter_rating.setSold(count);
+                            counter_rating.setOwnerID(userID);
+                            reference.setValue(counter_rating);
                         }
+
+//                      String upload = reference.push().getKey();
+//                        String upload = reference.push().getKey();
+//                        reference.child(upload).setValue(counter_rating);
                     }
                     //init adapter
                     adapter = new Items_Adapter(Sold_Activity.this, R.layout.recommend_ui, diyList);
@@ -101,21 +102,22 @@ public class Sold_Activity extends AppCompatActivity {
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                             ProductInfo itemRef = adapter.getItem(position);
                             Toast toast = Toast.makeText(Sold_Activity.this, itemRef.title
                                     + "\n" + itemRef.ownerUserID + "\n" + itemRef.price + "\n" + itemRef.desc + "\n"
                                     + itemRef.getProductPictureURLs().toString() + "\n" + count, Toast.LENGTH_SHORT);
                             toast.show();
-
                         }
                     });
                 }
+
+
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
             });
+
         }else{
             Toast.makeText(Sold_Activity.this, "Wala pa kay tinda na add!",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(Sold_Activity.this,MainActivity.class);

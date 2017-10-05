@@ -25,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import cabiso.daphny.com.g_companion.Model.ForCounter_Rating;
 import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
@@ -57,13 +58,13 @@ public class MyDiys extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_diys);
 
-            recyclerView = (RecyclerView) findViewById(R.id.list);
+        recyclerView = (RecyclerView) findViewById(R.id.list);
 
-            mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            userID = mFirebaseUser.getUid();
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        userID = mFirebaseUser.getUid();
 
-            lv = (ListView) findViewById(R.id.lvView);
-            if(lv!=null) {
+        lv = (ListView) findViewById(R.id.lvView);
+        if(lv!=null) {
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Please Wait loading DIYs.....");
             progressDialog.show();
@@ -135,14 +136,18 @@ public class MyDiys extends AppCompatActivity {
                 String procedure = diyList.get(listPosition).getDiyprocedure();
                 String imageURL = diyList.get(listPosition).getDiyImageUrl();
                 String category = diyList.get(listPosition).getCategory();
+
+                ForCounter_Rating counter_rating = new ForCounter_Rating();
+                long sold = counter_rating.getSold();
+
                 if(category.equals("bottle")){
                     categoryReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
                             .child("category").child("bottle");
-                    DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL, userID, category);
+                    DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL, userID, category, sold);
                     String upload = categoryReference.push().getKey();
                     categoryReference.child(upload).setValue(diYrecommend);
                 }
-                DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL, userID, category);
+                DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL, userID, category, sold);
                 String upload = databaseReference.push().getKey();
                 databaseReference.child(upload).setValue(diYrecommend);
                 Toast.makeText(MyDiys.this, "CLicked! COMMUNITY" + diyList.get(listPosition).getDiyName(), Toast.LENGTH_SHORT).show();

@@ -1,15 +1,19 @@
 package cabiso.daphny.com.g_companion.Recommend;
 
+import android.support.annotation.NonNull;
+
+import java.util.Comparator;
+
 /**
  * Created by Lenovo on 7/30/2017.
  */
 
-public class DIYrecommend {
+public class DIYrecommend implements Comparable<DIYrecommend>{
 
     public String diyName, diymaterial, diyprocedure, diyImageUrl, diyownerID, category;
-    public String sold_items;
+    public int sold_items;
     public DIYrecommend(String diyName, String diymaterial, String diyprocedure, String diyImageUrl,
-                        String diyownerID, String category, String sold_items) {
+                        String diyownerID, String category, int sold_items) {
         this.diyName = diyName;
         this.diymaterial = diymaterial;
         this.diyprocedure = diyprocedure;
@@ -27,6 +31,20 @@ public class DIYrecommend {
 //    }
 //
     public DIYrecommend(){
+    }
+
+    @Override
+    public int compareTo(@NonNull DIYrecommend o) {
+        return sold_items - o.getSold_items();
+    }
+
+    class compareBysoldItems implements Comparator<DIYrecommend>{
+
+
+        @Override
+        public int compare(DIYrecommend o1, DIYrecommend o2) {
+            return o1.getSold_items() - o2.getSold_items();
+        }
     }
 
     public String getDiyName() {
@@ -77,12 +95,14 @@ public class DIYrecommend {
         this.category = category;
     }
 
-    public String getSold_items() {
+    public int getSold_items() {
         return sold_items;
     }
 
-    public void setSold_items(String sold_items) {
+    public void setSold_items(int sold_items) {
         this.sold_items = sold_items;
     }
+
+
 }
 

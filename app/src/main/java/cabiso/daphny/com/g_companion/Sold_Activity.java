@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -71,10 +72,10 @@ public class Sold_Activity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     progressDialog.dismiss();
 
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Log.e(String.valueOf(snapshot.getRef()), snapshot.getChildrenCount() + "");
                         ProductInfo img = snapshot.getValue(ProductInfo.class);
-                        long count=0;
+                        int count=0;
                         if(img.getOwnerUserID().equals(userID)) {
 //                            img.setProductID(snapshot.getKey());
                             diyList.add(img);
@@ -83,13 +84,30 @@ public class Sold_Activity extends AppCompatActivity {
                             Toast.makeText(Sold_Activity.this, "count: " + count, Toast.LENGTH_SHORT).show();
 
                             DatabaseReference reference = database.getReference("to_recommend").child("sold_items").child(userID);
+                            final DatabaseReference ref = database.getReference("DIYs_By_Users").child("bottle").child(userID);
                             DatabaseReference sold = database.getReference("DIYs_By_Users").child("bottle")
                                     .child(userID).child("sold_items");
+                            DIYrecommend recommend = new DIYrecommend();
 
-                            ForCounter_Rating counter_rating = new ForCounter_Rating();
-                            counter_rating.setSold(String.valueOf(count));
+                            final ForCounter_Rating counter_rating = new ForCounter_Rating();
+                            counter_rating.setSold(count);
                             counter_rating.setOwnerID(userID);
-                            reference.setValue(counter_rating);
+                            Query get_sold = ref.orderByChild("sold_items").equalTo(0);
+                            get_sold.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
+                                        snapshot1.getRef().child("sold_items").setValue(counter_rating.getSold());
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                            String upload  = sold.getKey();
+                            reference.child(upload).setValue(counter_rating);
 
                             sold.setValue(counter_rating);
                         }

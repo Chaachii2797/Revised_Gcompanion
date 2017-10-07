@@ -2,10 +2,13 @@ package cabiso.daphny.com.g_companion.Recommend;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -17,16 +20,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 
+import cabiso.daphny.com.g_companion.DIYDataActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
-import cabiso.daphny.com.g_companion.Model.ForCounter_Rating;
 import cabiso.daphny.com.g_companion.ProductInfo;
 import cabiso.daphny.com.g_companion.R;
 
@@ -78,6 +78,9 @@ public class Bottle_Recommend extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if (snapshot.hasChildren()){
 
+                        Collections.sort(diyList);
+                        Collections.reverse(diyList);
+
                         progressDialog.dismiss();
                         Log.e("datasnaphot: "," "+dataSnapshot.getChildrenCount());
                         Log.e("datasnaphot: "," "+dataSnapshot.toString());
@@ -90,10 +93,9 @@ public class Bottle_Recommend extends AppCompatActivity {
                         DIYrecommend temp2 = new DIYrecommend();
 
                         Toast.makeText(getApplicationContext(), "KUHAA: " + img.getDiyName(), Toast.LENGTH_SHORT).show();
-                        if(8==diyList.size()){
+                        if(snapshot.getChildrenCount() == diyList.size()){
 
-                            Collections.sort(diyList);
-                            Collections.reverse(diyList);
+
 
 
                           /*  for(int j =0; j < diyList.size(); j++){
@@ -120,8 +122,35 @@ public class Bottle_Recommend extends AppCompatActivity {
                                 Log.e("daphny "," "+diyList.get(i).getSold_items());
                             }
                         }
+                        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                  Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
+                                Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName() +
+                                        diyList.get(position).diymaterial + diyList.get(position).diyprocedure +
+                                        diyList.get(position).diyImageUrl, Toast.LENGTH_SHORT).show();
+                                DIYrecommend selectedItem = adapter.getItem(position);
+                                //To-DO get you data from the ItemDetails Getter
+                                // selectedItem.getImage() or selectedItem.getName() .. etc
+                                // the  send the data using intent when opening another activity
+                                Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
+                                //  intent.putExtra("image",selectedItem.getDiyImageUrl().toString());
+                                // intent.putExtra("name",selectedItem.getDiyName());
+                                intent.putExtra("procedures", selectedItem.getDiyprocedure());
+                                intent.putExtra("materials", selectedItem.getDiymaterial());
 
+                                view.buildDrawingCache();
+                                Bitmap image = view.getDrawingCache();
+                                Bundle extras = new Bundle();
+                                extras.putParcelable("imagebitmap", image);
 
+                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                byte[] byteArray = stream.toByteArray();
+                                intent.putExtra("image", byteArray);
+                                startActivity(intent);
+                            }
+                        });
                     }
                 }
 

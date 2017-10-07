@@ -11,9 +11,9 @@ import java.util.Comparator;
 public class DIYrecommend implements Comparable<DIYrecommend>{
 
     public String diyName, diymaterial, diyprocedure, diyImageUrl, diyownerID, category;
-    public int sold_items;
+    public int sold_items, user_ratings;
     public DIYrecommend(String diyName, String diymaterial, String diyprocedure, String diyImageUrl,
-                        String diyownerID, String category, int sold_items) {
+                        String diyownerID, String category, int sold_items, int user_ratings) {
         this.diyName = diyName;
         this.diymaterial = diymaterial;
         this.diyprocedure = diyprocedure;
@@ -21,6 +21,7 @@ public class DIYrecommend implements Comparable<DIYrecommend>{
         this.diyownerID  = diyownerID;
         this.category = category;
         this.sold_items = sold_items;
+        this.user_ratings = user_ratings;
     }
 
 
@@ -103,6 +104,12 @@ public class DIYrecommend implements Comparable<DIYrecommend>{
         this.sold_items = sold_items;
     }
 
+    public int getUser_ratings() {
+        return user_ratings;
+    }
 
+    public void setUser_ratings(int user_ratings) {
+        this.user_ratings = user_ratings;
+    }
 }
 

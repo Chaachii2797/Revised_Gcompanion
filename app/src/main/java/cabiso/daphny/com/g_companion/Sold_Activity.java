@@ -98,6 +98,7 @@ public class Sold_Activity extends AppCompatActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
                                         snapshot1.getRef().child("sold_items").setValue(counter_rating.getSold());
+
                                     }
                                 }
 

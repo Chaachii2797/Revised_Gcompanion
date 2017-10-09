@@ -83,21 +83,26 @@ public class Sold_Activity extends AppCompatActivity {
                             count = diyList.size();
                             Toast.makeText(Sold_Activity.this, "count: " + count, Toast.LENGTH_SHORT).show();
 
-                            DatabaseReference reference = database.getReference("to_recommend").child("sold_items").child(userID);
+                            //DatabaseReference reference = database.getReference("to_recommend").child("sold_items").child(userID);
                             final DatabaseReference ref = database.getReference("DIYs_By_Users").child("bottle").child(userID);
-                            DatabaseReference sold = database.getReference("DIYs_By_Users").child("bottle")
-                                    .child(userID).child("sold_items");
+//                            DatabaseReference sold = database.getReference("DIYs_By_Users").child("bottle")
+//                                    .child(userID).child("sold_items");
                             DIYrecommend recommend = new DIYrecommend();
 
                             final ForCounter_Rating counter_rating = new ForCounter_Rating();
                             counter_rating.setSold(count);
-                            counter_rating.setOwnerID(userID);
+//                            counter_rating.setTransac_rating(count);
+
+                              //  counter_rating.setOwnerID(userID);
                             Query get_sold = ref.orderByChild("sold_items").equalTo(0);
                             get_sold.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
                                         snapshot1.getRef().child("sold_items").setValue(counter_rating.getSold());
+                                        snapshot1.getRef().child("transac_rating").setValue((counter_rating.getSold() * 0.4)
+                                                 + counter_rating.getTransac_rating());
+//                                        snapshot1.getRef().child("user_ratings").setValue(counter_rating.getTransac_rating());
 
                                     }
                                 }
@@ -107,10 +112,10 @@ public class Sold_Activity extends AppCompatActivity {
 
                                 }
                             });
-                            String upload  = sold.getKey();
-                            reference.child(upload).setValue(counter_rating);
-
-                            sold.setValue(counter_rating);
+//                            String upload  = sold.getKey();
+//                            //reference.child(upload).setValue(counter_rating);
+//
+//                            sold.setValue(counter_rating);
                         }
 
 //                      String upload = reference.push().getKey();

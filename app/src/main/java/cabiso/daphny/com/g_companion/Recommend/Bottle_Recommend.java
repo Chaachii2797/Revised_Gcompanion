@@ -92,32 +92,13 @@ public class Bottle_Recommend extends AppCompatActivity {
                         DIYrecommend temp;
                         DIYrecommend temp2 = new DIYrecommend();
 
+
+                        adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
+                        //set adapter for listview
+                        lv.setAdapter(adapter);
+
                         Toast.makeText(getApplicationContext(), "KUHAA: " + img.getDiyName(), Toast.LENGTH_SHORT).show();
                         if(snapshot.getChildrenCount() == diyList.size()){
-
-
-
-
-                          /*  for(int j =0; j < diyList.size(); j++){
-                                for(int i = 0; i < diyList.size(); i++){
-                                    if(i ==0){
-                                        temp2 = diyList.get(i+1);
-                                    }
-                                    if(diyList.get(i).getSold_items() > temp2.getSold_items()){
-                                        temp = diyList.get(+1);
-                                        temp2 = diyList.get(i);
-
-
-                                    }
-                                }
-                            }*/
-
-
-                            adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
-                            //set adapter for listview
-                            lv.setAdapter(adapter);
-
-
                             for(int i=0; i<diyList.size();i++){
                                 Log.e("daphny "," "+diyList.get(i).getSold_items());
                             }

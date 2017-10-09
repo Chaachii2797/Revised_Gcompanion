@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
+import cabiso.daphny.com.g_companion.Model.ForCounter_Rating;
 import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 
 /**
@@ -57,6 +59,7 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
 
     int count;
     float curRate;
+
 
 
     private DatabaseReference itemReference;
@@ -91,103 +94,79 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
                     userProfileInfo = dataSnapshot.getValue(UserProfileInfo.class);
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         ProductInfo img = snapshot.getValue(ProductInfo.class);
-                        final int rate = 0;
+                        int rate=0;
 
                         pendingList.add(img);
-                        if (userProfileInfo != null) {
+                        if (userProfileInfo != null){
                             userProfileInfo.getUserRating();
-                            //   rate.setText(Integer.toString(userProfileInfo.userRating));
-                            final DatabaseReference ref = database.getReference("DIYs_By_Users").child("bottle").child(userID);
-                            DatabaseReference sold = database.getReference("DIYs_By_Users").child("bottle")
-                                    .child(userID).child("user_ratings");
-                            final DIYrecommend rating = new DIYrecommend();
+                         //   rate.setText(Integer.toString(userProfileInfo.userRating));
+                            DIYrecommend rating = new DIYrecommend();
 
+                        }else{
+                            pendingList.add(img);
+                        }
+                    }
+                    //init adapter
+                    adapter = new Items_Adapter(Pending_Activity.this, R.layout.recommend_ui, pendingList);
+                    //set adapter for listview
+                    lv.setAdapter(adapter);
+                    final int count =lv.getAdapter().getCount();
+                    registerForContextMenu(lv);
+                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                            userDatabaseReference = FirebaseDatabase.getInstance().getReference("DIYs_By_Users").child("bottle")
+//                                    .child(userID).child("user_ratings");
 
-                            rating.setUser_ratings(rate);
-                            rating.setDiyownerID(userID);
-                            Query get_rate = ref.orderByChild("user_ratings").equalTo(0);
-                            get_rate.addListenerForSingleValueEvent(new ValueEventListener() {
+                       //     pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend").child("user_rating");
+                            ProductInfo itemRef = adapter.getItem(position);
+//                            adapter.remove(adapter.getItem(position));
+//                            adapter.notifyDataSetChanged();
+                            AlertDialog.Builder alert = new AlertDialog.Builder(
+                                    Pending_Activity.this);
+                            alert.setTitle("HEY!");
+                            alert.setMessage("Are you sure you already received the order?");
+                            alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
                                 @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
-                                        snapshot1.getRef().child("user_ratings").setValue(rating.getUser_ratings());
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //do your work here
+                                    new AppRatingDialog.Builder()
+                                            .setPositiveButtonText("Submit")
+                                            .setNegativeButtonText("Cancel")
+                                            .setNoteDescriptions(Arrays.asList("Very Bad", "Not good", "Quite ok", "Very Good", "Excellent !!!"))
+                                            .setDefaultRating(2)
+                                            .setTitle("Rate the seller!")
+                                            .setDescription("Please select some stars and give your feedback to the seller.")
+                                            .setTitleTextColor(R.color.titleTextColor)
+                                            .setDescriptionTextColor(R.color.contentTextColor)
+                                            .setHint("Please write your comment here ...")
+                                            .setHintTextColor(R.color.hintTextColor)
+                                            .setCommentTextColor(R.color.commentTextColor)
+                                            .setCommentBackgroundColor(R.color.bg_screen2)
+                                            .setWindowAnimation(R.style.MyDialogFadeAnimation)
+                                            .create(Pending_Activity.this)
+                                            .show();
 
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
+                                    dialog.dismiss();
 
                                 }
                             });
-//                            else{
-//                            pendingList.add(img);
-//                        }
+                            alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            alert.show();
+
+                            Toast toast = Toast.makeText(Pending_Activity.this, itemRef.title
+                                    + "\n" + itemRef.ownerUserID + "\n" + itemRef.price + "\n" + itemRef.desc + "\n"
+                                    + itemRef.getProductPictureURLs().get(0) + "\n" + count, Toast.LENGTH_SHORT);
+                            toast.show();
                         }
-                        //init adapter
-                        adapter = new Items_Adapter(Pending_Activity.this, R.layout.recommend_ui, pendingList);
-                        //set adapter for listview
-                        lv.setAdapter(adapter);
-                        final int count = lv.getAdapter().getCount();
-                        registerForContextMenu(lv);
-                        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                userDatabaseReference = FirebaseDatabase.getInstance().getReference("DIYs_By_Users").child("bottle")
-                                        .child(userID).child("user_ratings");
-
-                                //     pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend").child("user_rating");
-                                ProductInfo itemRef = adapter.getItem(position);
-//                            adapter.remove(adapter.getItem(position));
-//                            adapter.notifyDataSetChanged();
-                                AlertDialog.Builder alert = new AlertDialog.Builder(
-                                        Pending_Activity.this);
-                                alert.setTitle("HEY!");
-                                alert.setMessage("Are you sure you already received the order?");
-                                alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        //do your work here
-                                        new AppRatingDialog.Builder()
-                                                .setPositiveButtonText("Submit")
-                                                .setNegativeButtonText("Cancel")
-                                                .setNoteDescriptions(Arrays.asList("Very Bad", "Not good", "Quite ok", "Very Good", "Excellent !!!"))
-                                                .setDefaultRating(2)
-                                                .setTitle("Rate the seller!")
-                                                .setDescription("Please select some stars and give your feedback to the seller.")
-                                                .setTitleTextColor(R.color.titleTextColor)
-                                                .setDescriptionTextColor(R.color.contentTextColor)
-                                                .setHint("Please write your comment here ...")
-                                                .setHintTextColor(R.color.hintTextColor)
-                                                .setCommentTextColor(R.color.commentTextColor)
-                                                .setCommentBackgroundColor(R.color.bg_screen2)
-                                                .setWindowAnimation(R.style.MyDialogFadeAnimation)
-                                                .create(Pending_Activity.this)
-                                                .show();
-
-                                        dialog.dismiss();
-
-                                    }
-                                });
-                                alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                });
-
-                                alert.show();
-
-                                Toast toast = Toast.makeText(Pending_Activity.this, itemRef.title
-                                        + "\n" + itemRef.ownerUserID + "\n" + itemRef.price + "\n" + itemRef.desc + "\n"
-                                        + itemRef.getProductPictureURLs().get(0) + "\n" + count, Toast.LENGTH_SHORT);
-                                toast.show();
-                            }
-                        });
-                    }
-
-
+                    });
                 }
 
                 @Override
@@ -197,7 +176,7 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
             });
     }
 
-                public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
         super.onCreateContextMenu(menu, v, menuInfo);
         if (v.getId()==R.id.lvView) {
             MenuInflater inflater = getMenuInflater();
@@ -229,16 +208,74 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
 
     @Override
     public void onPositiveButtonClicked(int rate, @NotNull String comment) {
-        //pendingReference = FirebaseDatabase.getInstance().getReference("to_recommend").child("user_rating").setValue(curRate+count);
-//
-     //   String upload = databaseReference.push().getKey();
-        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+       // int rates = (5*252 + 4*124 + 3*40 + 2*29 + 1*33) / (252+124+40+29+33);
         curRate = Float.valueOf(decimalFormat.format((curRate * count + rate)/ ++count));
 
-        userDatabaseReference.child("ratings").setValue(curRate + count);
+//        pendingReference.child("ratings").setValue((curRate * count) * 0.4);
 
         Toast.makeText(Pending_Activity.this,"Rate : " + rate + "\n Comment : " + comment,Toast.LENGTH_SHORT).show();
 
+        DatabaseReference myRef = database.getReference("Sold_Items").child(userID);
+
+        myRef.orderByChild("title").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                progressDialog.dismiss();
+
+                for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.e(String.valueOf(snapshot.getRef()), snapshot.getChildrenCount() + "");
+                    ProductInfo img = snapshot.getValue(ProductInfo.class);
+                    int rate = 0;
+                    if (img.getOwnerUserID().equals(userID)) {
+//                            img.setProductID(snapshot.getKey());
+                      //  pendingList.add(img);
+//                          count = String.valueOf(String.valueOf(snapshot.getChildrenCount()).equals(userID));
+                        //count = diyList.size();
+                        Toast.makeText(Pending_Activity.this, "count: " + rate, Toast.LENGTH_SHORT).show();
+
+                        final DatabaseReference ref = database.getReference("DIYs_By_Users").child("bottle").child(userID);
+//                        DatabaseReference ratings = database.getReference("DIYs_By_Users").child("bottle")
+//                                .child(userID).child("user_ratings");
+                        DIYrecommend recommend = new DIYrecommend();
+
+                        final ForCounter_Rating counter_rating = new ForCounter_Rating();
+                        counter_rating.setRating((int) (curRate * count));
+                        counter_rating.setTransac_rating(rate);
+//                        final ForCounter_Rating counter_rating = new ForCounter_Rating();
+//                        counter_rating.setSold(rate);
+                        //  counter_rating.setOwnerID(userID);
+                        Query get_rate = ref.orderByChild("user_ratings").equalTo(0);
+                        get_rate.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                    snapshot1.getRef().child("user_ratings").setValue(counter_rating.getRating());
+                                    snapshot1.getRef().child("transac_rating").setValue((counter_rating.getSold() * 0.4)
+                                    + (counter_rating.getRating() * 0.6));
+//                                    snapshot1.getRef().child("user_ratings").setValue(counter_rating.getTransac_rating());
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+//                        String upload = sold.getKey();
+//                        reference.child(upload).setValue(counter_rating);
+
+                       // ratings.setValue(recommend);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

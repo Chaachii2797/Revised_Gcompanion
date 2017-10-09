@@ -7,13 +7,17 @@ package cabiso.daphny.com.g_companion.Model;
 public class ForCounter_Rating {
     int sold;
     String ownerID;
+    int rating;
+    int transac_rating;
 
     public ForCounter_Rating(){
 
     }
-    public ForCounter_Rating(int sold, String ownerID) {
+    public ForCounter_Rating(int sold, String ownerID,int rating, int transac_rating) {
         this.sold = sold;
         this.ownerID = ownerID;
+        this.rating = rating;
+        this.transac_rating = transac_rating;
     }
 
     public int getSold() {
@@ -30,5 +34,21 @@ public class ForCounter_Rating {
 
     public void setOwnerID(String ownerID) {
         this.ownerID = ownerID;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public int getTransac_rating() {
+        return transac_rating;
+    }
+
+    public void setTransac_rating(int transac_rating) {
+        this.transac_rating = (int) ((rating * 0.4) + (sold * 0.6));
     }
 }

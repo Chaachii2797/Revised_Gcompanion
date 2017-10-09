@@ -13,9 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,18 +46,12 @@ public class ImageRecognitionTags extends AppCompatActivity{
     private TextView tvTag;
 
     private List<String> tags = new ArrayList<>();
-    private DatabaseReference databaseReference;
-    private FirebaseDatabase mRef;
 
     final ClarifaiClient client;
 
     public ImageRecognitionTags() {
         client = new ClarifaiBuilder("cb169e9d3f9e4ec5a7769cc0422f3162").buildSync();
     }
-
-
-    // private final ClarifaiClient clarifaiClient = new ClarifaiBuilder(API_Credentials.CLIENT_ID,
-            //API_Credentials.CLIENT_SECRET).buildSync();
 
 
     @Override

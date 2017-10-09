@@ -11,9 +11,9 @@ import java.util.Comparator;
 public class DIYrecommend implements Comparable<DIYrecommend>{
 
     public String diyName, diymaterial, diyprocedure, diyImageUrl, diyownerID, category;
-    public int sold_items, user_ratings;
+    public int sold_items, user_ratings, transac_rating;
     public DIYrecommend(String diyName, String diymaterial, String diyprocedure, String diyImageUrl,
-                        String diyownerID, String category, int sold_items, int user_ratings) {
+                        String diyownerID, String category, int sold_items, int user_ratings, int transac_rating) {
         this.diyName = diyName;
         this.diymaterial = diymaterial;
         this.diyprocedure = diyprocedure;
@@ -22,6 +22,7 @@ public class DIYrecommend implements Comparable<DIYrecommend>{
         this.category = category;
         this.sold_items = sold_items;
         this.user_ratings = user_ratings;
+        this.transac_rating = transac_rating;
     }
 
 
@@ -36,7 +37,7 @@ public class DIYrecommend implements Comparable<DIYrecommend>{
 
     @Override
     public int compareTo(@NonNull DIYrecommend o) {
-        return sold_items - o.getSold_items();
+        return transac_rating - o.getTransac_rating();
     }
 
     class compareBysoldItems implements Comparator<DIYrecommend>{
@@ -44,7 +45,7 @@ public class DIYrecommend implements Comparable<DIYrecommend>{
 
         @Override
         public int compare(DIYrecommend o1, DIYrecommend o2) {
-            return o1.getSold_items() - o2.getSold_items();
+            return o1.getTransac_rating() - o2.getTransac_rating();
         }
     }
 
@@ -110,6 +111,14 @@ public class DIYrecommend implements Comparable<DIYrecommend>{
 
     public void setUser_ratings(int user_ratings) {
         this.user_ratings = user_ratings;
+    }
+
+    public int getTransac_rating() {
+        return transac_rating;
+    }
+
+    public void setTransac_rating(int transac_rating) {
+        this.transac_rating = transac_rating;
     }
 }
 

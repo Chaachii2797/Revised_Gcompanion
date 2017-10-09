@@ -27,6 +27,9 @@ public class SalesReport extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SalesReport.this,MainActivity.class);
                 startActivity(intent);
+
+
+
             }
         });
     }

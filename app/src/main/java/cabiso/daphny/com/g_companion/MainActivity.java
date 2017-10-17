@@ -1,25 +1,28 @@
 package cabiso.daphny.com.g_companion;
 
+import android.app.SearchManager;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -28,29 +31,25 @@ import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, MarketPlaceFragment.OnListFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener,
+        MarketPlaceFragment.OnListFragmentInteractionListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private ImageButton home, diyCom, promo, notif;
-    private Boolean isFabOpen = false;
-    private FloatingActionButton fab, fab1, fab2, fab3;
-    private Animation fab_open, fab_close, rotate_forward, rotate_backward;
+    private FloatingActionMenu fam;
+    private FloatingActionButton fab1, fab2, fab3;
+    private Animation fab_open, fab_close;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabaseReference;
     private String mUsername;
     private String mPhotoUrl;
+    private TextView name;
 
     // private final ClarifaiClient clarifaiClient = new ClarifaiBuilder("{b7aa33dc206c40a4b9cffc09a2e72a9d}").buildSync();
 
     final ClarifaiClient client = new ClarifaiBuilder("b7aa33dc206c40a4b9cffc09a2e72a9d").buildSync();
-
-//    private final ClarifaiClient clarifaiClient = new ClarifaiBuilder(API_Credentials.CLIENT_ID,
-         //   API_Credentials.CLIENT_SECRET).buildSync();
-
-
 
 
     @Override
@@ -79,133 +78,61 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        TextView txtProfileName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.mUser);
+        txtProfileName.setText("Daphny Cabiso");
 
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
         fab2 = (FloatingActionButton) findViewById(R.id.fab2);
         fab3 = (FloatingActionButton) findViewById(R.id.fab3);
+        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
+        fam = (FloatingActionMenu) findViewById(R.id.fab_menu);
 
+
+        fam.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+            @Override
+            public void onMenuToggle(boolean opened) {
+                if (opened) {
+                    Toast.makeText(getApplicationContext(),"Manu is opened",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(),"Menu is closed",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+
+        fab1.setOnClickListener(onButtonClick());
+        fab2.setOnClickListener(onButtonClick());
+        fab3.setOnClickListener(onButtonClick());
 
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
 
-        rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate_backward);
-        fab.setOnClickListener(this);
-        fab1.setOnClickListener(this);
-        fab2.setOnClickListener(this);
-        fab3.setOnClickListener(this);
-
-
-//        home.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this,HomePageActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
-
-//        diyCom.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this,DIYActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
-        fab1.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,ImageRecognitionTags.class);
-                startActivity(intent);
-
-                //   TODO: Snack bar for camera permission
-                Snackbar.make(view, "Waiting.......", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        fab2.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            @Override
-
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,AddProductActivity.class);
-                startActivity(intent);
-
-                //   TODO: Snack bar for camera permission
-                Snackbar.make(view, "Waiting.......", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        fab3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,CaptureDIY.class);
-                startActivity(intent);
-
-                //   TODO: Snack bar for camera permission
-                Snackbar.make(v, "Wait...", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
     }
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id){
-            case R.id.fab:
-                animateFAB();
-                break;
-            case R.id.fab1:
 
-                Log.d("CaptureDIY", "Fab 1");
-                break;
-            case R.id.fab2:
 
-                Log.d("CaptureDIY", "Fab 2");
-                break;
-            case  R.id.fab3:
-                Log.d("UploadImage", "Fab 3");
-                break;
-        }
-    }
-
-    public void animateFAB(){
-        if(isFabOpen){
-
-            fab.startAnimation(rotate_backward);
-            fab1.startAnimation(fab_close);
-            fab2.startAnimation(fab_close);
-            fab3.startAnimation(fab_close);
-
-            fab1.setClickable(false);
-            fab2.setClickable(false);
-            fab3.setClickable(false);
-
-            isFabOpen = false;
-            Log.d("CaptureDIY", "close");
-        } else {
-            fab.startAnimation(rotate_forward);
-            fab1.startAnimation(fab_open);
-            fab2.startAnimation(fab_open);
-            fab3.startAnimation(fab_open);
-
-            fab1.setClickable(true);
-            fab2.setClickable(true);
-            fab3.setClickable(true);
-
-            isFabOpen = true;
-            Log.d("CaptureDIY","open");
-
-        }
+    private View.OnClickListener onButtonClick() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view == fab1) {
+                    Toast.makeText(getApplicationContext(),"Capture a trash for image recognition.",Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainActivity.this,ImageRecognitionTags.class);
+                    Snackbar.make(view, "Wait.......", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+                    startActivity(intent);
+                } else if (view == fab2) {
+                    Toast.makeText(getApplicationContext(),"Add DIY to the Market Page",Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainActivity.this,AddProductActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getApplicationContext(),"Add DIY to the community.",Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainActivity.this,CaptureDIY.class);
+                    startActivity(intent);
+                }
+                fam.close(true);
+            }
+        };
     }
 
 
@@ -219,29 +146,30 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main_menu, menu);
-//        return true;
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_search, menu);
+        // Retrieve the SearchView and plug it into SearchManager
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // use this method when query submitted
+                Toast.makeText(getApplicationContext(),"Search pls", Toast.LENGTH_SHORT).show();
+                return false;
+            }
 
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item){
-//        int id = item.getItemId();
-//        switch(id){
-//            case R.id.logoff:
-//                FirebaseAuth.getInstance().signOut();
-//                Intent intent1=new Intent(this,Login.class);
-//                startActivity(intent1);
-//                return true;
-//            case R.id.profile:
-//                Intent intent2=new Intent(this,MyProfileActivity.class);
-//                startActivity(intent2);
-//                return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // use this method for auto complete search process
+                return false;
+            }
+        });
+        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
+        return super.onCreateOptionsMenu(menu);
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -309,4 +237,6 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("Product reference", ref.toString());
         startActivity(intent);
     }
+
+
 }

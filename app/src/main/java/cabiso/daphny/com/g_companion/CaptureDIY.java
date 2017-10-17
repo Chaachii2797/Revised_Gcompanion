@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -97,6 +98,97 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         tire.setOnClickListener(this);
         glass.setOnClickListener(this);
 
+
+        bottle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+            @Override
+            public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
+                if (isChecked){
+                    Toast.makeText(CaptureDIY.this, "Bottle is checked" , Toast.LENGTH_SHORT).show();
+                    paper.setEnabled(false);
+                    cup.setEnabled(false);
+                    glass.setEnabled(false);
+                    tire.setEnabled(false);
+                    wood.setEnabled(false);// disable checkbox
+                }
+            }
+        });
+
+        cup.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+            @Override
+            public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
+                if (isChecked){
+                    Toast.makeText(CaptureDIY.this, "Cup is checked" , Toast.LENGTH_SHORT).show();
+                    paper.setEnabled(false);
+                    bottle.setEnabled(false);
+                    glass.setEnabled(false);
+                    tire.setEnabled(false);
+                    wood.setEnabled(false);// disable checkbox
+                }
+            }
+        });
+
+        paper.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+            @Override
+            public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
+                if (isChecked){
+                    Toast.makeText(CaptureDIY.this, "Paper is checked" , Toast.LENGTH_SHORT).show();
+                    bottle.setEnabled(false);
+                    cup.setEnabled(false);
+                    glass.setEnabled(false);
+                    tire.setEnabled(false);
+                    wood.setEnabled(false);// disable checkbox
+                }
+            }
+        });
+
+        glass.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+            @Override
+            public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
+                if (isChecked){
+                    Toast.makeText(CaptureDIY.this, "Glass is checked" , Toast.LENGTH_SHORT).show();
+                    paper.setEnabled(false);
+                    cup.setEnabled(false);
+                    bottle.setEnabled(false);
+                    tire.setEnabled(false);
+                    wood.setEnabled(false);// disable checkbox
+                }
+            }
+        });
+
+        tire.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+            @Override
+            public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
+                if (isChecked){
+                    Toast.makeText(CaptureDIY.this, "Tire is checked" , Toast.LENGTH_SHORT).show();
+                    paper.setEnabled(false);
+                    cup.setEnabled(false);
+                    glass.setEnabled(false);
+                    bottle.setEnabled(false);
+                    wood.setEnabled(false);// disable checkbox
+                }
+            }
+        });
+
+        wood.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+
+            @Override
+            public void onCheckedChanged(CompoundButton arg0, boolean isChecked) {
+                if (isChecked){
+                    Toast.makeText(CaptureDIY.this, "Wood is checked" , Toast.LENGTH_SHORT).show();
+                    paper.setEnabled(false);
+                    cup.setEnabled(false);
+                    glass.setEnabled(false);
+                    tire.setEnabled(false);
+                    bottle.setEnabled(false);// disable checkbox
+                }
+            }
+        });
+
         final ImageView addProductImagePlusIcon = (ImageView) findViewById(R.id.add_product_image_plus_icon);
         addProductImagePlusIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,12 +220,15 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         }
     }
 
+
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.addToCommunity:
                 if (bottle.isChecked()){
+                    bottle.setEnabled(false);
                     //reference to database firebase
                     databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
                             .child("category").child("bottle");

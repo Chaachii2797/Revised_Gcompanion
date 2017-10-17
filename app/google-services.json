@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "796163187954-unqatuungcob3pdata95bl37goirag3k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cabiso.daphny.com.g_companion",
+            "certificate_hash": "2b8fd0d000450d006769e05d5d3db292aec60211"
+          }
+        },
+        {
+          "client_id": "796163187954-117tb1n2k47ogcioui9d24eclip2a217.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cabiso.daphny.com.g_companion",
+            "certificate_hash": "7ae439705189c9a1e112dd3dc1aa05c2c9f3807e"
+          }
+        },
+        {
           "client_id": "796163187954-2sjkjdak27p8t3a84ticfcnism3hfeko.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +45,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "796163187954-2sjkjdak27p8t3a84ticfcnism3hfeko.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

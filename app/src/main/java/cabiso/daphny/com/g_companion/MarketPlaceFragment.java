@@ -69,7 +69,6 @@ public class MarketPlaceFragment extends Fragment{
         Context context = view.getContext();
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
         return view;
     }
 

@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
@@ -30,8 +33,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class Login extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener{
 
-   private Button login;
+    private Button login;
     private Button withGoogle;
+    private SignInButton signInButton;
     private EditText email;
     private EditText password;
     private TextView signup;
@@ -43,10 +47,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
     private ProgressDialog mProgressDialog;
     private FirebaseUser user;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -67,6 +76,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         withGoogle.setOnClickListener(this);
         login.setOnClickListener(this);
         signup.setOnClickListener(this);
+
+
     }
 
 
@@ -92,6 +103,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         }
     }
 
+    private void signIn(){
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
 
     public void signin(){
         String em = email.getText().toString().trim();
@@ -155,6 +170,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
     private void showProgressDialog() {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setProgressStyle(R.style.ProgressBar);
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setIndeterminate(true);
         }

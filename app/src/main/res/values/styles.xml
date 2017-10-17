@@ -9,6 +9,13 @@
         <item name="android:colorBackground">@color/background_material_light</item>
     </style>
 
+    <style name="LoginStyle">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/backgroundColor</item>
+    </style>
+
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -33,6 +40,14 @@
     <style name="MyDialogFadeAnimation">
         <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
         <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
+
+    <style name="ProgressBar" parent="@android:style/Widget.ProgressBar">
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:background">@color/backgroundColor</item>
+        <item name="android:indeterminateDrawable">@drawable/circular_progress_dialog</item>
     </style>
 
 </resources>

@@ -67,7 +67,7 @@
                 <RelativeLayout
                     android:id="@+id/productinfo"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="210dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -150,19 +150,16 @@
                 <RelativeLayout
                     android:id="@+id/ownerinfo"
                     android:layout_width="match_parent"
-                    android:layout_height="260dp"
+                    android:layout_height="290dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/productOwnerContact"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/textView23"
-                        android:layout_alignStart="@+id/textView23"
-                        android:layout_below="@+id/productOwnerPhone"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
                         android:gravity="center"
                         android:text="Seller Info"
                         android:textSize="18sp"
@@ -172,84 +169,88 @@
                         android:id="@+id/textView21"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/productOwnerAddress"
-                        android:layout_alignStart="@+id/productOwnerAddress"
+                        android:text="Seller Name:"
                         android:layout_alignTop="@+id/productOwnerName"
-                        android:text="Seller Name:" />
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
 
                     <TextView
                         android:id="@+id/productOwnerName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
                         android:text="Martin"
                         android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_below="@+id/productOwnerContact"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="17dp" />
 
 
                     <TextView
                         android:id="@+id/textView22"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/productOwnerName"
-                        android:text="Address:" />
+                        android:text="Address:"
+                        android:layout_above="@+id/productOwnerAddress"
+                        android:layout_alignLeft="@+id/textView23"
+                        android:layout_alignStart="@+id/textView23" />
 
                     <TextView
                         android:id="@+id/productOwnerAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/textView22"
+                        android:layout_marginBottom="21dp"
                         android:text="740 WestCott Street   Apt 3  Syracuse    NY  13210"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:layout_above="@+id/textView23"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
 
                     <TextView
                         android:id="@+id/textView23"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignEnd="@+id/textView21"
-                        android:layout_alignRight="@+id/textView21"
+                        android:text="Contact No.:"
                         android:layout_alignTop="@+id/productOwnerPhone"
-                        android:text="Contact No.:" />
+                        android:layout_alignRight="@+id/textView21"
+                        android:layout_alignEnd="@+id/textView21" />
 
                     <TextView
                         android:id="@+id/productOwnerPhone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/productOwnerAddress"
+                        android:layout_above="@+id/btn_buy_item"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="17dp"
+                        android:layout_marginBottom="11dp"
                         android:text="315-420-4196"
                         android:textSize="18sp" />
 
                     <Button
                         android:id="@+id/btn_contact_seller"
+                        style="@style/LoginStyle"
                         android:layout_width="250dp"
                         android:layout_height="40dp"
-                        android:background="@android:color/black"
+                        android:layout_alignLeft="@+id/btn_buy_item"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignStart="@+id/btn_buy_item"
+                        android:layout_marginBottom="10dp"
+                        android:backgroundTint="@color/bg_screen2"
                         android:text="CONTACT SELLER"
                         android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignLeft="@+id/btn_buy_item"
-                        android:layout_alignStart="@+id/btn_buy_item"
-                        android:layout_marginBottom="12dp" />
-
+                        android:textSize="18sp" />
+x
                     <Button
                         android:id="@+id/btn_buy_item"
+                        style="@style/LoginStyle"
                         android:layout_width="250dp"
                         android:layout_height="40dp"
-                        android:background="@android:color/black"
-                        android:text="BUY ITEM"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
                         android:layout_above="@+id/btn_contact_seller"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="9dp" />
+                        android:layout_marginBottom="9dp"
+                        android:backgroundTint="@color/bg_screen2"
+                        android:text="BUY ITEM"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp" />
 
                 </RelativeLayout>
             </LinearLayout>

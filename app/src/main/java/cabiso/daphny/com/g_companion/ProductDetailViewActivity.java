@@ -153,7 +153,7 @@ public class ProductDetailViewActivity extends AppCompatActivity{
                         ProductInfo info = new ProductInfo(title, desc, price, negotiable, productURL, owner);
                         String upload_info = pending_reference.push().getKey();
                         pending_reference.child(upload_info).setValue(info);
-                        Toast.makeText(getApplicationContext(), "Clicked Button BUY!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "BUY!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override

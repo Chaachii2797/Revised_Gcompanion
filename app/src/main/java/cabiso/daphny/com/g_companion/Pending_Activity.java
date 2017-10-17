@@ -236,6 +236,13 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
                         Toast.makeText(Pending_Activity.this, "count: " + rate, Toast.LENGTH_SHORT).show();
 
                         final DatabaseReference ref = database.getReference("DIYs_By_Users").child("bottle").child(userID);
+                        final DatabaseReference ref1 = database.getReference("DIYs_By_Users").child("glass").child(userID);
+                        final DatabaseReference ref2 = database.getReference("DIYs_By_Users").child("paper").child(userID);
+                        final DatabaseReference ref3 = database.getReference("DIYs_By_Users").child("cup").child(userID);
+                        final DatabaseReference ref4 = database.getReference("DIYs_By_Users").child("tire").child(userID);
+                        final DatabaseReference ref5 = database.getReference("DIYs_By_Users").child("wood").child(userID);
+
+
 //                        DatabaseReference ratings = database.getReference("DIYs_By_Users").child("bottle")
 //                                .child(userID).child("user_ratings");
                         DIYrecommend recommend = new DIYrecommend();
@@ -254,7 +261,92 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
                                     snapshot1.getRef().child("user_ratings").setValue(counter_rating.getRating());
                                     snapshot1.getRef().child("transac_rating").setValue((counter_rating.getSold() * 0.4)
                                     + (counter_rating.getRating() * 0.6));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        Query get_rate1 = ref1.orderByChild("user_ratings").equalTo(0);
+                        get_rate1.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                    snapshot1.getRef().child("user_ratings").setValue(counter_rating.getRating());
+                                    snapshot1.getRef().child("transac_rating").setValue((counter_rating.getRating() * 0.4)
+                                            + (counter_rating.getSold() * 0.6));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        Query get_rate2 = ref2.orderByChild("user_ratings").equalTo(0);
+                        get_rate2.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                    snapshot1.getRef().child("user_ratings").setValue(counter_rating.getRating());
+                                    snapshot1.getRef().child("transac_rating").setValue((counter_rating.getSold() * 0.4)
+                                            + (counter_rating.getRating() * 0.6));
 //                                    snapshot1.getRef().child("user_ratings").setValue(counter_rating.getTransac_rating());
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        Query get_rate3 = ref3.orderByChild("user_ratings").equalTo(0);
+                        get_rate3.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                    snapshot1.getRef().child("user_ratings").setValue(counter_rating.getRating());
+                                    snapshot1.getRef().child("transac_rating").setValue((counter_rating.getSold() * 0.4)
+                                            + (counter_rating.getRating() * 0.6));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        Query get_rate4 = ref4.orderByChild("user_ratings").equalTo(0);
+                        get_rate4.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                    snapshot1.getRef().child("user_ratings").setValue(counter_rating.getRating());
+                                    snapshot1.getRef().child("transac_rating").setValue((counter_rating.getSold() * 0.4)
+                                            + (counter_rating.getRating() * 0.6));
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        Query get_rate5 = ref5.orderByChild("user_ratings").equalTo(0);
+                        get_rate5.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                    snapshot1.getRef().child("user_ratings").setValue(counter_rating.getRating());
+                                    snapshot1.getRef().child("transac_rating").setValue((counter_rating.getSold() * 0.4)
+                                            + (counter_rating.getRating() * 0.6));
                                 }
                             }
 

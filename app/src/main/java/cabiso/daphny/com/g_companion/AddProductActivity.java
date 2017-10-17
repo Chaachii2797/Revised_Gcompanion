@@ -38,13 +38,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static cabiso.daphny.com.g_companion.MyProfileActivity.REQUEST_IMAGE_CAPTURE;
+
 /**
  * Created by Lenovo on 8/22/2017.
  */
-
-import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
-
-import static cabiso.daphny.com.g_companion.MyProfileActivity.REQUEST_IMAGE_CAPTURE;
 
 public class AddProductActivity extends AppCompatActivity{
 
@@ -91,7 +89,7 @@ public class AddProductActivity extends AppCompatActivity{
 
         productImagesRecyclerViewAdapter = new ProductImagesRecyclerViewAdapter();
         final RecyclerView productImagesRecyclerView = (RecyclerView) findViewById(R.id.add_product_images_recycler_view);
-        productImagesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        productImagesRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
         productImagesRecyclerView.setAdapter(productImagesRecyclerViewAdapter);
 
         final ImageView addProductImagePlusIcon = (ImageView) findViewById(R.id.add_product_image_plus_icon);

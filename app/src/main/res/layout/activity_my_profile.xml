@@ -77,7 +77,8 @@
         android:layout_above="@+id/profile_address"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="12dp"
-        android:hint="Phone number:" />
+        android:hint="Phone number:"
+        android:phoneNumber="true" />
 
     <EditText
         android:id="@+id/profile_address"

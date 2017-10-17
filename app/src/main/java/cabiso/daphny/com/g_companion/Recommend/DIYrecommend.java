@@ -42,7 +42,6 @@ public class DIYrecommend implements Comparable<DIYrecommend>{
 
     class compareBysoldItems implements Comparator<DIYrecommend>{
 
-
         @Override
         public int compare(DIYrecommend o1, DIYrecommend o2) {
             return o1.getTransac_rating() - o2.getTransac_rating();

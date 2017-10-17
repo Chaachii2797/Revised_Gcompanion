@@ -26,14 +26,16 @@
         android:layout_below="@+id/add_product_title"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
     <EditText
+        android:id="@+id/add_diy_procedure"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/add_diy_procedure"
-        android:hint="Price"
-        android:layout_below="@+id/add_diy_material"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/add_diy_material"
+        android:hint="Price"
+        android:numeric="integer|decimal" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,7 +60,7 @@
         android:layout_height="90dp"
         android:id="@+id/add_product_image_plus_icon"
         android:src="@drawable/add"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="23dp"
         android:layout_below="@+id/add_product_price_negotiable_checkbox"
         android:layout_toRightOf="@+id/price_negotiable_text"
         android:layout_toEndOf="@+id/price_negotiable_text" />
@@ -76,15 +78,16 @@
         android:id="@+id/add_submit_diy"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:background="@drawable/shape"
         android:backgroundTint="@color/bg_screen2"
         android:onClick="onClick"
         android:text="SELL DIY"
         android:textColor="@android:color/background_light"
         tools:layout_editor_absoluteX="311dp"
-        tools:layout_editor_absoluteY="473dp" />
+        tools:layout_editor_absoluteY="473dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="11dp" />
 
     <TextView
         android:id="@+id/textView24"

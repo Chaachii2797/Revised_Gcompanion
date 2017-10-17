@@ -20,7 +20,7 @@ public class Signup extends AppCompatActivity implements View.OnClickListener{
 
     private String TAG;
     private Button signup;
-    private EditText email, password;
+    private EditText email, password, username, address;
     private TextView login;
     private FirebaseAuth mAuth;
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +30,8 @@ public class Signup extends AppCompatActivity implements View.OnClickListener{
         mAuth = FirebaseAuth.getInstance();
         email = (EditText) findViewById(R.id.etEmail);
         password = (EditText) findViewById(R.id.etPassword);
+        username = (EditText) findViewById(R.id.userName);
+        address = (EditText) findViewById(R.id.userAddress);
         login = (TextView) findViewById(R.id.tvLogin);
         signup = (Button) findViewById(R.id.btnLogin);
 
@@ -39,8 +41,10 @@ public class Signup extends AppCompatActivity implements View.OnClickListener{
     public void register(){
         String em = email.getText().toString().trim();
         String pass = password.getText().toString().trim();
+        String name = username.getText().toString().trim();
+        String add = address.getText().toString().trim();
 
-        if(TextUtils.isEmpty(em) || TextUtils.isEmpty(pass)){
+        if(TextUtils.isEmpty(em) || TextUtils.isEmpty(pass) || TextUtils.isEmpty(name) || TextUtils.isEmpty(add)){
             Toast.makeText(this,"Please enter valid email and password.", Toast.LENGTH_SHORT).show();
             return;
         }

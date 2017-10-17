@@ -82,27 +82,18 @@ public class Bottle_Recommend extends AppCompatActivity {
                         Collections.reverse(diyList);
 
                         progressDialog.dismiss();
-                        Log.e("datasnaphot: "," "+dataSnapshot.getChildrenCount());
-                        Log.e("datasnaphot: "," "+dataSnapshot.toString());
-
                         DIYrecommend img = snapshot.getValue(DIYrecommend.class);
                         diyList.add(img);
-                        Log.d("LOGGING: " + img.getDiyName(), "");
-
-                        DIYrecommend temp;
-                        DIYrecommend temp2 = new DIYrecommend();
-
 
                         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
-                        //set adapter for listview
                         lv.setAdapter(adapter);
 
-                        Toast.makeText(getApplicationContext(), "KUHAA: " + img.getDiyName(), Toast.LENGTH_SHORT).show();
                         if(snapshot.getChildrenCount() == diyList.size()){
                             for(int i=0; i<diyList.size();i++){
-                                Log.e("daphny "," "+diyList.get(i).getSold_items());
+                                Log.e("get "," "+diyList.get(i).getSold_items());
                             }
                         }
+
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

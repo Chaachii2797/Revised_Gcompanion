@@ -23,7 +23,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -138,9 +137,9 @@ public class AddProductActivity extends AppCompatActivity{
             case R.id.open_camera:
                 dispatchTakePictureIntent();
                 break;
-            case R.id.open_gallery:
-                get_image();
-                break;
+//            case R.id.open_gallery:
+//                get_image();
+//                break;
         }
         return super.onContextItemSelected(item);
     }
@@ -150,9 +149,10 @@ public class AddProductActivity extends AppCompatActivity{
         if(requestCode==REQUEST_IMAGE_CAPTURE && resultCode==RESULT_OK){
             productImageLocalURIs.add(productPictureUri);
             //productImagesRecyclerViewAdapter.notifyItemInserted(productImageLocalURIs.size()-1);
-        }else if(requestCode==SELECT_PHOTO && resultCode == RESULT_OK){
-            productImageLocalURIs.add(productPictureUri);
         }
+//        else if(requestCode==SELECT_PHOTO && resultCode == RESULT_OK){
+//            productImageLocalURIs.add(productPictureUri);
+//        }
     }
 
     @Override
@@ -179,11 +179,11 @@ public class AddProductActivity extends AppCompatActivity{
         }
     }
 
-    public void get_image(){
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
-    }
+//    public void get_image(){
+//        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+//        photoPickerIntent.setType("image/*");
+//        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+//    }
 
     private File createImageFile() throws IOException{
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());

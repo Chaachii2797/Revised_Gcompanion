@@ -102,7 +102,6 @@ public class Paper_Recommend extends AppCompatActivity {
                                     diyList.get(position).diymaterial + diyList.get(position).diyprocedure +
                                     diyList.get(position).diyImageUrl, Toast.LENGTH_SHORT).show();
 
-
                             DIYrecommend selectedItem = adapter.getItem(position);
                             //To-DO get you data from the ItemDetails Getter
                             // selectedItem.getImage() or selectedItem.getName() .. etc

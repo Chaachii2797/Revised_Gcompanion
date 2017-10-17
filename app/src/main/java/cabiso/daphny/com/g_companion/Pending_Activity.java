@@ -114,7 +114,7 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
                     registerForContextMenu(lv);
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 //                            userDatabaseReference = FirebaseDatabase.getInstance().getReference("DIYs_By_Users").child("bottle")
 //                                    .child(userID).child("user_ratings");
 
@@ -149,7 +149,6 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
                                             .show();
 
                                     dialog.dismiss();
-
                                 }
                             });
                             alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -200,8 +199,6 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
                 ProductInfo product = new ProductInfo(title, description, price, negotiable,productPictureURLs, userID);
                 String upload = itemReference.push().getKey();
                 itemReference.child(upload).setValue(product);
-
-
         }
         return super.onContextItemSelected(item);
     }
@@ -210,10 +207,7 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
     public void onPositiveButtonClicked(int rate, @NotNull String comment) {
 
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
-       // int rates = (5*252 + 4*124 + 3*40 + 2*29 + 1*33) / (252+124+40+29+33);
         curRate = Float.valueOf(decimalFormat.format((curRate * count + rate)/ ++count));
-
-//        pendingReference.child("ratings").setValue((curRate * count) * 0.4);
 
         Toast.makeText(Pending_Activity.this,"Rate : " + rate + "\n Comment : " + comment,Toast.LENGTH_SHORT).show();
 
@@ -229,28 +223,20 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
                     ProductInfo img = snapshot.getValue(ProductInfo.class);
                     int rate = 0;
                     if (img.getOwnerUserID().equals(userID)) {
-//                            img.setProductID(snapshot.getKey());
-                      //  pendingList.add(img);
-//                          count = String.valueOf(String.valueOf(snapshot.getChildrenCount()).equals(userID));
-                        //count = diyList.size();
                         Toast.makeText(Pending_Activity.this, "count: " + rate, Toast.LENGTH_SHORT).show();
 
                         final DatabaseReference ref = database.getReference("DIYs_By_Users").child("bottle").child(userID);
-//                        DatabaseReference ratings = database.getReference("DIYs_By_Users").child("bottle")
-//                                .child(userID).child("user_ratings");
-                        DIYrecommend recommend = new DIYrecommend();
 
                         final ForCounter_Rating counter_rating = new ForCounter_Rating();
                         counter_rating.setRating((int) (curRate * count));
                         counter_rating.setTransac_rating(rate);
-//                        final ForCounter_Rating counter_rating = new ForCounter_Rating();
-//                        counter_rating.setSold(rate);
-                        //  counter_rating.setOwnerID(userID);
+
                         Query get_rate = ref.orderByChild("user_ratings").equalTo(0);
                         get_rate.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+
                                     snapshot1.getRef().child("user_ratings").setValue(counter_rating.getRating());
                                     snapshot1.getRef().child("transac_rating").setValue((counter_rating.getSold() * 0.4)
                                     + (counter_rating.getRating() * 0.6));
@@ -263,10 +249,6 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
 
                             }
                         });
-//                        String upload = sold.getKey();
-//                        reference.child(upload).setValue(counter_rating);
-
-                       // ratings.setValue(recommend);
                     }
                 }
             }

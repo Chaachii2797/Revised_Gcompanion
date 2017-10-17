@@ -62,25 +62,19 @@ public class DIYDataActivity extends AppCompatActivity {
         diy_materials.setMovementMethod(new ScrollingMovementMethod());
 
 
-
-
-
-//        Intent i = getIntent();
-//        String image = i.getStringExtra("image");
-//        int imageID = i.getIntExtra("image",0);
-//        String name = i.getStringExtra("name");
-//        String materials = i.getStringExtra("materials");
-//        String procedures = i.getStringExtra("procedures");
-
         getIntent().getStringExtra("image");
         int imageID =getIntent().getIntExtra("image",0);
      //   getIntent().getStringExtra("name");
         getIntent().getStringExtra("materials");
         getIntent().getStringExtra("procedures");
 
+        diy_materials.setText(getIntent().getStringExtra("materials"));
+        diy_procedures.setText(getIntent().getStringExtra("procedures"));
 
-
-
+        Bundle extras = getIntent().getExtras();
+        byte[] byteArray = extras.getByteArray("image");
+        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        diy_image.setImageBitmap(bmp);
 
 //        Bundle extras = getIntent().getExtras();
 //        nameList = extras.getString("get");
@@ -98,14 +92,6 @@ public class DIYDataActivity extends AppCompatActivity {
   //      diy_image.setImageResource(imageID);
 
 //        diy_name.setText(getIntent().getStringExtra("name"));
-        diy_materials.setText(getIntent().getStringExtra("materials"));
-        diy_procedures.setText(getIntent().getStringExtra("procedures"));
-
-        Bundle extras = getIntent().getExtras();
-        byte[] byteArray = extras.getByteArray("image");
-        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        diy_image.setImageBitmap(bmp);
-
 
     }
 

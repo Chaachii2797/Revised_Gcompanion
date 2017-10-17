@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/open_gallery"
+        android:titleCondensed="Add picture"
+        android:title="Choose image"
+        android:icon="@mipmap/gallery"></item>
+
+    <item android:id="@+id/open_camera"
+        android:title="Take photo"
+        android:icon="@mipmap/camera_icon"></item>
+</menu>

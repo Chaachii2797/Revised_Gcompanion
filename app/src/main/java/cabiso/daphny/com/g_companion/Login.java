@@ -38,7 +38,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int RC_SIGN_IN = 007;
+        private static final int RC_SIGN_IN = 007;
     private GoogleApiClient mGoogleApiClient;
     private ProgressDialog mProgressDialog;
     private FirebaseUser user;

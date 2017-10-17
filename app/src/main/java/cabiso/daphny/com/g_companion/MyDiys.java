@@ -89,9 +89,6 @@ public class MyDiys extends AppCompatActivity {
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-//                        Intent intent = new Intent(Bottle_Recommend.this,ViewDIY.class);
-//                        startActivity(intent);
                             DIYrecommend itemRef = adapter.getItem(position);
                             adapter.remove(itemRef);
                             adapter.notifyDataSetChanged();

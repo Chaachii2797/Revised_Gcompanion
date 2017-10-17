@@ -14,12 +14,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -58,7 +62,7 @@ public class AddProductActivity extends AppCompatActivity{
     private String userID;
 
     private Uri productPictureUri;
-
+    private static final int SELECT_PHOTO = 100;
 
     private String currentKey;
     private String imageFileName;
@@ -93,10 +97,13 @@ public class AddProductActivity extends AppCompatActivity{
         productImagesRecyclerView.setAdapter(productImagesRecyclerViewAdapter);
 
         final ImageView addProductImagePlusIcon = (ImageView) findViewById(R.id.add_product_image_plus_icon);
+        registerForContextMenu(findViewById(R.id.add_product_image_plus_icon));
         addProductImagePlusIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispatchTakePictureIntent();
+//                dispatchTakePictureIntent();
+                openContextMenu(v);
+                v.showContextMenu();
             }
         });
 
@@ -117,10 +124,34 @@ public class AddProductActivity extends AppCompatActivity{
 
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        if(v.getId()==R.id.add_product_image_plus_icon){
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.menu_for_add_product,menu);
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.open_camera:
+                dispatchTakePictureIntent();
+                break;
+            case R.id.open_gallery:
+                get_image();
+                break;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode==REQUEST_IMAGE_CAPTURE && resultCode==RESULT_OK){
             productImageLocalURIs.add(productPictureUri);
             //productImagesRecyclerViewAdapter.notifyItemInserted(productImageLocalURIs.size()-1);
+        }else if(requestCode==SELECT_PHOTO && resultCode == RESULT_OK){
+            productImageLocalURIs.add(productPictureUri);
         }
     }
 
@@ -146,6 +177,12 @@ public class AddProductActivity extends AppCompatActivity{
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
             }
         }
+    }
+
+    public void get_image(){
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
     }
 
     private File createImageFile() throws IOException{

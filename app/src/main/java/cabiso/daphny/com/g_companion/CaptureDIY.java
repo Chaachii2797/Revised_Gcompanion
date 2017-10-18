@@ -262,12 +262,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     int transac_rate = (counter_rating.getTransac_rating());
 
                                     DIYrecommend transac_rating = new DIYrecommend();
-                                    int ratings = transac_rating.getUser_ratings();
+//                                    int ratings = transac_rating.getUser_ratings();
                                     int soldItems = transac_rating.getSold_items();
 
                                     final DIYrecommend recommend = new DIYrecommend(name.getText().toString(),
                                             material.getText().toString(), procedure.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, "bottle",sold, rate, transac_rate);
+                                            taskSnapshot.getDownloadUrl().toString(), userID, "bottle",sold, transac_rate);
                                     //assign string upload to database reference
                                     final String upload = databaseReference.push().getKey();
                                     //upload data to DIY_Methods database reference
@@ -319,12 +319,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     int transac_rate = (counter_rating.getTransac_rating());
 
                                     DIYrecommend transac_rating = new DIYrecommend();
-                                    int ratings = transac_rating.getUser_ratings();
+//                                    int ratings = transac_rating.getUser_ratings();
 
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(),
                                             material.getText().toString(), procedure.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, "paper",sold, rate, transac_rate);
+                                            taskSnapshot.getDownloadUrl().toString(), userID, "paper",sold, transac_rate);
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
@@ -380,12 +380,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     int transac_rate = (counter_rating.getTransac_rating());
 
                                     DIYrecommend transac_rating = new DIYrecommend();
-                                    int ratings = transac_rating.getUser_ratings();
+//                                    int ratings = transac_rating.getUser_ratings();
 
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(),
                                             material.getText().toString(), procedure.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, "cup",sold, rate, transac_rate);
+                                            taskSnapshot.getDownloadUrl().toString(), userID, "cup",sold, transac_rate);
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
@@ -441,12 +441,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     int transac_rate = (counter_rating.getTransac_rating());
 
                                     DIYrecommend transac_rating = new DIYrecommend();
-                                    int ratings = transac_rating.getUser_ratings();
+//                                    int ratings = transac_rating.getUser_ratings();
 
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(),
                                             material.getText().toString(), procedure.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, "wood",sold, rate, transac_rate);
+                                            taskSnapshot.getDownloadUrl().toString(), userID, "wood",sold, transac_rate);
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
@@ -501,12 +501,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     int transac_rate = (counter_rating.getTransac_rating());
 
                                     DIYrecommend transac_rating = new DIYrecommend();
-                                    int ratings = transac_rating.getUser_ratings();
+//                                    int ratings = transac_rating.getUser_ratings();
 
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(),
                                             material.getText().toString(), procedure.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, "tire", sold, rate, transac_rate);
+                                            taskSnapshot.getDownloadUrl().toString(), userID, "tire", sold, transac_rate);
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
@@ -561,12 +561,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     int transac_rate = (counter_rating.getTransac_rating());
 
                                     DIYrecommend transac_rating = new DIYrecommend();
-                                    int ratings = transac_rating.getUser_ratings();
+//                                    int ratings = transac_rating.getUser_ratings();
 
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(),
                                             material.getText().toString(), procedure.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, "glass", sold, rate, transac_rate);
+                                            taskSnapshot.getDownloadUrl().toString(), userID, "glass", sold, transac_rate);
                                     //assign string upload to database reference
                                     String upload = databaseReference.push().getKey();
                                     //upload data to database reference
@@ -618,12 +618,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     int transac_rate = (counter_rating.getTransac_rating());
 
                                     DIYrecommend transac_rating = new DIYrecommend();
-                                    int ratings = transac_rating.getUser_ratings();
+//                                    int ratings = transac_rating.getUser_ratings();
 
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(),
                                             material.getText().toString(), procedure.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, "bottle",sold, rate, transac_rate);
+                                            taskSnapshot.getDownloadUrl().toString(), userID, "bottle",sold, transac_rate);
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -664,12 +664,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     int transac_rate = (counter_rating.getTransac_rating());
 
                                     DIYrecommend transac_rating = new DIYrecommend();
-                                    int ratings = transac_rating.getUser_ratings();
+//                                    int ratings = transac_rating.getUser_ratings();
 
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(),
                                             material.getText().toString(), procedure.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, "paper",sold, rate, transac_rate);
+                                            taskSnapshot.getDownloadUrl().toString(), userID, "paper",sold, transac_rate);
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -712,12 +712,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     int transac_rate = (counter_rating.getTransac_rating());
 
                                     DIYrecommend transac_rating = new DIYrecommend();
-                                    int ratings = transac_rating.getUser_ratings();
+//                                    int ratings = transac_rating.getUser_ratings();
 
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(),
                                             material.getText().toString(), procedure.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, "cup",sold, rate, transac_rate);
+                                            taskSnapshot.getDownloadUrl().toString(), userID, "cup",sold, transac_rate);
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -760,12 +760,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     int transac_rate = (counter_rating.getTransac_rating());
 
                                     DIYrecommend transac_rating = new DIYrecommend();
-                                    int ratings = transac_rating.getUser_ratings();
+//                                    int ratings = transac_rating.getUser_ratings();
 
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(),
                                             material.getText().toString(), procedure.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, "wood",sold,rate, transac_rate);
+                                            taskSnapshot.getDownloadUrl().toString(), userID, "wood",sold, transac_rate);
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -808,12 +808,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     int transac_rate = (counter_rating.getTransac_rating());
 
                                     DIYrecommend transac_rating = new DIYrecommend();
-                                    int ratings = transac_rating.getUser_ratings();
+//                                    int ratings = transac_rating.getUser_ratings();
 
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(),
                                             material.getText().toString(), procedure.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, "tire",sold, rate, transac_rate);
+                                            taskSnapshot.getDownloadUrl().toString(), userID, "tire",sold, transac_rate);
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users
@@ -855,12 +855,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     int transac_rate = (counter_rating.getTransac_rating());
 
                                     DIYrecommend transac_rating = new DIYrecommend();
-                                    int ratings = transac_rating.getUser_ratings();
+//                                    int ratings = transac_rating.getUser_ratings();
 
                                     //get text input and save new object
                                     DIYrecommend recommend = new DIYrecommend(name.getText().toString(),
                                             material.getText().toString(), procedure.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, "glass",sold, rate, transac_rate);
+                                            taskSnapshot.getDownloadUrl().toString(), userID, "glass",sold, transac_rate);
                                     //assign string upload to database reference
                                     String upload = userDatabaseReference.push().getKey();
                                     //upload data to DIYs by users

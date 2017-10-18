@@ -36,6 +36,7 @@ public class Items_Adapter extends ArrayAdapter<ProductInfo> {
         listDIY = objects;
     }
 
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {

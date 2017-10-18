@@ -62,14 +62,13 @@ public class MyDiys extends AppCompatActivity {
         userID = mFirebaseUser.getUid();
 
         lv = (ListView) findViewById(R.id.lvView);
-        if(lv!=null) {
+//        if(lv!=null) {
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Please Wait loading DIYs.....");
             progressDialog.show();
 
             database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("DIYs_By_Users").child(userID);
-
+            DatabaseReference myRef = database.getReference("DIYs_By_Users").child("bottle").child(userID);
             myRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -79,6 +78,154 @@ public class MyDiys extends AppCompatActivity {
                         DIYrecommend img = snapshot.getValue(DIYrecommend.class);
                         diyList.add(img);
                     }
+                    DatabaseReference myRef = database.getReference("DIYs_By_Users").child("cup").child(userID);
+                    myRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
+                                DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
+                                diyList.add(img);
+                            }
+                            DatabaseReference myRef = database.getReference("DIYs_By_Users").child("glass").child(userID);
+                            myRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
+                                        DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
+                                        diyList.add(img);
+                                    }
+                                    DatabaseReference myRef = database.getReference("DIYs_By_Users").child("paper").child(userID);
+                                    myRef.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
+                                                DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
+                                                diyList.add(img);
+                                            }
+                                            DatabaseReference myRef = database.getReference("DIYs_By_Users").child("tire").child(userID);
+                                            myRef.addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
+                                                        DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
+                                                        diyList.add(img);
+                                                    }
+                                                    DatabaseReference myRef = database.getReference("DIYs_By_Users").child("wood").child(userID);
+                                                    myRef.addValueEventListener(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
+                                                                DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
+                                                                diyList.add(img);
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+                                                    //init adapter
+                                                    adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
+
+                                                    //set adapter for listview
+                                                    lv.setAdapter(adapter);
+                                                    registerForContextMenu(lv);
+                                                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                        @Override
+                                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                            DIYrecommend itemRef = adapter.getItem(position);
+//                            adapter.remove(itemRef);
+//                            adapter.notifyDataSetChanged();
+                                                            Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
+                                                                            + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
+                                                                    Toast.LENGTH_SHORT);
+                                                            toast.show();
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                            //init adapter
+                                            adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
+
+                                            //set adapter for listview
+                                            lv.setAdapter(adapter);
+                                            registerForContextMenu(lv);
+                                            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                    DIYrecommend itemRef = adapter.getItem(position);
+//                            adapter.remove(itemRef);
+//                            adapter.notifyDataSetChanged();
+                                                    Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
+                                                                    + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
+                                                            Toast.LENGTH_SHORT);
+                                                    toast.show();
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                    //init adapter
+                                    adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
+
+                                    //set adapter for listview
+                                    lv.setAdapter(adapter);
+                                    registerForContextMenu(lv);
+                                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                            DIYrecommend itemRef = adapter.getItem(position);
+//                            adapter.remove(itemRef);
+//                            adapter.notifyDataSetChanged();
+                                            Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
+                                                            + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
+                                                    Toast.LENGTH_SHORT);
+                                            toast.show();
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                            //init adapter
+                            adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
+
+                            //set adapter for listview
+                            lv.setAdapter(adapter);
+                            registerForContextMenu(lv);
+                            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    DIYrecommend itemRef = adapter.getItem(position);
+//                            adapter.remove(itemRef);
+//                            adapter.notifyDataSetChanged();
+                                    Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
+                                                    + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
+                                            Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
 
                     //init adapter
                     adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
@@ -90,8 +237,8 @@ public class MyDiys extends AppCompatActivity {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             DIYrecommend itemRef = adapter.getItem(position);
-                            adapter.remove(itemRef);
-                            adapter.notifyDataSetChanged();
+//                            adapter.remove(itemRef);
+//                            adapter.notifyDataSetChanged();
                             Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
                                             + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
                                     Toast.LENGTH_SHORT);
@@ -104,11 +251,11 @@ public class MyDiys extends AppCompatActivity {
 
                 }
             });
-        }else{
-            Toast.makeText(MyDiys.this, "Wala pay DIY na add!",Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(MyDiys.this,MainActivity.class);
-            startActivity(intent);
-        }
+//        }else{
+//            Toast.makeText(MyDiys.this, "Wala pay DIY na add!",Toast.LENGTH_SHORT).show();
+//            Intent intent = new Intent(MyDiys.this,MainActivity.class);
+//            startActivity(intent);
+//        }
     }
 
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
@@ -132,7 +279,7 @@ public class MyDiys extends AppCompatActivity {
                 String imageURL = diyList.get(listPosition).getDiyImageUrl();
                 String category = diyList.get(listPosition).getCategory();
                 int soldItems = diyList.get(listPosition).getSold_items();
-                int ratings = diyList.get(listPosition).getUser_ratings();
+//                int ratings = diyList.get(listPosition).getUser_ratings();
                 int transac_rate = diyList.get(listPosition).getTransac_rating();
 
 //                ForCounter_Rating counter_rating = new ForCounter_Rating();
@@ -142,15 +289,16 @@ public class MyDiys extends AppCompatActivity {
                     categoryReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
                             .child("category").child("bottle");
                     DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL, userID,
-                            category, soldItems, ratings, transac_rate);
+                            category, soldItems, transac_rate);
                     String upload = categoryReference.push().getKey();
                     categoryReference.child(upload).setValue(diYrecommend);
                 }
                 DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL, userID,
-                        category, soldItems, ratings, transac_rate);
+                        category, soldItems, transac_rate);
                 String upload = databaseReference.push().getKey();
                 databaseReference.child(upload).setValue(diYrecommend);
                 Toast.makeText(MyDiys.this, "CLicked! COMMUNITY" + diyList.get(listPosition).getDiyName(), Toast.LENGTH_SHORT).show();
+
                 return true;
             case R.id.addToMarket:
                 Intent intent = new Intent(MyDiys.this, SellMyDIYs.class);

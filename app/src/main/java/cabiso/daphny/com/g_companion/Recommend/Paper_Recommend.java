@@ -25,7 +25,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import cabiso.daphny.com.g_companion.DIYDataActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
@@ -79,9 +78,9 @@ public class Paper_Recommend extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if (snapshot.hasChildren()){
-
-                        Collections.sort(diyList);
-                        Collections.reverse(diyList);
+//
+//                        Collections.sort(diyList);
+//                        Collections.reverse(diyList);
 
                         progressDialog.dismiss();
                         Log.e("datasnaphot: "," "+dataSnapshot.getChildrenCount());
@@ -101,9 +100,9 @@ public class Paper_Recommend extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "KUHAA: " + img.getDiyName(), Toast.LENGTH_SHORT).show();
                         if(snapshot.getChildrenCount() == diyList.size()){
-                            for(int i=0; i<diyList.size();i++){
-                                Log.e("daphny "," "+diyList.get(i).getSold_items());
-                            }
+//                            for(int i=0; i<diyList.size();i++){
+//                                Log.e("daphny "," "+diyList.get(i).getSold_items());
+//                            }
                         }
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override

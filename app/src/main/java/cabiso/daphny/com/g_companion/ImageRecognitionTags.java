@@ -72,7 +72,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
 
                 String results = " ";
-                for(int i = 0; i < 1; i++) {
+                for(int i = 0; i < 5; i++) {
                     results += " " + tags.get(i);
 
                     if(tags.get(i).equals("bottle") || tags.get(i).equals("container")
@@ -154,7 +154,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
     public void printTags() {
         String results = "First tag: ";
-        for(int i = 0; i < 1; i++) {
+        for(int i = 0; i < 5; i++) {
             results += "\n" + tags.get(i);
             if (tags.get(i).equals("no person") || tags.get(i).equals("abstract") || tags.get(i).equals("indoors")){
                 tvTag.setText("Try Again!");

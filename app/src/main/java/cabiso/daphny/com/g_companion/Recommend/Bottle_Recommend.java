@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -23,7 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import cabiso.daphny.com.g_companion.DIYDataActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
@@ -77,9 +75,9 @@ public class Bottle_Recommend extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if (snapshot.hasChildren()){
-
-                        Collections.sort(diyList);
-                        Collections.reverse(diyList);
+//
+//                        Collections.sort(diyList);
+//                        Collections.reverse(diyList);
 
                         progressDialog.dismiss();
                         DIYrecommend img = snapshot.getValue(DIYrecommend.class);
@@ -88,11 +86,11 @@ public class Bottle_Recommend extends AppCompatActivity {
                         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
                         lv.setAdapter(adapter);
 
-                        if(snapshot.getChildrenCount() == diyList.size()){
-                            for(int i=0; i<diyList.size();i++){
-                                Log.e("get "," "+diyList.get(i).getSold_items());
-                            }
-                        }
+//                        if(snapshot.getChildrenCount() == diyList.size()){
+//                            for(int i=0; i<diyList.size();i++){
+//                                Log.e("get "," "+diyList.get(i).getSold_items());
+//                            }
+//                        }
 
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override

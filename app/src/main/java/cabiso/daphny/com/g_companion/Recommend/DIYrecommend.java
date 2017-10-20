@@ -1,51 +1,40 @@
 package cabiso.daphny.com.g_companion.Recommend;
 
-import android.support.annotation.NonNull;
-
-import java.util.Comparator;
-
 /**
  * Created by Lenovo on 7/30/2017.
  */
 
-public class DIYrecommend implements Comparable<DIYrecommend>{
+public class DIYrecommend{
 
-    public String diyName, diymaterial, diyprocedure, diyImageUrl, diyownerID, category;
-    public int sold_items, transac_rating;
+    public String diyName, diymaterial, diyprocedure, diyImageUrl, diyownerID, diyTags;
+//    public int sold_items, transac_rating;
     public DIYrecommend(String diyName, String diymaterial, String diyprocedure, String diyImageUrl,
-                        String diyownerID, String category, int sold_items, int transac_rating) {
+                        String diyownerID, String diyTags) {
         this.diyName = diyName;
         this.diymaterial = diymaterial;
         this.diyprocedure = diyprocedure;
         this.diyImageUrl = diyImageUrl;
         this.diyownerID  = diyownerID;
-        this.category = category;
-        this.sold_items = sold_items;
-        this.transac_rating = transac_rating;
+        this.diyTags = diyTags;
+//        this.sold_items = sold_items;
+//        this.transac_rating = transac_rating;
     }
 
-
-    //    public DIYrecommend(String diyName, String diymaterial, String diyprocedure) {
-//        this.diyName = diyName;
-//        this.diymaterial = diymaterial;
-//        this.diyprocedure = diyprocedure;
-//    }
-//
     public DIYrecommend(){
     }
 
-    @Override
-    public int compareTo(@NonNull DIYrecommend o) {
-        return transac_rating - o.getTransac_rating();
-    }
-
-    class compareBysoldItems implements Comparator<DIYrecommend>{
-
-        @Override
-        public int compare(DIYrecommend o1, DIYrecommend o2) {
-            return o1.getTransac_rating() - o2.getTransac_rating();
-        }
-    }
+//    @Override
+//    public int compareTo(@NonNull DIYrecommend o) {
+//        return transac_rating - o.getTransac_rating();
+//    }
+//
+//    class compareBysoldItems implements Comparator<DIYrecommend>{
+//
+//        @Override
+//        public int compare(DIYrecommend o1, DIYrecommend o2) {
+//            return o1.getTransac_rating() - o2.getTransac_rating();
+//        }
+//    }
 
     public String getDiyName() {
         return diyName;
@@ -87,28 +76,28 @@ public class DIYrecommend implements Comparable<DIYrecommend>{
         this.diyownerID = diyownerID;
     }
 
-    public String getCategory() {
-        return category;
+    public String getDiyTags() {
+        return diyTags;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setDiyTags(String diyTags) {
+        this.diyTags = diyTags;
     }
 
-    public int getSold_items() {
-        return sold_items;
-    }
-
-    public void setSold_items(int sold_items) {
-        this.sold_items = sold_items;
-    }
-
-    public int getTransac_rating() {
-        return transac_rating;
-    }
-
-    public void setTransac_rating(int transac_rating) {
-        this.transac_rating = transac_rating;
-    }
+    //    public int getSold_items() {
+//        return sold_items;
+//    }
+//
+//    public void setSold_items(int sold_items) {
+//        this.sold_items = sold_items;
+//    }
+//
+//    public int getTransac_rating() {
+//        return transac_rating;
+//    }
+//
+//    public void setTransac_rating(int transac_rating) {
+//        this.transac_rating = transac_rating;
+//    }
 }
 

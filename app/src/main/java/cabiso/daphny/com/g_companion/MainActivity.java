@@ -4,10 +4,10 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,14 +15,9 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
-import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -32,13 +27,13 @@ import clarifai2.api.ClarifaiClient;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        MarketPlaceFragment.OnListFragmentInteractionListener{
+        MarketPlaceFragment.OnListFragmentInteractionListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private FloatingActionMenu fam;
-    private FloatingActionButton fab1, fab2, fab3;
-    private Animation fab_open, fab_close;
+   // private FloatingActionMenu fam;
+//    private FloatingActionButton fab1, fab2, fab3;
+//    private Animation fab_open, fab_close;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
@@ -46,6 +41,10 @@ public class MainActivity extends AppCompatActivity
     private String mUsername;
     private String mPhotoUrl;
     private TextView name;
+
+    private ViewPager mViewPager;
+    private ViewPagerAdapter mViewPagerAdapter;
+    private TabLayout mTabLayout;
 
     // private final ClarifaiClient clarifaiClient = new ClarifaiBuilder("{b7aa33dc206c40a4b9cffc09a2e72a9d}").buildSync();
 
@@ -64,9 +63,11 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        setViewPager();
 
-        Fragment fragment = new MarketPlaceFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.theFragmentFrame, fragment).addToBackStack("MarketPlaceFragment").commit();
+//
+//        Fragment fragment = new MarketPlaceFragment();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.theFragmentFrame, fragment).addToBackStack("MarketPlaceFragment").commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -81,59 +82,71 @@ public class MainActivity extends AppCompatActivity
         TextView txtProfileName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.mUser);
         txtProfileName.setText("Daphny Cabiso");
 
+//
+//        fab2 = (FloatingActionButton) findViewById(R.id.fab2);
+//        fab3 = (FloatingActionButton) findViewById(R.id.fab3);
+//        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
+//        fam = (FloatingActionMenu) findViewById(R.id.fab_menu);
+//
+//
+//        fam.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+//            @Override
+//            public void onMenuToggle(boolean opened) {
+//                if (opened) {
+//                    Toast.makeText(getApplicationContext(), "Manu is opened", Toast.LENGTH_LONG).show();
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "Menu is closed", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+//
+//
+//        fab1.setOnClickListener(onButtonClick());
+//        fab2.setOnClickListener(onButtonClick());
+//        fab3.setOnClickListener(onButtonClick());
+//
+//        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+//        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
 
-        fab2 = (FloatingActionButton) findViewById(R.id.fab2);
-        fab3 = (FloatingActionButton) findViewById(R.id.fab3);
-        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
-        fam = (FloatingActionMenu) findViewById(R.id.fab_menu);
+    }
 
+    private void setViewPager() {
 
-        fam.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
-            @Override
-            public void onMenuToggle(boolean opened) {
-                if (opened) {
-                    Toast.makeText(getApplicationContext(),"Manu is opened",Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getApplicationContext(),"Menu is closed",Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mViewPagerAdapter);
 
-
-        fab1.setOnClickListener(onButtonClick());
-        fab2.setOnClickListener(onButtonClick());
-        fab3.setOnClickListener(onButtonClick());
-
-        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
-
+        mTabLayout = (TabLayout) findViewById(R.id.tab);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
 
 
-    private View.OnClickListener onButtonClick() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (view == fab1) {
-                    Toast.makeText(getApplicationContext(),"Capture a trash for image recognition.",Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainActivity.this,ImageRecognitionTags.class);
-                    Snackbar.make(view, "Wait.......", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                    startActivity(intent);
-                } else if (view == fab2) {
-                    Toast.makeText(getApplicationContext(),"Add DIY to the Market Page",Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainActivity.this,AddProductActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getApplicationContext(),"Add DIY to the community.",Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MainActivity.this,CaptureDIY.class);
-                    startActivity(intent);
-                }
-                fam.close(true);
-            }
-        };
-    }
+//    private View.OnClickListener onButtonClick() {
+//        return new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (view == fab1) {
+//                    Toast.makeText(getApplicationContext(),"Capture a trash for image recognition.",Toast.LENGTH_LONG).show();
+//                    Intent intent = new Intent(MainActivity.this,ImageRecognitionTags.class);
+//                    Snackbar.make(view, "Wait.......", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//                    startActivity(intent);
+//                } else if (view == fab2) {
+//                    Toast.makeText(getApplicationContext(),"Add DIY to the Market Page",Toast.LENGTH_LONG).show();
+//                    Intent intent = new Intent(MainActivity.this,AddProductActivity.class);
+//                    startActivity(intent);
+//                } else {
+//                    Toast.makeText(getApplicationContext(),"Add DIY to the community.",Toast.LENGTH_LONG).show();
+//                    Intent intent = new Intent(MainActivity.this,CaptureDIY.class);
+//                    startActivity(intent);
+//                }
+//                fam.close(true);
+//            }
+//        };
+//    }
+
+
 
 
     @Override

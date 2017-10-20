@@ -1,10 +1,12 @@
 package cabiso.daphny.com.g_companion;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,11 +39,16 @@ public class MarketPlaceFragment extends Fragment{
     private RecyclerView recyclerView;
     private OnListFragmentInteractionListener mListener;
     File productImageTempFile = null;
+    private FloatingActionButton fab1;
+
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
+
+    public static final String TITLE = "DIY Market";
+
     public MarketPlaceFragment() {
     }
 
@@ -64,12 +71,24 @@ public class MarketPlaceFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.app_bar_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_market_page, container, false);
 
         Context context = view.getContext();
         recyclerView = (RecyclerView) view.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        fab1 = (FloatingActionButton) view.findViewById(R.id.market_fab);
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(getActivity(), AddProductActivity.class);
+                startActivity(in);
+            }
+        });
+
         return view;
+
+
     }
 
     @Override

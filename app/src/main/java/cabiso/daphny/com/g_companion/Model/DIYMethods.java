@@ -5,13 +5,16 @@ package cabiso.daphny.com.g_companion.Model;
  */
 
 public class DIYMethods {
-    private String diyName, diyMaterials, diyProcedures, diyQty;
+    private String diyName;
+    private String diyMaterials;
+    private String diyProcedures;
+    private String diyTags;
 
-    public DIYMethods(String diyName, String diyMaterials, String diyProcedures, String diyQty) {
+    public DIYMethods(String diyName, String diyMaterials, String diyProcedures, String diyTags) {
         this.diyName = diyName;
         this.diyMaterials = diyMaterials;
         this.diyProcedures = diyProcedures;
-        this.diyQty = diyQty;
+        this.diyTags = diyTags;
     }
 
     public DIYMethods(){
@@ -40,11 +43,12 @@ public class DIYMethods {
         this.diyProcedures = diyProcedures;
     }
 
+    public String getDiyTags() {
+        return diyTags;
+    }
 
-    public String getDiyQty() {
-        return diyQty;
+    public void setDiyTags(String diyTags) {
+        this.diyTags = diyTags;
     }
-    public void setDiyQty(String diyQty) {
-        this.diyQty = diyQty;
-    }
+
 }

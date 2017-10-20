@@ -277,27 +277,23 @@ public class MyDiys extends AppCompatActivity {
                 String material = diyList.get(listPosition).getDiymaterial();
                 String procedure = diyList.get(listPosition).getDiyprocedure();
                 String imageURL = diyList.get(listPosition).getDiyImageUrl();
-                String category = diyList.get(listPosition).getCategory();
-                int soldItems = diyList.get(listPosition).getSold_items();
-//                int ratings = diyList.get(listPosition).getUser_ratings();
-                int transac_rate = diyList.get(listPosition).getTransac_rating();
+
 
 //                ForCounter_Rating counter_rating = new ForCounter_Rating();
 //                int sold = (counter_rating.getSold());
 
-                if(category.equals("bottle")){
-                    categoryReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
-                            .child("category").child("bottle");
-                    DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL, userID,
-                            category, soldItems, transac_rate);
-                    String upload = categoryReference.push().getKey();
-                    categoryReference.child(upload).setValue(diYrecommend);
-                }
-                DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL, userID,
-                        category, soldItems, transac_rate);
-                String upload = databaseReference.push().getKey();
-                databaseReference.child(upload).setValue(diYrecommend);
-                Toast.makeText(MyDiys.this, "CLicked! COMMUNITY" + diyList.get(listPosition).getDiyName(), Toast.LENGTH_SHORT).show();
+//                if(category.equals("bottle")){
+//                    categoryReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods")
+//                            .child("category").child("bottle");
+//                    DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL, userID,
+//                            category, soldItems, transac_rate);
+//                    String upload = categoryReference.push().getKey();
+//                    categoryReference.child(upload).setValue(diYrecommend);
+//                }
+              //  DIYrecommend diYrecommend = new DIYrecommend(name, material, procedure, imageURL, userID, diyTags);
+//                String upload = databaseReference.push().getKey();
+//                databaseReference.child(upload).setValue(diYrecommend);
+//                Toast.makeText(MyDiys.this, "CLicked! COMMUNITY" + diyList.get(listPosition).getDiyName(), Toast.LENGTH_SHORT).show();
 
                 return true;
             case R.id.addToMarket:

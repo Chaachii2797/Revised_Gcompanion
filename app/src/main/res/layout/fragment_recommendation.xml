@@ -12,6 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="569dp"
         android:layout_marginTop="130dp"
-        tools:listitem="@layout/recycler_item" />
+        tools:listitem="@layout/recommend_ui" />
 
 </FrameLayout>

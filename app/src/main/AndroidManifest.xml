@@ -81,7 +81,8 @@
         <activity android:name=".DIYDataActivity" />
         <activity android:name=".Item_Activity" />
         <activity android:name=".Sold_Activity" />
-        <activity android:name=".Pending_Activity"></activity>
+
+
     </application>
 
 </manifest>

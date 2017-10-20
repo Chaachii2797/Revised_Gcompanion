@@ -87,7 +87,7 @@ public class AddProductActivity extends AppCompatActivity{
         productImagesStorageReference = storageReference.child("ProductImages"+"/"+currentKey);
 
         final EditText title = (EditText)findViewById(R.id.add_product_title);
-        final EditText desc = (EditText)findViewById(R.id.add_diy_material);
+        final EditText desc = (EditText)findViewById(R.id.etMaterials);
         final EditText price = (EditText) findViewById(R.id.add_diy_procedure);
 
         productImagesRecyclerViewAdapter = new ProductImagesRecyclerViewAdapter();

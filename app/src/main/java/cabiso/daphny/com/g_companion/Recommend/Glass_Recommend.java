@@ -23,7 +23,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 
 import cabiso.daphny.com.g_companion.DIYDataActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
@@ -74,8 +73,8 @@ public class Glass_Recommend extends AppCompatActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if (snapshot.hasChildren()) {
 
-                        Collections.sort(diyList);
-                        Collections.reverse(diyList);
+//                        Collections.sort(diyList);
+//                        Collections.reverse(diyList);
                         progressDialog.dismiss();
                         Log.e("datasnaphot: ", " " + dataSnapshot.getChildrenCount());
                         Log.e("datasnaphot: ", " " + dataSnapshot.toString());
@@ -114,10 +113,10 @@ public class Glass_Recommend extends AppCompatActivity {
 
 
 
-
-                            for (int i = 0; i < diyList.size(); i++) {
-                                Log.e("daphny ", " " + diyList.get(i).getSold_items());
-                            }
+//
+//                            for (int i = 0; i < diyList.size(); i++) {
+//                                Log.e("daphny ", " " + diyList.get(i).getSold_items());
+//                            }
                         }
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override

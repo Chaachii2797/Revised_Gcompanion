@@ -11,9 +11,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import cabiso.daphny.com.g_companion.CommunityFragment;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
-import cabiso.daphny.com.g_companion.Model.DIYMethods;
 import cabiso.daphny.com.g_companion.R;
 
 /**
@@ -30,8 +28,8 @@ public class CommunityAdapter extends BaseAdapter {
         this.itemList = modelList;
     }
 
-    public CommunityAdapter(CommunityFragment communityFragment, int recommend_ui, ArrayList<DIYMethods> diyList) {
-    }
+//    public CommunityAdapter(CommunityFragment communityFragment, int recommend_ui, ArrayList<DIYMethods> diyList) {
+//    }
 
     @Override
     public int getCount() {
@@ -63,7 +61,7 @@ public class CommunityAdapter extends BaseAdapter {
             ImageButton deleteBtn = (ImageButton) convertView.findViewById(R.id.deleteMaterial);
 
             CommunityItem m = itemList.get(position);
-            tvMaterials.setText(m.getName());
+            tvMaterials.setText(m.getValue());
 
             // click listiner for remove button
             deleteBtn.setOnClickListener(new View.OnClickListener() {
@@ -76,5 +74,4 @@ public class CommunityAdapter extends BaseAdapter {
         }
         return convertView;
     }
-
 }

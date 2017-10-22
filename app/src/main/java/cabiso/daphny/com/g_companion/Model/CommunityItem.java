@@ -6,17 +6,17 @@ package cabiso.daphny.com.g_companion.Model;
 
 public class CommunityItem {
 
-        String name;
+        String value;
 
-        public CommunityItem(String name) {
-            this.name = name;
+        public CommunityItem(String value) {
+            this.value = value;
         }
 
-        public String getName() {
-            return name;
-        }
+    public String getValue() {
+        return value;
+    }
 
-        public void setName(String name) {
-            this.name = name;
-        }
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

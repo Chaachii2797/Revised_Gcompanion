@@ -9,10 +9,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,7 +42,6 @@ import java.util.List;
 
 import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
-import cabiso.daphny.com.g_companion.Model.DIYMethods;
 import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
@@ -61,9 +61,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     private DatabaseReference databaseReference;
     private DatabaseReference tagReference;
-    private DatabaseReference userDatabaseReference;
-    private DatabaseReference materialsReference;
-    private DatabaseReference proceduresReference;
+    private Task<Void> materialsReference;
+    private Task<Void> proceduresReference;
     private FirebaseDatabase database;
     private FirebaseAuth mFirebaseAuth;
 
@@ -73,7 +72,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     private FirebaseUser mFirebaseUser;
     private String userID;
-    private FirebaseUser user;
     private String imageFileName;
 
     private Uri diyPictureUri;
@@ -110,16 +108,16 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        tagReference = databaseReference.child("diy_by_tags").child(userID);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(userID);
+       // tagReference = databaseReference;
+
 
         mStorage = FirebaseStorage.getInstance();
-        storageReference = mStorage.getReferenceFromUrl("gs://g-companion.appspot.com/" +
-                "diy_by_tags_imgs");
+        storageReference = mStorage.getReferenceFromUrl("gs://g-companion.appspot.com/" + "diy_by_tags_imgs");
 
         diyTags = (TextView) findViewById(R.id.tvTag);
-        name = (EditText)findViewById(R.id.add_diy_name);
-        material = (EditText)findViewById(R.id.etMaterials);
+        name = (EditText) findViewById(R.id.add_diy_name);
+        material = (EditText) findViewById(R.id.etMaterials);
         procedure = (EditText) findViewById(R.id.etProcedures);
         imgView = (ImageView) findViewById(R.id.add_product_image_plus_icon);
         materialsList = (ListView) findViewById(R.id.materialsList);
@@ -135,26 +133,28 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         materialsList.setAdapter(mAdapter);
         proceduresList.setAdapter(pAdapter);
 
-        tagReference.child(userID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                diyRecommend = dataSnapshot.getValue(DIYrecommend.class);
-                if(diyRecommend!=null){
-                    //  Log.d("username", userProfileInfo.username);
-                    name.setText(diyRecommend.diyName);
-                    // Log.d("username", userProfileInfo.username);
-                    material.setText(diyRecommend.diymaterial);
-                    //Log.d("email", userProfileInfo.email);
-                    procedure.setText(diyRecommend.diyprocedure);
-                    //Log.d("profile", userProfileInfo.phone);
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.w("Failure to read", "Failed to read value.", error.toException());
-            }
-        });
+//        tagReference.child(userID).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                diyRecommend = dataSnapshot.getValue(DIYrecommend.class);
+//                if (diyRecommend != null) {
+//
+//                    //  Log.d("username", userProfileInfo.username);
+//                    name.setText(diyRecommend.diyName);
+//                    // Log.d("username", userProfileInfo.username);
+//                    material.setText(diyRecommend.diymaterial);
+//                    //Log.d("email", userProfileInfo.email);
+//                    procedure.setText(diyRecommend.diyprocedure);
+//                    //Log.d("profile", userProfileInfo.phone);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                Log.w("Failure to read", "Failed to read value.", error.toException());
+//            }
+//        });
 
         btnAddMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,6 +167,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     itemMaterial.add(md);
                     mAdapter.notifyDataSetChanged();
                     material.setText(" ");
+
                 }
             }
         });
@@ -182,6 +183,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     itemProcedure.add(md);
                     pAdapter.notifyDataSetChanged();
                     procedure.setText(" ");
+
+
                 }
             }
         });
@@ -196,20 +199,55 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             }
         });
 
+        databaseReference.child(userID).child("diy_by_tags").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                    CommunityItem com = postSnapshot.getValue(CommunityItem.class);
+                    itemMaterial.add(com);
+
+                    ArrayAdapter arrayAdapter = new ArrayAdapter(CaptureDIY.this, android.R.layout.simple_list_item_1,
+                            itemMaterial);
+                    materialsList.setAdapter(arrayAdapter);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         submitButton = (Button) findViewById(R.id.submit_diy);
         database = FirebaseDatabase.getInstance();
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (userID != null) {
-                    tagReference.setValue(new DIYMethods(name.getText().toString(), material.getText().toString(),
-                            procedure.getText().toString(), diyTags.getText().toString()), userID);
-                    Intent intent = new Intent(CaptureDIY.this, MainActivity.class);
+                    String result = " ";
+                    for (int i=0; i < 5; i++) {
+                        result = tags.get(i);
+
+//                        if(tags.get(i).equals(" ") || tags.get(i) != "no person"){
+//                            result += " ";
+
+                        databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(userID);
+                        databaseReference.child(tags.get(i)).push().child("diy_name").setValue(name.getText().toString());
+
+                        databaseReference.child(tags.get(i)).child("diy_process").child("materials").setValue(itemMaterial);
+
+                        databaseReference.child(tags.get(i)).child("diy_process").child("procedures").setValue(itemProcedure);
+
+
+                    }
+                    Intent intent = new Intent(CaptureDIY.this, MyDiys.class);
                     startActivity(intent);
                 }
             }
         });
     }
+
 
     public void printTags() {
         String results = "Tags: ";
@@ -256,8 +294,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Toast.makeText(CaptureDIY.this,"Capture DIY!",Toast.LENGTH_SHORT).show();
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            Toast.makeText(CaptureDIY.this,"Capture DIY!",Toast.LENGTH_SHORT).show();
             if (resultCode == MainActivity.RESULT_OK){
 //                    diyPictureUri = data.getData();
 //                    imgView.setImageURI(diyPictureUri);

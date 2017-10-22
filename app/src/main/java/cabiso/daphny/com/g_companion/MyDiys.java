@@ -24,8 +24,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
-import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
+import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
+import cabiso.daphny.com.g_companion.Model.CommunityItem;
 
 /**
  * Created by Lenovo on 7/31/2017.
@@ -33,10 +33,10 @@ import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
 public class MyDiys extends AppCompatActivity {
 
-    private ArrayList<DIYrecommend> diyList = new ArrayList<>();
+    private ArrayList<CommunityItem> diyList = new ArrayList<>();
     private ListView lv;
     private ImageView loadview;
-    private RecommendDIYAdapter adapter;
+    private CommunityAdapter adapter;
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
 
@@ -47,6 +47,7 @@ public class MyDiys extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
     private DatabaseReference categoryReference;
+
     public MyDiys() {
 
     }
@@ -63,200 +64,202 @@ public class MyDiys extends AppCompatActivity {
 
         lv = (ListView) findViewById(R.id.lvView);
 //        if(lv!=null) {
-            progressDialog = new ProgressDialog(this);
-            progressDialog.setMessage("Please Wait loading DIYs.....");
-            progressDialog.show();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Please Wait loading DIYs.....");
+        progressDialog.show();
 
-            database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("DIYs_By_Users").child("bottle").child(userID);
-            myRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    progressDialog.dismiss();
+        database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("diy_by_tags").child("materials").child(userID);
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                progressDialog.dismiss();
 
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        DIYrecommend img = snapshot.getValue(DIYrecommend.class);
-                        diyList.add(img);
-                    }
-                    DatabaseReference myRef = database.getReference("DIYs_By_Users").child("cup").child(userID);
-                    myRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
-                                DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
-                                diyList.add(img);
-                            }
-                            DatabaseReference myRef = database.getReference("DIYs_By_Users").child("glass").child(userID);
-                            myRef.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
-                                        DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
-                                        diyList.add(img);
-                                    }
-                                    DatabaseReference myRef = database.getReference("DIYs_By_Users").child("paper").child(userID);
-                                    myRef.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
-                                                DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
-                                                diyList.add(img);
-                                            }
-                                            DatabaseReference myRef = database.getReference("DIYs_By_Users").child("tire").child(userID);
-                                            myRef.addValueEventListener(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
-                                                        DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
-                                                        diyList.add(img);
-                                                    }
-                                                    DatabaseReference myRef = database.getReference("DIYs_By_Users").child("wood").child(userID);
-                                                    myRef.addValueEventListener(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                                            for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
-                                                                DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
-                                                                diyList.add(img);
-                                                            }
-                                                        }
-
-                                                        @Override
-                                                        public void onCancelled(DatabaseError databaseError) {
-
-                                                        }
-                                                    });
-                                                    //init adapter
-                                                    adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
-
-                                                    //set adapter for listview
-                                                    lv.setAdapter(adapter);
-                                                    registerForContextMenu(lv);
-                                                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                        @Override
-                                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                            DIYrecommend itemRef = adapter.getItem(position);
-//                            adapter.remove(itemRef);
-//                            adapter.notifyDataSetChanged();
-                                                            Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
-                                                                            + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
-                                                                    Toast.LENGTH_SHORT);
-                                                            toast.show();
-                                                        }
-                                                    });
-                                                }
-
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-
-                                                }
-                                            });
-                                            //init adapter
-                                            adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
-
-                                            //set adapter for listview
-                                            lv.setAdapter(adapter);
-                                            registerForContextMenu(lv);
-                                            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                @Override
-                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                    DIYrecommend itemRef = adapter.getItem(position);
-//                            adapter.remove(itemRef);
-//                            adapter.notifyDataSetChanged();
-                                                    Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
-                                                                    + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
-                                                            Toast.LENGTH_SHORT);
-                                                    toast.show();
-                                                }
-                                            });
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-
-                                        }
-                                    });
-                                    //init adapter
-                                    adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
-
-                                    //set adapter for listview
-                                    lv.setAdapter(adapter);
-                                    registerForContextMenu(lv);
-                                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                        @Override
-                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                            DIYrecommend itemRef = adapter.getItem(position);
-//                            adapter.remove(itemRef);
-//                            adapter.notifyDataSetChanged();
-                                            Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
-                                                            + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
-                                                    Toast.LENGTH_SHORT);
-                                            toast.show();
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-                            //init adapter
-                            adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
-
-                            //set adapter for listview
-                            lv.setAdapter(adapter);
-                            registerForContextMenu(lv);
-                            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    DIYrecommend itemRef = adapter.getItem(position);
-//                            adapter.remove(itemRef);
-//                            adapter.notifyDataSetChanged();
-                                    Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
-                                                    + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
-                                            Toast.LENGTH_SHORT);
-                                    toast.show();
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-
-                    //init adapter
-                    adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
-
-                    //set adapter for listview
-                    lv.setAdapter(adapter);
-                    registerForContextMenu(lv);
-                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            DIYrecommend itemRef = adapter.getItem(position);
-//                            adapter.remove(itemRef);
-//                            adapter.notifyDataSetChanged();
-                            Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
-                                            + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
-                                    Toast.LENGTH_SHORT);
-                            toast.show();
-                        }
-                    });
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    CommunityItem img = snapshot.getValue(CommunityItem.class);
+                    diyList.add(img);
                 }
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+//                    DatabaseReference myRef = database.getReference("DIYs_By_Users").child("cup").child(userID);
+//                    myRef.addValueEventListener(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
+//                                DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
+//                                diyList.add(img);
+//                            }
+//                            DatabaseReference myRef = database.getReference("DIYs_By_Users").child("glass").child(userID);
+//                            myRef.addValueEventListener(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(DataSnapshot dataSnapshot) {
+//                                    for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
+//                                        DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
+//                                        diyList.add(img);
+//                                    }
+//                                    DatabaseReference myRef = database.getReference("DIYs_By_Users").child("paper").child(userID);
+//                                    myRef.addValueEventListener(new ValueEventListener() {
+//                                        @Override
+//                                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                                            for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
+//                                                DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
+//                                                diyList.add(img);
+//                                            }
+//                                            DatabaseReference myRef = database.getReference("DIYs_By_Users").child("tire").child(userID);
+//                                            myRef.addValueEventListener(new ValueEventListener() {
+//                                                @Override
+//                                                public void onDataChange(DataSnapshot dataSnapshot) {
+//                                                    for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
+//                                                        DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
+//                                                        diyList.add(img);
+//                                                    }
+//                                                    DatabaseReference myRef = database.getReference("DIYs_By_Users").child("wood").child(userID);
+//                                                    myRef.addValueEventListener(new ValueEventListener() {
+//                                                        @Override
+//                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                                                            for(DataSnapshot snapshot1:dataSnapshot.getChildren()){
+//                                                                DIYrecommend img = snapshot1.getValue(DIYrecommend.class);
+//                                                                diyList.add(img);
+//                                                            }
+//                                                        }
+            }
 
-                }
-            });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //init adapter
+        adapter = new CommunityAdapter(getApplicationContext(),  diyList);
+
+        //set adapter for listview
+        lv.setAdapter(adapter);
+        registerForContextMenu(lv);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                CommunityItem itemRef = adapter.getItem(position);
+//                            adapter.remove(itemRef);
+//                            adapter.notifyDataSetChanged();
+//                Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
+//                                + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
+//                        Toast.LENGTH_SHORT);
+//                toast.show();
+            }
+        });
+
+
+    }
+
+
+
+
+//                                            //init adapter
+//                                            adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
+//
+//                                            //set adapter for listview
+//                                            lv.setAdapter(adapter);
+//                                            registerForContextMenu(lv);
+//                                            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                                                @Override
+//                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                                                    DIYrecommend itemRef = adapter.getItem(position);
+////                            adapter.remove(itemRef);
+////                            adapter.notifyDataSetChanged();
+//                                                    Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
+//                                                                    + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
+//                                                            Toast.LENGTH_SHORT);
+//                                                    toast.show();
+//                                                }
+//                                            });
+//                                        }
+//
+//                                        @Override
+//                                        public void onCancelled(DatabaseError databaseError) {
+//
+//                                        }
+//                                    });
+//                                    //init adapter
+//                                    adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
+//
+//                                    //set adapter for listview
+//                                    lv.setAdapter(adapter);
+//                                    registerForContextMenu(lv);
+//                                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                                        @Override
+//                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                                            DIYrecommend itemRef = adapter.getItem(position);
+////                            adapter.remove(itemRef);
+////                            adapter.notifyDataSetChanged();
+//                                            Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
+//                                                            + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
+//                                                    Toast.LENGTH_SHORT);
+//                                            toast.show();
+//                                        }
+//                                    });
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(DatabaseError databaseError) {
+//
+//                                }
+//                            });
+//                            //init adapter
+//                            adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
+//
+//                            //set adapter for listview
+//                            lv.setAdapter(adapter);
+//                            registerForContextMenu(lv);
+//                            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                                @Override
+//                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                                    DIYrecommend itemRef = adapter.getItem(position);
+////                            adapter.remove(itemRef);
+////                            adapter.notifyDataSetChanged();
+//                                    Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
+//                                                    + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
+//                                            Toast.LENGTH_SHORT);
+//                                    toast.show();
+//                                }
+//                            });
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//
+//
+//                    //init adapter
+//                    adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
+//
+//                    //set adapter for listview
+//                    lv.setAdapter(adapter);
+//                    registerForContextMenu(lv);
+//                    lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                            DIYrecommend itemRef = adapter.getItem(position);
+////                            adapter.remove(itemRef);
+////                            adapter.notifyDataSetChanged();
+//                            Toast toast = Toast.makeText(MyDiys.this, itemRef.getDiyName()
+//                                            + "\n" + itemRef.getDiymaterial() + "\n" + itemRef.diyImageUrl + "\n" + itemRef.getDiyprocedure(),
+//                                    Toast.LENGTH_SHORT);
+//                            toast.show();
+//                        }
+//                    });
+//                }
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
 //        }else{
 //            Toast.makeText(MyDiys.this, "Wala pay DIY na add!",Toast.LENGTH_SHORT).show();
 //            Intent intent = new Intent(MyDiys.this,MainActivity.class);
 //            startActivity(intent);
 //        }
-    }
+
 
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -266,17 +269,18 @@ public class MyDiys extends AppCompatActivity {
         }
     }
 
+
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.addToCommunity:
                 int listPosition = info.position;
-                databaseReference = FirebaseDatabase.getInstance().getReference().child("DIY_Methods").child("all_DIYS");
-                String name = diyList.get(listPosition).getDiyName();
-                String material = diyList.get(listPosition).getDiymaterial();
-                String procedure = diyList.get(listPosition).getDiyprocedure();
-                String imageURL = diyList.get(listPosition).getDiyImageUrl();
+                databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child("materials");
+                String name = diyList.get(listPosition).getValue();
+//                String material = diyList.get(listPosition).getDiymaterial();
+//                String procedure = diyList.get(listPosition).getDiyprocedure();
+//                String imageURL = diyList.get(listPosition).getDiyImageUrl();
 
 
 //                ForCounter_Rating counter_rating = new ForCounter_Rating();

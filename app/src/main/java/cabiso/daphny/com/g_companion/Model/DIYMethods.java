@@ -10,6 +10,8 @@ public class DIYMethods {
     private String diyProcedures;
     private String diyTags;
 
+
+
     public DIYMethods(String diyName, String diyMaterials, String diyProcedures, String diyTags) {
         this.diyName = diyName;
         this.diyMaterials = diyMaterials;
@@ -17,8 +19,6 @@ public class DIYMethods {
         this.diyTags = diyTags;
     }
 
-    public DIYMethods(){
-    }
 
     public String getDiyName() {
         return diyName;
@@ -50,5 +50,6 @@ public class DIYMethods {
     public void setDiyTags(String diyTags) {
         this.diyTags = diyTags;
     }
+
 
 }

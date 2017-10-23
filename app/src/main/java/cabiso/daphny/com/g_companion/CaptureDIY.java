@@ -183,13 +183,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     itemProcedure.add(md);
                     pAdapter.notifyDataSetChanged();
                     procedure.setText(" ");
-
-
                 }
             }
         });
-
-
         final ImageView addProductImagePlusIcon = (ImageView) findViewById(R.id.add_product_image_plus_icon);
         addProductImagePlusIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,7 +194,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 dispatchTakePictureIntent();
             }
         });
-
         databaseReference.child(userID).child("diy_by_tags").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -209,7 +204,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     ArrayAdapter arrayAdapter = new ArrayAdapter(CaptureDIY.this, android.R.layout.simple_list_item_1,
                             itemMaterial);
                     materialsList.setAdapter(arrayAdapter);
-
                 }
             }
 
@@ -227,19 +221,18 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 if (userID != null) {
                     String result = " ";
                     for (int i=0; i < 5; i++) {
-                        result = tags.get(i);
+//                        result = tags.get(i);
 
 //                        if(tags.get(i).equals(" ") || tags.get(i) != "no person"){
 //                            result += " ";
 
+                        String upload = databaseReference.push().getKey();
                         databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(userID);
-                        databaseReference.child(tags.get(i)).push().child("diy_name").setValue(name.getText().toString());
-
-                        databaseReference.child(tags.get(i)).child("diy_process").child("materials").setValue(itemMaterial);
-
-                        databaseReference.child(tags.get(i)).child("diy_process").child("procedures").setValue(itemProcedure);
-
-
+                        databaseReference.child(tags.get(i)).child(upload).child("diy_name").setValue(name.getText().toString());
+                        databaseReference.child(tags.get(i)).child(upload).child("diy_process").child("materials")
+                                .setValue(itemMaterial);
+                        databaseReference.child(tags.get(i)).child(upload).child("diy_process").child("procedures")
+                                .setValue(itemProcedure);
                     }
                     Intent intent = new Intent(CaptureDIY.this, MyDiys.class);
                     startActivity(intent);

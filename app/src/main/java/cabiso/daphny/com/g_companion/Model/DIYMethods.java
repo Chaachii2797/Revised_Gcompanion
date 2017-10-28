@@ -11,6 +11,7 @@ public class DIYMethods {
     private String diyTags;
 
 
+    public DIYMethods(){}
 
     public DIYMethods(String diyName, String diyMaterials, String diyProcedures, String diyTags) {
         this.diyName = diyName;

@@ -24,6 +24,6 @@
         android:layout_marginTop="24dp"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:text="Bottle Recommendations" />
+        android:text="Recommendations" />
 
 </RelativeLayout>

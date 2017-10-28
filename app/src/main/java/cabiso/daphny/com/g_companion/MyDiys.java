@@ -69,7 +69,7 @@ public class MyDiys extends AppCompatActivity {
         progressDialog.show();
 
         database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("diy_by_tags").child("materials").child(userID);
+        DatabaseReference myRef = database.getReference("diy_by_tags").child(userID).child("business");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -277,7 +277,7 @@ public class MyDiys extends AppCompatActivity {
             case R.id.addToCommunity:
                 int listPosition = info.position;
                 databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child("materials");
-                String name = diyList.get(listPosition).getValue();
+                String name = diyList.get(listPosition).getVal();
 //                String material = diyList.get(listPosition).getDiymaterial();
 //                String procedure = diyList.get(listPosition).getDiyprocedure();
 //                String imageURL = diyList.get(listPosition).getDiyImageUrl();

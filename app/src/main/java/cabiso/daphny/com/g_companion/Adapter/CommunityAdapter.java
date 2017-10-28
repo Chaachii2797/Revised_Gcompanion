@@ -61,9 +61,9 @@ public class CommunityAdapter extends BaseAdapter {
             ImageButton deleteBtn = (ImageButton) convertView.findViewById(R.id.deleteMaterial);
 
             CommunityItem m = itemList.get(position);
-            tvMaterials.setText(m.getValue());
+            tvMaterials.setText(m.getVal());
 
-            // click listiner for remove button
+            // click listener for remove button
             deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -71,6 +71,12 @@ public class CommunityAdapter extends BaseAdapter {
                     notifyDataSetChanged();
                 }
             });
+
+            //TextView tvName = (TextView) convertView.findViewById(R.id.get_diyName);
+            //ImageView img = (ImageView) v.findViewById(R.id.diy_item_icon);
+
+//            tvName.setText(itemList.get(position).getValue());
+            //Glide.with(context).load(listDIY.get(position).getProductPictureURLs().get(0)).into(img);
         }
         return convertView;
     }

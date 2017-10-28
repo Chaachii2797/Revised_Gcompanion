@@ -1,5 +1,6 @@
 package cabiso.daphny.com.g_companion;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,11 +9,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -21,16 +22,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,7 +44,8 @@ import java.util.List;
 
 import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
-import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
+import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiResponse;
@@ -60,15 +63,13 @@ import clarifai2.dto.prediction.Concept;
 public class CaptureDIY extends AppCompatActivity implements View.OnClickListener{
 
     private DatabaseReference databaseReference;
-    private DatabaseReference tagReference;
     private Task<Void> materialsReference;
     private Task<Void> proceduresReference;
     private FirebaseDatabase database;
     private FirebaseAuth mFirebaseAuth;
 
     private FirebaseStorage mStorage;
-    private StorageReference storageReference;
-    private DIYrecommend diyRecommend;
+    private StorageReference storageReference, imageRef;
 
     private FirebaseUser mFirebaseUser;
     private String userID;
@@ -98,6 +99,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     ArrayList<CommunityItem> itemMaterial;
     ArrayList<CommunityItem> itemProcedure;
 
+    private ProgressDialog progressDialog;
+    UploadTask uploadTask;
 
 
     @Override
@@ -109,11 +112,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         userID = mFirebaseUser.getUid();
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(userID);
-       // tagReference = databaseReference;
-
 
         mStorage = FirebaseStorage.getInstance();
-        storageReference = mStorage.getReferenceFromUrl("gs://g-companion.appspot.com/" + "diy_by_tags_imgs");
+        storageReference = mStorage.getReferenceFromUrl("gs://g-companion.appspot.com/").child("diy_by_tags");
 
         diyTags = (TextView) findViewById(R.id.tvTag);
         name = (EditText) findViewById(R.id.add_diy_name);
@@ -133,28 +134,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         materialsList.setAdapter(mAdapter);
         proceduresList.setAdapter(pAdapter);
 
-
-//        tagReference.child(userID).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                diyRecommend = dataSnapshot.getValue(DIYrecommend.class);
-//                if (diyRecommend != null) {
-//
-//                    //  Log.d("username", userProfileInfo.username);
-//                    name.setText(diyRecommend.diyName);
-//                    // Log.d("username", userProfileInfo.username);
-//                    material.setText(diyRecommend.diymaterial);
-//                    //Log.d("email", userProfileInfo.email);
-//                    procedure.setText(diyRecommend.diyprocedure);
-//                    //Log.d("profile", userProfileInfo.phone);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                Log.w("Failure to read", "Failed to read value.", error.toException());
-//            }
-//        });
 
         btnAddMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,49 +173,80 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 dispatchTakePictureIntent();
             }
         });
-        databaseReference.child(userID).child("diy_by_tags").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
-                    CommunityItem com = postSnapshot.getValue(CommunityItem.class);
-                    itemMaterial.add(com);
-
-                    ArrayAdapter arrayAdapter = new ArrayAdapter(CaptureDIY.this, android.R.layout.simple_list_item_1,
-                            itemMaterial);
-                    materialsList.setAdapter(arrayAdapter);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
         submitButton = (Button) findViewById(R.id.submit_diy);
         database = FirebaseDatabase.getInstance();
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userID != null) {
-                    String result = " ";
-                    for (int i=0; i < 5; i++) {
-//                        result = tags.get(i);
 
-//                        if(tags.get(i).equals(" ") || tags.get(i) != "no person"){
-//                            result += " ";
+                imageRef = storageReference.child(diyPictureUri.getLastPathSegment());
 
-                        String upload = databaseReference.push().getKey();
-                        databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(userID);
-                        databaseReference.child(tags.get(i)).child(upload).child("diy_name").setValue(name.getText().toString());
-                        databaseReference.child(tags.get(i)).child(upload).child("diy_process").child("materials")
-                                .setValue(itemMaterial);
-                        databaseReference.child(tags.get(i)).child(upload).child("diy_process").child("procedures")
-                                .setValue(itemProcedure);
+                //creating and showing progress dialog
+                progressDialog = new ProgressDialog(CaptureDIY.this);
+                progressDialog.setMax(100);
+                progressDialog.setMessage("Uploading...");
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                progressDialog.show();
+                progressDialog.setCancelable(false);
+
+                //starting upload
+                uploadTask = imageRef.putFile(diyPictureUri);
+                // Observe state change events such as progress, pause, and resume
+                uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        //sets and increments value of progressbar
+                        progressDialog.incrementProgressBy((int) progress);
                     }
-                    Intent intent = new Intent(CaptureDIY.this, MyDiys.class);
-                    startActivity(intent);
-                }
+                });
+                // Register observers to listen for when the download is done or if it fails
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                        Toast.makeText(CaptureDIY.this, "Error in uploading!", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                        if (userID != null) {
+                            String results = " ";
+                            for (int i = 0; i < 5; i++) {
+                                results = tags.get(i);
+                                if (results.equals("no person")) {
+                                    diyTags.setText("");
+                                } else {
+                                    diyTags.setText(results);
+                                }
+                                String upload = databaseReference.push().getKey();
+                                databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(userID);
+                                databaseReference.child(tags.get(i)).child(upload).setValue(new DIYnames(name.getText().toString(),
+                                        taskSnapshot.getDownloadUrl().toString()));
+                                databaseReference.child(tags.get(i)).child(upload).child("diy_process").child("materials")
+                                        .setValue(itemMaterial);
+                                databaseReference.child(tags.get(i)).child(upload).child("diy_process").child("procedures")
+                                        .setValue(itemProcedure);
+
+                            }
+
+                            Intent intent = new Intent(CaptureDIY.this, Bottle_Recommend.class);
+                            startActivity(intent);
+                        }
+
+                        Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                        //showing the uploaded image in ImageView using the download url
+                        //Picasso.with(CaptureDIY.this).load(downloadUrl).into(imgView);
+                    }
+                });
+
+
             }
         });
     }
@@ -246,7 +256,11 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         String results = "Tags: ";
         for(int i = 0; i < 5; i++) {
             results += "\n" + tags.get(i);
+            if(results.equals("no person")){
+                diyTags.setText("");
+            }else{
                 diyTags.setText(results);
+            }
             }
         }
 
@@ -258,7 +272,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             openContextMenu(submitButton);
         }
     }
-
 
 
     @Override
@@ -290,8 +303,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         Toast.makeText(CaptureDIY.this,"Capture DIY!",Toast.LENGTH_SHORT).show();
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == MainActivity.RESULT_OK){
-//                    diyPictureUri = data.getData();
-//                    imgView.setImageURI(diyPictureUri);
+
+                diyPictureUri = data.getData();
+                imgView.setImageURI(diyPictureUri);
                 Bitmap bmp = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
 

@@ -13,21 +13,22 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.List;
+import java.util.ArrayList;
 
+import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.R;
 
 /**
  * Created by cicctuser on 7/31/2017.
  */
 
-public class RecommendDIYAdapter extends ArrayAdapter<DIYrecommend> {
+public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
 
     private Activity context;
     private int resource;
-    private List<DIYrecommend> listDIY;
+    private ArrayList<DIYnames> listDIY;
 
-    public RecommendDIYAdapter(@NonNull Activity context, @LayoutRes int resource, @NonNull List<DIYrecommend> objects) {
+    public RecommendDIYAdapter(@NonNull Activity context, @LayoutRes int resource, @NonNull ArrayList<DIYnames> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -43,10 +44,10 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYrecommend> {
         TextView tvName = (TextView) v.findViewById(R.id.get_diyName);
         ImageView img = (ImageView) v.findViewById(R.id.diy_item_icon);
 
-         tvName.setText(listDIY.get(position).getDiyName());
+        tvName.setText(listDIY.get(position).getDiyName());
 
         //tvName.setText("DIY Name: "+listDIY.get(position).getDiyName());
-        Glide.with(context).load(listDIY.get(position).getDiyImageUrl()).into(img);
+        Glide.with(context).load(listDIY.get(position).getDiyUrl()).into(img);
 
         return v;
     }

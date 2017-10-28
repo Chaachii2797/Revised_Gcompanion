@@ -25,7 +25,8 @@ import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.DIYDataActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
-import cabiso.daphny.com.g_companion.ProductInfo;
+import cabiso.daphny.com.g_companion.Model.CommunityItem;
+import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.R;
 
 /**
@@ -34,8 +35,8 @@ import cabiso.daphny.com.g_companion.R;
 
 public class Bottle_Recommend extends AppCompatActivity {
 
-    private ArrayList<DIYrecommend> diyList = new ArrayList<>();
-    private ArrayList<ProductInfo> infoList = new ArrayList<>();
+    private ArrayList<DIYnames> diyList = new ArrayList<>();
+    private ArrayList<CommunityItem> infoList = new ArrayList<>();
     private ListView lv;
     private ImageView loadview;
     private RecommendDIYAdapter adapter;
@@ -47,7 +48,8 @@ public class Bottle_Recommend extends AppCompatActivity {
     private FirebaseDatabase database;
     private String userID;
     private FirebaseUser mFirebaseUser;
-
+    //ArrayList<CommunityItem> itemMaterial;
+    ArrayList<CommunityItem> itemProcedure;
     int count=0;
 
     public Bottle_Recommend() {
@@ -69,19 +71,28 @@ public class Bottle_Recommend extends AppCompatActivity {
         progressDialog.setMessage("Please Wait loading DIYs.....");
         progressDialog.show();
 
-        DatabaseReference myRef = database.getReference("DIYs_By_Users");
-        myRef.child("bottle").addChildEventListener(new ChildEventListener()  {
+        final ArrayList<CommunityItem> infoList = new ArrayList<CommunityItem>();
+
+
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags").child(userID);
+        myRef.child("people").addChildEventListener(new ChildEventListener()  {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    if (snapshot.hasChildren()){
+                    if (snapshot.hasChildren()) {
 //
 //                        Collections.sort(diyList);
 //                        Collections.reverse(diyList);
 
                         progressDialog.dismiss();
-                        DIYrecommend img = snapshot.getValue(DIYrecommend.class);
+
+                        Toast.makeText(Bottle_Recommend.this,"HEY!",Toast.LENGTH_SHORT).show();
+
+                        DIYnames img = dataSnapshot.getValue(DIYnames.class);
                         diyList.add(img);
+
+                        CommunityItem mp = dataSnapshot.getValue(CommunityItem.class);
+                        infoList.add(mp);
 
                         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
                         lv.setAdapter(adapter);
@@ -89,25 +100,44 @@ public class Bottle_Recommend extends AppCompatActivity {
 //                        if(snapshot.getChildrenCount() == diyList.size()){
 //                            for(int i=0; i<diyList.size();i++){
 //                                Log.e("get "," "+diyList.get(i).getSold_items());
-//                            }
+//                            }f
 //                        }
 
+
+                        registerForContextMenu(lv);
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                  Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
-                                Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName() +
-                                        diyList.get(position).diymaterial + diyList.get(position).diyprocedure +
-                                        diyList.get(position).diyImageUrl, Toast.LENGTH_SHORT).show();
-                                DIYrecommend selectedItem = adapter.getItem(position);
+                                Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName(), Toast.LENGTH_SHORT).show();
+                                DIYnames selectedItem = adapter.getItem(position);
+
+
+
                                 //To-DO get you data from the ItemDetails Getter
                                 // selectedItem.getImage() or selectedItem.getName() .. etc
                                 // the  send the data using intent when opening another activity
                                 Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
-                                //  intent.putExtra("image",selectedItem.getDiyImageUrl().toString());
-                                // intent.putExtra("name",selectedItem.getDiyName());
-                                intent.putExtra("procedures", selectedItem.getDiyprocedure());
-                                intent.putExtra("materials", selectedItem.getDiymaterial());
+                                String items = infoList.get(position).getVal();
+
+                                CommunityItem mat = (CommunityItem) parent.getItemAtPosition(position);
+
+
+                                //intent.putExtra("CATEGORY", mat);
+                                Bundle b = new Bundle();
+
+                                b.putString("Area", items);
+                                intent.putExtras(b);
+
+
+
+                                adapter.notifyDataSetChanged();
+                                Toast toast = Toast.makeText(Bottle_Recommend.this, items, Toast.LENGTH_SHORT);
+                                toast.show();
+                                intent.putExtra("image",selectedItem.getDiyUrl().toString());
+                                intent.putExtra("name",selectedItem.getDiyName());
+                                intent.putExtra("procedures", infoList.get(position));
+                               // intent.putExtra("materials", selectedItem.getDiymaterial());
+
 
                                 view.buildDrawingCache();
                                 Bitmap image = view.getDrawingCache();
@@ -149,7 +179,7 @@ public class Bottle_Recommend extends AppCompatActivity {
     }
 
     public void sort_to_recommend(){
-        DatabaseReference myRef = database.getReference("Sold_Items");
+        DatabaseReference myRef = database.getReference("dy_by_tags");
 
     }
 

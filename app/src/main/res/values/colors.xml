@@ -45,6 +45,9 @@
     <color name="contentTextColor">#55000000</color>
 
     <color name="backgroundColor">@android:color/white</color>
+    <color name="for_heart">#ff3a3d</color>
+    <color name="for_star">#55000000</color>
+    <color name="star_yello">#efd63d</color>
 
 
 </resources>

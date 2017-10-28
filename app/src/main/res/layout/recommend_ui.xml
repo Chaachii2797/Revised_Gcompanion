@@ -42,4 +42,36 @@
         android:layout_alignStart="@+id/get_diyName"
         android:layout_marginTop="11dp"
         android:text="DIY Name" />
+
+    <ImageButton
+        android:id="@+id/staru"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@null"
+        android:src="@android:drawable/btn_star" />
+
+    <ImageButton
+        android:id="@+id/heartu"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/staru"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignStart="@+id/staru"
+        android:layout_below="@+id/get_diyName"
+        android:background="@null"
+        android:src="@drawable/vector_heart" />
+
+    <TextView
+        android:id="@+id/tv_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/heartu"
+        android:layout_toStartOf="@+id/heartu"
+        android:text="0" />
 </RelativeLayout>

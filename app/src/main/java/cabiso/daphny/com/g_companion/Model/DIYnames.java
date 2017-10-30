@@ -4,7 +4,7 @@ package cabiso.daphny.com.g_companion.Model;
  * Created by Lenovo on 10/23/2017.
  */
 
-public class DIYnames extends CommunityItem{
+public class DIYnames {
 
     public String diyName;
     public String diyUrl;

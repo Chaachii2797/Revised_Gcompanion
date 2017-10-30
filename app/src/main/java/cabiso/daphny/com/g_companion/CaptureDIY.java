@@ -261,8 +261,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             }else{
                 diyTags.setText(results);
             }
-            }
         }
+    }
 
 
     @Override

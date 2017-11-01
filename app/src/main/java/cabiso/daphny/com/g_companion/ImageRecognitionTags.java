@@ -18,12 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.Cup_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.Glass_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.Paper_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.Rubber_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.Utensils_Recommend;
-import cabiso.daphny.com.g_companion.Recommend.Wood_Recommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiResponse;
@@ -73,7 +67,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
                 String results = " ";
                 for(int i = 0; i < 5; i++) {
-                    results += " " + tags.get(i);
+                    results += tags.get(i);
                     tvTag.setText(results);
 //                    Bundle b=new Bundle();
 //                    String result_tag = null;
@@ -82,65 +76,9 @@ public class ImageRecognitionTags extends AppCompatActivity{
 //                    intent.putExtras(b);
 //                    startActivity(intent);
                     Intent intent = new Intent(ImageRecognitionTags.this,Bottle_Recommend.class);
-                    intent.putExtra("result_tag",results);
+                    intent.putExtra("result_tag", results);
                     startActivity(intent);
 
-//
-//                    if(tags.get(i).equals("bottle") || tags.get(i).equals("container")
-//                            || tags.get(i).equals("plastic")|| tags.get(i).equals("gallon")|| tags.get(i).equals("jug")) {
-//                        //Toast.makeText(getApplication(), "Result:" + results, Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(ImageRecognitionTags.this, Bottle_Recommend.class);
-//                        Toast.makeText(ImageRecognitionTags.this, "bottle", Toast.LENGTH_SHORT).show();
-//                        startActivity(intent);
-//
-//                    }else if(tags.get(i).equals("paper") || tags.get(i).equals("document") || tags.get(i).equals("newspaper")
-//                            || tags.get(i).equals("sheet")|| tags.get(i).equals("form")|| tags.get(i).equals("magazines")
-//                            || tags.get(i).equals("notebook") || tags.get(i).equals("book") || tags.get(i).equals("book bindings")
-//                            || tags.get(i).equals("page")) {
-//                        //Toast.makeText(getApplication(), "Result:" + results, Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(ImageRecognitionTags.this, Paper_Recommend.class);
-//                        Toast.makeText(ImageRecognitionTags.this, "paper", Toast.LENGTH_SHORT).show();
-//                        startActivity(intent);
-//
-//                    }else if(tags.get(i).equals("wood")) {
-//                        //Toast.makeText(getApplication(), "Result:" + results, Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(ImageRecognitionTags.this, Wood_Recommend.class);
-//                        Toast.makeText(ImageRecognitionTags.this, "wood", Toast.LENGTH_SHORT).show();
-//                        startActivity(intent);
-//
-//                    }else if(tags.get(i).equals("cup") || tags.get(i).equals("coffee")) {
-//                        //Toast.makeText(getApplication(), "Result:" + results, Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(ImageRecognitionTags.this, Cup_Recommend.class);
-//                        Toast.makeText(ImageRecognitionTags.this, "cup", Toast.LENGTH_SHORT).show();
-//                        startActivity(intent);
-//
-//                    }else if(tags.get(i).equals("fork") || tags.get(i).equals("spoon") || tags.get(i).equals("plate")
-//                            || tags.get(i).equals("equipment") || tags.get(i).equals("cooking") || tags.get(i).equals("kitchenware")
-//                            || tags.get(i).equals("pan")) {
-//                        //Toast.makeText(getApplication(), "Result:" + results, Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(ImageRecognitionTags.this, Utensils_Recommend.class);
-//                        Toast.makeText(ImageRecognitionTags.this, "utensils", Toast.LENGTH_SHORT).show();
-//                        startActivity(intent);
-//
-//                    }else if(tags.get(i).equals("glass") || tags.get(i).equals("drink") || tags.get(i).equals("wine")) {
-//                        //Toast.makeText(getApplication(), "Result:" + results, Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(ImageRecognitionTags.this, Glass_Recommend.class);
-//                        Toast.makeText(ImageRecognitionTags.this, "glass", Toast.LENGTH_SHORT).show();
-//                        startActivity(intent);
-//
-//                    }else if(results.equals("tire")){
-//                        clearFields();
-//                        Intent intent = new Intent(ImageRecognitionTags.this, Rubber_Recommend.class);
-//                        Toast.makeText(ImageRecognitionTags.this,"tire",Toast.LENGTH_SHORT).show();
-//                        startActivity(intent);
-//                    }else if(tags.get(i).equals("no person") || tags.get(i).equals("abstract")){
-//                        Toast.makeText(getApplication(), "No available DIY for this.", Toast.LENGTH_SHORT).show();
-//
-//                    }else{
-//                        tvTag.setText(results);
-//                        Toast.makeText(getApplication(), "No available DIY for this.", Toast.LENGTH_SHORT).show();
-//
-//                    }
                 }
 
             }

@@ -76,8 +76,8 @@ public class Bottle_Recommend extends AppCompatActivity {
 
         String intent = getIntent().getStringExtra("result_tag");
         Toast.makeText(this," "+intent,Toast.LENGTH_LONG).show();
-        for(int i=0;i<intent.length();i++){
-            Toast.makeText(this," "+intent,Toast.LENGTH_LONG).show();
+        for(int i=0;i < intent.length() ;i++){
+            Toast.makeText(this, " " +intent, Toast.LENGTH_LONG).show();
         }
 
         final String data = getIntent().getStringExtra("result_tag");
@@ -94,7 +94,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                                 progressDialog.dismiss();
                                 DIYnames diYnames = snapshot.getValue(DIYnames.class);
                                 diyList.add(diYnames);
-                                Toast.makeText(Bottle_Recommend.this, "counts "+diyList.size(),Toast.LENGTH_LONG).show();
+                                Toast.makeText(Bottle_Recommend.this, "counts "+ diyList.size(),Toast.LENGTH_LONG).show();
                             }
                         }
                         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);

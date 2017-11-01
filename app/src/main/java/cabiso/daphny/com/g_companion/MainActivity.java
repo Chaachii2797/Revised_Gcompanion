@@ -23,7 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 
@@ -174,7 +173,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(chat);
                 break;
             case R.id.nav_diy:
-                Intent diy = new Intent(MainActivity.this,Bottle_Recommend.class);
+                Intent diy = new Intent(MainActivity.this, MyDiys.class);
                 startActivity(diy);
                 break;
             case R.id.nav_item:

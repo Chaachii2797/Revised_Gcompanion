@@ -4,6 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import static cabiso.daphny.com.g_companion.MarketPlaceFragment.*;
+
 /**
  * Created by Lenovo on 10/19/2017.
  */
@@ -24,8 +26,9 @@ class ViewPagerAdapter extends FragmentStatePagerAdapter{
                 return MarketPlaceFragment.newInstance();
             case 1:
                 return CommunityFragment.newInstance();
-            }
-        return null;
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -37,7 +40,7 @@ class ViewPagerAdapter extends FragmentStatePagerAdapter{
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return MarketPlaceFragment.TITLE;
+                return TITLE;
 
             case 1:
                 return CommunityFragment.TITLE;

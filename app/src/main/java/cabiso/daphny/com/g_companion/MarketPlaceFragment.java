@@ -16,7 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,7 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
@@ -74,7 +75,7 @@ public class MarketPlaceFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_market_page, container, false);
 
         Context context = view.getContext();
-        recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.marketList);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         fab1 = (FloatingActionButton) view.findViewById(R.id.market_fab);
@@ -94,6 +95,8 @@ public class MarketPlaceFragment extends Fragment{
     @Override
     public void onStart(){
         super.onStart();
+        Toast.makeText(getActivity(), "yow! yow!", Toast.LENGTH_SHORT).show();
+
         FirebaseRecyclerAdapter<ProductInfo, ItemViewHolder> adapter =
                 new FirebaseRecyclerAdapter<ProductInfo, ItemViewHolder>(ProductInfo.class,
                 R.layout.recycler_item,ItemViewHolder.class, marketplaceReference ) {
@@ -113,7 +116,7 @@ public class MarketPlaceFragment extends Fragment{
                             // Got the download URL for 'users/me/profile.png'
                             // Pass it to Picasso to download, show in ImageView and caching
                             Log.d("Product Picture URI is", uri.toString());
-                            Picasso.with(getContext()).load(uri).resize(75, 75).into(viewHolder.mProductImageView);
+                            Glide.with(getContext()).load(uri).into(viewHolder.mProductImageView);
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -198,16 +201,7 @@ public class MarketPlaceFragment extends Fragment{
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(DatabaseReference ref);
     }

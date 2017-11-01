@@ -8,7 +8,6 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,8 +28,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
-import cabiso.daphny.com.g_companion.Model.CommunityItem;
+import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
 /**
  * Created by Lenovo on 7/31/2017.
@@ -38,10 +37,10 @@ import cabiso.daphny.com.g_companion.Model.CommunityItem;
 
 public class MyDiys extends AppCompatActivity {
 
-    private ArrayList<CommunityItem> diyList = new ArrayList<>();
+    private ArrayList<DIYnames> diyList = new ArrayList<>();
     private ListView lv;
     private ImageView loadview;
-    private CommunityAdapter adapter;
+    private RecommendDIYAdapter adapter;
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
 
@@ -84,7 +83,7 @@ public class MyDiys extends AppCompatActivity {
                 progressDialog.dismiss();
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    CommunityItem img = snapshot.getValue(CommunityItem.class);
+                    DIYnames img = snapshot.getValue(DIYnames.class);
                     diyList.add(img);
                 }
 //                    DatabaseReference myRef = database.getReference("DIYs_By_Users").child("cup").child(userID);
@@ -137,7 +136,7 @@ public class MyDiys extends AppCompatActivity {
         });
 
         //init adapter
-        adapter = new CommunityAdapter(getApplicationContext(),  diyList);
+        adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
 
         //set adapter for listview
         lv.setAdapter(adapter);
@@ -312,7 +311,7 @@ public class MyDiys extends AppCompatActivity {
             case R.id.addToCommunity:
                 int listPosition = info.position;
                 databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child("materials");
-                String name = diyList.get(listPosition).getVal();
+               // String name = diyList.get(listPosition).getVal();
 //                String material = diyList.get(listPosition).getDiymaterial();
 //                String procedure = diyList.get(listPosition).getDiyprocedure();
 //                String imageURL = diyList.get(listPosition).getDiyImageUrl();

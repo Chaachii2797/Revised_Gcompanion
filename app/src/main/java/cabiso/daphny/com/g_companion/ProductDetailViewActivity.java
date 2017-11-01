@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,7 +32,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -235,7 +235,9 @@ public class ProductDetailViewActivity extends AppCompatActivity{
                     @Override
                     public void onSuccess(Uri uri) {
                         Log.d("Image Download URI", uri.toString());
-                        Picasso.with(context).load(uri).resize(350,350).into(productImageView);
+                        //Picasso.with(context).load(uri).resize(350,350).into(productImageView);
+                        Glide.with(context).load(uri).into(productImageView);
+
                     }
                 });
 

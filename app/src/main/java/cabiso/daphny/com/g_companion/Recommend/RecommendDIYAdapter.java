@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.R;
@@ -44,6 +36,8 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
         this.resource = resource;
         listDIY = objects;
     }
+
+
 
     @NonNull
     @Override
@@ -144,5 +138,6 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
 
         return v;
     }
+
 }
 

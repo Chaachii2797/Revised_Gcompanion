@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import clarifai2.api.ClarifaiBuilder;
@@ -28,20 +29,19 @@ import clarifai2.api.ClarifaiClient;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        MarketPlaceFragment.OnListFragmentInteractionListener {
+        MarketPlaceFragment.OnListFragmentInteractionListener, CommunityFragment.OnListFragmentInteractionListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-   // private FloatingActionMenu fam;
-//    private FloatingActionButton fab1, fab2, fab3;
-//    private Animation fab_open, fab_close;
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabaseReference;
+    private FirebaseDatabase mDatabase;
     private String mUsername;
     private String mPhotoUrl;
     private TextView name;
+    private String userID;
 
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
@@ -66,10 +66,6 @@ public class MainActivity extends AppCompatActivity
 
         setViewPager();
 
-//
-//        Fragment fragment = new MarketPlaceFragment();
-//        getSupportFragmentManager().beginTransaction().replace(R.id.theFragmentFrame, fragment).addToBackStack("MarketPlaceFragment").commit();
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -83,71 +79,37 @@ public class MainActivity extends AppCompatActivity
         TextView txtProfileName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.mUser);
         txtProfileName.setText("Daphny Cabiso");
 
-//
-//        fab2 = (FloatingActionButton) findViewById(R.id.fab2);
-//        fab3 = (FloatingActionButton) findViewById(R.id.fab3);
-//        fab1 = (FloatingActionButton) findViewById(R.id.fab1);
-//        fam = (FloatingActionMenu) findViewById(R.id.fab_menu);
-//
-//
-//        fam.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
-//            @Override
-//            public void onMenuToggle(boolean opened) {
-//                if (opened) {
-//                    Toast.makeText(getApplicationContext(), "Manu is opened", Toast.LENGTH_LONG).show();
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "Menu is closed", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        });
-//
-//
-//        fab1.setOnClickListener(onButtonClick());
-//        fab2.setOnClickListener(onButtonClick());
-//        fab3.setOnClickListener(onButtonClick());
-//
-//        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-//        fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
-
     }
 
     private void setViewPager() {
 
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(mViewPagerAdapter);
 
+
+        mViewPager.setAdapter(mViewPagerAdapter);
+        mViewPager.getCurrentItem();
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout = (TabLayout) findViewById(R.id.tab);
         mTabLayout.setupWithViewPager(mViewPager);
+
+        mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mViewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
-
-
-
-//    private View.OnClickListener onButtonClick() {
-//        return new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (view == fab1) {
-//                    Toast.makeText(getApplicationContext(),"Capture a trash for image recognition.",Toast.LENGTH_LONG).show();
-//                    Intent intent = new Intent(MainActivity.this,ImageRecognitionTags.class);
-//                    Snackbar.make(view, "Wait.......", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//                    startActivity(intent);
-//                } else if (view == fab2) {
-//                    Toast.makeText(getApplicationContext(),"Add DIY to the Market Page",Toast.LENGTH_LONG).show();
-//                    Intent intent = new Intent(MainActivity.this,AddProductActivity.class);
-//                    startActivity(intent);
-//                } else {
-//                    Toast.makeText(getApplicationContext(),"Add DIY to the community.",Toast.LENGTH_LONG).show();
-//                    Intent intent = new Intent(MainActivity.this,CaptureDIY.class);
-//                    startActivity(intent);
-//                }
-//                fam.close(true);
-//            }
-//        };
-//    }
-
-
 
 
     @Override
@@ -162,9 +124,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         getMenuInflater().inflate(R.menu.menu_search, menu);
         // Retrieve the SearchView and plug it into SearchManager
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -176,6 +140,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onQueryTextChange(String newText) {
                 // use this method for auto complete search process
+
+
                 return false;
             }
         });
@@ -184,6 +150,10 @@ public class MainActivity extends AppCompatActivity
 
         return super.onCreateOptionsMenu(menu);
     }
+
+
+
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -249,6 +219,13 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentInteraction(DatabaseReference ref) {
         Intent intent = new Intent(this, ProductDetailViewActivity.class);
         intent.putExtra("Product reference", ref.toString());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onListFragmentInteractionListener(DatabaseReference ref) {
+        Intent intent = new Intent(this, DIYDataActivity.class);
+        intent.putExtra("Commmunity reference", ref.toString());
         startActivity(intent);
     }
 

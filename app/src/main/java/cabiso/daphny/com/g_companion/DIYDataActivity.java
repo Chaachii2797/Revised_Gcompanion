@@ -50,7 +50,7 @@ public class DIYDataActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
 
 
-       // diy_name = (TextView) findViewById(R.id.diy_name);
+        diy_name = (TextView) findViewById(R.id.diy_name);
         diy_image =(ImageView) findViewById(R.id.diy_image);
         diy_materials = (TextView) findViewById(R.id.diy_materials);
         diy_procedures = (TextView) findViewById(R.id.diy_procedures);
@@ -61,7 +61,7 @@ public class DIYDataActivity extends AppCompatActivity {
 
         getIntent().getStringExtra("image");
         int imageID =getIntent().getIntExtra("image",0);
-        getIntent().getStringExtra("procedures");
+    //    getIntent().getStringExtra("name");
 //        getIntent().getStringExtra("materials");
 //        getIntent().getStringExtra("procedures");
 
@@ -69,23 +69,23 @@ public class DIYDataActivity extends AppCompatActivity {
 //        diy_procedures.setText(getIntent().getStringExtra("procedures"));
 
         Bundle extras = getIntent().getExtras();
-        byte[] byteArray = extras.getByteArray("image");
-        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        diy_image.setImageBitmap(bmp);
+        if(extras!=null) {
+            String name =extras.getString("name");
+            byte[] byteArray = extras.getByteArray("image");
+            Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            diy_image.setImageBitmap(bmp);
+            diy_name.setText(name);
 
-//        Intent i = new Intent();
-//        String name=i.getStringExtra("CATEGORY");
+        }
 
-        Bundle b = getIntent().getExtras();
 
-        // diy_name.setText(name);
-        diy_materials.setText(b.getCharSequence("Area"));
+
+        //      diy_materials.setText(b.getCharSequence("Area"));
 //        diy_procedures.setText(proceduresList);
 //        diy_image.setImageURI(Uri.parse(imageList));
 
 
-  //      diy_image.setImageResource(imageID);
-
+//
 //        diy_name.setText(getIntent().getStringExtra("name"));
 
     }

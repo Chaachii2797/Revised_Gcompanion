@@ -6,16 +6,13 @@
     android:layout_height="match_parent"
     tools:context="innovatecode.com.tabexample.TabTwoFragment">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/communityList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Community" />
-
-    <ListView
-        android:id="@+id/community_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_marginTop="10dp"
+        tools:context="cabiso.daphny.com.g_companion.CommunityFragment"
+        tools:listitem="@layout/recommend_ui" />
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fab_menu"

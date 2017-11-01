@@ -1,15 +1,16 @@
 package cabiso.daphny.com.g_companion;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -35,17 +36,12 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
-import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiResponse;
@@ -79,6 +75,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 11;
     private List<String> tags = new ArrayList<>();
+
 
     final ClarifaiClient client;
 
@@ -178,7 +175,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         database = FirebaseDatabase.getInstance();
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
 
                 imageRef = storageReference.child(diyPictureUri.getLastPathSegment());
 
@@ -235,16 +232,33 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
                             }
 
-                            Intent intent = new Intent(CaptureDIY.this, Bottle_Recommend.class);
-                            startActivity(intent);
                         }
 
                         Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
+
+                        AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this);
+                        ab.setMessage("Thank you for contributing to the DIY Community!");
+                        ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                Intent in=new Intent(CaptureDIY.this, MainActivity.class);
+                                startActivity(in);
+                            }
+                        });
+                        ab.create().show();
+
+
                         progressDialog.dismiss();
+
+
+
                         //showing the uploaded image in ImageView using the download url
                         //Picasso.with(CaptureDIY.this).load(downloadUrl).into(imgView);
                     }
                 });
+
 
 
             }
@@ -362,14 +376,14 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     }
 
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        imageFileName = "JPEG_"+timeStamp+"_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir );
-        diyPictureUri = Uri.fromFile(image);
-        return image;
-    }
+//    private File createImageFile() throws IOException {
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        imageFileName = "JPEG_"+timeStamp+"_";
+//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//        File image = File.createTempFile(imageFileName, ".jpg", storageDir );
+//        diyPictureUri = Uri.fromFile(image);
+//        return image;
+//    }
 
     @Override
     public void onStart(){
@@ -381,4 +395,5 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         Intent intent = new Intent(CaptureDIY.this, MainActivity.class);
         startActivity(intent);
     }
+
 }

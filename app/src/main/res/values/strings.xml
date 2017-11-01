@@ -26,7 +26,7 @@
     <string name="tab_one">Market Place</string>
     <string name="tab_two">Community</string>
 
-    <string name="srch">Search</string>
+    <string name="search_hint">Search</string>
 
 
     <string-array name="categories">

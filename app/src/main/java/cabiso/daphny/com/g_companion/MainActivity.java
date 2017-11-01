@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(chat);
                 break;
             case R.id.nav_diy:
-                Intent diy = new Intent(MainActivity.this,Bottle_Recommend.class);
+                Intent diy = new Intent(MainActivity.this,MyDiys.class);
                 startActivity(diy);
                 break;
             case R.id.nav_item:

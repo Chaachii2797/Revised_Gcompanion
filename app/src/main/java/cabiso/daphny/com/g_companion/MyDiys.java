@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -76,16 +77,42 @@ public class MyDiys extends AppCompatActivity {
         progressDialog.show();
 
         database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("diy_by_tags").child(userID).child("business");
-        myRef.addValueEventListener(new ValueEventListener() {
+        DatabaseReference myRef = database.getReference("diy_by_tags").child(userID);
+        myRef.child("business").addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                progressDialog.dismiss();
-
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     DIYnames img = snapshot.getValue(DIYnames.class);
                     diyList.add(img);
                 }
+                //init adapter
+                adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
+                //set adapter for listview
+                lv.setAdapter(adapter);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
 //                    DatabaseReference myRef = database.getReference("DIYs_By_Users").child("cup").child(userID);
 //                    myRef.addValueEventListener(new ValueEventListener() {
 //                        @Override
@@ -127,19 +154,8 @@ public class MyDiys extends AppCompatActivity {
 //                                                                diyList.add(img);
 //                                                            }
 //                                                        }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
-
-        //init adapter
-        adapter = new RecommendDIYAdapter(MyDiys.this, R.layout.recommend_ui, diyList);
-
-        //set adapter for listview
-        lv.setAdapter(adapter);
         registerForContextMenu(lv);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

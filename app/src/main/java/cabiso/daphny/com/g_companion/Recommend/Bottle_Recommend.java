@@ -47,12 +47,13 @@ public class Bottle_Recommend extends AppCompatActivity {
     private RecyclerView recyclerView;
 
     //  RecyclerView recyclerView;
-    private DatabaseReference userDatabaseReference;
+    private DatabaseReference databaseReference;
     private FirebaseDatabase database;
     private String userID;
     private FirebaseUser mFirebaseUser;
     //ArrayList<CommunityItem> itemMaterial;
     private List<String> tags = new ArrayList<>();
+
 
     public Bottle_Recommend() {
 
@@ -64,10 +65,14 @@ public class Bottle_Recommend extends AppCompatActivity {
         setContentView(R.layout.activity_recommend_bottle);
         recyclerView = (RecyclerView) findViewById(R.id.list);
 
+        String diyReferenceString = getIntent().getStringExtra("Community reference");
+
+        databaseReference = FirebaseDatabase.getInstance().getReference(diyReferenceString);
+
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
         database = FirebaseDatabase.getInstance();
-        lv = (ListView) findViewById(R.id.lvView);
+        lv = (ListView) findViewById(R.id.recommendLvView);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please Wait loading DIYs.....");
@@ -84,7 +89,7 @@ public class Bottle_Recommend extends AppCompatActivity {
         String [] items = data.split(" ");
         for(final String item : items){
 
-            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags").child(userID);
+            final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags").child(userID);
             myRef.child(item).addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -105,45 +110,44 @@ public class Bottle_Recommend extends AppCompatActivity {
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName(), Toast.LENGTH_SHORT).show();
-                                DIYnames selectedItem = adapter.getItem(position);
+                                    Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName(), Toast.LENGTH_SHORT).show();
+                                    DIYnames selectedItem = adapter.getItem(position);
 
 
-                                //To-DO get you data from the ItemDetails Getter
-                                // selectedItem.getImage() or selectedItem.getName() .. etc
-                                // the  send the data using intent when opening another activity
-                                Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
-                              //  String items = infoList.get(position).getVal();
+                                    //To-DO get you data from the ItemDetails Getter
+                                    // selectedItem.getImage() or selectedItem.getName() .. etc
+                                    // the  send the data using intent when opening another activity
+                                    Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
+                                    //  String items = infoList.get(position).getVal();
 
-                                //adapter.notifyDataSetChanged();
+                                    //adapter.notifyDataSetChanged();
 //                                Toast toast = Toast.makeText(Bottle_Recommend.this, items, Toast.LENGTH_SHORT);
 //                                toast.show();
-                                intent.putExtra("image", selectedItem.getDiyUrl().getBytes());
-                                intent.putExtra("name", selectedItem.getDiyName());
-                                //intent.putExtra("procedures", infoList.get(position));
-                                // intent.putExtra("materials", selectedItem.getDiymaterial());
+                                    intent.putExtra("image", selectedItem.getDiyUrl().getBytes());
+                                    intent.putExtra("name", selectedItem.getDiyName());
+                                    //intent.putExtra("procedures", infoList.get(position));
+                                    // intent.putExtra("materials", selectedItem.getDiymaterial());
 
-                                view.buildDrawingCache();
-                                Bitmap image = view.getDrawingCache();
-                                Bundle extras = new Bundle();
-                                extras.putParcelable("imagebitmap", image);
+                                    view.buildDrawingCache();
+                                    Bitmap image = view.getDrawingCache();
+                                    Bundle extras = new Bundle();
+                                    extras.putParcelable("imagebitmap", image);
 
-                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                                byte[] byteArray = stream.toByteArray();
-                                intent.putExtra("image", byteArray);
-                                startActivity(intent);
+                                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                    byte[] byteArray = stream.toByteArray();
+                                    intent.putExtra("image", byteArray);
+                                    startActivity(intent);
 
-                                Toast.makeText(Bottle_Recommend.this, "counts "+diyList.size(),Toast.LENGTH_LONG).show();
-                                Log.e("counter bes: ",""+diyList.size());
+                                    Toast.makeText(Bottle_Recommend.this, "counts " + diyList.size(), Toast.LENGTH_LONG).show();
+                                    Log.e("counter bes: ", "" + diyList.size());
+
+
                             }
                         });
                     }
 
-
-
                 }
-
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -166,6 +170,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                 }
             });
         }
+
 
 //        String result_tag = null;
 //        Bundle b=this.getIntent().getExtras();
@@ -289,4 +294,5 @@ public class Bottle_Recommend extends AppCompatActivity {
         Intent intent = new Intent(Bottle_Recommend.this, MainActivity.class);
         startActivity(intent);
     }
+
 }

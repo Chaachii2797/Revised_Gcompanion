@@ -106,6 +106,7 @@ public class CommunityFragment extends Fragment{
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
 
+
         fam = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
         fam.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
             @Override
@@ -139,20 +140,20 @@ public class CommunityFragment extends Fragment{
         return view;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        recyclerView = (RecyclerView) view.findViewById(R.id.communityList);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-
-    }
+//    @Override
+//    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//        recyclerView = (RecyclerView) view.findViewById(R.id.communityList);
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+//
+//    }
+//
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//
+//    }
 
 
 
@@ -175,6 +176,7 @@ public class CommunityFragment extends Fragment{
                     protected void populateViewHolder(final ItemViewHolder viewHolder, DIYnames model, final int position) {
                         viewHolder.mNameView.setText(model.diyName);
 
+
                         try{
                             String productPictureURL = model.diyUrl;
                             Log.d("ppURL", productPictureURL);
@@ -186,6 +188,7 @@ public class CommunityFragment extends Fragment{
                                     // Pass it to Picasso to download, show in ImageView and caching
                                     Log.d("Product Picture URI is", uri.toString());
                                     Glide.with(getContext()).load(uri).into(viewHolder.mProductImageView);
+
 
                                     //Picasso.with(getContext()).load(uri).resize(75, 75).into(viewHolder.mProductImageView);
                                 }
@@ -210,6 +213,7 @@ public class CommunityFragment extends Fragment{
                                     // Notify the active callbacks interface (the activity, if the
                                     // fragment is attached to one) that an item has been selected.
                                     mlistener.onListFragmentInteractionListener(getRef(position));
+
                                 }
                             }
                         });
@@ -254,5 +258,6 @@ public class CommunityFragment extends Fragment{
 
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteractionListener(DatabaseReference ref);
+
     }
 }

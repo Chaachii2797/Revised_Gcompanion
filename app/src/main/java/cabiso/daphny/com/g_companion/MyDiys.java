@@ -112,6 +112,7 @@ public class MyDiys extends AppCompatActivity {
 //                        }
 
 
+
                         registerForContextMenu(lv);
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override

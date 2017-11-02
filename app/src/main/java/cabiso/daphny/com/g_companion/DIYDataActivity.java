@@ -47,9 +47,12 @@ public class DIYDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diy_data);
 
+        String diyReferenceString = getIntent().getStringExtra("Community reference");
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child(diyReferenceString);
+
+
         progressDialog = new ProgressDialog(this);
-
-
         diy_name = (TextView) findViewById(R.id.diy_name);
         diy_image =(ImageView) findViewById(R.id.diy_image);
         diy_materials = (TextView) findViewById(R.id.diy_materials);

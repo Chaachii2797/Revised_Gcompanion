@@ -15,6 +15,7 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,8 +24,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -46,6 +49,9 @@ public class MainActivity extends AppCompatActivity
     private ViewPagerAdapter mViewPagerAdapter;
     private TabLayout mTabLayout;
 
+    //private Bottle_Recommend lv;
+
+    private ImageView image;
     // private final ClarifaiClient clarifaiClient = new ClarifaiBuilder("{b7aa33dc206c40a4b9cffc09a2e72a9d}").buildSync();
 
     final ClarifaiClient client = new ClarifaiBuilder("b7aa33dc206c40a4b9cffc09a2e72a9d").buildSync();
@@ -59,6 +65,8 @@ public class MainActivity extends AppCompatActivity
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
+
+        image = (ImageView) findViewById(R.id.diy_item_icon);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -221,9 +229,10 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+
     @Override
     public void onListFragmentInteractionListener(DatabaseReference ref) {
-        Intent intent = new Intent(this, DIYDataActivity.class);
+        Intent intent = new Intent(this, Bottle_Recommend.class);
         intent.putExtra("Commmunity reference", ref.toString());
         startActivity(intent);
     }

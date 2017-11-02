@@ -1,6 +1,7 @@
 package cabiso.daphny.com.g_companion;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -59,13 +60,15 @@ public class CommunityFragment extends Fragment{
     private RecommendDIYAdapter recommendDIYAdapter;
     private Activity context;
     private int resource;
-    private ArrayList<DIYnames> listDIY;
+    private ArrayList<DIYnames> diyList = new ArrayList<>();
+    private RecommendDIYAdapter adapter;
 
 
     public static final String TITLE = " DIY Community";
     private FloatingActionButton fab2, fab3;
     private FloatingActionMenu fam;
     private Animation fab_open, fab_close;
+    private ProgressDialog progressDialog;
 
 
 
@@ -89,7 +92,7 @@ public class CommunityFragment extends Fragment{
         userID = mFirebaseUser.getUid();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        communityReference = databaseReference.child("diy_by_tags").child(userID).child("people");
+        communityReference = databaseReference.child("diy_by_tags").child(userID).child("technology");
 
     }
 

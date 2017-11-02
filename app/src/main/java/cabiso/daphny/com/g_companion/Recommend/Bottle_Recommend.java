@@ -65,9 +65,9 @@ public class Bottle_Recommend extends AppCompatActivity {
         setContentView(R.layout.activity_recommend_bottle);
         recyclerView = (RecyclerView) findViewById(R.id.list);
 
-        String diyReferenceString = getIntent().getStringExtra("Community reference");
-
-        databaseReference = FirebaseDatabase.getInstance().getReference(diyReferenceString);
+//        String diyReferenceString = getIntent().getStringExtra("Community reference");
+//
+//        databaseReference = FirebaseDatabase.getInstance().getReference(diyReferenceString);
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();

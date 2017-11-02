@@ -95,6 +95,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     private CommunityAdapter mAdapter;
     ArrayList<CommunityItem> itemMaterial;
     ArrayList<CommunityItem> itemProcedure;
+    private List<String> diys = new ArrayList<String>();
 
     private ProgressDialog progressDialog;
     UploadTask uploadTask;
@@ -223,39 +224,32 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 }
                                 String upload = databaseReference.push().getKey();
                                 databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(userID);
-                                databaseReference.child(tags.get(i)).child(upload).setValue(new DIYnames(name.getText().toString(),
-                                        taskSnapshot.getDownloadUrl().toString()));
-                                databaseReference.child(tags.get(i)).child(upload).child("diy_process").child("materials")
+                                databaseReference.child(results).child(upload).setValue(new DIYnames(name.getText().toString(),
+                                        taskSnapshot.getDownloadUrl().toString(), results));
+
+                                databaseReference.child(results).child(upload).child("diy_process").child("materials")
                                         .setValue(itemMaterial);
-                                databaseReference.child(tags.get(i)).child(upload).child("diy_process").child("procedures")
+
+                                databaseReference.child(results).child(upload).child("diy_process").child("procedures")
                                         .setValue(itemProcedure);
 
                             }
 
+                            Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
+
+                            AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this);
+                                ab.setMessage("Thank you for contributing to the DIY Community!");
+                                ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent in = new Intent(CaptureDIY.this, MainActivity.class);
+                                        startActivity(in);
+                                    }
+                                });
+
+                            ab.create().show();
                         }
-
-                        Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
-
-                        AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this);
-                        ab.setMessage("Thank you for contributing to the DIY Community!");
-                        ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                Intent in=new Intent(CaptureDIY.this, MainActivity.class);
-                                startActivity(in);
-                            }
-                        });
-                        ab.create().show();
-
-
                         progressDialog.dismiss();
-
-
-
-                        //showing the uploaded image in ImageView using the download url
-                        //Picasso.with(CaptureDIY.this).load(downloadUrl).into(imgView);
                     }
                 });
 

@@ -24,7 +24,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 
@@ -232,8 +231,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteractionListener(DatabaseReference ref) {
-        Intent intent = new Intent(this, Bottle_Recommend.class);
-        intent.putExtra("Commmunity reference", ref.toString());
+        Intent intent = new Intent(this, DIYDataActivity.class);
+        intent.putExtra("result_tag", ref.toString());
         startActivity(intent);
     }
 

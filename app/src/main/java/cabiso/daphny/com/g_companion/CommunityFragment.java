@@ -92,7 +92,7 @@ public class CommunityFragment extends Fragment{
         userID = mFirebaseUser.getUid();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        communityReference = databaseReference.child("diy_by_tags").child(userID).child("technology");
+        communityReference = databaseReference.child("diy_by_tags").child(userID).child("business");
 
     }
 
@@ -143,22 +143,6 @@ public class CommunityFragment extends Fragment{
         return view;
     }
 
-//    @Override
-//    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        recyclerView = (RecyclerView) view.findViewById(R.id.communityList);
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-//
-//    }
-//
-//    @Override
-//    public void setUserVisibleHint(boolean isVisibleToUser) {
-//        super.setUserVisibleHint(isVisibleToUser);
-//
-//    }
-
-
 
     @Override
     public void onResume() {
@@ -191,9 +175,6 @@ public class CommunityFragment extends Fragment{
                                     // Pass it to Picasso to download, show in ImageView and caching
                                     Log.d("Product Picture URI is", uri.toString());
                                     Glide.with(getContext()).load(uri).into(viewHolder.mProductImageView);
-
-
-                                    //Picasso.with(getContext()).load(uri).resize(75, 75).into(viewHolder.mProductImageView);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -207,8 +188,6 @@ public class CommunityFragment extends Fragment{
                         catch(Exception e){
                             Log.d("Exception", "Failed to fetch product Picture");
                         }
-
-
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -216,14 +195,14 @@ public class CommunityFragment extends Fragment{
                                     // Notify the active callbacks interface (the activity, if the
                                     // fragment is attached to one) that an item has been selected.
                                     mlistener.onListFragmentInteractionListener(getRef(position));
-
                                 }
                             }
                         });
                     }
                 };
-        recyclerView.setAdapter(adapter);
 
+
+        recyclerView.setAdapter(adapter);
     }
 
 

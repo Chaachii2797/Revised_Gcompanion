@@ -231,8 +231,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteractionListener(DatabaseReference ref) {
-        Intent intent = new Intent(this, DIYDataActivity.class);
-        intent.putExtra("result_tag", ref.toString());
+        Intent intent = new Intent(this, DIYDetailViewActivity.class);
+        intent.putExtra("Community Ref", ref.toString());
         startActivity(intent);
     }
 

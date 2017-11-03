@@ -86,6 +86,7 @@
         <activity android:name=".Item_Activity" />
         <activity android:name=".Sold_Activity" />
         <activity android:name=".SearchResultsActivity"/>
+        <activity android:name=".DIYDetailViewActivity"/>
 
         <intent-filter>
             <action android:name="android.intent.action.SEARCH" />

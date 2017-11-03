@@ -1,12 +1,9 @@
 package cabiso.daphny.com.g_companion;
 
 import android.app.ProgressDialog;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.text.method.ScrollingMovementMethod;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,46 +37,50 @@ public class DIYDataActivity extends AppCompatActivity {
     private String userID;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diy_data);
 
-        String diyReferenceString = getIntent().getStringExtra("result_tag");
+//        String diyReferenceString = getIntent().getStringExtra("Community Ref");
+//
+//        databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceString);
+//
+//
+//        progressDialog = new ProgressDialog(this);
+//        diy_name = (TextView) findViewById(R.id.diy_name);
+//        diy_image =(ImageView) findViewById(R.id.diy_image);
+//        diy_materials = (TextView) findViewById(R.id.diy_materials);
+//        diy_procedures = (TextView) findViewById(R.id.diy_procedures);
+//
+//        diy_procedures.setMovementMethod(new ScrollingMovementMethod());
+//        diy_materials.setMovementMethod(new ScrollingMovementMethod());
+//
+//
+//        getIntent().getStringExtra("image");
+//        int imageID =getIntent().getIntExtra("image",0);
+//        diy_image.setImageResource(imageID);
+//
+//        diy_name.setText("Daphny Gwapa");
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child(diyReferenceString);
 
 
-        progressDialog = new ProgressDialog(this);
-        diy_name = (TextView) findViewById(R.id.diy_name);
-        diy_image =(ImageView) findViewById(R.id.diy_image);
-        diy_materials = (TextView) findViewById(R.id.diy_materials);
-        diy_procedures = (TextView) findViewById(R.id.diy_procedures);
-
-        diy_procedures.setMovementMethod(new ScrollingMovementMethod());
-        diy_materials.setMovementMethod(new ScrollingMovementMethod());
-
-
-        getIntent().getStringExtra("image");
-        int imageID =getIntent().getIntExtra("image",0);
-    //    getIntent().getStringExtra("name");
+        //    getIntent().getStringExtra("name");
 //        getIntent().getStringExtra("materials");
 //        getIntent().getStringExtra("procedures");
 
 //        diy_materials.setText(getIntent().getStringExtra("materials"));
 //        diy_procedures.setText(getIntent().getStringExtra("procedures"));
 
-        Bundle extras = getIntent().getExtras();
-        if(extras!=null) {
-            String name =extras.getString("name");
-            byte[] byteArray = extras.getByteArray("image");
-            Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-            diy_image.setImageBitmap(bmp);
-            diy_name.setText(name);
-
-        }
+//        Bundle extras = getIntent().getExtras();
+//        if(extras!=null) {
+//            String name =extras.getString("name");
+//            byte[] byteArray = extras.getByteArray("image");
+//            Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+//            diy_image.setImageBitmap(bmp);
+//            diy_name.setText(name);
+//
+//        }
 
 
 
@@ -92,5 +93,6 @@ public class DIYDataActivity extends AppCompatActivity {
 //        diy_name.setText(getIntent().getStringExtra("name"));
 
     }
+
 
 }

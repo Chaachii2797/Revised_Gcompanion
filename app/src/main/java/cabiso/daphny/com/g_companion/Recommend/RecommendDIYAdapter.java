@@ -74,7 +74,7 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
         star.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                count++;
+                count++;
                 if(count==1){
                     final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags").child(userID);
                     reference.addChildEventListener(new ChildEventListener() {

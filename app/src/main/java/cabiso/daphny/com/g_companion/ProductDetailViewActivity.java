@@ -187,14 +187,6 @@ public class ProductDetailViewActivity extends AppCompatActivity{
                         productOwnerNameTextView.setText(userProfileInfo.username);
                         productOwnerAddressTextView.setText(userProfileInfo.address);
                         productOwnerPhoneTextView.setText(userProfileInfo.phone);
-
-//                        productOwnerNameTextView.setOnClickListener(new View.OnClickListener(){
-//                            @Override
-//                            public void onClick(View v) {
-//                                Intent intent = new Intent(ProductDetailViewActivity.this, MyProfileActivity.class);
-//                                startActivity(intent);
-//                            }
-//                        });
                     }
 
                     @Override

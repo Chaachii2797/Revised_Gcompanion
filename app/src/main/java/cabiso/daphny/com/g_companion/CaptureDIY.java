@@ -38,6 +38,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
@@ -109,7 +110,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(userID);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
         mStorage = FirebaseStorage.getInstance();
         storageReference = mStorage.getReferenceFromUrl("gs://g-companion.appspot.com/").child("diy_by_tags");
@@ -144,6 +145,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     itemMaterial.add(md);
                     mAdapter.notifyDataSetChanged();
                     material.setText(" ");
+
+
 
                 }
             }
@@ -223,16 +226,25 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     diyTags.setText(results);
                                 }
                                 String upload = databaseReference.push().getKey();
-                                databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(userID);
-                                databaseReference.child(results).child(upload).setValue(new DIYnames(name.getText().toString(),
-                                        taskSnapshot.getDownloadUrl().toString(), results));
 
-                                databaseReference.child(results).child(upload).child("diy_process").child("materials")
-                                        .setValue(itemMaterial);
+                                Random random = new Random();
+                                String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+                                String productID = String.valueOf(candidateChars.charAt(random.nextInt(candidateChars.length())));
 
-                                databaseReference.child(results).child(upload).child("diy_process").child("procedures")
-                                        .setValue(itemProcedure);
+                                if(name.getText() == name.getText()) {
 
+//                                databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(userID);
+                                    databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
+//                                databaseReference.child(results).child(upload).setValue(new DIYnames(name.getText().toString(),
+                                    databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
+                                            taskSnapshot.getDownloadUrl().toString(), userID, results, productID));
+
+                                    databaseReference.child(upload).child("diy_process").child("materials")
+                                            .setValue(itemMaterial);
+
+                                    databaseReference.child(upload).child("diy_process").child("procedures")
+                                            .setValue(itemProcedure);
+                                }
                             }
 
                             Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
@@ -243,6 +255,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent in = new Intent(CaptureDIY.this, MainActivity.class);
+//                                        in.putExtra("materials", itemMaterial);
+//                                        in.putExtra("procedures", itemProcedure);
                                         startActivity(in);
                                     }
                                 });

@@ -5,7 +5,6 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -31,7 +30,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
@@ -90,7 +88,7 @@ public class MyDiys extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
 
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags").child(userID).child("business");
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -221,18 +219,12 @@ public class MyDiys extends AppCompatActivity {
                                 CommunityItem mat = (CommunityItem) parent.getItemAtPosition(position);
 
 
-                                //intent.putExtra("CATEGORY", mat);
-                                Bundle b = new Bundle();
-
-                                b.putString("Area", items);
-                                intent.putExtras(b);
-
                                 adapter.notifyDataSetChanged();
                                 Toast toast = Toast.makeText(MyDiys.this, items, Toast.LENGTH_SHORT);
                                 toast.show();
                                 intent.putExtra("image", selectedItem.getDiyUrl().toString());
                                 intent.putExtra("name", selectedItem.getDiyName());
-                                intent.putExtra("procedures", infoList.get(position));
+                               // intent.putExtra("procedures", infoList.get(position));
                                 // intent.putExtra("materials", selectedItem.getDiymaterial());
 
 

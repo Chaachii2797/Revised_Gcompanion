@@ -8,17 +8,21 @@ public class DIYnames {
 
     public String diyName;
     public String diyUrl;
-    private String tags;
+    public String user_id;
+    public String tag;
+    public String productID;
 
     public DIYnames(){}
 
 
 
 
-    public DIYnames(String diyName, String diyUrl, String tags){
+    public DIYnames(String diyName, String diyUrl, String user_id, String tag, String productID){
         this.diyName = diyName;
         this.diyUrl = diyUrl;
-        this.tags = tags;
+        this.user_id = user_id;
+        this.tag = tag;
+        this.productID = productID;
     }
 
     public String getDiyName() {
@@ -37,11 +41,27 @@ public class DIYnames {
         this.diyUrl = diyUrl;
     }
 
-    public String getTags() {
-        return tags;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setTags(String tags) {
-        this.tags = tags;
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public String getProductID() {
+        return productID;
+    }
+
+    public void setProductID(String productID) {
+        this.productID = productID;
     }
 }

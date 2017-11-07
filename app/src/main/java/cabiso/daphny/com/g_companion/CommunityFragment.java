@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,9 +33,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -163,117 +161,45 @@ public class CommunityFragment extends Fragment{
         super.onStart();
         Toast.makeText(getActivity(), "yow!", Toast.LENGTH_SHORT).show();
 
-        FirebaseRecyclerAdapter<DIYnames, ItemViewHolder> adapter =
+        final FirebaseRecyclerAdapter<DIYnames, ItemViewHolder> adapter =
                 new FirebaseRecyclerAdapter<DIYnames, ItemViewHolder>(DIYnames.class,
                         R.layout.recommend_ui,ItemViewHolder.class, communityReference ) {
-
+                    public int heartCount=0;
+                    public int starCount=0;
 
                     @Override
                     protected void populateViewHolder(final ItemViewHolder viewHolder, final DIYnames model, final int position) {
                         viewHolder.mNameView.setText(model.diyName);
 
-                        viewHolder.mStar.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
+                        final String key = this.getRef(position).getKey();
 
-                               // viewHolder.count++;
-                                //if (viewHolder.count == 1) {
-                                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
-                                    reference.addChildEventListener(new ChildEventListener() {
-                                        @Override
-                                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                            //for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                               // String key = snapshot.getKey();
+                            viewHolder.mStar.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    starCount++;
+                                    viewHolder.mStar.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
 
+                                    if (viewHolder.starResult.put("bookmarks", starCount) != null) {
+                                        reference.child(key).updateChildren(viewHolder.starResult);
 
-                                            viewHolder.mStar.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
-
-                                            String path = "/" + dataSnapshot.getKey();
-                                            HashMap<String, Object> result = new HashMap<>();
-                                            result.put("bookmarks", viewHolder.count + " ");
-                                            //viewHolder.count++;
-                                            if(viewHolder.count != 0) {
-                                                viewHolder.count++;
-                                                reference.child(path).updateChildren(result);
-                                            }
-
-                                            Toast.makeText(getContext(), "Star Clicked!", Toast.LENGTH_SHORT).show();
-
-                                            // }
-                                        }
-
-                                        @Override
-                                        public void onChildChanged(DataSnapshot
-                                                                           dataSnapshot, String s) {
-
-                                        }
-
-                                        @Override
-                                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                        }
-
-                                        @Override
-                                        public void onChildMoved(DataSnapshot
-                                                                         dataSnapshot, String s) {
-
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-
-                                        }
-                                    });
-
-//                                }else if(viewHolder.count==2){
-//                                    viewHolder.count++;
-//                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
-//                                reference.addChildEventListener(new ChildEventListener() {
-//                                    @Override
-//                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                                       // for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-//                                           // String key = snapshot.getKey();
-//                                            String path = "/" + dataSnapshot.getKey();
-//                                            HashMap<String, Object> result = new HashMap<>();
-//                                            result.put("bookmarks",viewHolder.count);
-//                                            reference.child(path).updateChildren(result);
-//                                            viewHolder.mStar.setColorFilter(ContextCompat.getColor(getContext(), R.color.for_star));
-//                                            viewHolder.count++;
-//                                      // }
-//                                    }
-//
-//                                    @Override
-//                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//                                    }
-//
-//                                    @Override
-//                                    public void onCancelled(DatabaseError databaseError) {
-//
-//                                        }
-//                                    });
-
+                                    }
                                 }
-                           // }
-                        });
+                            });
 
 
-                        viewHolder.mHeart.setOnClickListener(new View.OnClickListener() {
+                            viewHolder.mHeart.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Toast.makeText(getContext(), "Heart Clicked!", Toast.LENGTH_SHORT).show();
+                                heartCount++;
+                                viewHolder.mHeart.setColorFilter(Color.RED);
+
+                                if (viewHolder.likeResult.put("likes", heartCount) != null) {
+                                    reference.child(key).updateChildren(viewHolder.likeResult);
+                                }
                             }
-                        });
+                            });
 
 
                         try{
@@ -308,8 +234,7 @@ public class CommunityFragment extends Fragment{
                                     // fragment is attached to one) that an item has been selected.
                                     mlistener.onListFragmentInteractionListener(getRef(position));
 
-
-
+                                    Toast.makeText(getActivity(), "You clicked on position!"+ " " + position, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -331,7 +256,8 @@ public class CommunityFragment extends Fragment{
         public ImageButton mStar;
         public ImageButton mHeart;
 
-        private int count=0;
+        HashMap<String, Object> starResult = new HashMap<>();
+        HashMap<String, Object> likeResult = new HashMap<>();
 
         public ItemViewHolder(View view){
             super(view);
@@ -341,6 +267,8 @@ public class CommunityFragment extends Fragment{
 
             mStar = (ImageButton) view.findViewById(R.id.staru);
             mHeart = (ImageButton) view.findViewById(R.id.heartu);
+
+
         }
     }
     @Override

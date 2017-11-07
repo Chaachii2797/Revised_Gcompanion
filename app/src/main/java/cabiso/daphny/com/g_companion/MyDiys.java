@@ -4,8 +4,8 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -31,7 +31,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
@@ -128,49 +127,49 @@ public class MyDiys extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName(), Toast.LENGTH_SHORT).show();
                                 DIYnames selectedItem = adapter.getItem(position);
                                 if(selectedItem.getUser_id()!=null){
-                                    star.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Toast.makeText(getApplicationContext(),"CLIIIIIIIICK!", Toast.LENGTH_SHORT).show();
-                                            if(star.isPressed()){
-                                                count+=1;
-                                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags").child(userID);
-                                                reference.addChildEventListener(new ChildEventListener() {
-                                                    @Override
-                                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                                        for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-                                                            String key = snapshot.getKey();
-                                                            String path = "/" + dataSnapshot.getKey() + "/" + key;
-                                                            HashMap<String, Object> result = new HashMap<>();
-                                                            result.put("bookmarks",count);
-                                                            reference.child(path).updateChildren(result);
-                                                            star.setColorFilter(Color.YELLOW);
-                                                        }
-                                                    }
-
-                                                    @Override
-                                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                                    }
-
-                                                    @Override
-                                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                                    }
-
-                                                    @Override
-                                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(DatabaseError databaseError) {
-
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    });
+//                                    star.setOnClickListener(new View.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(View v) {
+//                                            Toast.makeText(getApplicationContext(),"CLIIIIIIIICK!", Toast.LENGTH_SHORT).show();
+//                                            if(star.isPressed()){
+//                                                count+=1;
+//                                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags").child(userID);
+//                                                reference.addChildEventListener(new ChildEventListener() {
+//                                                    @Override
+//                                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                                                        for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+//                                                            String key = snapshot.getKey();
+//                                                            String path = "/" + dataSnapshot.getKey() + "/" + key;
+//                                                            HashMap<String, Object> result = new HashMap<>();
+//                                                            result.put("bookmarks",count);
+//                                                            reference.child(path).updateChildren(result);
+                                    star.setColorFilter(ContextCompat.getColor(MyDiys.this, R.color.star_yello));
+//                                                        }
+//                                                    }
+//
+//                                                    @Override
+//                                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//                                                    }
+//
+//                                                    @Override
+//                                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//                                                    }
+//
+//                                                    @Override
+//                                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//                                                    }
+//
+//                                                    @Override
+//                                                    public void onCancelled(DatabaseError databaseError) {
+//
+//                                                    }
+//                                                });
+//                                            }
+//                                        }
+//                                    });
 
 
                                 }

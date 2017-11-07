@@ -65,10 +65,6 @@ public class Bottle_Recommend extends AppCompatActivity {
         setContentView(R.layout.activity_recommend_bottle);
         recyclerView = (RecyclerView) findViewById(R.id.list);
 
-//        String diyReferenceString = getIntent().getStringExtra("Community reference");
-//
-//        databaseReference = FirebaseDatabase.getInstance().getReference(diyReferenceString);
-
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
         database = FirebaseDatabase.getInstance();
@@ -96,7 +92,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                         if (snapshot.hasChildren()) {
                             DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
                             if (item != null) {
-                                Toast.makeText(Bottle_Recommend.this, "item " + item + "\n" + "tagdb" + diYnames.getTag(), Toast.LENGTH_SHORT).show();
+                            //    Toast.makeText(Bottle_Recommend.this, "item " + item + "\n" + "tagdb" + diYnames.getTag(), Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                                 if (item.equals(diYnames.getTag())) {
 //                                    for (int i = 0; i < diyList.size(); i++) {

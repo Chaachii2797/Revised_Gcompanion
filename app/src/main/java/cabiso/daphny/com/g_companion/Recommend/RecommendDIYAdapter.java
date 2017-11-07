@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,9 +40,18 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
     private int resource;
     private ArrayList<DIYnames> listDIY;
     private int count=0;
+    private ListView lv;
+
+    public int heartCount=0;
+    public int starCount=0;
+
 
     private FirebaseUser mFirebaseUser;
     private String userID;
+
+    HashMap<String, Object> starResult = new HashMap<>();
+    HashMap<String, Object> likeResult = new HashMap<>();
+
 
     public RecommendDIYAdapter(@NonNull Activity context, @LayoutRes int resource, @NonNull ArrayList<DIYnames> objects) {
         super(context, resource, objects);
@@ -50,10 +61,12 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
     }
 
 
+
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable final View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
+
 
         View v = inflater.inflate(resource, null);
         TextView tvName = (TextView) v.findViewById(R.id.get_diyName);
@@ -76,21 +89,29 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
         star.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                count++;
-                if(count==1){
+                Toast.makeText(getContext(), "Star is clicked!" + position, Toast.LENGTH_SHORT).show();
+
                     final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
                     reference.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-                                String key = snapshot.getKey();
-                                String path = "/" + dataSnapshot.getKey() + "/" + key;
-                                HashMap<String, Object> result = new HashMap<>();
-                                result.put("bookmarks",count);
-                                reference.child(path).updateChildren(result);
-                                star.setColorFilter(ContextCompat.getColor(context, R.color.star_yello));
-                                count++;
-                            }
+
+
+                            starCount++;
+                            String key = dataSnapshot.getKey();
+                            String index = key.toString();
+
+
+
+                            star.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
+
+                            String path = "/" + key;
+                            starResult.put("bookmarks", starCount);
+                            reference.child(path).updateChildren(starResult);
+//                            if (starResult.put("bookmarks", starCount) != null) {
+//                                reference.child(key).updateChildren(starResult);
+//
+////                            }
                         }
 
                         @Override
@@ -113,46 +134,20 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
 
                         }
                     });
-                }else if(count==2){
-                    count=0;
-                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
-                    reference.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-                                String key = snapshot.getKey();
-                                String path = "/" + dataSnapshot.getKey() + "/" + key;
-                                HashMap<String, Object> result = new HashMap<>();
-                                result.put("bookmarks",count);
-                                reference.child(path).updateChildren(result);
-                                star.setColorFilter(ContextCompat.getColor(context, R.color.for_star));
-                                count--;
-                            }
-                        }
 
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                }
             }
         });
+
+
+        heart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Heart is clicked!", Toast.LENGTH_SHORT).show();;
+            }
+        });
+
+
 
         return v;
     }

@@ -78,7 +78,6 @@ public class Bottle_Recommend extends AppCompatActivity {
         progressDialog.setMessage("Please Wait loading DIYs.....");
         progressDialog.show();
 
-
         String intent = getIntent().getStringExtra("result_tag");
 //        Toast.makeText(this," "+intent,Toast.LENGTH_LONG).show();
         for(int i=0;i < intent.length() ;i++){
@@ -95,9 +94,9 @@ public class Bottle_Recommend extends AppCompatActivity {
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     for(DataSnapshot snapshot:dataSnapshot.getChildren()){
                         if(snapshot.hasChildren()){
-                            if(item!=null){
+                            for(int i=0;i<item.length();i++){
                                 progressDialog.dismiss();
-                                DIYnames diYnames = snapshot.getValue(DIYnames.class);
+                                DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
                                 if(item.equals(diYnames.getTag())){
                                     diyList.add(diYnames);
                                     Toast.makeText(Bottle_Recommend.this, "counts "+ diyList.size(),Toast.LENGTH_SHORT).show();
@@ -106,7 +105,6 @@ public class Bottle_Recommend extends AppCompatActivity {
                         }
                         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
                         lv.setAdapter(adapter);
-
 
                         registerForContextMenu(lv);
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

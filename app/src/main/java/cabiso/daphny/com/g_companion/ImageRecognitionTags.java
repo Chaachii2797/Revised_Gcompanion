@@ -76,8 +76,9 @@ public class ImageRecognitionTags extends AppCompatActivity{
 //                    intent.putExtras(b);
 //                    startActivity(intent);
                     Intent intent = new Intent(ImageRecognitionTags.this,Bottle_Recommend.class);
-                    intent.putExtra("result_tag", results);
+                    intent.putExtra("result_tag", tags.get(i));
                     startActivity(intent);
+//                    Toast.makeText(ImageRecognitionTags.this, " " +results, Toast.LENGTH_SHORT).show();
 
                 }
 

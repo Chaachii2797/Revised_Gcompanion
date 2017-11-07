@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
@@ -119,97 +121,59 @@ public class MyDiys extends AppCompatActivity {
 
 
 
-                        registerForContextMenu(lv);
+//                        registerForContextMenu(lv);
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName(), Toast.LENGTH_SHORT).show();
                                 DIYnames selectedItem = adapter.getItem(position);
-//                                star.setTag(adapter.getItem(position));
-//                                star.setOnClickListener(new View.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(View v) {
-//                                        count++;
-//                                        if(count==1){
-//                                            Toast.makeText(getApplicationContext(), "click!! 1", Toast.LENGTH_SHORT).show();
-//                                            star.setColorFilter(R.color.star_yello);
-//                                            final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags").child(userID);
-//                                            reference.addChildEventListener(new ChildEventListener() {
-//                                                @Override
-//                                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                                                    for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-//                                                        String key = snapshot.getKey();
-//                                                        String path = "/" + dataSnapshot.getKey() + "/" + key;
-//                                                        HashMap<String, Object> result = new HashMap<>();
-//                                                        result.put("bookmarks",count);
-//                                                        reference.child(path).updateChildren(result);
-////                                                        star.setColorFilter(ContextCompat.getColor(context, R.color.star_yello));
-//                                                        count++;
-//                                                    }
-//                                                }
-//
-//                                                @Override
-//                                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//                                                }
-//
-//                                                @Override
-//                                                public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//                                                }
-//
-//                                                @Override
-//                                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//                                                }
-//
-//                                                @Override
-//                                                public void onCancelled(DatabaseError databaseError) {
-//
-//                                                }
-//                                            });
-//                                        }else if(count==2){
-//                                            count=0;
-//                                            Toast.makeText(getApplicationContext(), "click!! 2", Toast.LENGTH_SHORT).show();
-//                                            star.setColorFilter(R.color.for_star);
-//                                            final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
-//                                            reference.addChildEventListener(new ChildEventListener() {
-//                                                @Override
-//                                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                                                    for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-//                                                        String key = snapshot.getKey();
-//                                                        String path = "/" + dataSnapshot.getKey() + "/" + key;
-//                                                        HashMap<String, Object> result = new HashMap<>();
-//                                                        result.put("bookmarks",count);
-//                                                        reference.child(path).updateChildren(result);
-////                                                        star.setColorFilter(ContextCompat.getColor(context, R.color.for_star));
-//                                                        count--;
-//                                                    }
-//                                                }
-//
-//                                                @Override
-//                                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//                                                }
-//
-//                                                @Override
-//                                                public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//                                                }
-//
-//                                                @Override
-//                                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//                                                }
-//
-//                                                @Override
-//                                                public void onCancelled(DatabaseError databaseError) {
-//
-//                                                }
-//                                            });
-//                                        }
-//                                    }
-//                                });
+                                if(selectedItem.getUser_id()!=null){
+                                    star.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Toast.makeText(getApplicationContext(),"CLIIIIIIIICK!", Toast.LENGTH_SHORT).show();
+                                            if(star.isPressed()){
+                                                count+=1;
+                                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags").child(userID);
+                                                reference.addChildEventListener(new ChildEventListener() {
+                                                    @Override
+                                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                                        for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                                                            String key = snapshot.getKey();
+                                                            String path = "/" + dataSnapshot.getKey() + "/" + key;
+                                                            HashMap<String, Object> result = new HashMap<>();
+                                                            result.put("bookmarks",count);
+                                                            reference.child(path).updateChildren(result);
+                                                            star.setColorFilter(Color.YELLOW);
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+
+
+                                }
                                 //To-DO get you data from the ItemDetails Getter
                                 // selectedItem.getImage() or selectedItem.getName() .. etc
                                 // the  send the data using intent when opening another activity

@@ -51,6 +51,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:background="@null"
+        android:descendantFocusability="blocksDescendants"
         android:src="@android:drawable/btn_star" />
 
     <ImageButton

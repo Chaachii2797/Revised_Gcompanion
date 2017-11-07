@@ -197,7 +197,7 @@ public class CommunityFragment extends Fragment{
                                                 reference.child(path).updateChildren(result);
                                             }
 
-                                            Toast.makeText(getContext(), "Star Clicked!" + viewHolder.count, Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), "Star Clicked!", Toast.LENGTH_SHORT).show();
 
                                             // }
                                         }

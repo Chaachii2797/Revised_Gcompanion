@@ -67,7 +67,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
                 String results = " ";
                 for(int i = 0; i < 5; i++) {
-                    results += tags.get(i);
+                    results += " "+tags.get(i);
                     tvTag.setText(results);
 //                    Bundle b=new Bundle();
 //                    String result_tag = null;
@@ -76,7 +76,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
 //                    intent.putExtras(b);
 //                    startActivity(intent);
                     Intent intent = new Intent(ImageRecognitionTags.this,Bottle_Recommend.class);
-                    intent.putExtra("result_tag", tags.get(i));
+                    intent.putExtra("result_tag", results);
                     startActivity(intent);
 //                    Toast.makeText(ImageRecognitionTags.this, " " +results, Toast.LENGTH_SHORT).show();
 

@@ -164,9 +164,11 @@ public class CommunityFragment extends Fragment{
         final FirebaseRecyclerAdapter<DIYnames, ItemViewHolder> adapter =
                 new FirebaseRecyclerAdapter<DIYnames, ItemViewHolder>(DIYnames.class,
                         R.layout.recommend_ui,ItemViewHolder.class, communityReference ) {
-                    public int heartCount=0;
-                    public int starCount=0;
+                    public int heartCount=0; //pila ka heart * 0.4
+                    public int starCount=0; //pila ka bookmark * 0.6
 
+                    public double totalBmLike = ((starCount * 0.6) + (heartCount * 0.4));// i plus ang total percent sa bookmark ug like
+                    public int totalDIYs = 0; //pila kabuok diys ang under ana nga tag nya i divide daton nas totaBmLike times 100
                     @Override
                     protected void populateViewHolder(final ItemViewHolder viewHolder, final DIYnames model, final int position) {
                         viewHolder.mNameView.setText(model.diyName);
@@ -177,10 +179,13 @@ public class CommunityFragment extends Fragment{
                             viewHolder.mStar.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    Toast.makeText(getContext(), "Bookmark DIY!" + " " + starCount + " " + totalBmLike, Toast.LENGTH_SHORT).show();
                                     starCount++;
+                                    totalBmLike++;
+
                                     viewHolder.mStar.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
 
-                                    if (viewHolder.starResult.put("bookmarks", starCount) != null) {
+                                    if (viewHolder.starResult.put("bookmarks", starCount * 0.6) != null) {
                                         reference.child(key).updateChildren(viewHolder.starResult);
 
                                     }
@@ -191,11 +196,13 @@ public class CommunityFragment extends Fragment{
                             viewHolder.mHeart.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(getContext(), "Heart Clicked!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Liked DIY!" + " " + heartCount + " " + totalBmLike, Toast.LENGTH_SHORT).show();
                                 heartCount++;
+                                totalBmLike++;
+
                                 viewHolder.mHeart.setColorFilter(Color.RED);
 
-                                if (viewHolder.likeResult.put("likes", heartCount) != null) {
+                                if (viewHolder.likeResult.put("likes", heartCount * 0.4) != null) {
                                     reference.child(key).updateChildren(viewHolder.likeResult);
                                 }
                             }
@@ -234,7 +241,7 @@ public class CommunityFragment extends Fragment{
                                     // fragment is attached to one) that an item has been selected.
                                     mlistener.onListFragmentInteractionListener(getRef(position));
 
-                                    Toast.makeText(getActivity(), "You clicked on position!"+ " " + position, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "You clicked on position!" + " " + position, Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });

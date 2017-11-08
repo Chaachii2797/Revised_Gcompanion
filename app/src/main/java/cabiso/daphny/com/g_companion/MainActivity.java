@@ -171,9 +171,9 @@ public class MainActivity extends AppCompatActivity
     public void display(int itemID){
         android.support.v4.app.FragmentTransaction ft;
         switch (itemID){
-            case R.id.nav_admin:
-                Intent admin = new Intent(this,Admin.class);
-                startActivity(admin);
+//            case R.id.nav_admin:
+//                Intent admin = new Intent(this,Admin.class);
+//                startActivity(admin);
             case R.id.nav_profile:
                 Intent intent2=new Intent(this,MyProfileActivity.class);
                 startActivity(intent2);

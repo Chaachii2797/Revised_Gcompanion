@@ -1,5 +1,6 @@
 package cabiso.daphny.com.g_companion.Recommend;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,8 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,9 +27,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
-import cabiso.daphny.com.g_companion.DIYDataActivity;
+import cabiso.daphny.com.g_companion.DIYDetailViewActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
@@ -38,6 +42,9 @@ import cabiso.daphny.com.g_companion.R;
 
 public class Bottle_Recommend extends AppCompatActivity {
 
+    private DatabaseReference databaseReference;
+    private DatabaseReference communityReference;
+
     private ArrayList<DIYnames> diyList = new ArrayList<>();
     private ArrayList<CommunityItem> infoList = new ArrayList<>();
 
@@ -47,13 +54,12 @@ public class Bottle_Recommend extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
 
-    //  RecyclerView recyclerView;
-    private DatabaseReference databaseReference;
     private FirebaseDatabase database;
     private String userID;
     private FirebaseUser mFirebaseUser;
     //ArrayList<CommunityItem> itemMaterial;
     private List<String> tags = new ArrayList<>();
+    private Activity context;
 
 
     public Bottle_Recommend() {
@@ -114,6 +120,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                                 }
                             }
                         }
+
                         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
                         lv.setAdapter(adapter);
 
@@ -128,7 +135,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                                 //To-DO get you data from the ItemDetails Getter
                                 // selectedItem.getImage() or selectedItem.getName() .. etc
                                 // the  send the data using intent when opening another activity
-                                Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
+                                Intent intent = new Intent(Bottle_Recommend.this, DIYDetailViewActivity.class);
                                 //  String items = infoList.get(position).getVal();
 
                                 //adapter.notifyDataSetChanged();
@@ -152,7 +159,6 @@ public class Bottle_Recommend extends AppCompatActivity {
 
                                 Toast.makeText(Bottle_Recommend.this, "counts " + diyList.size(), Toast.LENGTH_LONG).show();
                                 Log.e("counter bes: ", "" + diyList.size());
-
 
                             }
                         });
@@ -180,6 +186,7 @@ public class Bottle_Recommend extends AppCompatActivity {
 
                 }
             });
+
 //        }
     }
 
@@ -296,6 +303,32 @@ public class Bottle_Recommend extends AppCompatActivity {
 //        /////laaaaaaaaaaaaaaaaaast///
     }
 
+
+    public static class RecommendViewHolder extends RecyclerView.ViewHolder{
+
+        public final View mView;
+        public final TextView mNameView;
+        public final ImageView mProductImageView;
+
+        public ImageButton mStar;
+        public ImageButton mHeart;
+
+        HashMap<String, Object> starResult = new HashMap<>();
+        HashMap<String, Object> likeResult = new HashMap<>();
+
+        public RecommendViewHolder(View view){
+            super(view);
+            mView = view;
+            mNameView = (TextView) view.findViewById(R.id.get_diyName);
+            mProductImageView = (ImageView) view.findViewById(R.id.diy_item_icon);
+
+            mStar = (ImageButton) view.findViewById(R.id.staru);
+            mHeart = (ImageButton) view.findViewById(R.id.heartu);
+
+
+        }
+    }
+
     public void sort_to_recommend(){
         DatabaseReference myRef = database.getReference("dy_by_tags");
 
@@ -304,6 +337,13 @@ public class Bottle_Recommend extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(Bottle_Recommend.this, MainActivity.class);
+        startActivity(intent);
+    }
+
+
+    public void onListFragmentInteractionListener(DatabaseReference ref) {
+        Intent intent = new Intent(this, DIYDetailViewActivity.class);
+        intent.putExtra("Community Ref", ref.toString());
         startActivity(intent);
     }
 

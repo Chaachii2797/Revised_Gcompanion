@@ -66,7 +66,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
         diyBtn = (Button)findViewById(R.id.btnDIY);
         imageView = (ImageView)findViewById(R.id.imgPhotoSaver);
         tvTag = (TextView) findViewById(R.id.tvTag);
-        tv_category = (TextView) findViewById(R.id.tvCategory);
+        //tv_category = (TextView) findViewById(R.id.tvCategory);
 
         getWordBank();
         diyBtn.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +143,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
     }
 
     public void printTags() {
-        String results = "First tag: ";
+        String results = "Tags: ";
 
 //        if(!tags.get(0).equals("no person")){
 //            tv_category.setText(tags.get(0));
@@ -151,7 +151,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
 //            tv_category.setText(tags.get(1));
 //        }
 
-        for(int i = 1; i < 6; i++) {
+        for(int i = 0; i < 5; i++) {
 
             for(int c = 0; c < validWords.size(); c++){
                 if(tags.get(i).contains(validWords.get(c))){
@@ -163,19 +163,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
             }
             Log.e("tags", ""+results);
             Log.d("value",extras.get(i));
-//            if (tags.get(i).equals("no person") || tags.get(i).equals("abstract") || tags.get(i).equals("indoors")){
-//                tvTag.setText("Try Again!");
-//                Toast.makeText(getApplication(), "Capture the best angle. Try Again!", Toast.LENGTH_SHORT).show();
-//            }else if(tags.get(i).equals("abstract") || tags.get(i).equals("document") || tags.get(i).equals("form") ||
-//                    tags.get(i).equals("sheet") || tags.get(i).equals("page") || tags.get(i).equals("bookbindings")){
-//                tvTag.setText("paper");
-//            }else if(tags.get(i).equals("coffee") || tags.get(i).equals("milk")){
-//                tvTag.setText("cup");
-//            }else if(tags.get(i).equals("drink") || tags.get(i).equals("wine")) {
-//                tvTag.setText("glass");
-//            }else{
-//
-//            }
+
         }
     }
 

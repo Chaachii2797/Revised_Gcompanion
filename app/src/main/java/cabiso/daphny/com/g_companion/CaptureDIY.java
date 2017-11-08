@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -28,6 +29,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -76,7 +80,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 11;
     private List<String> tags = new ArrayList<>();
-
+    private List<String> extras = new ArrayList<>();
+    private List<String> validWords = new ArrayList<>();
 
     final ClarifaiClient client;
 
@@ -132,6 +137,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
         materialsList.setAdapter(mAdapter);
         proceduresList.setAdapter(pAdapter);
+
+        getWordBank();
 
 
         btnAddMaterial.setOnClickListener(new View.OnClickListener() {
@@ -218,33 +225,42 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         Float float_this = null;
                         if (userID != null) {
                             String results = " ";
-                            for (int i = 0; i < 5; i++) {
+//                            for(int i = 0; i < 5; i++) {
+//                                for(int c = 0; c < validWords.size(); c++) {
+//                                    if (tags.get(i).contains(validWords.get(c))) {
+//                                        results = tags.get(i);
+//                                        diyTags.setText(results);
+//                                    } else {
+//                                        //invalid words
+//                                    }
+//                                }
+                            for (int i = 0; i < 10; i++) {
                                 results = tags.get(i);
                                 if (results.equals("no person")) {
                                     diyTags.setText("");
                                 } else {
                                     diyTags.setText(results);
                                 }
-                                String upload = databaseReference.push().getKey();
+                                    String upload = databaseReference.push().getKey();
 
-                                Random random = new Random();
-                                String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-                                String productID = String.valueOf(candidateChars.charAt(random.nextInt(candidateChars.length())));
+                                    Random random = new Random();
+                                    String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+                                    String productID = String.valueOf(candidateChars.charAt(random.nextInt(candidateChars.length())));
 
-                                if(name.getText() == name.getText()) {
+                                    // if(name.getText() == name.getText()) {
 
-//                                databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(userID);
                                     databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
-//                                databaseReference.child(results).child(upload).setValue(new DIYnames(name.getText().toString(),
+
                                     databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, results, productID,float_this, float_this));
+                                            taskSnapshot.getDownloadUrl().toString(), userID, results, productID, float_this, float_this));
 
                                     databaseReference.child(upload).child("diy_process").child("materials")
                                             .setValue(itemMaterial);
 
                                     databaseReference.child(upload).child("diy_process").child("procedures")
                                             .setValue(itemProcedure);
-                                }
+                                    // }
+
                             }
 
                             Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
@@ -276,13 +292,18 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     public void printTags() {
         String results = "Tags: ";
-        for(int i = 0; i < 5; i++) {
-            results += "\n" + tags.get(i);
-            if(results.equals("no person")){
-                diyTags.setText("");
-            }else{
-                diyTags.setText(results);
+        for(int i = 0; i < 10; i++) {
+
+            for(int c = 0; c < validWords.size(); c++){
+                if(tags.get(i).contains(validWords.get(c))){
+                    results += "\n" + tags.get(i);
+                    diyTags.setText(results);
+                }else{
+                    //invalid words
+                }
             }
+            Log.e("tags", ""+results);
+            Log.d("value",extras.get(i));
         }
     }
 
@@ -316,6 +337,37 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         tags.clear();
         diyTags.setText("");
         ((ImageView)findViewById(R.id.add_product_image_plus_icon)).setImageResource(android.R.color.transparent);
+    }
+
+    public void getWordBank(){
+        final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("word_bank");
+        myRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                validWords.add(dataSnapshot.getValue().toString());
+                Log.d("fsdfs", dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -368,6 +420,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         final List<Concept> predictedTags = predictions.get(0).data();
                         for(int i = 0; i < predictedTags.size(); i++) {
                             tags.add(predictedTags.get(i).name());
+                            extras.add(String.valueOf(predictedTags.get(i).value()));
+
                         }
                         printTags();
                     }

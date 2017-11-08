@@ -63,9 +63,10 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
 
 
     @NonNull
+
     @Override
-    public View getView(final int position, @Nullable final View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = context.getLayoutInflater();
+    public View getView(final int position, @Nullable final View convertView, @NonNull final ViewGroup parent) {
+        final LayoutInflater inflater = context.getLayoutInflater();
 
 
         View v = inflater.inflate(resource, null);
@@ -80,6 +81,9 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
         star.setTag(listDIY.get(position));
         heart.setTag(listDIY.get(position));
 
+        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
+
+
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
 
@@ -89,29 +93,20 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
         star.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Star is clicked!" + position, Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(getContext(), "Bookmark DIY!", Toast.LENGTH_SHORT).show();
+                if (star.isPressed()) {
+                    count += 1;
                     final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
                     reference.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                             //   String key = dataSnapshot.getKey();
+                                String path = "/" + dataSnapshot.getKey();
+                                HashMap<String, Object> result = new HashMap<>();
+                                result.put("bookmarks", count);
+                                reference.child(path).updateChildren(result);
+                                star.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
 
-
-                            starCount++;
-                            String key = dataSnapshot.getKey();
-                            String index = key.toString();
-
-
-
-                            star.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
-
-                            String path = "/" + key;
-                            starResult.put("bookmarks", starCount);
-                            reference.child(path).updateChildren(starResult);
-//                            if (starResult.put("bookmarks", starCount) != null) {
-//                                reference.child(key).updateChildren(starResult);
-//
-////                            }
                         }
 
                         @Override
@@ -135,22 +130,19 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
                         }
                     });
 
-
+                }
             }
         });
 
 
         heart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Heart is clicked!", Toast.LENGTH_SHORT).show();;
-            }
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getContext(), "Liked DIY!", Toast.LENGTH_SHORT).show();
+                    }
         });
 
 
-
-        return v;
+                return v;
+            }
     }
-
-}
-

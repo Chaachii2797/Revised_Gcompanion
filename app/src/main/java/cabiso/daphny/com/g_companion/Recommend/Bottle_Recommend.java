@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.DIYDataActivity;
@@ -104,6 +105,8 @@ public class Bottle_Recommend extends AppCompatActivity {
 //
 //                                                }
                                     diyList.add(diYnames);
+                                    Collections.sort(diyList);
+                                    Collections.reverse(diyList);
                                     Toast.makeText(Bottle_Recommend.this, "counts " + diyList.size(), Toast.LENGTH_SHORT).show();
 
 //                                        }

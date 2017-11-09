@@ -215,7 +215,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
-
+                        Float float_this = null;
                         if (userID != null) {
                             String results = " ";
                             for (int i = 0; i < 5; i++) {
@@ -237,7 +237,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 //                                databaseReference.child(results).child(upload).setValue(new DIYnames(name.getText().toString(),
                                     databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, results, productID));
+                                            taskSnapshot.getDownloadUrl().toString(), userID, results, productID,float_this, float_this));
 
                                     databaseReference.child(upload).child("diy_process").child("materials")
                                             .setValue(itemMaterial);

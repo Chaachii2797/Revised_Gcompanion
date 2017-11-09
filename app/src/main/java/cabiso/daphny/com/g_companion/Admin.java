@@ -19,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ import clarifai2.dto.prediction.Concept;
  * Created by Lenovo on 7/30/2017.
  */
 
-public class ImageRecognitionTags extends AppCompatActivity{
+public class Admin extends AppCompatActivity{
 
     static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
 
@@ -47,11 +48,10 @@ public class ImageRecognitionTags extends AppCompatActivity{
     private TextView tvTag, tv_category;
 
     private List<String> tags = new ArrayList<>();
-    private List<String> extras = new ArrayList<>();
-    private List<String> validWords = new ArrayList<>();
+
     final ClarifaiClient client;
 
-    public ImageRecognitionTags() {
+    public Admin() {
         client = new ClarifaiBuilder("cb169e9d3f9e4ec5a7769cc0422f3162").buildSync();
     }
 
@@ -59,70 +59,26 @@ public class ImageRecognitionTags extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_recog_tag);
+        setContentView(R.layout.activity_main);
 
-
-        //  firstFrame = (FrameLayout)findViewById(R.id.FirstFrame);
         diyBtn = (Button)findViewById(R.id.btnDIY);
         imageView = (ImageView)findViewById(R.id.imgPhotoSaver);
         tvTag = (TextView) findViewById(R.id.tvTag);
         tv_category = (TextView) findViewById(R.id.tvCategory);
 
-        getWordBank();
+
         diyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String results = " ";
-                for(int i = 0; i < 5; i++) {
+                for(int i = 0; i < 6; i++) {
                     results += " "+tags.get(i);
 
-                    final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Admin").child("Categories");
-                    final int finalI = i;
-                    final String finalResults = results;
-                    myRef.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            if(tags.get(finalI).equals(myRef)){
-                                tvTag.setText(finalResults);
-                            }
-                        }
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-//                    tvTag.setText(results);
-//                    Bundle b=new Bundle();
-//                    String result_tag = null;
-//                    b.putStringArray(result_tag, new String[]{tags.get(i)});
-//                    Intent intent =new Intent(getApplicationContext(), Bottle_Recommend.class);
-//                    intent.putExtras(b);
-//                    startActivity(intent);
-                    Intent intent = new Intent(ImageRecognitionTags.this,Bottle_Recommend.class);
+                    Intent intent = new Intent(Admin.this,MainActivity.class);
                     intent.putExtra("result_tag", results);
                     startActivity(intent);
-//                    Toast.makeText(ImageRecognitionTags.this, " " +results, Toast.LENGTH_SHORT).show();
-
                 }
-
             }
         });
         dispatchTakePictureIntent();
@@ -144,70 +100,19 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
     public void printTags() {
         String results = "First tag: ";
-
-//        if(!tags.get(0).equals("no person")){
-//            tv_category.setText(tags.get(0));
-//        }else{
-//            tv_category.setText(tags.get(1));
-//        }
-
-        for(int i = 1; i < 6; i++) {
-
-            for(int c = 0; c < validWords.size(); c++){
-                if(tags.get(i).contains(validWords.get(c))){
-                    results += "\n" + tags.get(i);
-                    tvTag.setText(results);
-                }else{
-                    //invalid words
-                }
-            }
-            Log.e("tags", ""+results);
-            Log.d("value",extras.get(i));
-//            if (tags.get(i).equals("no person") || tags.get(i).equals("abstract") || tags.get(i).equals("indoors")){
-//                tvTag.setText("Try Again!");
-//                Toast.makeText(getApplication(), "Capture the best angle. Try Again!", Toast.LENGTH_SHORT).show();
-//            }else if(tags.get(i).equals("abstract") || tags.get(i).equals("document") || tags.get(i).equals("form") ||
-//                    tags.get(i).equals("sheet") || tags.get(i).equals("page") || tags.get(i).equals("bookbindings")){
-//                tvTag.setText("paper");
-//            }else if(tags.get(i).equals("coffee") || tags.get(i).equals("milk")){
-//                tvTag.setText("cup");
-//            }else if(tags.get(i).equals("drink") || tags.get(i).equals("wine")) {
-//                tvTag.setText("glass");
-//            }else{
-//
-//            }
+        if(!tags.get(0).equals("no person")){
+            tv_category.setText(tags.get(0));
+        }else{
+            tv_category.setText(tags.get(1));
         }
-    }
 
-    public void getWordBank(){
-        final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("word_bank");
-        myRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                validWords.add(dataSnapshot.getValue().toString());
-                Log.d("fsdfs", dataSnapshot.getValue().toString());
-            }
+        for (int i = 1; i < 6; i++) {
+            results += "\n" + tags.get(i);
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            tvTag.setText(results);
+            Log.e("tags", "" + results);
+        }
 
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -256,7 +161,6 @@ public class ImageRecognitionTags extends AppCompatActivity{
                         final List<Concept> predictedTags = predictions.get(0).data();
                         for(int i = 0; i < predictedTags.size(); i++) {
                             tags.add(predictedTags.get(i).name());
-                            extras.add(String.valueOf(predictedTags.get(i).value()));
                         }
                         printTags();
                     }

@@ -7,14 +7,14 @@ package cabiso.daphny.com.g_companion.Model;
 public class CommunityItem {
 
 
-        String val;
+    String val;
 
     public  CommunityItem(){}
 
 
-        public CommunityItem(String val) {
-            this.val = val;
-        }
+    public CommunityItem(String val) {
+        this.val = val;
+    }
 
 
     public String getVal() {

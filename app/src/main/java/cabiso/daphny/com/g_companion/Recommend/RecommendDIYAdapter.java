@@ -68,7 +68,6 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
     public View getView(final int position, @Nullable final View convertView, @NonNull final ViewGroup parent) {
         final LayoutInflater inflater = context.getLayoutInflater();
 
-
         View v = inflater.inflate(resource, null);
         TextView tvName = (TextView) v.findViewById(R.id.get_diyName);
         TextView tvcategory = (TextView) v.findViewById(R.id.tv_category);
@@ -90,57 +89,58 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
         //tvName.setText("DIY Name: "+listDIY.get(position).getDiyName());
         Glide.with(context).load(listDIY.get(position).getDiyUrl()).into(img);
 
-        star.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getContext(), "Bookmark DIY!", Toast.LENGTH_SHORT).show();
-                if (star.isPressed()) {
-                    count += 1;
-                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
-                    reference.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                             //   String key = dataSnapshot.getKey();
-                                String path = "/" + dataSnapshot.getKey();
-                                HashMap<String, Object> result = new HashMap<>();
-                                result.put("bookmarks", count);
-                                reference.child(path).updateChildren(result);
-                                star.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
+//        star.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getContext(), "Bookmark DIY!", Toast.LENGTH_SHORT).show();
+//                if (star.isPressed()) {
+//                    count += 1;
+//                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
+//                    reference.addChildEventListener(new ChildEventListener() {
+//                        @Override
+//                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                             //   String key = dataSnapshot.getKey();
+//
+//                            String path = "/" + dataSnapshot.getKey();
+//                                HashMap<String, Object> result = new HashMap<>();
+//                                result.put("bookmarks", count);
+//                                reference.child(path).updateChildren(result);
+//                                star.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
+//
+//                        }
+//
+//                        @Override
+//                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
+//
+//                }
+//            }
+//        });
 
-                        }
 
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-                }
-            }
-        });
-
-
-        heart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(getContext(), "Liked DIY!", Toast.LENGTH_SHORT).show();
-                    }
-        });
+//        heart.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(getContext(), "Liked DIY!", Toast.LENGTH_SHORT).show();
+//                    }
+//        });
 
 
                 return v;

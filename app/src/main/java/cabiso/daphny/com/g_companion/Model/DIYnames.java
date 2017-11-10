@@ -18,9 +18,6 @@ public class DIYnames implements Comparable<DIYnames>{
 
     public DIYnames(){}
 
-
-
-
     public DIYnames(String diyName, String diyUrl, String user_id, String tag, String productID, Float bookmarks, Float likes){
         this.diyName = diyName;
         this.diyUrl = diyUrl;

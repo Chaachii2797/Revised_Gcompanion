@@ -74,7 +74,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
             public void onClick(View v) {
 
                 String results = " ";
-                for(int i = 0; i < 5; i++) {
+                for(int i = 0; i < 6; i++) {
                     results += " "+tags.get(i);
 
                     final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Admin").child("Categories");
@@ -151,7 +151,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
 //            tv_category.setText(tags.get(1));
 //        }
 
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < 6; i++) {
 
             for(int c = 0; c < validWords.size(); c++){
                 if(tags.get(i).contains(validWords.get(c))){

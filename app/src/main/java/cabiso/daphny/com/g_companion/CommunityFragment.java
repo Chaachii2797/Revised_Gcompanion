@@ -33,12 +33,16 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import cabiso.daphny.com.g_companion.Model.DIYnames;
@@ -98,6 +102,9 @@ public class CommunityFragment extends Fragment{
         databaseReference = FirebaseDatabase.getInstance().getReference();
 //        communityReference = databaseReference.child("diy_by_tags").child(userID).child("business");
         communityReference = databaseReference.child("diy_by_tags");
+
+        Collections.sort(diyList);
+        Collections.reverse(diyList);
 
     }
 
@@ -160,7 +167,6 @@ public class CommunityFragment extends Fragment{
     public void onStart(){
         super.onStart();
         Toast.makeText(getActivity(), "yow!", Toast.LENGTH_SHORT).show();
-
         final FirebaseRecyclerAdapter<DIYnames, ItemViewHolder> adapter =
                 new FirebaseRecyclerAdapter<DIYnames, ItemViewHolder>(DIYnames.class,
                         R.layout.recommend_ui,ItemViewHolder.class, communityReference ) {
@@ -172,6 +178,7 @@ public class CommunityFragment extends Fragment{
                     @Override
                     protected void populateViewHolder(final ItemViewHolder viewHolder, final DIYnames model, final int position) {
                         viewHolder.mNameView.setText(model.diyName);
+                        viewHolder.mCategory.setText(model.tag);
 
                         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
                         final String key = this.getRef(position).getKey();
@@ -182,6 +189,9 @@ public class CommunityFragment extends Fragment{
                                     Toast.makeText(getContext(), "Bookmark DIY!" + " " + starCount + " " + totalBmLike, Toast.LENGTH_SHORT).show();
                                     starCount++;
                                     totalBmLike++;
+
+                                    final DatabaseReference db = FirebaseDatabase.getInstance().getReference("bookmarks");
+                                    db.child(userID).push().setValue(model);
 
                                     viewHolder.mStar.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
 
@@ -258,6 +268,8 @@ public class CommunityFragment extends Fragment{
 
         public final View mView;
         public final TextView mNameView;
+        public final TextView mCategory;
+//        public final TextView mMaterial;
         public final ImageView mProductImageView;
 
         public ImageButton mStar;
@@ -270,6 +282,7 @@ public class CommunityFragment extends Fragment{
             super(view);
             mView = view;
             mNameView = (TextView) view.findViewById(R.id.get_diyName);
+            mCategory = (TextView) view.findViewById(R.id.tv_category);
             mProductImageView = (ImageView) view.findViewById(R.id.diy_item_icon);
 
             mStar = (ImageButton) view.findViewById(R.id.staru);

@@ -4,9 +4,9 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_admin"
+            android:id="@+id/nav_bm"
             android:icon="@drawable/ic_profile"
-            android:title="Admin" />
+            android:title="Bookmark" />
 
         <item
             android:id="@+id/nav_profile"

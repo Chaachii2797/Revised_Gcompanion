@@ -62,6 +62,7 @@ public class CommunityAdapter extends BaseAdapter {
 
             CommunityItem m = itemList.get(position);
             tvMaterials.setText(m.getVal());
+//            tvMaterials.setText(itemList.get(position).getMaterial());
 
             // click listener for remove button
             deleteBtn.setOnClickListener(new View.OnClickListener() {

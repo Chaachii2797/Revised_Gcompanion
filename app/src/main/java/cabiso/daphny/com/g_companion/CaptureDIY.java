@@ -152,9 +152,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     itemMaterial.add(md);
                     mAdapter.notifyDataSetChanged();
                     material.setText(" ");
-
-
-
                 }
             }
         });
@@ -234,13 +231,22 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 //                                        //invalid words
 //                                    }
 //                                }
-                            for (int i = 0; i < 10; i++) {
-                                results = tags.get(i);
-                                if (results.equals("no person")) {
-                                    diyTags.setText("");
-                                } else {
-                                    diyTags.setText(results);
+                            for (int i = 0; i < 6; i++) {
+                                for(int c = 0; c < validWords.size(); c++){
+                                    if(tags.get(i).contains(validWords.get(c))){
+                                        results = tags.get(i);
+
+                                        //results += "\n" + tags.get(i);
+                                        diyTags.setText(results);
+                                    }else{
+                                        //invalid words
+                                    }
                                 }
+//                                if (results.equals("no person")) {
+//                                    diyTags.setText("");
+//                                } else {
+//                                    diyTags.setText(results);
+//                                }
                                     String upload = databaseReference.push().getKey();
 
                                     Random random = new Random();
@@ -292,7 +298,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     public void printTags() {
         String results = "Tags: ";
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 6; i++) {
 
             for(int c = 0; c < validWords.size(); c++){
                 if(tags.get(i).contains(validWords.get(c))){

@@ -24,11 +24,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
@@ -70,96 +73,11 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
         databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceString);
 
-
         progressDialog = new ProgressDialog(this);
         diy_name = (TextView) findViewById(R.id.diy_name);
         //diy_image = (ImageView) findViewById(R.id.diy_image);
         diy_materials = (TextView) findViewById(R.id.diy_materials);
         diy_procedures = (TextView) findViewById(R.id.diy_procedures);
-
-//        final ImageButton star = (ImageButton) findViewById(R.id.staru);
-//        ImageButton heart = (ImageButton) findViewById(R.id.heartu);
-
-//        star.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                count++;
-//                if(count==1) {
-//                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags").child(userID);
-//                    reference.addChildEventListener(new ChildEventListener() {
-//                        @Override
-//                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                                String key = snapshot.getKey();
-//                                String path = "/" + dataSnapshot.getKey() + "/" + key;
-//                                HashMap<String, Object> result = new HashMap<>();
-//                                result.put("bookmarks", count);
-//                                reference.child(path).updateChildren(result);
-//                                star.setColorFilter(ContextCompat.getColor(context, R.color.star_yello));
-//                                count++;
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError) {
-//
-//                        }
-//                    });
-//                }else if(count==2){
-//                    count=0;
-//                    final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
-//                    reference.addChildEventListener(new ChildEventListener() {
-//                        @Override
-//                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                            for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-//                                String key = snapshot.getKey();
-//                                String path = "/" + dataSnapshot.getKey() + "/" + key;
-//                                HashMap<String, Object> result = new HashMap<>();
-//                                result.put("bookmarks",count);
-//                                reference.child(path).updateChildren(result);
-//                                star.setColorFilter(ContextCompat.getColor(context, R.color.for_star));
-//                                count--;
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError) {
-//
-//                        }
-//                    });
-//                }
-//            }
-//        });
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -171,13 +89,17 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-
                         CommunityItem communityItem = dataSnapshot.getValue(CommunityItem.class);
 //                        diy_materials.setText(communityItem.getVal());
 //                        diy_procedures.setText(communityItem.getVal());
 
+                        GenericTypeIndicator<List<CommunityItem>> genericTypeIndicator = new GenericTypeIndicator<List<CommunityItem>>(){};
+                        List<CommunityItem> item_material = dataSnapshot.child("diy_process").child("materials").getValue(genericTypeIndicator);
+                        Toast.makeText(getApplicationContext(),"mateials: "+item_material,Toast.LENGTH_SHORT).show();
+//                        diy_materials.setText(communityItem.getMaterial());
+                        
                         ArrayList<CommunityItem> itemMaterial = (ArrayList<CommunityItem>) getIntent().getSerializableExtra("materials");
-                        diy_materials.setText((CharSequence) itemMaterial);
+//                        diy_materials.setText((CharSequence) itemMaterial);
                         Toast.makeText(DIYDetailViewActivity.this, communityItem.getVal() , Toast.LENGTH_SHORT).show();
 
                     }
@@ -210,7 +132,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     /**
      * Called when a view has been clicked.
      *
-     * @param v The view that was clicked.
      */
 
 

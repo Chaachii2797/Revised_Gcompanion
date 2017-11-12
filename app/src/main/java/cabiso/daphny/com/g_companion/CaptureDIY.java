@@ -231,7 +231,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 //                                        //invalid words
 //                                    }
 //                                }
-                            for (int i = 0; i < 6; i++) {
+                            for (int i = 0; i < 10; i++) {
                                 for(int c = 0; c < validWords.size(); c++){
                                     if(tags.get(i).contains(validWords.get(c))){
                                         results = tags.get(i);
@@ -258,12 +258,13 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
                                     databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, results, productID, float_this, float_this));
+                                            taskSnapshot.getDownloadUrl().toString(), userID, results, productID,
+                                            float_this, float_this));
 
-                                    databaseReference.child(upload).child("diy_process").child("materials")
+                                    databaseReference.child(upload).child("materials")
                                             .setValue(itemMaterial);
 
-                                    databaseReference.child(upload).child("diy_process").child("procedures")
+                                    databaseReference.child(upload).child("procedures")
                                             .setValue(itemProcedure);
                                     // }
 
@@ -298,7 +299,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     public void printTags() {
         String results = "Tags: ";
-        for(int i = 0; i < 6; i++) {
+        for(int i = 0; i < 10; i++) {
 
             for(int c = 0; c < validWords.size(); c++){
                 if(tags.get(i).contains(validWords.get(c))){

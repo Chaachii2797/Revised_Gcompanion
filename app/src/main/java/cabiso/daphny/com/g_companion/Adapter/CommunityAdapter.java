@@ -28,6 +28,9 @@ public class CommunityAdapter extends BaseAdapter {
         this.itemList = modelList;
     }
 
+    public CommunityAdapter(String inputMaterials) {
+    }
+
 //    public CommunityAdapter(CommunityFragment communityFragment, int recommend_ui, ArrayList<DIYMethods> diyList) {
 //    }
 

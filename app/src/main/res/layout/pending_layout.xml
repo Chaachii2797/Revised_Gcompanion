@@ -23,15 +23,16 @@
         android:id="@+id/get_diyName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="50dp"
-        android:layout_marginStart="50dp"
-        android:layout_toEndOf="@+id/diy_item_icon"
-        android:layout_toRightOf="@+id/diy_item_icon"
+        android:layout_marginLeft="48dp"
+        android:layout_marginStart="48dp"
         android:text="DIY Name:"
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_below="@+id/textView12"
+        android:layout_toRightOf="@+id/diy_item_icon"
+        android:layout_toEndOf="@+id/diy_item_icon"
+        android:layout_marginTop="14dp" />
 
     <TextView
         android:id="@+id/textView12"
@@ -43,13 +44,4 @@
         android:layout_marginTop="11dp"
         android:text="DIY Name" />
 
-    <TextView
-        android:id="@+id/tv_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="category"
-        android:layout_below="@+id/get_diyName"
-        android:layout_alignLeft="@+id/get_diyName"
-        android:layout_alignStart="@+id/get_diyName"
-        android:layout_marginTop="11dp"/>
 </RelativeLayout>

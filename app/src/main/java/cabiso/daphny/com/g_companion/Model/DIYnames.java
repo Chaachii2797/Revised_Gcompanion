@@ -2,6 +2,8 @@ package cabiso.daphny.com.g_companion.Model;
 
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
 /**
  * Created by Lenovo on 10/23/2017.
  */
@@ -15,6 +17,8 @@ public class DIYnames implements Comparable<DIYnames>{
     public String productID;
     public Float bookmarks;
     public Float likes;
+    public List<String> itemMaterials;
+    public List<String> itemProcedures;
 
     public DIYnames(){}
 
@@ -26,7 +30,10 @@ public class DIYnames implements Comparable<DIYnames>{
         this.productID = productID;
         this.bookmarks = bookmarks;
         this.likes = likes;
+        this.itemMaterials = itemMaterials;
+        this.itemProcedures = itemProcedures;
     }
+
 
     public String getDiyName() {
         return diyName;
@@ -94,4 +101,5 @@ public class DIYnames implements Comparable<DIYnames>{
             return 0;
         }
     }
+
 }

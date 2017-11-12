@@ -33,11 +33,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -151,8 +148,6 @@ public class CommunityFragment extends Fragment{
             }
         });
 
-
-
         return view;
     }
 
@@ -186,7 +181,7 @@ public class CommunityFragment extends Fragment{
                             viewHolder.mStar.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Toast.makeText(getContext(), "Bookmark DIY!" + " " + starCount + " " + totalBmLike, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Bookmark DIY!" + " " + starCount, Toast.LENGTH_SHORT).show();
                                     starCount++;
                                     totalBmLike++;
 
@@ -206,7 +201,7 @@ public class CommunityFragment extends Fragment{
                             viewHolder.mHeart.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(getContext(), "Liked DIY!" + " " + heartCount + " " + totalBmLike, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Liked DIY!" + " " + heartCount, Toast.LENGTH_SHORT).show();
                                 heartCount++;
                                 totalBmLike++;
 

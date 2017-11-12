@@ -8,13 +8,19 @@ public class CommunityItem {
 
 
     String val;
+//    public List<String> itemMaterials;
+//    public List<String> itemProcedures;
 
     public  CommunityItem(){}
 
 
     public CommunityItem(String val) {
         this.val = val;
+//        this.itemMaterials = itemMaterials;
+//        this.itemProcedures = itemProcedures;
     }
+
+
 
 
     public String getVal() {
@@ -25,4 +31,19 @@ public class CommunityItem {
         this.val = val;
     }
 
+//    public List<String> getItemMaterials() {
+//        return itemMaterials;
+//    }
+//
+//    public void setItemMaterials(List<String> itemMaterials) {
+//        this.itemMaterials = itemMaterials;
+//    }
+//
+//    public List<String> getItemProcedures() {
+//        return itemProcedures;
+//    }
+//
+//    public void setItemProcedures(List<String> itemProcedures) {
+//        this.itemProcedures = itemProcedures;
+//    }
 }

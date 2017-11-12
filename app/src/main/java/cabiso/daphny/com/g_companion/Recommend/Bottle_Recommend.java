@@ -3,6 +3,7 @@ package cabiso.daphny.com.g_companion.Recommend;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -20,10 +21,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import cabiso.daphny.com.g_companion.DIYDataActivity;
 import cabiso.daphny.com.g_companion.DIYDetailViewActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
@@ -93,8 +96,6 @@ public class Bottle_Recommend extends AppCompatActivity {
                 myRef.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        if (snapshot.hasChildren()) {
                             DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
                             if (item != null) {
                             //    Toast.makeText(Bottle_Recommend.this, "item " + item + "\n" + "tagdb" + diYnames.getTag(), Toast.LENGTH_SHORT).show();
@@ -112,7 +113,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                                     Toast.makeText(Bottle_Recommend.this, "counts " + diyList.size(), Toast.LENGTH_SHORT).show();
                                 }
                             }
-                        }
+
 
                         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
                         lv.setAdapter(adapter);
@@ -126,37 +127,38 @@ public class Bottle_Recommend extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), selectedItem.diyName, Toast.LENGTH_SHORT).show();
 
 
+
 //                                //To-DO get you data from the ItemDetails Getter
 //                                // selectedItem.getImage() or selectedItem.getName() .. etc
 //                                // the  send the data using intent when opening another activity
-//                                Intent intent = new Intent(Bottle_Recommend.this, DIYDetailViewActivity.class);
-//                                //  String items = infoList.get(position).getVal();
-//
+                                Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
+                                //  String items = infoList.get(position).getVal();
+
 //                                //adapter.notifyDataSetChanged();
 ////                                Toast toast = Toast.makeText(Bottle_Recommend.this, items, Toast.LENGTH_SHORT);
 ////                                toast.show();
-//                                intent.putExtra("image", selectedItem.getDiyUrl().getBytes());
-//                                intent.putExtra("name", selectedItem.getDiyName());
+                                intent.putExtra("image", selectedItem.getDiyUrl().getBytes());
+                                intent.putExtra("name", selectedItem.getDiyName());
 //                                //intent.putExtra("procedures", infoList.get(position));
 //                                // intent.putExtra("materials", selectedItem.getDiymaterial());
 //
-//                                view.buildDrawingCache();
-//                                Bitmap image = view.getDrawingCache();
-//                                Bundle extras = new Bundle();
-//                                extras.putParcelable("imagebitmap", image);
-//
-//                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                                byte[] byteArray = stream.toByteArray();
-//                                intent.putExtra("image", byteArray);
-//                                startActivity(intent);
+                                view.buildDrawingCache();
+                                Bitmap image = view.getDrawingCache();
+                                Bundle extras = new Bundle();
+                                extras.putParcelable("imagebitmap", image);
+
+                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                byte[] byteArray = stream.toByteArray();
+                                intent.putExtra("image", byteArray);
+                                startActivity(intent);
 //
 //                                Toast.makeText(Bottle_Recommend.this, "counts " + diyList.size(), Toast.LENGTH_LONG).show();
 //                                Log.e("counter bes: ", "" + diyList.size());
 
                             }
                         });
-                    }
+
 
                 }
 

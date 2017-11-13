@@ -72,14 +72,12 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
         TextView tvName = (TextView) v.findViewById(R.id.get_diyName);
         TextView tvcategory = (TextView) v.findViewById(R.id.tv_category);
         ImageView img = (ImageView) v.findViewById(R.id.diy_item_icon);
-        final ImageButton star = (ImageButton) v.findViewById(R.id.staru);
-        ImageButton heart = (ImageButton) v.findViewById(R.id.heartu);
+//        final ImageButton star = (ImageButton) v.findViewById(R.id.staru);
+//        ImageButton heart = (ImageButton) v.findViewById(R.id.heartu);
 
         tvName.setText(listDIY.get(position).getDiyName());
         tvcategory.setText(listDIY.get(position).getTag());
-        star.setTag(listDIY.get(position));
-        heart.setTag(listDIY.get(position));
-
+//        star.setTag(getItem(position).getBookmarks());
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
 
 
@@ -91,7 +89,8 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
 
 //        star.setOnClickListener(new View.OnClickListener() {
 //            @Override
-//            public void onClick(View v) {
+//            public void onClick(final View view) {
+//                Float position = (Float) view.getTag();
 //                Toast.makeText(getContext(), "Bookmark DIY!", Toast.LENGTH_SHORT).show();
 //                if (star.isPressed()) {
 //                    count += 1;
@@ -102,10 +101,10 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
 //                             //   String key = dataSnapshot.getKey();
 //
 //                            String path = "/" + dataSnapshot.getKey();
-//                                HashMap<String, Object> result = new HashMap<>();
-//                                result.put("bookmarks", count);
-//                                reference.child(path).updateChildren(result);
-//                                star.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
+//                            HashMap<String, Object> result = new HashMap<>();
+//                            result.put("bookmarks", count);
+//                            reference.child(path).updateChildren(result);
+//                            star.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
 //
 //                        }
 //

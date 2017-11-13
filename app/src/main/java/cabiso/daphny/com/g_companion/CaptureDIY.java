@@ -219,7 +219,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        Float float_this = null;
+                        Float float_this = Float.valueOf(0);
                         if (userID != null) {
                             String results = " ";
 //                            for(int i = 0; i < 5; i++) {

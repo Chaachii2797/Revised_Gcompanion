@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -54,6 +55,8 @@ public class Bottle_Recommend extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
 
+    ImageButton star;
+
     private FirebaseDatabase database;
     private String userID;
     private FirebaseUser mFirebaseUser;
@@ -81,7 +84,9 @@ public class Bottle_Recommend extends AppCompatActivity {
         progressDialog.setMessage("Please Wait loading DIYs.....");
         progressDialog.show();
 
-        String intent = getIntent().getStringExtra("result_tag");
+        star = (ImageButton) findViewById(R.id.staru);
+
+        final String intent = getIntent().getStringExtra("result_tag");
 //        Toast.makeText(this," "+intent,Toast.LENGTH_LONG).show();
         for (int i = 0; i < intent.length(); i++) {
 //            Toast.makeText(this, " " +intent, Toast.LENGTH_LONG).show();
@@ -102,53 +107,59 @@ public class Bottle_Recommend extends AppCompatActivity {
                             //    Toast.makeText(Bottle_Recommend.this, "item " + item + "\n" + "tagdb" + diYnames.getTag(), Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                                 if (item.equals(diYnames.getTag())) {
+                                   // if(diYnames.getBookmarks()!=null && diYnames.getLikes()!=null){
+                                        diyList.add(diYnames);
+                                        Collections.sort(diyList);
+                                        Collections.reverse(diyList);
+//                                    }else{
+//                                        diyList.add(diYnames);
+//                                        Toast.makeText(Bottle_Recommend.this, "No available DIY for this tag!", Toast.LENGTH_SHORT).show();
+//                                    }
 
-                                    diyList.add(diYnames);
-                                    Collections.sort(diyList);
-                                    Collections.reverse(diyList);
                                     Toast.makeText(Bottle_Recommend.this, "counts " + diyList.size(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }
 
-                        adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.recommend_ui, diyList);
+                        adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
                         lv.setAdapter(adapter);
 
-                        registerForContextMenu(lv);
+//                        registerForContextMenu(lv);
                         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName(), Toast.LENGTH_SHORT).show();
                                 DIYnames selectedItem = adapter.getItem(position);
+                                Toast.makeText(getApplicationContext(), selectedItem.diyName, Toast.LENGTH_SHORT).show();
 
 
-                                //To-DO get you data from the ItemDetails Getter
-                                // selectedItem.getImage() or selectedItem.getName() .. etc
-                                // the  send the data using intent when opening another activity
-                                Intent intent = new Intent(Bottle_Recommend.this, DIYDetailViewActivity.class);
-                                //  String items = infoList.get(position).getVal();
-
-                                //adapter.notifyDataSetChanged();
-//                                Toast toast = Toast.makeText(Bottle_Recommend.this, items, Toast.LENGTH_SHORT);
-//                                toast.show();
-                                intent.putExtra("image", selectedItem.getDiyUrl().getBytes());
-                                intent.putExtra("name", selectedItem.getDiyName());
-                                //intent.putExtra("procedures", infoList.get(position));
-                                // intent.putExtra("materials", selectedItem.getDiymaterial());
-
-                                view.buildDrawingCache();
-                                Bitmap image = view.getDrawingCache();
-                                Bundle extras = new Bundle();
-                                extras.putParcelable("imagebitmap", image);
-
-                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                                byte[] byteArray = stream.toByteArray();
-                                intent.putExtra("image", byteArray);
-                                startActivity(intent);
-
-                                Toast.makeText(Bottle_Recommend.this, "counts " + diyList.size(), Toast.LENGTH_LONG).show();
-                                Log.e("counter bes: ", "" + diyList.size());
+//                                //To-DO get you data from the ItemDetails Getter
+//                                // selectedItem.getImage() or selectedItem.getName() .. etc
+//                                // the  send the data using intent when opening another activity
+//                                Intent intent = new Intent(Bottle_Recommend.this, DIYDetailViewActivity.class);
+//                                //  String items = infoList.get(position).getVal();
+//
+//                                //adapter.notifyDataSetChanged();
+////                                Toast toast = Toast.makeText(Bottle_Recommend.this, items, Toast.LENGTH_SHORT);
+////                                toast.show();
+//                                intent.putExtra("image", selectedItem.getDiyUrl().getBytes());
+//                                intent.putExtra("name", selectedItem.getDiyName());
+//                                //intent.putExtra("procedures", infoList.get(position));
+//                                // intent.putExtra("materials", selectedItem.getDiymaterial());
+//
+//                                view.buildDrawingCache();
+//                                Bitmap image = view.getDrawingCache();
+//                                Bundle extras = new Bundle();
+//                                extras.putParcelable("imagebitmap", image);
+//
+//                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                                byte[] byteArray = stream.toByteArray();
+//                                intent.putExtra("image", byteArray);
+//                                startActivity(intent);
+//
+//                                Toast.makeText(Bottle_Recommend.this, "counts " + diyList.size(), Toast.LENGTH_LONG).show();
+//                                Log.e("counter bes: ", "" + diyList.size());
 
                             }
                         });

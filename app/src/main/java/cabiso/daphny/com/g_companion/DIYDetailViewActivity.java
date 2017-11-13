@@ -89,18 +89,21 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        CommunityItem communityItem = dataSnapshot.getValue(CommunityItem.class);
+//                        CommunityItem communityItem = dataSnapshot.getValue(CommunityItem.class);
 //                        diy_materials.setText(communityItem.getVal());
 //                        diy_procedures.setText(communityItem.getVal());
 
-                        GenericTypeIndicator<List<CommunityItem>> genericTypeIndicator = new GenericTypeIndicator<List<CommunityItem>>(){};
-                        List<CommunityItem> item_material = dataSnapshot.child("diy_process").child("materials").getValue(genericTypeIndicator);
-                        Toast.makeText(getApplicationContext(),"mateials: "+item_material,Toast.LENGTH_SHORT).show();
+//                        GenericTypeIndicator<ArrayList<CommunityItem>> t = new GenericTypeIndicator<ArrayList<CommunityItem>>(){};
+//                        ArrayList<CommunityItem> yourStringArray = dataSnapshot.getValue(t);
+//                        Toast.makeText(getApplicationContext(),yourStringArray.get(0).getVal(),Toast.LENGTH_LONG).show();
+
+//error pa ni siring dapita HASH MAP CHUVA
+//                        GenericTypeIndicator<List<CommunityItem>> genericTypeIndicator = new GenericTypeIndicator<List<CommunityItem>>(){};
+//                        List<CommunityItem> item_material = dataSnapshot.child("diy_process").child("materials").getValue(genericTypeIndicator);
+//                        Toast.makeText(getApplicationContext(),"mateials: "+item_material,Toast.LENGTH_SHORT).show();
 //                        diy_materials.setText(communityItem.getMaterial());
                         
-                        ArrayList<CommunityItem> itemMaterial = (ArrayList<CommunityItem>) getIntent().getSerializableExtra("materials");
-//                        diy_materials.setText((CharSequence) itemMaterial);
-                        Toast.makeText(DIYDetailViewActivity.this, communityItem.getVal() , Toast.LENGTH_SHORT).show();
+
 
                     }
 

@@ -1,11 +1,13 @@
 package cabiso.daphny.com.g_companion;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +30,7 @@ import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiResponse;
+import clarifai2.api.request.input.SearchClause;
 import clarifai2.dto.input.ClarifaiImage;
 import clarifai2.dto.input.ClarifaiInput;
 import clarifai2.dto.model.ConceptModel;
@@ -50,6 +53,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
     private List<String> extras = new ArrayList<>();
     private List<String> validWords = new ArrayList<>();
     final ClarifaiClient client;
+    String CURRENT_MODEL;
 
     public ImageRecognitionTags() {
         client = new ClarifaiBuilder("cb169e9d3f9e4ec5a7769cc0422f3162").buildSync();
@@ -74,53 +78,11 @@ public class ImageRecognitionTags extends AppCompatActivity{
             public void onClick(View v) {
 
                 String results = " ";
-                for(int i = 0; i < 6; i++) {
+                for(int i = 0; i < 10; i++) {
                     results += " "+tags.get(i);
-
-                    final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("Admin").child("Categories");
-                    final int finalI = i;
-                    final String finalResults = results;
-                    myRef.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            if(tags.get(finalI).equals(myRef)){
-                                tvTag.setText(finalResults);
-                            }
-                        }
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-//                    tvTag.setText(results);
-//                    Bundle b=new Bundle();
-//                    String result_tag = null;
-//                    b.putStringArray(result_tag, new String[]{tags.get(i)});
-//                    Intent intent =new Intent(getApplicationContext(), Bottle_Recommend.class);
-//                    intent.putExtras(b);
-//                    startActivity(intent);
                     Intent intent = new Intent(ImageRecognitionTags.this,Bottle_Recommend.class);
                     intent.putExtra("result_tag", results);
                     startActivity(intent);
-//                    Toast.makeText(ImageRecognitionTags.this, " " +results, Toast.LENGTH_SHORT).show();
-
                 }
 
             }
@@ -151,21 +113,25 @@ public class ImageRecognitionTags extends AppCompatActivity{
 //            tv_category.setText(tags.get(1));
 //        }
 
-        for(int i = 0; i < 6; i++) {
+        for(int i = 0; i < 10; i++) {
 
             for(int c = 0; c < validWords.size(); c++){
                 if(tags.get(i).contains(validWords.get(c))){
                     results += "\n" + tags.get(i);
+                    Log.e("tags_here", ""+results);
+                    Log.e("value_here",extras.get(i));
                     tvTag.setText(results);
+
                 }else{
                     //invalid words
                 }
             }
             Log.e("tags", ""+results);
-            Log.d("value",extras.get(i));
+            Log.e("value",extras.get(i));
 
         }
     }
+
 
     public void getWordBank(){
         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("word_bank");
@@ -215,17 +181,24 @@ public class ImageRecognitionTags extends AppCompatActivity{
                 imageView.setImageBitmap(bitmap);
 
                 new AsyncTask<Bitmap, Void, ClarifaiResponse<List<ClarifaiOutput<Concept>>>>() {
-
                     // Model prediction
                     @Override
                     protected ClarifaiResponse<List<ClarifaiOutput<Concept>>> doInBackground(Bitmap... bitmaps) {
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
                         bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 90, stream);
+
                         byte[] byteArray = stream.toByteArray();
-                        final ConceptModel general = client.getDefaultModels().generalModel();
-                        return client.getDefaultModels().generalModel().predict()
-                                .withInputs(ClarifaiInput.forImage(ClarifaiImage.of(byteArray)))
-                                .executeSync();
+
+                        final ConceptModel generalModel = client.getDefaultModels().generalModel();
+//                        final Concept diy = client.getConceptByID("trash_DIY").executeSync().get().asConcept();
+
+                        ClarifaiResponse<List<Concept>> card = client.searchConcepts(String.valueOf(SearchClause.matchConcept(Concept
+                                .forName("cardboard")))).getPage(1).executeSync();
+
+                        return generalModel.predict().withInputs(ClarifaiInput.forImage(ClarifaiImage.of(byteArray))).executeSync();
+//                        return client.getDefaultModels().generalModel().predict()
+//                                .withInputs(ClarifaiInput.forImage(ClarifaiImage.of(byteArray)))
+//                                .executeSync();
                     }
 
                     // Handling API response and then collecting and printing tags

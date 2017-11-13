@@ -126,13 +126,11 @@ public class Bottle_Recommend extends AppCompatActivity {
                                 DIYnames selectedItem = adapter.getItem(position);
                                 Toast.makeText(getApplicationContext(), selectedItem.diyName, Toast.LENGTH_SHORT).show();
 
-
-
 //                                //To-DO get you data from the ItemDetails Getter
 //                                // selectedItem.getImage() or selectedItem.getName() .. etc
 //                                // the  send the data using intent when opening another activity
                                 Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
-                                //  String items = infoList.get(position).getVal();
+                              //  String items = infoList.get(position).getVal();
 
 //                                //adapter.notifyDataSetChanged();
 ////                                Toast toast = Toast.makeText(Bottle_Recommend.this, items, Toast.LENGTH_SHORT);
@@ -140,7 +138,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                                 intent.putExtra("image", selectedItem.getDiyUrl().getBytes());
                                 intent.putExtra("name", selectedItem.getDiyName());
 //                                //intent.putExtra("procedures", infoList.get(position));
-//                                // intent.putExtra("materials", selectedItem.getDiymaterial());
+                                 //intent.putExtra("materials", items);
 //
                                 view.buildDrawingCache();
                                 Bitmap image = view.getDrawingCache();

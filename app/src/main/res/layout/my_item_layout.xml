@@ -43,13 +43,4 @@
         android:layout_marginTop="11dp"
         android:text="DIY Name" />
 
-    <TextView
-        android:id="@+id/tv_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/get_diyName"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/get_diyName"
-        android:text="TextView" />
-
 </RelativeLayout>

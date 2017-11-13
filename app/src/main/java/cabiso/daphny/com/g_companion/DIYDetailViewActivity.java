@@ -85,6 +85,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
+//                        getIntent().getStringExtra("materials");
+//                        diy_materials.setText(getIntent().getStringExtra("materials"));
+
 //                        CommunityItem communityItem = dataSnapshot.getValue(CommunityItem.class);
 //                        diy_materials.setText(communityItem.getVal());
 //                        diy_procedures.setText(communityItem.getVal());

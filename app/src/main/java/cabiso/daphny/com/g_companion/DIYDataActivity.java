@@ -1,12 +1,15 @@
 package cabiso.daphny.com.g_companion;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,6 +40,7 @@ public class DIYDataActivity extends AppCompatActivity {
 
     private TextView diy_name, diy_materials, diy_procedures;
     private ImageView diy_image;
+    private ImageButton backBtn;
     private String userID;
 
 
@@ -55,6 +59,15 @@ public class DIYDataActivity extends AppCompatActivity {
         diy_image =(ImageView) findViewById(R.id.diy_image);
         diy_materials = (TextView) findViewById(R.id.diy_materials);
         diy_procedures = (TextView) findViewById(R.id.diy_procedures);
+        backBtn =  (ImageButton) findViewById(R.id.backBtn);
+
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent backIntent = new Intent(DIYDataActivity.this, RecommendDIYAdapter.class);
+                startActivity(backIntent);
+            }
+        });
 
         diy_procedures.setMovementMethod(new ScrollingMovementMethod());
         diy_materials.setMovementMethod(new ScrollingMovementMethod());

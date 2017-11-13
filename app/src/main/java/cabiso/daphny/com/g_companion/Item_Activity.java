@@ -79,7 +79,7 @@ public class Item_Activity extends AppCompatActivity {
                         }
                     }
                     //init adapter
-                    adapter = new Items_Adapter(Item_Activity.this, R.layout.pending_layout, diyList);
+                    adapter = new Items_Adapter(Item_Activity.this, R.layout.my_item_layout, diyList);
                     //set adapter for listview
                     lv.setAdapter(adapter);
 //                    final int count =lv.getAdapter().getCount();

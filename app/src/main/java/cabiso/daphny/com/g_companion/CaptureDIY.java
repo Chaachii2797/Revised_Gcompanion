@@ -276,6 +276,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 //                                map.put(upload, itemMaterial);
 //                                    databaseReference.child(upload).child("materials").updateChildren(map);
 
+
                                     databaseReference.child(upload).child("procedures")
                                             .setValue(itemProcedure);
                                     // }

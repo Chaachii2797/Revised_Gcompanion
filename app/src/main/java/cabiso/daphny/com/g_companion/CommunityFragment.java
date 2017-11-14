@@ -257,8 +257,6 @@ public class CommunityFragment extends Fragment{
         recyclerView.setAdapter(adapter);
     }
 
-
-
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
 
         public final View mView;
@@ -282,8 +280,6 @@ public class CommunityFragment extends Fragment{
 
             mStar = (ImageButton) view.findViewById(R.id.staru);
             mHeart = (ImageButton) view.findViewById(R.id.heartu);
-
-
         }
     }
     @Override
@@ -303,12 +299,7 @@ public class CommunityFragment extends Fragment{
         mlistener = null;
     }
 
-
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteractionListener(DatabaseReference ref);
-
-
     }
-
-
 }

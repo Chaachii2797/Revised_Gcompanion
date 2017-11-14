@@ -192,8 +192,8 @@ public class ImageRecognitionTags extends AppCompatActivity{
                         final ConceptModel generalModel = client.getDefaultModels().generalModel();
 //                        final Concept diy = client.getConceptByID("trash_DIY").executeSync().get().asConcept();
 
-                        ClarifaiResponse<List<Concept>> card = client.searchConcepts(String.valueOf(SearchClause.matchConcept(Concept
-                                .forName("cardboard")))).getPage(1).executeSync();
+//                        ClarifaiResponse<List<Concept>> card = client.searchConcepts(String.valueOf(SearchClause.matchConcept(Concept
+//                                .forName("cardboard")))).getPage(0).executeSync();
 
                         return generalModel.predict().withInputs(ClarifaiInput.forImage(ClarifaiImage.of(byteArray))).executeSync();
 //                        return client.getDefaultModels().generalModel().predict()

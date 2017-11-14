@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -129,14 +130,15 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         proceduresList = (ListView) findViewById(R.id.proceduresList);
         btnAddMaterial = (ImageButton) findViewById(R.id.btnMaterial);
         btnAddProcedure = (ImageButton) findViewById(R.id.btnProcedure);
-        itemMaterial = new ArrayList<CommunityItem>();
-        itemProcedure = new ArrayList<CommunityItem>();
-
+        itemMaterial = new ArrayList<>();
+        itemProcedure = new ArrayList<>();
+//
         mAdapter = new CommunityAdapter(getApplicationContext(), itemMaterial);
         pAdapter = new CommunityAdapter(getApplicationContext(), itemProcedure);
 
-        materialsList.setAdapter(mAdapter);
-        proceduresList.setAdapter(pAdapter);
+//            adapter = new CommunityAdapter(CaptureDIY.this, R.layout.activity_diy_data, itemMaterial);
+//        materialsList.setAdapter(mAdapter);
+//        proceduresList.setAdapter(pAdapter);
 
         getWordBank();
 
@@ -149,6 +151,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     Toast.makeText(CaptureDIY.this, "Please enter materials", Toast.LENGTH_SHORT).show();
                 } else {
                     CommunityItem md = new CommunityItem(inputMaterials);
+//                    ArrayList<CommunityItem> materials = new ArrayList<>();
                     itemMaterial.add(md);
                     mAdapter.notifyDataSetChanged();
                     material.setText(" ");
@@ -164,6 +167,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     Toast.makeText(CaptureDIY.this, "Please enter procedures", Toast.LENGTH_SHORT).show();
                 } else {
                     CommunityItem md = new CommunityItem(inputProcedure);
+//                    ArrayList<CommunityItem> procedures = new ArrayList<>();
                     itemProcedure.add(md);
                     pAdapter.notifyDataSetChanged();
                     procedure.setText(" ");
@@ -250,19 +254,27 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     String upload = databaseReference.push().getKey();
 
                                     Random random = new Random();
+//                                String key = databaseReference.getKey();
                                     String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
                                     String productID = String.valueOf(candidateChars.charAt(random.nextInt(candidateChars.length())));
 
                                     // if(name.getText() == name.getText()) {
 
+                                CommunityItem comItem = new CommunityItem();
+                                String listMaterial = TextUtils.join(", ", itemMaterial);
+
                                     databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
                                     databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
                                             taskSnapshot.getDownloadUrl().toString(), userID, results, productID,
-                                            float_this, float_this));
+                                            float_this, float_this, new CommunityItem(listMaterial)));
 
+//                                String listMaterial = itemMaterial.stream().map(CommunityItem::toString).collect(Collectors.joining(", "));
                                     databaseReference.child(upload).child("materials")
-                                            .setValue(itemMaterial);
+                                            .setValue(new CommunityItem(listMaterial));
+//                                Map<String, Object> map = new HashMap<>();
+//                                map.put(upload, itemMaterial);
+//                                    databaseReference.child(upload).child("materials").updateChildren(map);
 
                                     databaseReference.child(upload).child("procedures")
                                             .setValue(itemProcedure);

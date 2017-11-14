@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -96,23 +97,25 @@ public class Bottle_Recommend extends AppCompatActivity {
                 myRef.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    if (dataSnapshot.hasChildren()){
+                        if (item != null) {
                             DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
-                            if (item != null) {
                             //    Toast.makeText(Bottle_Recommend.this, "item " + item + "\n" + "tagdb" + diYnames.getTag(), Toast.LENGTH_SHORT).show();
-                                progressDialog.dismiss();
-                                if (item.equals(diYnames.getTag())) {
-                                   // if(diYnames.getBookmarks()!=null && diYnames.getLikes()!=null){
-                                        diyList.add(diYnames);
-                                        Collections.sort(diyList);
-                                        Collections.reverse(diyList);
+                            progressDialog.dismiss();
+                            if (item.equals(diYnames.getTag())) {
+                                // if(diYnames.getBookmarks()!=null && diYnames.getLikes()!=null){
+                                diyList.add(diYnames);
+                                Collections.sort(diyList);
+                                Collections.reverse(diyList);
 //                                    }else{
 //                                        diyList.add(diYnames);
 //                                        Toast.makeText(Bottle_Recommend.this, "No available DIY for this tag!", Toast.LENGTH_SHORT).show();
 //                                    }
 
-                                    Toast.makeText(Bottle_Recommend.this, "counts " + diyList.size(), Toast.LENGTH_SHORT).show();
-                                }
+//                                Toast.makeText(Bottle_Recommend.this, "counts " + diyList.size(), Toast.LENGTH_SHORT).show();
                             }
+                        }
+                }
 
 
                         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
@@ -126,20 +129,22 @@ public class Bottle_Recommend extends AppCompatActivity {
                                 DIYnames selectedItem = adapter.getItem(position);
                                 Toast.makeText(getApplicationContext(), selectedItem.diyName, Toast.LENGTH_SHORT).show();
 
-
+//                                Toast.makeText(getApplicationContext(), "yawa"+selectedItem.getCommunityItem().getVal(), Toast.LENGTH_SHORT).show();
 
 //                                //To-DO get you data from the ItemDetails Getter
 //                                // selectedItem.getImage() or selectedItem.getName() .. etc
 //                                // the  send the data using intent when opening another activity
                                 Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
-                                //  String items = infoList.get(position).getVal();
+                             //     String items = infoList.get(position).getVal();
 
 //                                //adapter.notifyDataSetChanged();
 ////                                Toast toast = Toast.makeText(Bottle_Recommend.this, items, Toast.LENGTH_SHORT);
 ////                                toast.show();
                                 intent.putExtra("image", selectedItem.getDiyUrl().getBytes());
                                 intent.putExtra("name", selectedItem.getDiyName());
-//                                //intent.putExtra("procedures", infoList.get(position));
+                                intent.putExtra("procedures", selectedItem.communityItem);
+                                Toast.makeText(getApplicationContext(), "piste"+selectedItem,Toast.LENGTH_SHORT).show();
+                                Log.d("communityItem: ", String.valueOf(selectedItem.communityItem));
 //                                // intent.putExtra("materials", selectedItem.getDiymaterial());
 //
                                 view.buildDrawingCache();

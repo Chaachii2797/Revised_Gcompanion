@@ -177,14 +177,14 @@ public class MyDiys extends AppCompatActivity {
                                 // selectedItem.getImage() or selectedItem.getName() .. etc
                                 // the  send the data using intent when opening another activity
                                 Intent intent = new Intent(MyDiys.this, DIYDataActivity.class);
-                                String items = infoList.get(position).getVal();
+//                                String items = infoList.get(position).getVal();
 
                                 CommunityItem mat = (CommunityItem) parent.getItemAtPosition(position);
 
 
                                 adapter.notifyDataSetChanged();
-                                Toast toast = Toast.makeText(MyDiys.this, items, Toast.LENGTH_SHORT);
-                                toast.show();
+//                                Toast toast = Toast.makeText(MyDiys.this, items, Toast.LENGTH_SHORT);
+//                                toast.show();
                                 intent.putExtra("image", selectedItem.getDiyUrl().toString());
                                 intent.putExtra("name", selectedItem.getDiyName());
                                // intent.putExtra("procedures", infoList.get(position));

@@ -19,10 +19,19 @@ public class DIYnames implements Comparable<DIYnames>{
     public Float likes;
     public List<String> itemMaterials;
     public List<String> itemProcedures;
+    public CommunityItem communityItem;
+
+    public CommunityItem getCommunityItem() {
+        return communityItem;
+    }
+
+    public void setCommunityItem(CommunityItem communityItem) {
+        this.communityItem = communityItem;
+    }
 
     public DIYnames(){}
 
-    public DIYnames(String diyName, String diyUrl, String user_id, String tag, String productID, Float bookmarks, Float likes){
+    public DIYnames(String diyName, String diyUrl, String user_id, String tag, String productID, Float bookmarks, Float likes, CommunityItem communityItem){
         this.diyName = diyName;
         this.diyUrl = diyUrl;
         this.user_id = user_id;
@@ -32,6 +41,7 @@ public class DIYnames implements Comparable<DIYnames>{
         this.likes = likes;
         this.itemMaterials = itemMaterials;
         this.itemProcedures = itemProcedures;
+        this.communityItem = communityItem;
     }
 
 

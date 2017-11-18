@@ -60,8 +60,10 @@ public class CommunityAdapter extends BaseAdapter {
             TextView tvMaterials = (TextView) convertView.findViewById(R.id.etMaterials);
             ImageButton deleteBtn = (ImageButton) convertView.findViewById(R.id.deleteMaterial);
 
+            int pos = position+1;
+
             CommunityItem m = itemList.get(position);
-            tvMaterials.setText(m.getVal());
+            tvMaterials.setText(pos + ".) " +m.getVal());
 //            tvMaterials.setText(itemList.get(position).getMaterial());
 
             // click listener for remove button

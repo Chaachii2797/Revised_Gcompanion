@@ -12,9 +12,9 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.DragEvent;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
@@ -127,13 +127,21 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         btnAddProcedure = (ImageButton) findViewById(R.id.btnProcedure);
         itemMaterial = new ArrayList<>();
         itemProcedure = new ArrayList<>();
-//
+
         mAdapter = new CommunityAdapter(getApplicationContext(), itemMaterial);
         pAdapter = new CommunityAdapter(getApplicationContext(), itemProcedure);
 
-//            adapter = new CommunityAdapter(CaptureDIY.this, R.layout.activity_diy_data, itemMaterial);
         materialsList.setAdapter(mAdapter);
         proceduresList.setAdapter(pAdapter);
+
+        materialsList.setOnDragListener(new ListView.OnDragListener(){
+                                            @Override
+                                            public boolean onDrag(View v, DragEvent event) {
+                                                return false;
+                                            }
+                                        });
+
+        String[] values = new String[] { "Quantity" };
 
         getWordBank();
 
@@ -141,18 +149,21 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         btnAddMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String inputMaterials = material.getText().toString();
                 if (inputMaterials.isEmpty()) {
                     Toast.makeText(CaptureDIY.this, "Please enter materials", Toast.LENGTH_SHORT).show();
                 } else {
-                    CommunityItem md = new CommunityItem(inputMaterials);
-//                    ArrayList<CommunityItem> materials = new ArrayList<>();
-                    itemMaterial.add(md);
-                    mAdapter.notifyDataSetChanged();
-                    material.setText(" ");
+                    //CommunityItem md = new CommunityItem(inputMaterials);
+                    AlertDialogView();
+//                    itemMaterial.add(md);
+//                    mAdapter.notifyDataSetChanged();
+//                    material.setText(" ");
                 }
             }
         });
+
+
 
         btnAddProcedure.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,7 +173,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     Toast.makeText(CaptureDIY.this, "Please enter procedures", Toast.LENGTH_SHORT).show();
                 } else {
                     CommunityItem md = new CommunityItem(inputProcedure);
-//                    ArrayList<CommunityItem> procedures = new ArrayList<>();
                     itemProcedure.add(md);
                     pAdapter.notifyDataSetChanged();
                     procedure.setText(" ");
@@ -173,7 +183,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         addProductImagePlusIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // clearFields();
                 dispatchTakePictureIntent();
             }
         });
@@ -216,102 +225,88 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         Float float_this = Float.valueOf(0);
-//                        if (userID != null) {
-//                            String results = " ";
-//                            for(int i = 0; i < 5; i++) {
-//                                for(int c = 0; c < validWords.size(); c++) {
-//                                    if (tags.get(i).contains(validWords.get(c))) {
-//                                        results = tags.get(i);
-//                                        diyTags.setText(results);
-//                                    } else {
-//                                        //invalid words
-//                                    }
-//                                }
-//                            for (int i = 0; i < 10; i++) {
-//                                for(int c = 0; c < validWords.size(); c++){
-//                                    if(tags.get(i).contains(validWords.get(c))){
-//                                        results = tags.get(i);
-//
-//                                        //results += "\n" + tags.get(i);
-//                                        diyTags.setText(results);
-//                                    }else{
-//                                        //invalid words
-//                                    }
-//                                }
-//                                if (results.equals("no person")) {
-//                                    diyTags.setText("");
-//                                } else {
-//                                    diyTags.setText(results);
-//                                }
-                                    String upload = databaseReference.push().getKey();
 
-                                    Random random = new Random();
-//                                String key = databaseReference.getKey();
-                                    String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-                                    String productID = String.valueOf(candidateChars.charAt(random.nextInt(candidateChars.length())));
+                        String upload = databaseReference.push().getKey();
+
+                        Random random = new Random();
+                        String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+                        String productID = String.valueOf(candidateChars.charAt(random.nextInt(candidateChars.length())));
+
+                        //push data to Firebase Database
+                        databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
+
+                        databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
+                                taskSnapshot.getDownloadUrl().toString(), userID, productID,
+                                float_this, float_this));
+
+                        databaseReference.child(upload).child("materials").setValue(itemMaterial);
+
+                        databaseReference.child(upload).child("procedures").setValue(itemProcedure);
 
 
-                                CommunityItem comItem = new CommunityItem();
-                                String listMaterial = TextUtils.join(", ", itemMaterial);
+                        Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
-                                    databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
+                        // Alert Dialog for finished uploaing DIYs
+                        AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this);
+                        ab.setMessage("Thank you for contributing to the DIY Community!");
+                        ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent in = new Intent(CaptureDIY.this, MainActivity.class);
+                                startActivity(in);
+                            }
+                        });
 
-                                    databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
-                                            taskSnapshot.getDownloadUrl().toString(), userID, productID,
-                                            float_this, float_this));
-
-                               databaseReference.child(upload).child("materials")
-                                        .setValue(itemMaterial);
-
-                                databaseReference.child(upload).child("procedures")
-                                        .setValue(itemProcedure);
-                         //   }
-
-                            Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
-
-                            AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this);
-                                ab.setMessage("Thank you for contributing to the DIY Community!");
-                                ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent in = new Intent(CaptureDIY.this, MainActivity.class);
-                                        startActivity(in);
-                                    }
-                                });
-
-                            ab.create().show();
-                    //    }
+                        ab.create().show();
                         progressDialog.dismiss();
                     }
                 });
-
-
 
             }
         });
     }
 
+    //Quantity Chooser
+    private void AlertDialogView() {
+        final CharSequence[] items = { "1pc", "2pcs", "3pcs", "4pcs", "5pcs", "6pcs", "7pcs",
+                "8pcs", "9pcs", "10pcs"};
 
-//    public void printTags() {
-//        String results = "Tags: ";
-//        for(int i = 0; i < 10; i++) {
-//
-//            for(int c = 0; c < validWords.size(); c++){
-//                if(tags.get(i).contains(validWords.get(c))){
-//                    results += "\n" + tags.get(i);
-//                    diyTags.setText(results);
-//                }else{
-//                    //invalid words
-//                }
-//            }
-//            Log.e("tags", ""+results);
-//            Log.d("value",extras.get(i));
-//        }
-//    }
+        AlertDialog.Builder builder = new AlertDialog.Builder(CaptureDIY.this);
+        builder.setTitle("Quantity of material: ");
+        builder.setSingleChoiceItems(items, -1,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        String quantityMaterial = items[item] + " " + material.getText().toString();
 
+                        CommunityItem qm = new CommunityItem(quantityMaterial);
+                        itemMaterial.add(qm);
+                        mAdapter.notifyDataSetChanged();
+                        material.setText(" ");
+
+                        Toast.makeText(getApplicationContext(), items[item] + " " + material.getText().toString(),
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(CaptureDIY.this, "Material added.", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(CaptureDIY.this, "Fail", Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
     @Override
     public void onClick(View v) {
@@ -338,11 +333,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         }
     }
 
-//    public void clearFields() {
-//        tags.clear();
-//        diyTags.setText("");
-//        ((ImageView)findViewById(R.id.add_product_image_plus_icon)).setImageResource(android.R.color.transparent);
-//    }
 
     public void getWordBank(){
         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("word_bank");
@@ -397,60 +387,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         byteArray.length);
                 imgView.setImageBitmap(bitmap);
 
-//                Bitmap bmp = (Bitmap) data.getExtras().get("data");
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//
-//                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                byte[] byteArray = stream.toByteArray();
-//
-//                // convert byte array to Bitmap
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0,
-//                        byteArray.length);
-//                imgView.setImageBitmap(bitmap);
-//                new AsyncTask<Bitmap, Void, ClarifaiResponse<List<ClarifaiOutput<Concept>>>>() {
-//
-//                    // Model prediction
-//                    @Override
-//                    protected ClarifaiResponse<List<ClarifaiOutput<Concept>>> doInBackground(Bitmap... bitmaps) {
-//                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                        bitmaps[0].compress(Bitmap.CompressFormat.JPEG, 90, stream);
-//                        byte[] byteArray = stream.toByteArray();
-//                        final ConceptModel general = client.getDefaultModels().generalModel();
-//                        return client.getDefaultModels().generalModel().predict()
-//                                .withInputs(ClarifaiInput.forImage(ClarifaiImage.of(byteArray)))
-//                                .executeSync();
-//                    }
-//
-//                    // Handling API response and then collecting and printing tags
-//                    @Override
-//                    protected void onPostExecute(ClarifaiResponse<List<ClarifaiOutput<Concept>>> response) {
-//                        if (!response.isSuccessful()) {
-//                            Toast.makeText(getApplicationContext(), "API contact error", Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
-//                        final List<ClarifaiOutput<Concept>> predictions = response.get();
-//                        if (predictions.isEmpty()) {
-//                            Toast.makeText(getApplicationContext(), "No results from API", Toast.LENGTH_SHORT).show();
-//                            return;
-//                        }
-//
-//                        final List<Concept> predictedTags = predictions.get(0).data();
-//                        for(int i = 0; i < predictedTags.size(); i++) {
-//                            tags.add(predictedTags.get(i).name());
-//                            extras.add(String.valueOf(predictedTags.get(i).value()));
-//
-//                        }
-//                        printTags();
-//                    }
-//                }.execute(bitmap);
-
-//        } else if (resultCode == RESULT_CANCELED) {
-//            // User cancelled the image capture or selection.
-//            Toast.makeText(getApplicationContext(), "User Cancelled", Toast.LENGTH_SHORT).show();
-//        } else {
-//            // capture failed or did not find file.
-//            Toast.makeText(getApplicationContext(), "Unknown Failure. Please notify app owner.", Toast.LENGTH_SHORT).show();
-//        }
             }
 
         }

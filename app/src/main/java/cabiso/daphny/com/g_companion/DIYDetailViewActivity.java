@@ -29,8 +29,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
@@ -92,7 +90,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     List<String> messageMaterials = new ArrayList<String>();
                     for(int i = 0; i<splitsMat.length; i++){
                         Log.d("splitVal", splitsMat[i].substring(5,splitsMat[i].length()-1));
-                        String message = i+1 +".) "+ splitsMat[i].substring(5,splitsMat[i].length()-1).replaceAll("\\}", "").replaceAll("=", "");
+                        String message = i+1 +".) "+ splitsMat[i].substring(5,splitsMat[i].length()-1).replaceAll("\\}", "")
+                                .replaceAll("=", "");
                         messageMat+="\n"+message;
                         messageMaterials.add(message);
 

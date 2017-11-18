@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +24,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
+import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
 /**
@@ -51,6 +53,7 @@ public class DIYDataActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recommend_diy_data);
 
         progressDialog = new ProgressDialog(this);
+
         //  diy_name = (TextView) findViewById(R.id.diy_name);
         diy_image = (ImageView) findViewById(R.id.diy_image);
         diy_materials = (TextView) findViewById(R.id.diy_materials);
@@ -59,11 +62,16 @@ public class DIYDataActivity extends AppCompatActivity {
         diy_procedures.setMovementMethod(new ScrollingMovementMethod());
         diy_materials.setMovementMethod(new ScrollingMovementMethod());
 
+        final int mPostId = getIntent().getIntExtra("pos", 0);
+        Log.e("mpostID", "" + mPostId);
+
         getIntent().getStringExtra("image");
         int imageID = getIntent().getIntExtra("image", 0);
 
         getIntent().getStringExtra("materials");
-        getIntent().getStringExtra("procedures");
+        String prod = getIntent().getStringExtra("procedures");
+
+        Toast.makeText(getApplicationContext(), "PROCEDURES: "+ prod,Toast.LENGTH_SHORT).show();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -74,32 +82,28 @@ public class DIYDataActivity extends AppCompatActivity {
         }
 
         databaseReference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
-        databaseReference.addChildEventListener(new ChildEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                CommunityItem item = dataSnapshot.getValue(CommunityItem.class);
-                if(item!=null){
-                    Log.e("SNAPSHOT: ",""+item.getVal());
-                    Log.e("SnapDataSnap", ""+dataSnapshot.child("materials").getValue());
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot:dataSnapshot.getChildren()) {
+                    DIYnames diyInfo = dataSnapshot.getValue(DIYnames.class);
 
-                    diy_materials.setText(dataSnapshot.child("materials").toString());
-                    diy_procedures.setText(dataSnapshot.child("procedures").toString());
+//                    diyInfo.get(mPostId).getVal();
+//                diy_name.setText(diyInfo.diyName);
+
+                    CommunityItem item = dataSnapshot.getValue(CommunityItem.class);
+
+                    if (item != null) {
+                        Log.e("SnapItem", "not null");
+                        Log.e("SnapMaterial", "" + item);
+                        Log.e("SnapDataSnap", "" + snapshot.child("materials").getValue());
+
+                        diy_materials.setText(snapshot.child("materials").toString());
+                        diy_procedures.setText(snapshot.child("procedures").toString());
+                    } else {
+                        Log.e("SNAPSHOT: NULL??", "");
+                    }
                 }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
             }
 
             @Override

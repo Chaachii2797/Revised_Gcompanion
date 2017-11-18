@@ -137,8 +137,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         pAdapter = new CommunityAdapter(getApplicationContext(), itemProcedure);
 
 //            adapter = new CommunityAdapter(CaptureDIY.this, R.layout.activity_diy_data, itemMaterial);
-//        materialsList.setAdapter(mAdapter);
-//        proceduresList.setAdapter(pAdapter);
+        materialsList.setAdapter(mAdapter);
+        proceduresList.setAdapter(pAdapter);
 
         getWordBank();
 
@@ -267,20 +267,13 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
                                     databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
                                             taskSnapshot.getDownloadUrl().toString(), userID, results, productID,
-                                            float_this, float_this, new CommunityItem(listMaterial)));
+                                            float_this, float_this));
 
-//                                String listMaterial = itemMaterial.stream().map(CommunityItem::toString).collect(Collectors.joining(", "));
-                                    databaseReference.child(upload).child("materials")
-                                            .setValue(new CommunityItem(listMaterial));
-//                                Map<String, Object> map = new HashMap<>();
-//                                map.put(upload, itemMaterial);
-//                                    databaseReference.child(upload).child("materials").updateChildren(map);
+                               databaseReference.child(upload).child("materials")
+                                        .setValue(itemMaterial);
 
-
-                                    databaseReference.child(upload).child("procedures")
-                                            .setValue(itemProcedure);
-                                    // }
-
+                                databaseReference.child(upload).child("procedures")
+                                        .setValue(itemProcedure);
                             }
 
                             Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
@@ -291,8 +284,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         Intent in = new Intent(CaptureDIY.this, MainActivity.class);
-//                                        in.putExtra("materials", itemMaterial);
-//                                        in.putExtra("procedures", itemProcedure);
                                         startActivity(in);
                                     }
                                 });

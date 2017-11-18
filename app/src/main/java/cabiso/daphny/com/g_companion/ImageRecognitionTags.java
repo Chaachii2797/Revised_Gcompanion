@@ -132,7 +132,6 @@ public class ImageRecognitionTags extends AppCompatActivity{
         }
     }
 
-
     public void getWordBank(){
         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("word_bank");
         myRef.addChildEventListener(new ChildEventListener() {

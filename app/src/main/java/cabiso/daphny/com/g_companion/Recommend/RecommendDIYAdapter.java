@@ -139,4 +139,6 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
 
                 return v;
             }
-    }
+
+
+}

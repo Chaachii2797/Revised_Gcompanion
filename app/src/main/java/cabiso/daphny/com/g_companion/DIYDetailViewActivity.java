@@ -80,7 +80,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
         progressDialog = new ProgressDialog(this);
         diy_name = (TextView) findViewById(R.id.diy_name);
-        //diy_image = (ImageView) findViewById(R.id.diy_image);
         diy_materials = (TextView) findViewById(R.id.diy_materials);
         diy_procedures = (TextView) findViewById(R.id.diy_procedures);
 
@@ -92,20 +91,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                 CommunityItem item = dataSnapshot.getValue(CommunityItem.class);
 
                 if(item!=null){
-                    String strMaterial = "[{\""+dataSnapshot.child("materials").getValue().toString()+"\"}]";
-                    String strProcedure = "[{\""+dataSnapshot.child("procedures").getValue().toString()+"\"}]";
-
-                    Matcher m = Pattern.compile("\\(([^)]+)\\)").matcher(dataSnapshot.child("procedures").getValue().toString());
-
-                    String[] parts = dataSnapshot.child("procedures").getValue().toString().split("\\[");
-                    String part1 = parts[0]; // Apple
-                    String part2 = parts[1]; // 18);
-
-                    String test = dataSnapshot.child("procedures").getValue().toString().replaceAll("[\\\\[\\\\](){}]", "");
-
-                    part2 = part2.replace("]", "");
-
-                    String strMat = dataSnapshot.child("materials").getValue().toString().substring(1, dataSnapshot.child("materials").getValue().toString().length()-1);
                     String[] splitsMat = dataSnapshot.child("materials").getValue().toString().split(",");
 
                     String messageMat = "";
@@ -119,9 +104,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         Log.d("messageProd", messageMat);
                     }
 
-                    String strProd = dataSnapshot.child("procedures").getValue().toString().substring(1, dataSnapshot.child("procedures").getValue().toString().length()-1);
                     String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
-
 
                     String messageProd = "";
                     List<String> messageProcedure = new ArrayList<String>();
@@ -139,7 +122,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     diy_materials.setText(messageMat);
                     diy_procedures.setText(messageProd);
 
-//                    diy_materials.setTag(item);
                     Log.d("SnapItem", "not null");
                     Log.d("SnapMaterial", ""+item);
                     Log.d("SnapDataSnap", ""+dataSnapshot.child("materials").getValue());
@@ -147,65 +129,12 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     Log.d("SnapItem", "null");
                 }
 
-                Log.d("diyName", diyInfo.diyName);
-//                for(DataSnapshot snapshot:dataSnapshot.getChildren()) {
-                    if (diyInfo != null) {
-//                        Log.d("Snapshot material:"+diyInfo.ge, );
-                    } else {
-                        Log.d("Snapshot is", " null");
-                    }
-//                }
-
-//                CommunityItem item = dataSnapshot.child("materials").getValue(CommunityItem.class);
-//                String first = item.getVal().get(0);
-//
-//                diy_materials.setText(first);
-
-//                databaseReference.addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        for(DataSnapshot snapshot:dataSnapshot.getChildren()) {
-//
-//                            if (snapshot.getKey() != null) {
-//                                Log.d("Snapshot is", " null");
-//                            } else {
-//                                Log.d("Snapshot is", snapshot.toString());
-//                            }
-////                            CommunityItem communityItem = snapshot.getValue(CommunityItem.class);
-////                            diy_materials.setText(communityItem.getVal());
-////                            diy_procedures.setText(communityItem.getVal());
-////
-////                            Log.d("getMaterials", "" + communityItem.getVal());
-////                        infoList = new ArrayList<>();
-////                        for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-////                            HashMap map =(HashMap) snapshot.getValue();
-////                            if(map!=null){
-////                                infoList.add((CommunityItem) map.get("val"));
-////                            }
-////                            String v = (String) snapshot.child("val").getValue();
-////                            diy_materials.setText(v);
-////                            Toast.makeText(getApplicationContext(), "VALUE: "+v , Toast.LENGTH_SHORT).show();
-////                        }
-////                        GenericTypeIndicator<List<CommunityItem>> genericTypeIndicator = new GenericTypeIndicator<List<CommunityItem>>(){};
-////                        List<CommunityItem> item_material = dataSnapshot.child("diy_process").child("materials").getValue(genericTypeIndicator);
-////                        Toast.makeText(getApplicationContext(),"mateials: "+item_material,Toast.LENGTH_SHORT).show();
-////                        diy_materials.setText(communityItem.getMaterial());
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//
-//                    }
-//                });
-
                 if (diyInfo.diyUrl != null) {
                     diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPager);
                     diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), diyInfo.diyUrl);
                     diyImagesViewPager.setAdapter(diyImagesViewPagerAdapter);
 
                 Toast.makeText(DIYDetailViewActivity.this, diyInfo.diyUrl, Toast.LENGTH_SHORT).show();
-
                 }
             }
 

@@ -96,12 +96,12 @@ public class Bottle_Recommend extends AppCompatActivity {
                             DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
                             //    Toast.makeText(Bottle_Recommend.this, "item " + item + "\n" + "tagdb" + diYnames.getTag(), Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
-                            if (item.equals(diYnames.getTag())) {
+                          //  if (item.equals(diYnames.getTag())) {
                                 // if(diYnames.getBookmarks()!=null && diYnames.getLikes()!=null){
                                 diyList.add(diYnames);
                                 Collections.sort(diyList);
                                 Collections.reverse(diyList);
-                            }
+                        //    }
                         }
                     }
 

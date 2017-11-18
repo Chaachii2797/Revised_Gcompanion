@@ -173,7 +173,7 @@ public class CommunityFragment extends Fragment{
                     @Override
                     protected void populateViewHolder(final ItemViewHolder viewHolder, final DIYnames model, final int position) {
                         viewHolder.mNameView.setText(model.diyName);
-                        viewHolder.mCategory.setText(model.tag);
+                     //   viewHolder.mCategory.setText(model.tag);
 
                         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
                         final String key = this.getRef(position).getKey();

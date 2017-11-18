@@ -71,7 +71,7 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
 //        ImageButton heart = (ImageButton) v.findViewById(R.id.heartu);
 
         tvName.setText(listDIY.get(position).getDiyName());
-        tvcategory.setText(listDIY.get(position).getTag());
+      //  tvcategory.setText(listDIY.get(position).getTag());
 //        star.setTag(getItem(position).getBookmarks());
         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
 

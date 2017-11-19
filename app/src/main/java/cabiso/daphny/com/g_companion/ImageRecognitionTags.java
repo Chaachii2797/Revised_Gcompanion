@@ -80,6 +80,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
                 String results = " ";
                 for(int i = 0; i < 10; i++) {
                     results += " "+tags.get(i);
+                    Log.e("RESULT: ",""+results);
                     Intent intent = new Intent(ImageRecognitionTags.this,Bottle_Recommend.class);
                     intent.putExtra("result_tag", results);
                     startActivity(intent);

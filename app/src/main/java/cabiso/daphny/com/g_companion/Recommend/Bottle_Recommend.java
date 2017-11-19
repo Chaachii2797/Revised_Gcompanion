@@ -84,16 +84,24 @@ public class Bottle_Recommend extends AppCompatActivity {
         final String intent = getIntent().getStringExtra("result_tag");
 
         final String data = getIntent().getStringExtra("result_tag");
-        String[] items = data.split(" ");
+        final String[] items = data.split(" ");
         for (final String item : items) {
+            Log.e("itemsMASO: ",""+item);
 
             final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
                 myRef.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    if (dataSnapshot.hasChildren()){
+//                    if (dataSnapshot.hasChildren()){
                         if (item != null) {
                             DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
+                            DataSnapshot commu_snapshot = dataSnapshot.child("materials");
+
+
+                            Log.e("item_materials: ",""+dataSnapshot.child("materials").getValue());
+                            Log.e("commu_snapshot: ",""+commu_snapshot);
+
+
                             //    Toast.makeText(Bottle_Recommend.this, "item " + item + "\n" + "tagdb" + diYnames.getTag(), Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                             if (item.equals(diYnames.getDiyName())) {
@@ -103,7 +111,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                                 Collections.reverse(diyList);
                             }
                         }
-                    }
+//                    }
 
                         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
                         lv.setAdapter(adapter);

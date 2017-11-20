@@ -85,6 +85,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                 if(item!=null){
                     String[] splitsMat = dataSnapshot.child("materials").getValue().toString().split(",");
+                    Log.e("messageProd", ""+splitsMat);
 
                     String messageMat = "";
                     List<String> messageMaterials = new ArrayList<String>();
@@ -99,6 +100,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     }
 
                     String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
+                    Log.e("splits", ""+splits);
 
                     String messageProd = "";
                     List<String> messageProcedure = new ArrayList<String>();

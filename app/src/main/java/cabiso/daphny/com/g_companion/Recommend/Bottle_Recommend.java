@@ -92,26 +92,49 @@ public class Bottle_Recommend extends AppCompatActivity {
                 myRef.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                    if (dataSnapshot.hasChildren()){
-                        if (item != null) {
-                            DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
-                            DataSnapshot commu_snapshot = dataSnapshot.child("materials");
+                    if(item!=null){
 
+                    DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
+                    DataSnapshot commu_snapshot = dataSnapshot.child("materials");
+//                    CommunityItem item = dataSnapshot.getValue(CommunityItem.class);
 
-                            Log.e("item_materials: ",""+dataSnapshot.child("materials").getValue());
-                            Log.e("commu_snapshot: ",""+commu_snapshot);
+                    Object items_item = dataSnapshot.child("materials").getValue();
+                    String[] splits = commu_snapshot.toString().split(",");
 
+                    Log.e("item_materials: ",""+dataSnapshot.child("materials").getValue());
+                    Log.e("commu_snapshot: ",""+commu_snapshot);
+                    Log.e("splitsMat: ",""+splits);
+                    Log.e("items_item: ",""+items_item);
 
+                    String messageProd = "";
+                    List<String> messageProcedure = new ArrayList<String>();
+                    for(int i = 0; i<splits.length; i++){
+//                        Log.e("splitted_val", ""+splits[i].substring(30,splits[i].length()-1));
+                        String message = splits[i].substring(7,splits[i].length()-1).replaceAll("\\}", " ").replaceAll("=", " ")
+                                .replaceAll("\\{"," ").replaceAll("key", "").replaceAll("material","").replaceAll("val","")
+                                .replaceAll("pshot","").replaceAll("0","");
+//                        String message = i+1 +".) "+ splits[i].substring(12,splits[i].length()-1).replaceAll("\\}", "").replaceAll("=", "");
+                        messageProd+="\n"+message;
+
+                        messageProcedure.add(message);
+                    }
+
+                    if(messageProd.contains(item)){
+                        Log.e("contains: ",""+messageProd);
+                        diyList.add(diYnames);
+                    }
+                    Log.e("messageProcedure", ""+messageProcedure);
+                    Log.e("messageProd", ""+messageProd);
                             //    Toast.makeText(Bottle_Recommend.this, "item " + item + "\n" + "tagdb" + diYnames.getTag(), Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
-                            if (item.equals(diYnames.getDiyName())) {
-                                // if(diYnames.getBookmarks()!=null && diYnames.getLikes()!=null){
-                                diyList.add(diYnames);
-                                Collections.sort(diyList);
-                                Collections.reverse(diyList);
-                            }
-                        }
-//                    }
+//                            if (item.equals(messageProd)) {
+//                                // if(diYnames.getBookmarks()!=null && diYnames.getLikes()!=null){
+//                                diyList.add(diYnames);
+//                                Collections.sort(diyList);
+//                                Collections.reverse(diyList);
+//                            }
+//                        }
+                    }
 
                         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
                         lv.setAdapter(adapter);
@@ -123,7 +146,6 @@ public class Bottle_Recommend extends AppCompatActivity {
                                 DIYnames selectedItem = adapter.getItem(position);
 
                                 Toast.makeText(getApplicationContext(), "chiii "+position, Toast.LENGTH_SHORT).show();
-
 
 //                                //To-DO get you data from the ItemDetails Getter
 //                                // selectedItem.getImage() or selectedItem.getName() .. etc

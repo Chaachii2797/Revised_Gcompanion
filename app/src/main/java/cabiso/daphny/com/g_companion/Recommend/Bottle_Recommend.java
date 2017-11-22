@@ -61,6 +61,7 @@ public class Bottle_Recommend extends AppCompatActivity {
     private List<String> tags = new ArrayList<>();
     private Activity context;
 
+    List<String> messageProcedure  = new ArrayList<String>();
 
     public Bottle_Recommend() {
 
@@ -96,45 +97,39 @@ public class Bottle_Recommend extends AppCompatActivity {
 
                     DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
                     DataSnapshot commu_snapshot = dataSnapshot.child("materials");
-//                    CommunityItem item = dataSnapshot.getValue(CommunityItem.class);
 
-                    Object items_item = dataSnapshot.child("materials").getValue();
+//                    Object items_item = dataSnapshot.child("materials").getValue().toString();
                     String[] splits = commu_snapshot.toString().split(",");
 
-                    Log.e("item_materials: ",""+dataSnapshot.child("materials").getValue());
                     Log.e("commu_snapshot: ",""+commu_snapshot);
                     Log.e("splitsMat: ",""+splits);
-                    Log.e("items_item: ",""+items_item);
 
                     String messageProd = "";
-                    List<String> messageProcedure = new ArrayList<String>();
                     for(int i = 0; i<splits.length; i++){
 //                        Log.e("splitted_val", ""+splits[i].substring(30,splits[i].length()-1));
-                        String message = splits[i].substring(7,splits[i].length()-1).replaceAll("\\}", " ").replaceAll("=", " ")
-                                .replaceAll("\\{"," ").replaceAll("key", "").replaceAll("material","").replaceAll("val","")
-                                .replaceAll("pshot","").replaceAll("0","");
+//                        String message = splits[i].substring(7,splits[i].length()-1).replaceAll("\\}", " ").replaceAll("=", " ")
+//                                .replaceAll("\\{"," ").replaceAll("key", "").replaceAll("material","").replaceAll("val","")
+//                                .replaceAll("pshot","").replaceAll("0","");
+//
+                        String message = splits[i].substring(0,splits[i].length()).replaceAll("\\}", " ").replaceAll("=", " ")
+                                .replaceAll("\\{"," ").replaceAll("DataSnapshot","").replaceAll("key","").replaceAll("materials,","")
+                                .replaceAll("value","").replaceAll("val","").replaceAll("[0-9]","").trim();
 //                        String message = i+1 +".) "+ splits[i].substring(12,splits[i].length()-1).replaceAll("\\}", "").replaceAll("=", "");
-                        messageProd+="\n"+message;
+                        messageProd = " "+message;
 
                         messageProcedure.add(message);
+                        if(item.equals(message)){
+                            Log.e("contains: ",""+messageProd);
+                            Log.e("contains: ",""+message);
+                            diyList.add(diYnames);
+                        }
                     }
 
-                    if(messageProd.contains(item)){
-                        Log.e("contains: ",""+messageProd);
-                        diyList.add(diYnames);
-                    }
                     Log.e("messageProcedure", ""+messageProcedure);
                     Log.e("messageProd", ""+messageProd);
                             //    Toast.makeText(Bottle_Recommend.this, "item " + item + "\n" + "tagdb" + diYnames.getTag(), Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
-//                            if (item.equals(messageProd)) {
-//                                // if(diYnames.getBookmarks()!=null && diYnames.getLikes()!=null){
-//                                diyList.add(diYnames);
-//                                Collections.sort(diyList);
-//                                Collections.reverse(diyList);
-//                            }
-//                        }
-                    }
+                        }
 
                         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
                         lv.setAdapter(adapter);

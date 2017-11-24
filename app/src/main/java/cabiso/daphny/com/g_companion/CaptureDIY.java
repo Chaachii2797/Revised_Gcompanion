@@ -14,7 +14,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.DragEvent;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
@@ -93,7 +92,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     private ImageButton btnAddMaterial, btnAddProcedure;
     private EditText name, material, procedure;
     private ImageView imgView;
-    private ListView materialsList, proceduresList;
+    private ListView materialsList;
+    private ListView proceduresList;
     private CommunityAdapter pAdapter;
     private CommunityAdapter mAdapter;
     ArrayList<CommunityItem> itemMaterial;
@@ -134,12 +134,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         materialsList.setAdapter(mAdapter);
         proceduresList.setAdapter(pAdapter);
 
-        materialsList.setOnDragListener(new ListView.OnDragListener(){
-                                            @Override
-                                            public boolean onDrag(View v, DragEvent event) {
-                                                return false;
-                                            }
-                                        });
 
         String[] values = new String[] { "Quantity" };
 
@@ -165,6 +159,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
 
 
+
         btnAddProcedure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,9 +168,10 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     Toast.makeText(CaptureDIY.this, "Please enter procedures", Toast.LENGTH_SHORT).show();
                 } else {
                     CommunityItem md = new CommunityItem(inputProcedure);
-                    itemProcedure.add(md);
-                    pAdapter.notifyDataSetChanged();
-                    procedure.setText(" ");
+                        itemProcedure.add(md);
+                        pAdapter.notifyDataSetChanged();
+                        procedure.setText(" ");
+
                 }
             }
         });

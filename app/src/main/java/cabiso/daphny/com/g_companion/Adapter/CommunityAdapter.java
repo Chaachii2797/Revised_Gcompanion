@@ -28,8 +28,6 @@ public class CommunityAdapter extends BaseAdapter {
         this.itemList = modelList;
     }
 
-//    public CommunityAdapter(CommunityFragment communityFragment, int recommend_ui, ArrayList<DIYMethods> diyList) {
-//    }
 
     @Override
     public int getCount() {
@@ -64,6 +62,7 @@ public class CommunityAdapter extends BaseAdapter {
 
             CommunityItem m = itemList.get(position);
             tvMaterials.setText(pos + ".) " +m.getVal());
+
 //            tvMaterials.setText(itemList.get(position).getMaterial());
 
             // click listener for remove button
@@ -80,7 +79,11 @@ public class CommunityAdapter extends BaseAdapter {
 
 //            tvName.setText(itemList.get(position).getValue());
             //Glide.with(context).load(listDIY.get(position).getProductPictureURLs().get(0)).into(img);
+
+
         }
+
         return convertView;
     }
+
 }

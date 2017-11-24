@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
@@ -42,6 +43,8 @@ public class DIYDataActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private StorageReference mStorageRef;
 
+    private DIYnames diYnamesModel;
+
     private TextView diy_name, diy_materials, diy_procedures;
     private ImageView diy_image;
     private String userID;
@@ -51,6 +54,21 @@ public class DIYDataActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend_diy_data);
+
+        String diyReferenceString = getIntent().getStringExtra("Community Ref");
+
+        databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceString);
+
+        diYnamesModel = new DIYnames();
+
+        if(getIntent().getExtras().getSerializable("diyName")!=null){
+            diYnamesModel = (DIYnames) getIntent().getExtras().getSerializable("diyName");
+            if(diYnamesModel!=null){
+                Log.d("ViewRecommend", "not null");
+            }else{
+                Log.d("ViewRecommend", "null");
+            }
+        }
 
         progressDialog = new ProgressDialog(this);
 
@@ -85,26 +103,68 @@ public class DIYDataActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot:dataSnapshot.getChildren()) {
-                    DIYnames diyInfo = dataSnapshot.getValue(DIYnames.class);
-
-//                    diyInfo.get(mPostId).getVal();
-//                diy_name.setText(diyInfo.diyName);
-
-                    CommunityItem item = dataSnapshot.getValue(CommunityItem.class);
-
-                    if (item != null) {
-                        Log.e("SnapItem", "not null");
-                        Log.e("SnapMaterial", "" + item);
-                        Log.e("SnapDataSnap", "" + snapshot.child("materials").getValue());
-
-                        diy_materials.setText(snapshot.child("materials").toString());
-                        diy_procedures.setText(snapshot.child("procedures").toString());
-                    } else {
-                        Log.e("SNAPSHOT: NULL??", "");
-                    }
+                if(dataSnapshot == null){
+                    Log.d("dataSnap","null");
+                }else{
+                    Log.d("dataSnap","not null");
                 }
-            }
+                DIYnames diyInfo = dataSnapshot.getValue(DIYnames.class);
+//                diy_name.setText(diyInfo.diyName);
+                CommunityItem item = dataSnapshot.getValue(CommunityItem.class);
+
+                if(item!=null){
+                    String[] splitsMat = dataSnapshot.child("materials").getValue().toString().split(",");
+                    Log.e("messageProd", ""+splitsMat);
+
+                    String messageMat = "";
+                    List<String> messageMaterials = new ArrayList<String>();
+                    for(int i = 0; i<splitsMat.length; i++){
+                        Log.d("splitVal", splitsMat[i].substring(5,splitsMat[i].length()-1));
+                        String message = i+1 +".) "+ splitsMat[i].substring(5,splitsMat[i].length()-1).replaceAll("\\}", "")
+                                .replaceAll("=", "");
+                        messageMat+="\n"+message;
+                        messageMaterials.add(message);
+
+                        Log.d("messageProd", messageMat);
+                    }
+
+                    String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
+                    Log.e("splits", ""+splits);
+
+                    String messageProd = "";
+                    List<String> messageProcedure = new ArrayList<String>();
+                    for(int i = 0; i<splits.length; i++){
+                        Log.d("splitVal", splits[i].substring(5,splits[i].length()-1));
+                        String message = i+1 +".) "+ splits[i].substring(5,splits[i].length()-1).replaceAll("\\}", "").replaceAll("=", "");
+                        messageProd+="\n"+message;
+                        messageProcedure.add(message);
+
+                        Log.d("messageProd", messageProd);
+                    }
+
+                    Log.d("MessageProcedure", messageProcedure.toString());
+
+                    diy_materials.setText(messageMat);
+                    diy_procedures.setText(messageProd);
+
+                    Log.d("SnapItem", "not null");
+                    Log.d("SnapMaterial", ""+item);
+                    Log.d("SnapDataSnap", ""+dataSnapshot.child("materials").getValue());
+                }else{
+                    Log.d("SnapItem", "null");
+                }
+
+//                    if (item != null) {
+//                        Log.e("SnapItem", "not null");
+//                        Log.e("SnapMaterial", "" + item);
+//                        Log.e("SnapDataSnap", "" + snapshot.child("materials").getValue());
+//
+//                        diy_materials.setText(snapshot.child("materials").toString());
+//                        diy_procedures.setText(snapshot.child("procedures").toString());
+//                    } else {
+//                        Log.e("SNAPSHOT: NULL??", "");
+//                    }
+                }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {

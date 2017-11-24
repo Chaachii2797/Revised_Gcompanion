@@ -76,16 +76,20 @@ public class ImageRecognitionTags extends AppCompatActivity{
         diyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String results = " ";
+                String priority = " ";
+
                 for(int i = 0; i < 10; i++) {
                     results += " "+tags.get(i);
+                    priority +=" "+extras.get(i);
                     Log.e("RESULT: ",""+results);
                     Intent intent = new Intent(ImageRecognitionTags.this,Bottle_Recommend.class);
+                    intent.putExtra("result_priority", priority);
                     intent.putExtra("result_tag", results);
+                    Log.e("PRIORITY: ",""+priority);
+                    Log.e("RESULTS: ",""+results);
                     startActivity(intent);
                 }
-
             }
         });
         dispatchTakePictureIntent();
@@ -107,15 +111,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
     public void printTags() {
         String results = "Tags: ";
-
-//        if(!tags.get(0).equals("no person")){
-//            tv_category.setText(tags.get(0));
-//        }else{
-//            tv_category.setText(tags.get(1));
-//        }
-
         for(int i = 0; i < 10; i++) {
-
             for(int c = 0; c < validWords.size(); c++){
                 if(tags.get(i).contains(validWords.get(c))){
                     results += "\n" + tags.get(i);

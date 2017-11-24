@@ -2,11 +2,9 @@ package cabiso.daphny.com.g_companion.Model;
 
 import android.support.annotation.NonNull;
 
-/**
- * Created by Lenovo on 10/23/2017.
- */
+import java.io.Serializable;
 
-public class DIYnames implements Comparable<DIYnames>{
+public class DIYnames implements Comparable<DIYnames>, Serializable{
 
     public String diyName;
     public String diyUrl;
@@ -14,11 +12,9 @@ public class DIYnames implements Comparable<DIYnames>{
     public String productID;
     public Float bookmarks;
     public Float likes;
+    public int materialMatches;
 
-    public DIYnames(){
-
-    }
-
+    public DIYnames(){}
     public DIYnames(String diyName, String diyUrl, String user_id, String productID,
                     Float bookmarks, Float likes){
         this.diyName = diyName;
@@ -27,6 +23,14 @@ public class DIYnames implements Comparable<DIYnames>{
         this.productID = productID;
         this.bookmarks = bookmarks;
         this.likes = likes;
+    }
+
+    public int getMaterialMatches() {
+        return materialMatches;
+    }
+
+    public void setMaterialMatches(int materialMatches) {
+        this.materialMatches = materialMatches;
     }
 
     public String getDiyName() {
@@ -86,5 +90,10 @@ public class DIYnames implements Comparable<DIYnames>{
         }else{
             return 0;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "product name : "+diyName;
     }
 }

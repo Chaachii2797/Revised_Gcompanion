@@ -1,10 +1,13 @@
 package cabiso.daphny.com.g_companion;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,17 +15,28 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cunoraz.tagview.Tag;
+import com.cunoraz.tagview.TagView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -38,6 +52,9 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +66,9 @@ import java.util.Random;
 
 import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
+import cabiso.daphny.com.g_companion.Model.Constants;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.Model.TagClass;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 
@@ -90,6 +109,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     private static final int MAX_LENGTH = 100;
     private Button submitButton;
     private ImageButton btnAddMaterial, btnAddProcedure;
+    private TagView tagGroup;
     private EditText name, material, procedure;
     private ImageView imgView;
     private ListView materialsList;
@@ -102,6 +122,14 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     private ProgressDialog progressDialog;
     UploadTask uploadTask;
+
+    private ArrayList<TagClass> tagList;
+    String[] unitOfMeasurement;
+    String[] quantity;
+    String spinner_item_um;
+    String spinner_item_q;
+    SpinnerAdapter umAdapter;
+    SpinnerAdapter1 qAdapter;
 
 
     @Override
@@ -118,7 +146,69 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         storageReference = mStorage.getReferenceFromUrl("gs://g-companion.appspot.com/").child("diy_by_tags");
 
         name = (EditText) findViewById(R.id.add_diy_name);
+
         material = (EditText) findViewById(R.id.etMaterials);
+        tagGroup = (TagView) findViewById(R.id.tag_group);
+
+        unitOfMeasurement = getResources().getStringArray(R.array.UM);
+        umAdapter=new SpinnerAdapter(getApplicationContext());
+
+        quantity = getResources().getStringArray(R.array.qty);
+        qAdapter=new SpinnerAdapter1(getApplicationContext());
+
+
+        material.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                setTags(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        tagGroup.setOnTagLongClickListener(new TagView.OnTagLongClickListener() {
+            @Override
+            public void onTagLongClick(Tag tag, int position) {
+                Toast.makeText(CaptureDIY.this, "Long Click: " + tag.text, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        tagGroup.setOnTagClickListener(new TagView.OnTagClickListener() {
+            @Override
+            public void onTagClick(Tag tag, int position) {
+                material.setText(tag.text);
+                material.setSelection(tag.text.length());//to set cursor position
+
+            }
+        });
+        tagGroup.setOnTagDeleteListener(new TagView.OnTagDeleteListener() {
+
+            @Override
+            public void onTagDeleted(final TagView view, final Tag tag, final int position) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(CaptureDIY.this);
+                builder.setMessage("\"" + tag.text + "\" will be delete. Are you sure?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        view.remove(position);
+                        Toast.makeText(CaptureDIY.this, "\"" + tag.text + "\" deleted", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("No", null);
+                builder.show();
+
+            }
+        });
+
+
         procedure = (EditText) findViewById(R.id.etProcedures);
         imgView = (ImageView) findViewById(R.id.add_product_image_plus_icon);
         materialsList = (ListView) findViewById(R.id.materialsList);
@@ -134,26 +224,90 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         materialsList.setAdapter(mAdapter);
         proceduresList.setAdapter(pAdapter);
 
-
         String[] values = new String[] { "Quantity" };
 
         getWordBank();
+        prepareTags();
 
 
         btnAddMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final Dialog dialog = new Dialog(CaptureDIY.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.row_spinner);
+                dialog.setCancelable(true);
+
+                final Spinner spinner1 = (Spinner) dialog.findViewById(R.id.spinner1);
+                final Spinner spinner2 = (Spinner) dialog.findViewById(R.id.spinner2);
+                Button okButton = (Button) dialog.findViewById(R.id.okaybtn);
+
+                spinner1.setAdapter(umAdapter);
+                spinner2.setAdapter(qAdapter);
+
+
+                spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        // TODO Auto-generated method stub
+                        spinner_item_um = unitOfMeasurement[position];
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
+
+                spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        // TODO Auto-generated method stub
+                        spinner_item_q = quantity[position];
+
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        // TODO Auto-generated method stub
+
+                    }
+                });
 
                 String inputMaterials = material.getText().toString();
                 if (inputMaterials.isEmpty()) {
                     Toast.makeText(CaptureDIY.this, "Please enter materials", Toast.LENGTH_SHORT).show();
                 } else {
-                    //CommunityItem md = new CommunityItem(inputMaterials);
-                    AlertDialogView();
-//                    itemMaterial.add(md);
+//                    String quantityMaterial = spinner_item + " " + material.getText().toString();
+//
+//                    CommunityItem qm = new CommunityItem(quantityMaterial);
+//                    itemMaterial.add(qm);
 //                    mAdapter.notifyDataSetChanged();
 //                    material.setText(" ");
+
+                    Toast.makeText(CaptureDIY.this, spinner_item_q + spinner_item_um, Toast.LENGTH_SHORT).show();
                 }
+
+                dialog.show();
+
+                okButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String quantityMaterial = spinner_item_q + " " + spinner_item_um + " " + material.getText().toString();
+
+                        CommunityItem qm = new CommunityItem(quantityMaterial);
+                        itemMaterial.add(qm);
+                        mAdapter.notifyDataSetChanged();
+                        material.setText(" ");
+
+                        Toast.makeText(CaptureDIY.this, spinner_item_q + " " +spinner_item_um, Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+
+                    }
+                });
+
             }
         });
 
@@ -234,7 +388,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
                         databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
-                                taskSnapshot.getDownloadUrl().toString(), userID, productID,
+                                taskSnapshot.getDownloadUrl().toString(), userID, "prod_000"+ productID,
                                 float_this, float_this));
 
                         databaseReference.child(upload).child("materials").setValue(itemMaterial);
@@ -264,17 +418,161 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         });
     }
 
+    public class SpinnerAdapter extends BaseAdapter {
+        Context context;
+        private LayoutInflater mInflater;
+
+        public SpinnerAdapter(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return unitOfMeasurement.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final ListContent holder;
+            View v = convertView;
+            if (v == null) {
+                mInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+                v = mInflater.inflate(R.layout.row_textview, null);
+                holder = new ListContent();
+                holder.text = (TextView) v.findViewById(R.id.textView1);
+
+                v.setTag(holder);
+            } else {
+                holder = (ListContent) v.getTag();
+            }
+            holder.text.setText(unitOfMeasurement[position]);
+            return v;
+        }
+    }
+
+    public class SpinnerAdapter1 extends BaseAdapter {
+        Context context;
+        private LayoutInflater mInflater;
+
+        public SpinnerAdapter1(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return quantity.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final ContentQty holder1;
+            View vi = convertView;
+            if (vi == null) {
+                mInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+                vi = mInflater.inflate(R.layout.row_textview, null);
+                holder1 = new ContentQty();
+                holder1.text1 = (TextView) vi.findViewById(R.id.textView1);
+
+                vi.setTag(holder1);
+            } else {
+                holder1 = (ContentQty) vi.getTag();
+            }
+            holder1.text1.setText(quantity[position]);
+            return vi;
+        }
+    }
+
+
+    static class ListContent {
+        TextView text;
+    }
+
+    static class ContentQty {
+        TextView text1;
+    }
+
+    //Materials Tags
+    private void prepareTags() {
+        tagList = new ArrayList<>();
+        JSONArray jsonArray;
+        JSONObject temp;
+        try {
+            jsonArray = new JSONArray(Constants.MATERIALS);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                temp = jsonArray.getJSONObject(i);
+                tagList.add(new TagClass(temp.getString("code"), temp.getString("name")));
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void setTags(CharSequence cs) {
+        /**
+         * for empty edittext
+         */
+        if (cs.toString().equals("")) {
+            tagGroup.addTags(new ArrayList<Tag>());
+            return;
+        }
+
+        String text = cs.toString();
+        ArrayList<Tag> tags = new ArrayList<>();
+        Tag tag;
+
+
+        for (int i = 0; i < tagList.size(); i++) {
+            if (tagList.get(i).getName().toLowerCase().startsWith(text.toLowerCase())) {
+                tag = new Tag(tagList.get(i).getName());
+                tag.radius = 10f;
+                tag.layoutColor = Color.parseColor(tagList.get(i).getColor());
+                if (i % 2 == 0) // you can set deletable or not
+                    tag.isDeletable = true;
+                tags.add(tag);
+            }
+        }
+        tagGroup.addTags(tags);
+
+    }
+
+
+
     //Quantity Chooser
     private void AlertDialogView() {
         final CharSequence[] items = { "1pc", "2pcs", "3pcs", "4pcs", "5pcs", "6pcs", "7pcs",
                 "8pcs", "9pcs", "10pcs"};
 
+//        final CharSequence[] unitOfMeasurement = { "meters", "centimeters", "liters", "milligrams ", "grams", "kilograms", "inches ",
+//                "feet", "square inches", "gallon"};
+
         AlertDialog.Builder builder = new AlertDialog.Builder(CaptureDIY.this);
         builder.setTitle("Quantity of material: ");
-        builder.setSingleChoiceItems(items, -1,
+        builder.setSingleChoiceItems(unitOfMeasurement, -1,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
-                        String quantityMaterial = items[item] + " " + material.getText().toString();
+                        String quantityMaterial = unitOfMeasurement[item] + " " + material.getText().toString();
 
                         CommunityItem qm = new CommunityItem(quantityMaterial);
                         itemMaterial.add(qm);

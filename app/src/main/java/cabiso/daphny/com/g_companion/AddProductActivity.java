@@ -78,7 +78,7 @@ public class AddProductActivity extends AppCompatActivity{
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
 
-        marketplaceReference = FirebaseDatabase.getInstance().getReference().child("marketplace");
+        marketplaceReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
         currentProductReference=marketplaceReference.push();
         currentKey=currentProductReference.getKey();

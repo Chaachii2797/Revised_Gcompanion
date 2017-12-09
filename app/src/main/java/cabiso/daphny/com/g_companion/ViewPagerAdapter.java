@@ -12,7 +12,7 @@ import static cabiso.daphny.com.g_companion.MarketPlaceFragment.*;
 
 class ViewPagerAdapter extends FragmentStatePagerAdapter{
 
-    private static int TAB_COUNT = 2;
+    private static int TAB_COUNT = 1;
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -22,12 +22,12 @@ class ViewPagerAdapter extends FragmentStatePagerAdapter{
     public Fragment getItem(int position) {
 
         switch (position) {
-            case 0:
-                return MarketPlaceFragment.newInstance();
-            case 1:
-                return CommunityFragment.newInstance();
+//            case 0:
+//                return MarketPlaceFragment.newInstance();
+//            case 0:
+//                return CommunityFragment.newInstance();
             default:
-                return null;
+                return CommunityFragment.newInstance();
         }
     }
 
@@ -42,8 +42,8 @@ class ViewPagerAdapter extends FragmentStatePagerAdapter{
             case 0:
                 return TITLE;
 
-            case 1:
-                return CommunityFragment.TITLE;
+//            case 1:
+//                return CommunityFragment.TITLE;
         }
         return super.getPageTitle(position);
     }

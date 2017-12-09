@@ -6,20 +6,23 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -36,11 +39,16 @@ import java.io.File;
 public class MarketPlaceFragment extends Fragment{
 
     private DatabaseReference mDatabaseReference;
+    private DatabaseReference communityReference;
     private DatabaseReference marketplaceReference;
+    private GridView gridview;
     private RecyclerView recyclerView;
     private OnListFragmentInteractionListener mListener;
     File productImageTempFile = null;
-    private FloatingActionButton fab1;
+    //private FloatingActionButton fab1;
+    private com.github.clans.fab.FloatingActionButton fab1, fab2, fab3;
+    private FloatingActionMenu fam;
+    private Animation fab_open, fab_close;
 
 
     /**
@@ -64,8 +72,10 @@ public class MarketPlaceFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         marketplaceReference = mDatabaseReference.child("marketplace");
+
 
     }
 
@@ -76,9 +86,43 @@ public class MarketPlaceFragment extends Fragment{
 
         Context context = view.getContext();
         recyclerView = (RecyclerView) view.findViewById(R.id.marketList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+//        gridview = (GridView) view.findViewById(R.id.gridview);
+//        gridview.setAdapter(new DIYHolder(this));
+        int numberOfColumns = 2;
 
-        fab1 = (FloatingActionButton) view.findViewById(R.id.market_fab);
+        recyclerView.setLayoutManager(new GridLayoutManager(context, numberOfColumns));
+
+        fam = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
+        fam.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
+            @Override
+            public void onMenuToggle(boolean opened) {
+                if (opened) {
+                } else {
+                }
+            }
+        });
+        fab2 = (com.github.clans.fab.FloatingActionButton) view.findViewById(R.id.community_fab);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(getActivity(), CaptureDIY.class);
+                startActivity(in);
+            }
+        });
+
+        fab3 = (com.github.clans.fab.FloatingActionButton) view.findViewById(R.id.image_recog_fab);
+        fab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(getActivity(), ImageRecognitionTags.class);
+                Snackbar.make(view, "Please wait.......", Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null).show();
+                startActivity(in);
+            }
+        });
+
+
+        fab1 = (com.github.clans.fab.FloatingActionButton) view.findViewById(R.id.market_fab);
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,16 +139,16 @@ public class MarketPlaceFragment extends Fragment{
     @Override
     public void onStart(){
         super.onStart();
-        Toast.makeText(getActivity(), "yow! yow!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Hi! Welcome!", Toast.LENGTH_SHORT).show();
 
         FirebaseRecyclerAdapter<ProductInfo, ItemViewHolder> adapter =
                 new FirebaseRecyclerAdapter<ProductInfo, ItemViewHolder>(ProductInfo.class,
-                R.layout.recycler_item,ItemViewHolder.class, marketplaceReference ) {
+                R.layout.recycler_item,ItemViewHolder.class, marketplaceReference) {
 
             @Override
             protected void populateViewHolder(final ItemViewHolder viewHolder, ProductInfo model, final int position) {
                 viewHolder.mNameView.setText(model.title);
-                viewHolder.mDescriptionView.setText(model.desc);
+                //viewHolder.mDescriptionView.setText(model.desc);
                 viewHolder.mPriceView.setText(model.price);
                 try{
                     String productPictureURL = model.productPictureURLs.get(0);
@@ -170,7 +214,7 @@ public class MarketPlaceFragment extends Fragment{
 
         public final View mView;
         public final TextView mNameView;
-        public final TextView mDescriptionView;
+       // public final TextView mDescriptionView;
         public final TextView mPriceView;
         public final ImageView mProductImageView;
 
@@ -178,7 +222,7 @@ public class MarketPlaceFragment extends Fragment{
             super(view);
             mView = view;
             mNameView = (TextView) view.findViewById(R.id.item_name);
-            mDescriptionView = (TextView) view.findViewById(R.id.item_description);
+           // mDescriptionView = (TextView) view.findViewById(R.id.item_description);
             mPriceView = (TextView) view.findViewById(R.id.item_price);
             mProductImageView = (ImageView) view.findViewById(R.id.diy_item_icon);
 
@@ -205,4 +249,6 @@ public class MarketPlaceFragment extends Fragment{
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(DatabaseReference ref);
     }
+
+
 }

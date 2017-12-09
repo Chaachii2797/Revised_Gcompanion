@@ -35,7 +35,9 @@
             android:singleLine="true"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_product_image_plus_icon" />
+            app:layout_constraintTop_toBottomOf="@+id/add_product_image_plus_icon"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
 
         <EditText
@@ -56,7 +58,9 @@
             app:layout_constraintHorizontal_bias="0.8"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/btnMaterial"
-            app:layout_constraintTop_toBottomOf="@+id/add_diy_name" />
+            app:layout_constraintTop_toBottomOf="@+id/add_diy_name"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <EditText
             android:id="@+id/etProcedures"
@@ -76,7 +80,9 @@
             app:layout_constraintHorizontal_bias="0.8"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/btnProcedure"
-            app:layout_constraintTop_toBottomOf="@+id/materialsList" />
+            app:layout_constraintTop_toBottomOf="@+id/materialsList"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <ImageView
             android:id="@+id/add_product_image_plus_icon"
@@ -86,11 +92,13 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="-1dp"
             android:src="@drawable/add"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="2dp" />
 
         <Button
             android:id="@+id/submit_diy"
@@ -108,7 +116,9 @@
             android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <ImageButton
             android:id="@+id/btnMaterial"
@@ -118,7 +128,6 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             app:srcCompat="@drawable/ic_add"
-            android:layout_marginRight="-8dp"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="14dp"
             app:layout_constraintTop_toBottomOf="@+id/add_diy_name" />
@@ -131,7 +140,6 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             app:srcCompat="@drawable/ic_add"
-            android:layout_marginRight="-8dp"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginTop="17dp"
             app:layout_constraintTop_toBottomOf="@+id/materialsList" />
@@ -145,7 +153,6 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
             android:background="@drawable/edittext_background"
             android:footerDividersEnabled="true"
             android:headerDividersEnabled="true"
@@ -155,7 +162,11 @@
             android:paddingBottom="5dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etMaterials" />
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/tags_laoyut" />
+
 
         <ListView
             android:id="@+id/proceduresList"
@@ -165,7 +176,6 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/materialsList"
             android:layout_marginBottom="8dp"
-            android:layout_marginLeft="-8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/edittext_background"
@@ -180,8 +190,32 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etProcedures"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="1.0"
+            android:layout_marginEnd="8dp" />
 
+        <ScrollView
+            android:id="@+id/tags_laoyut"
+            android:layout_width="312dp"
+            android:layout_height="200dp"
+            android:layout_below="@+id/editText"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="15dp"
+            android:background="@android:color/white"
+            android:visibility="visible"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etMaterials"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
+
+            <com.cunoraz.tagview.TagView
+                android:id="@+id/tag_group"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp" />
+
+        </ScrollView>
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

@@ -4,8 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg1"
     tools:context="cabiso.daphny.com.g_companion.MainActivity">
 
+    <View
+        android:id="@+id/opacityFilter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ceffce"
+        android:layout_alignParentBottom="true"
+        android:alpha="0.5">
+    </View>
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

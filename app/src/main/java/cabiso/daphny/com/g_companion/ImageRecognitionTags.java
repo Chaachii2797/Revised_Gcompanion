@@ -1,18 +1,26 @@
 package cabiso.daphny.com.g_companion;
 
-import android.content.DialogInterface;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +38,6 @@ import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiResponse;
-import clarifai2.api.request.input.SearchClause;
 import clarifai2.dto.input.ClarifaiImage;
 import clarifai2.dto.input.ClarifaiInput;
 import clarifai2.dto.model.ConceptModel;
@@ -48,12 +55,21 @@ public class ImageRecognitionTags extends AppCompatActivity{
     private ImageView imageView;
     private Button diyBtn;
     private TextView tvTag, tv_category;
+    private EditText addMaterial;
+    private ImageButton btnMaterial;
 
     private List<String> tags = new ArrayList<>();
     private List<String> extras = new ArrayList<>();
     private List<String> validWords = new ArrayList<>();
     final ClarifaiClient client;
     String CURRENT_MODEL;
+
+    String[] unitOfMeasurement;
+    String[] quantity;
+    String spinner_item_um;
+    String spinner_item_q;
+    SpinnerAdapter nsAdapter;
+    SpinnerAdapter1 qtyAdapter;
 
     public ImageRecognitionTags() {
         client = new ClarifaiBuilder("cb169e9d3f9e4ec5a7769cc0422f3162").buildSync();
@@ -65,6 +81,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_recog_tag);
 
+        getWordBank();
 
         //  firstFrame = (FrameLayout)findViewById(R.id.FirstFrame);
         diyBtn = (Button)findViewById(R.id.btnDIY);
@@ -72,7 +89,213 @@ public class ImageRecognitionTags extends AppCompatActivity{
         tvTag = (TextView) findViewById(R.id.tvTag);
         //tv_category = (TextView) findViewById(R.id.tvCategory);
 
-        getWordBank();
+        addMaterial = (EditText) findViewById(R.id.addMaterials);
+        btnMaterial = (ImageButton) findViewById(R.id.btnAddMaterial);
+
+        Spinner spinnerUm1 = (Spinner) findViewById(R.id.spinnerUM1);
+        Spinner spinnerUm2 = (Spinner) findViewById(R.id.spinnerUM2);
+        Spinner spinnerUm3 = (Spinner) findViewById(R.id.spinnerUM3);
+
+        Spinner spinnerQty1 = (Spinner) findViewById(R.id.spinnerqty1);
+        Spinner spinnerQty2 = (Spinner) findViewById(R.id.spinnerqty2);
+        Spinner spinnerQty3 = (Spinner) findViewById(R.id.spinnerqty3);
+
+        unitOfMeasurement = getResources().getStringArray(R.array.UM);
+        nsAdapter= new SpinnerAdapter(getApplicationContext());
+
+        quantity = getResources().getStringArray(R.array.qty);
+        qtyAdapter=new SpinnerAdapter1(getApplicationContext());
+
+        spinnerUm1.setAdapter(nsAdapter);
+        spinnerUm2.setAdapter(nsAdapter);
+        spinnerUm3.setAdapter(nsAdapter);
+
+        spinnerQty1.setAdapter(qtyAdapter);
+        spinnerQty2.setAdapter(qtyAdapter);
+        spinnerQty3.setAdapter(qtyAdapter);
+
+        spinnerUm1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO Auto-generated method stub
+                spinner_item_um = unitOfMeasurement[position];
+
+                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+        spinnerUm1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO Auto-generated method stub
+                spinner_item_um = unitOfMeasurement[position];
+
+                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+        spinnerUm2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO Auto-generated method stub
+                spinner_item_um = unitOfMeasurement[position];
+
+                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+
+            }
+        });spinnerUm3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO Auto-generated method stub
+                spinner_item_um = unitOfMeasurement[position];
+
+                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+        spinnerQty1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO Auto-generated method stub
+                spinner_item_q = quantity[position];
+
+                Toast.makeText(ImageRecognitionTags.this, spinner_item_q, Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+        spinnerQty2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO Auto-generated method stub
+                spinner_item_q = quantity[position];
+
+                Toast.makeText(ImageRecognitionTags.this, spinner_item_q, Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+        spinnerQty3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // TODO Auto-generated method stub
+                spinner_item_q = quantity[position];
+
+                Toast.makeText(ImageRecognitionTags.this, spinner_item_q, Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+        btnMaterial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(ImageRecognitionTags.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.row_spinner);
+                dialog.setCancelable(true);
+
+                final Spinner spinnerUM = (Spinner) dialog.findViewById(R.id.spinner1);
+                final Spinner spinnerQty = (Spinner) dialog.findViewById(R.id.spinner2);
+                Button okButton = (Button) dialog.findViewById(R.id.okaybtn);
+
+                spinnerQty.setAdapter(qtyAdapter);
+                spinnerUM.setAdapter(nsAdapter);
+
+
+                spinnerUM.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        // TODO Auto-generated method stub
+                        spinner_item_um = unitOfMeasurement[position];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        // TODO Auto-generated method stub
+                    }
+                });
+
+                spinnerQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        // TODO Auto-generated method stub
+                        spinner_item_q = quantity[position];
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        // TODO Auto-generated method stub
+                    }
+                });
+
+                String inputMaterials = addMaterial.getText().toString();
+                if (inputMaterials.isEmpty()) {
+                    Toast.makeText(ImageRecognitionTags.this, "Please enter materials", Toast.LENGTH_SHORT).show();
+                } else {
+
+
+                    Toast.makeText(ImageRecognitionTags.this, spinner_item_q + spinner_item_um, Toast.LENGTH_SHORT).show();
+                }
+
+                dialog.show();
+
+                okButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String quantityMaterial = spinner_item_q + " " + spinner_item_um + " " + addMaterial.getText().toString();
+
+                        tvTag.append("\n" + quantityMaterial);
+
+                        Toast.makeText(ImageRecognitionTags.this, spinner_item_q + " " +spinner_item_um, Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+
+                    }
+                });
+
+            }
+        });
+
         diyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,6 +318,100 @@ public class ImageRecognitionTags extends AppCompatActivity{
         dispatchTakePictureIntent();
 
     }
+
+    public class SpinnerAdapter extends BaseAdapter {
+        Context context;
+        private LayoutInflater mInflater;
+
+        public SpinnerAdapter(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return unitOfMeasurement.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final ListContent holder;
+            View v = convertView;
+            if (v == null) {
+                mInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+                v = mInflater.inflate(R.layout.row_textview, null);
+                holder = new ListContent();
+                holder.text = (TextView) v.findViewById(R.id.textView1);
+
+                v.setTag(holder);
+            } else {
+                holder = (ListContent) v.getTag();
+            }
+            holder.text.setText(unitOfMeasurement[position]);
+            return v;
+        }
+    }
+
+    public class SpinnerAdapter1 extends BaseAdapter {
+        Context context;
+        private LayoutInflater mInflater;
+
+        public SpinnerAdapter1(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public int getCount() {
+            return quantity.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            final ContentQty holder1;
+            View vi = convertView;
+            if (vi == null) {
+                mInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+                vi = mInflater.inflate(R.layout.row_textview, null);
+                holder1 = new ContentQty();
+                holder1.text1 = (TextView) vi.findViewById(R.id.textView1);
+
+                vi.setTag(holder1);
+            } else {
+                holder1 = (ContentQty) vi.getTag();
+            }
+            holder1.text1.setText(quantity[position]);
+            return vi;
+        }
+    }
+
+
+    static class ListContent {
+        TextView text;
+    }
+
+    static class ContentQty {
+        TextView text1;
+    }
+
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

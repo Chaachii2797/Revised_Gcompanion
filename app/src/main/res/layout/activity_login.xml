@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#96ff99"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/bg">
+
+    <View
+        android:id="@+id/opacityFilter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ceffce"
+        android:layout_alignParentBottom="true"
+        android:alpha="0.7">
+    </View>
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="170dp"
         android:layout_height="170dp"
-        android:layout_marginTop="41dp"
+        android:layout_marginTop="74dp"
+        android:backgroundTintMode="src_over"
         app:srcCompat="@drawable/gc_logo"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -18,15 +29,16 @@
         android:id="@+id/etEmail"
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:layout_marginTop="47dp"
-        android:paddingLeft="15dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/edittext_background"
         android:ems="10"
         android:hint="Email"
-        android:background="@drawable/edittext_background"
         android:inputType="textEmailAddress"
+        android:paddingLeft="15dp"
         android:textColor="@android:color/black"
-        android:layout_below="@+id/imageView2"
-        android:layout_centerHorizontal="true" />
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/etPassword"
@@ -36,22 +48,23 @@
         android:layout_alignStart="@+id/etEmail"
         android:layout_below="@+id/etEmail"
         android:layout_marginTop="18dp"
-        android:paddingLeft="15dp"
+        android:background="@drawable/edittext_background"
         android:ems="10"
         android:hint="Password"
-        android:background="@drawable/edittext_background"
         android:inputType="textPassword"
-        android:textColor="@android:color/black" />
+        android:paddingLeft="15dp"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/btnLogin"
+        style="@style/LoginStyle"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:backgroundTint="@color/bg_screen2"
         android:text="Login"
-        style="@style/LoginStyle"
         android:textColor="@android:color/background_light"
-        android:layout_marginTop="31dp"
         android:layout_below="@+id/etPassword"
         android:layout_alignLeft="@+id/btnWithGoogle"
         android:layout_alignStart="@+id/btnWithGoogle" />
@@ -68,14 +81,14 @@
 
     <Button
         android:id="@+id/btnWithGoogle"
+        style="@style/LoginStyle"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/bg_screen2"
-        android:text="Signin with Google"
-        style="@style/LoginStyle"
-        android:textColor="@android:color/background_light"
         android:layout_below="@+id/btnLogin"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp" />
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/bg_screen2"
+        android:text="Signin with Google"
+        android:textColor="@android:color/background_light" />
 
 </RelativeLayout>

@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -67,6 +68,7 @@ import java.util.Random;
 import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.Constants;
+import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.TagClass;
 import clarifai2.api.ClarifaiBuilder;
@@ -80,6 +82,7 @@ import clarifai2.api.ClarifaiClient;
 public class CaptureDIY extends AppCompatActivity implements View.OnClickListener{
 
     private DatabaseReference databaseReference;
+    private DatabaseReference dbRef;
     private Task<Void> materialsReference;
     private Task<Void> proceduresReference;
     private FirebaseDatabase database;
@@ -87,6 +90,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     private FirebaseStorage mStorage;
     private StorageReference storageReference, imageRef;
+
+    private StorageReference storageRef, imgRef;
+
 
     private FirebaseUser mFirebaseUser;
     private String userID;
@@ -107,7 +113,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     private static final int SELECT_PHOTO = 100;
     private static final int MAX_LENGTH = 100;
-    private Button submitButton;
+    private Button submitButton, sellButton;
     private ImageButton btnAddMaterial, btnAddProcedure;
     private TagView tagGroup;
     private EditText name, material, procedure;
@@ -130,8 +136,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     String spinner_item_q;
     SpinnerAdapter umAdapter;
     SpinnerAdapter1 qAdapter;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,8 +147,27 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
+        dbRef = FirebaseDatabase.getInstance().getReference().child("Sell DIY");
+
         mStorage = FirebaseStorage.getInstance();
         storageReference = mStorage.getReferenceFromUrl("gs://g-companion.appspot.com/").child("diy_by_tags");
+
+        storageRef = mStorage.getReferenceFromUrl("gs://g-companion.appspot.com/").child("Sell DIY");
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarAddDIY);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationIcon(R.drawable.back_btn);
+        toolbar.setTitle("Upload DIY");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            }
+        });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         name = (EditText) findViewById(R.id.add_diy_name);
 
@@ -193,7 +217,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
             @Override
             public void onTagDeleted(final TagView view, final Tag tag, final int position) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(CaptureDIY.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(CaptureDIY.this, R.style.AppTheme);
                 builder.setMessage("\"" + tag.text + "\" will be delete. Are you sure?");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -233,13 +257,13 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         btnAddMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(CaptureDIY.this);
+                final Dialog dialog = new Dialog(CaptureDIY.this, R.style.MyAlertDialogStyle);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.row_spinner);
                 dialog.setCancelable(true);
 
                 final Spinner spinner1 = (Spinner) dialog.findViewById(R.id.spinner1);
-                final Spinner spinner2 = (Spinner) dialog.findViewById(R.id.spinner2);
+                final Spinner spinner2 = (Spinner) dialog.findViewById(R.id.qtySpinner);
                 Button okButton = (Button) dialog.findViewById(R.id.okaybtn);
 
                 spinner1.setAdapter(umAdapter);
@@ -337,7 +361,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             }
         });
 
-        submitButton = (Button) findViewById(R.id.submit_diy);
+        submitButton = (Button) findViewById(R.id.communityDiy);
         database = FirebaseDatabase.getInstance();
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -399,7 +423,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
                         // Alert Dialog for finished uploaing DIYs
-                        AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this);
+                        AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this, R.style.MyAlertDialogStyle);
                         ab.setMessage("Thank you for contributing to the DIY Community!");
                         ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
@@ -416,6 +440,111 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
             }
         });
+
+        sellButton = (Button) findViewById(R.id.sellDiy);
+        sellButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(CaptureDIY.this, R.style.MyAlertDialogStyle);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.sell_diy_option);
+                dialog.setCancelable(true);
+
+                final EditText etPrice = (EditText) dialog.findViewById(R.id.etPrice);
+                final EditText etQuantity = (EditText) dialog.findViewById(R.id.etQty);
+                final EditText etDescription = (EditText) dialog.findViewById(R.id.etDescription);
+                Button okButton = (Button) dialog.findViewById(R.id.okaybtn);
+
+                dialog.show();
+
+                okButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Toast.makeText(CaptureDIY.this, etPrice.getText() + "," + etQuantity.getText() + "," + etDescription.getText(),
+                                Toast.LENGTH_SHORT).show();
+
+                        imgRef = storageRef.child(diyPictureUri.getLastPathSegment());
+
+                        //creating and showing progress dialog
+                        progressDialog = new ProgressDialog(CaptureDIY.this);
+                        progressDialog.setMax(100);
+                        progressDialog.setMessage("Adding DIY to the Community...");
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                        progressDialog.show();
+                        progressDialog.setCancelable(false);
+
+                        //starting upload
+                        uploadTask = imgRef.putFile(diyPictureUri);
+                        // Observe state change events such as progress, pause, and resume
+                        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                                //sets and increments value of progressbar
+                                progressDialog.incrementProgressBy((int) progress);
+                            }
+                        });
+                        // Register observers to listen for when the download is done or if it fails
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception exception) {
+                                // Handle unsuccessful uploads
+                                Toast.makeText(CaptureDIY.this, "Error in uploading!", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                Float float_this = Float.valueOf(0);
+
+                                String upload = dbRef.push().getKey();
+
+                                Random random = new Random();
+                                String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+                                String productID = String.valueOf(candidateChars.charAt(random.nextInt(candidateChars.length())));
+
+                                //push data to Firebase Database
+                                dbRef = FirebaseDatabase.getInstance().getReference().child("Sell DIY");
+
+                                dbRef.child(upload).setValue(new DIYSell(name.getText().toString(),
+                                        taskSnapshot.getDownloadUrl().toString(), userID, "prod_000"+ productID,
+                                        float_this, float_this));
+
+                                dbRef.child(upload).child("materials").setValue(itemMaterial);
+
+                                dbRef.child(upload).child("procedures").setValue(itemProcedure);
+
+                                dbRef.child(upload).child("DIY Price").setValue(etPrice.getText().toString());
+
+                                Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
+
+                                // Alert Dialog for finished uploaing DIYs
+                                AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this, R.style.MyAlertDialogStyle);
+                                ab.setMessage("Thank you for contributing to the DIY Community!");
+                                ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent in = new Intent(CaptureDIY.this, MainActivity.class);
+                                        startActivity(in);
+                                    }
+                                });
+
+                                ab.create().show();
+                                progressDialog.dismiss();
+                            }
+                        });
+
+                        dialog.dismiss();
+
+                    }
+                });
+
+
+            }
+        });
+
     }
 
     public class SpinnerAdapter extends BaseAdapter {

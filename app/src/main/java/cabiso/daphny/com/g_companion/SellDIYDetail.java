@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,14 +34,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
-import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
 /**
- * Created by Lenovo on 11/2/2017.
+ * Created by Lenovo on 1/6/2018.
  */
 
-public class DIYDetailViewActivity extends AppCompatActivity{
+public class SellDIYDetail extends AppCompatActivity {
 
     private ArrayList infoList;
     private ListView lv;
@@ -49,11 +50,11 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private RecyclerView recyclerView;
 
     private FirebaseDatabase database;
-    private DatabaseReference databaseReference;
     private DatabaseReference dbRef;
     private StorageReference mStorageRef;
 
     private TextView diy_name, diy_materials, diy_procedures, diy_sell;
+    private Button btnSell;
     private ImageView diy_image;
     private String userID;
     private int count=0;
@@ -68,11 +69,12 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_diy_data);
+        setContentView(R.layout.activity_diy_sell_data);
 
-        String diyReferenceString = getIntent().getStringExtra("Community Ref");
+        String diyReferenceStrings = getIntent().getStringExtra("Market Ref");
 
-        databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceString);
+        dbRef = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceStrings);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDetails);
         setSupportActionBar(toolbar);
@@ -93,19 +95,27 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         diy_name = (TextView) findViewById(R.id.diy_name);
         diy_materials = (TextView) findViewById(R.id.diy_material);
         diy_procedures = (TextView) findViewById(R.id.diy_procedure);
+        diy_sell = (TextView) findViewById(R.id.sellDetails);
+        btnSell = (Button) findViewById(R.id.buyBtn);
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        dbRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DIYnames diyInfo = dataSnapshot.getValue(DIYnames.class);
-                diy_name.setText(diyInfo.diyName);
+                DIYSell diyInfos = dataSnapshot.getValue(DIYSell.class);
+
+                btnSell.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(SellDIYDetail.this, "BUY ITEM!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                diy_name.setText(diyInfos.diyName);
 
                 //for temporary price
-//                if(dataSnapshot.child("DIY Price").getValue().toString() != null) {
-//                    String sellItem = dataSnapshot.child("DIY Price").getValue().toString();
-//                    diy_sell = (TextView) findViewById(R.id.sellDetails);
-//                    diy_sell.setText(sellItem);
-//                }
+                    String sellItem = dataSnapshot.child("DIY Price").getValue().toString();
+                    diy_sell = (TextView) findViewById(R.id.sellDetails);
+                    diy_sell.setText(sellItem);
 
 
                 CommunityItem item = dataSnapshot.getValue(CommunityItem.class);
@@ -152,12 +162,12 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     Log.d("SnapItem", "null");
                 }
 
-                if (diyInfo.diyUrl != null) {
+                if (diyInfos.diyUrl != null) {
                     diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers);
-                    diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), diyInfo.diyUrl);
+                    diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), diyInfos.diyUrl);
                     diyImagesViewPager.setAdapter(diyImagesViewPagerAdapter);
 
-                Toast.makeText(DIYDetailViewActivity.this, diyInfo.diyUrl, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SellDIYDetail.this, diyInfos.diyUrl, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -205,7 +215,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                 Log.d("Exception", "Getting diy image");
             }
             container.addView(currentView);
-             return currentView;
+            return currentView;
         }
 
 
@@ -224,5 +234,4 @@ public class DIYDetailViewActivity extends AppCompatActivity{
             return view.equals(object);
         }
     }
-
 }

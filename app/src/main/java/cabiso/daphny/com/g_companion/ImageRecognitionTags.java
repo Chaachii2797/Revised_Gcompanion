@@ -108,6 +108,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
         spinnerUm1.setAdapter(nsAdapter);
         spinnerUm2.setAdapter(nsAdapter);
+
         spinnerUm3.setAdapter(nsAdapter);
 
         spinnerQty1.setAdapter(qtyAdapter);
@@ -236,7 +237,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
                 dialog.setCancelable(true);
 
                 final Spinner spinnerUM = (Spinner) dialog.findViewById(R.id.spinner1);
-                final Spinner spinnerQty = (Spinner) dialog.findViewById(R.id.spinner2);
+                final Spinner spinnerQty = (Spinner) dialog.findViewById(R.id.qtySpinner);
                 Button okButton = (Button) dialog.findViewById(R.id.okaybtn);
 
                 spinnerQty.setAdapter(qtyAdapter);
@@ -287,7 +288,9 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
                         tvTag.append("\n" + quantityMaterial);
 
-                        Toast.makeText(ImageRecognitionTags.this, spinner_item_q + " " +spinner_item_um, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ImageRecognitionTags.this, spinner_item_q + " " +spinner_item_um + " " +
+                                addMaterial.getText().toString(), Toast.LENGTH_SHORT).show();
+                        addMaterial.setText("");
                         dialog.dismiss();
 
                     }

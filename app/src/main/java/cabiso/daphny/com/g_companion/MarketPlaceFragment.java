@@ -149,7 +149,6 @@ public class MarketPlaceFragment extends Fragment{
             protected void populateViewHolder(final ItemViewHolder viewHolder, ProductInfo model, final int position) {
                 viewHolder.mNameView.setText(model.title);
                 //viewHolder.mDescriptionView.setText(model.desc);
-                viewHolder.mPriceView.setText(model.price);
                 try{
                     String productPictureURL = model.productPictureURLs.get(0);
                     Log.d("ppURL", productPictureURL);
@@ -215,7 +214,6 @@ public class MarketPlaceFragment extends Fragment{
         public final View mView;
         public final TextView mNameView;
        // public final TextView mDescriptionView;
-        public final TextView mPriceView;
         public final ImageView mProductImageView;
 
         public ItemViewHolder(View view){
@@ -223,8 +221,7 @@ public class MarketPlaceFragment extends Fragment{
             mView = view;
             mNameView = (TextView) view.findViewById(R.id.item_name);
            // mDescriptionView = (TextView) view.findViewById(R.id.item_description);
-            mPriceView = (TextView) view.findViewById(R.id.item_price);
-            mProductImageView = (ImageView) view.findViewById(R.id.diy_item_icon);
+            mProductImageView = (ImageView) view.findViewById(R.id.diy_item_icons);
 
         }
     }

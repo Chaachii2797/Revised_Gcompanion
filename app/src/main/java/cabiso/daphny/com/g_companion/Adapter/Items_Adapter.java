@@ -44,7 +44,7 @@ public class Items_Adapter extends ArrayAdapter<ProductInfo> {
         View v = inflater.inflate(resource, null);
 
         TextView tvName = (TextView) v.findViewById(R.id.get_diyName);
-        ImageView img = (ImageView) v.findViewById(R.id.diy_item_icon);
+        ImageView img = (ImageView) v.findViewById(R.id.diy_item_icons);
 
         tvName.setText(listDIY.get(position).title);
         Glide.with(context).load(listDIY.get(position).getProductPictureURLs().get(0)).into(img);

@@ -60,6 +60,16 @@
         fab:menu_labels_singleLine="true">
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/community_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add_diy"
+            fab:fab_colorNormal="#00cc00"
+            fab:fab_colorPressed="#7fff7f"
+            fab:fab_size="normal"
+            fab:fab_label="Upload DIY" />
+
+        <com.github.clans.fab.FloatingActionButton
             android:id="@+id/image_recog_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -68,27 +78,6 @@
             fab:fab_colorPressed="#7fff7f"
             fab:fab_size="normal"
             fab:fab_label="Image Recognition" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/community_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_upload"
-            fab:fab_colorNormal="#00cc00"
-            fab:fab_colorPressed="#7fff7f"
-            fab:fab_size="normal"
-            fab:fab_label="Add DIY to the Community" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/market_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_upload"
-            fab:fab_colorNormal="#00cc00"
-            fab:fab_colorPressed="#7fff7f"
-            fab:fab_size="normal"
-            fab:fab_label="Add DIY to the Market" />
-
 
     </com.github.clans.fab.FloatingActionMenu>
 

@@ -81,7 +81,7 @@ public class Fragment_BottleRecommend extends Fragment {
                 Log.d("Firebase download", model.name);
                 viewHolder.mNameView.setText(model.name);
                 //viewHolder.mMaterialView.setText(model.material);
-                viewHolder.mProcedureView.setText(model.procedure);
+                //viewHolder.mProcedureView.setText(model.procedure);
                 try {
                     String categoryPictureURL = model.categoryPictureURLs.get(0);
                     Log.d("ppURL", categoryPictureURL);
@@ -122,7 +122,7 @@ public class Fragment_BottleRecommend extends Fragment {
         public final View mView;
         public final TextView mNameView;
         //public final TextView mMaterialView;
-        public final TextView mProcedureView;
+        //public final TextView mProcedureView;
         public final ImageView mcategoryImageView;
 
         public ItemViewHolder(View view){
@@ -130,8 +130,7 @@ public class Fragment_BottleRecommend extends Fragment {
             mView = view;
             mNameView = (TextView) view.findViewById(R.id.item_name);
            // mMaterialView = (TextView) view.findViewById(R.id.item_description);
-            mProcedureView = (TextView) view.findViewById(R.id.item_price);
-            mcategoryImageView = (ImageView) view.findViewById(R.id.diy_item_icon);
+            mcategoryImageView = (ImageView) view.findViewById(R.id.diy_item_icons);
 
         }
     }

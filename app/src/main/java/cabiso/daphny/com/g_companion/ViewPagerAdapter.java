@@ -4,8 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import static cabiso.daphny.com.g_companion.MarketPlaceFragment.*;
-
 /**
  * Created by Lenovo on 10/19/2017.
  */
@@ -13,6 +11,7 @@ import static cabiso.daphny.com.g_companion.MarketPlaceFragment.*;
 class ViewPagerAdapter extends FragmentStatePagerAdapter{
 
     private static int TAB_COUNT = 1;
+    private static String PAGE_TITLE = "DIY Items";
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -23,8 +22,8 @@ class ViewPagerAdapter extends FragmentStatePagerAdapter{
 
         switch (position) {
 //            case 0:
-//                return MarketPlaceFragment.newInstance();
-//            case 0:
+//                return SellingFragment.newInstance();
+//            case 1:
 //                return CommunityFragment.newInstance();
             default:
                 return CommunityFragment.newInstance();
@@ -40,10 +39,10 @@ class ViewPagerAdapter extends FragmentStatePagerAdapter{
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return TITLE;
+              //  return TITLE;
 
 //            case 1:
-//                return CommunityFragment.TITLE;
+                return PAGE_TITLE;
         }
         return super.getPageTitle(position);
     }

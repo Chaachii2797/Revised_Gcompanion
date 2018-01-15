@@ -30,7 +30,7 @@ import clarifai2.api.ClarifaiClient;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        MarketPlaceFragment.OnListFragmentInteractionListener, CommunityFragment.OnListFragmentInteractionListener{
+        CommunityFragment.OnListFragmentInteractionListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
-        image = (ImageView) findViewById(R.id.diy_item_icon);
+        image = (ImageView) findViewById(R.id.diy_item_icons);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
 
-        drawer.setDrawerListener(toggle);
         toggle.syncState();
+        drawer.setDrawerListener(toggle);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity
 
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.getCurrentItem();
+
         //mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 //        mTabLayout = (TabLayout) findViewById(R.id.tab);
 //        mTabLayout.setupWithViewPager(mViewPager);
@@ -225,13 +226,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
     }
 
-    @Override
-    public void onListFragmentInteraction(DatabaseReference ref) {
-        Intent intent = new Intent(this, ProductDetailViewActivity.class);
-        intent.putExtra("Product reference", ref.toString());
-        startActivity(intent);
-    }
-
 
     @Override
     public void onListFragmentInteractionListener(DatabaseReference ref) {
@@ -239,5 +233,12 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra("Community Ref", ref.toString());
         startActivity(intent);
     }
+
+//    @Override
+//    public void onListFragmentInteractionListener(DatabaseReference ref) {
+//        Intent intent = new Intent(this, SellDIYDetail.class);
+//        intent.putExtra("Market Ref", ref.toString());
+//        startActivity(intent);
+//    }
 
 }

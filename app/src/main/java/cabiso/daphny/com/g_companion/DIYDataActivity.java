@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -74,8 +73,8 @@ public class DIYDataActivity extends AppCompatActivity {
 
         //  diy_name = (TextView) findViewById(R.id.diy_name);
         diy_image = (ImageView) findViewById(R.id.diy_image);
-        diy_materials = (TextView) findViewById(R.id.diy_materials);
-        diy_procedures = (TextView) findViewById(R.id.diy_procedures);
+        diy_materials = (TextView) findViewById(R.id.diy_material);
+        diy_procedures = (TextView) findViewById(R.id.diy_procedure);
 
         diy_procedures.setMovementMethod(new ScrollingMovementMethod());
         diy_materials.setMovementMethod(new ScrollingMovementMethod());

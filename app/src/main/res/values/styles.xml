@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@android:color/holo_green_dark</item>
-        <item name="colorPrimaryDark">@android:color/holo_green_dark</item>
-        <item name="colorAccent">@android:color/holo_red_dark</item>
+        <item name="colorPrimary">@color/bg_screen2</item>
+        <item name="colorPrimaryDark">@color/bg_screen2</item>
+        <item name="colorAccent">@android:color/holo_orange_dark</item>
         <item name="android:colorBackground">@color/background_material_light</item>
     </style>
 
@@ -26,14 +26,14 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- Dialog -->
-    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">@color/backgroundColor</item>
+    <style name="MyAlertDialogStyle" parent="Base.V7.Theme.AppCompat.Light.Dialog">
+        <item name="android:background">@color/bg_screen1</item>
         <item name="buttonBarPositiveButtonStyle">@style/MyAlertDialogButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/MyAlertDialogButtonStyle</item>
     </style>
 
     <style name="MyAlertDialogButtonStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textColor">@color/bg_screen2</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
 

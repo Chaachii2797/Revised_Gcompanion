@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +65,7 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
         View v = inflater.inflate(resource, null);
         TextView tvName = (TextView) v.findViewById(R.id.get_diyName);
         TextView tvcategory = (TextView) v.findViewById(R.id.tv_category);
-        ImageView img = (ImageView) v.findViewById(R.id.diy_item_icon);
+        ImageView img = (ImageView) v.findViewById(R.id.diy_item_icons);
 
 //        final ImageButton star = (ImageButton) v.findViewById(R.id.staru);
 //        ImageButton heart = (ImageButton) v.findViewById(R.id.heartu);

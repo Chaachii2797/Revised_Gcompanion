@@ -40,11 +40,11 @@
         android:textSize="18sp"
         android:layout_marginTop="16dp"
         android:layout_below="@+id/diy_image"
-        android:layout_alignLeft="@+id/diy_materials"
-        android:layout_alignStart="@+id/diy_materials" />
+        android:layout_alignLeft="@+id/diy_material"
+        android:layout_alignStart="@+id/diy_material" />
 
     <TextView
-        android:id="@+id/diy_materials"
+        android:id="@+id/diy_material"
         android:layout_width="330dp"
         android:layout_height="100dp"
         android:layout_below="@+id/textView29"
@@ -63,18 +63,18 @@
         android:layout_height="wrap_content"
         android:text="Procedures:"
         android:textSize="18sp"
-        android:layout_above="@+id/diy_procedures"
-        android:layout_alignLeft="@+id/diy_procedures"
-        android:layout_alignStart="@+id/diy_procedures" />
+        android:layout_above="@+id/diy_procedure"
+        android:layout_alignLeft="@+id/diy_procedure"
+        android:layout_alignStart="@+id/diy_procedure" />
 
 
     <TextView
-        android:id="@+id/diy_procedures"
+        android:id="@+id/diy_procedure"
         android:layout_width="330dp"
         android:layout_height="180dp"
-        android:layout_alignLeft="@+id/diy_materials"
+        android:layout_alignLeft="@+id/diy_material"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/diy_materials"
+        android:layout_alignStart="@+id/diy_material"
         android:hint="1. Make the materials clean. \n 2. Use scissors to cut it. Be careful. \n 3. Use glue."
         android:scrollbars="vertical"
         android:textColor="@android:color/black"

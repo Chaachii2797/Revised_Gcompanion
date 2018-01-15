@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="450dp"
+    android:layout_margin="5dp"
+    android:backgroundTint="@android:color/holo_green_dark"
+    android:orientation="vertical"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
+
+    <EditText
+        android:id="@+id/etPrice"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_alignEnd="@+id/textView14"
+        android:layout_alignRight="@+id/textView14"
+        android:layout_below="@+id/textView19"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/edittext_background"
+        android:ems="10"
+        android:inputType="number|numberDecimal"
+        android:paddingLeft="43dp"
+        android:paddingRight="10dp"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/okaybtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/shape"
+        android:backgroundTint="@color/bg_screen2"
+        android:text="Okay"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/etPrice"
+        android:layout_marginTop="25dp"
+        android:text="Quantity:"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView14"
+        android:layout_marginTop="20dp"
+        android:text="DIY Price: "
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etQty"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/etPrice"
+        android:layout_alignStart="@+id/etPrice"
+        android:layout_below="@+id/textView15"
+        android:layout_marginTop="17dp"
+        android:background="@drawable/edittext_background"
+        android:ems="10"
+        android:inputType="number|numberDecimal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/textView27"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/etPrice"
+        android:layout_alignBottom="@+id/etPrice"
+        android:layout_alignLeft="@+id/etPrice"
+        android:layout_alignStart="@+id/etPrice"
+        android:layout_marginLeft="9dp"
+        android:layout_marginStart="9dp"
+        android:text="PHP"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="13dp"
+        android:text="Selling Information"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/etQty"
+        android:layout_marginTop="22dp"
+        android:text="DIY Description:"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/etDescription"
+        android:layout_width="250dp"
+        android:layout_height="80dp"
+        android:layout_alignLeft="@+id/etQty"
+        android:layout_alignStart="@+id/etQty"
+        android:layout_below="@+id/textView28"
+        android:layout_marginTop="13dp"
+        android:background="@drawable/edittext_background"
+        android:ems="10"
+        android:inputType="text|textMultiLine"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@android:color/white" />
+
+
+</RelativeLayout>

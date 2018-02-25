@@ -2,6 +2,7 @@ package cabiso.daphny.com.g_companion;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -27,10 +28,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 
+import static cabiso.daphny.com.g_companion.R.id.nav_logout;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        CommunityFragment.OnListFragmentInteractionListener{
+        CommunityFragment.OnListFragmentInteractionListener, CommunityFragment.OnListFragmentInteraction{
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -55,11 +58,14 @@ public class MainActivity extends AppCompatActivity
 
     final ClarifaiClient client = new ClarifaiBuilder("b7aa33dc206c40a4b9cffc09a2e72a9d").buildSync();
 
+    private SharedPreferences sharedPref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -216,11 +222,11 @@ public class MainActivity extends AppCompatActivity
                 Intent about = new Intent(MainActivity.this,About.class);
                 startActivity(about);
                 break;
-            case R.id.nav_logout:
+            case nav_logout:
                 FirebaseAuth.getInstance().signOut();
-                Intent intent1=new Intent(this,Login.class);
+                Intent intent1=new Intent(MainActivity.this, Login.class);
                 startActivity(intent1);
-                break;
+//                break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -234,11 +240,11 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-//    @Override
-//    public void onListFragmentInteractionListener(DatabaseReference ref) {
-//        Intent intent = new Intent(this, SellDIYDetail.class);
-//        intent.putExtra("Market Ref", ref.toString());
-//        startActivity(intent);
-//    }
+    @Override
+    public void onListFragmentInteraction(DatabaseReference ref) {
+        Intent intent = new Intent(this, SellDIYDetail.class);
+        intent.putExtra("Market Ref", ref.toString());
+        startActivity(intent);
+    }
 
 }

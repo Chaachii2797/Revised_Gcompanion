@@ -94,6 +94,26 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
             }
         });
+
+//        SharedPreference sharedPref;
+//        sharedPref = SharedPreference.getInstance();
+//
+//        if (sharedPref.getISLogged_IN(WelcomeActivity.this)) {
+//            Intent NextScreen = new Intent(getApplicationContext(),
+//                    MainActivity.class);
+//            startActivity(NextScreen);
+//            finish();
+//        }
+//        else{
+//            Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//            finish();
+//
+//        }
+
+
+
     }
 
     private void addBottomDots(int currentPage) {

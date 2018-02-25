@@ -39,7 +39,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 import cabiso.daphny.com.g_companion.Model.DIYSell;
@@ -62,12 +61,13 @@ public class CommunityFragment extends Fragment{
     private FirebaseUser mFirebaseUser;
     private String userID;
     private OnListFragmentInteractionListener mListener;
-    private OnListFragmentInteractionListener mlistener;
+    private OnListFragmentInteraction mlistener;
 
 
 
     private ListView lv;
     private RecyclerView recyclerView;
+    private RecyclerView recyclerView1;
     private RecommendDIYAdapter recommendDIYAdapter;
     private Activity context;
     private int resource;
@@ -106,8 +106,8 @@ public class CommunityFragment extends Fragment{
         communityReference = databaseReference.child("diy_by_tags");
         marketplaceReference = databaseReference.child("Sell DIY");
 
-        Collections.sort(diyList);
-        Collections.reverse(diyList);
+//        Collections.sort(diyList);
+//        Collections.reverse(diyList);
 
     }
 
@@ -124,8 +124,14 @@ public class CommunityFragment extends Fragment{
         final Context context = view.getContext();
         recyclerView = (RecyclerView) view.findViewById(R.id.communityList);
 
+        recyclerView1 = (RecyclerView) view.findViewById(R.id.marketList);
+
         int numberOfColumns = 2;
         recyclerView.setLayoutManager(new GridLayoutManager(context, numberOfColumns));
+        recyclerView1.setLayoutManager(new GridLayoutManager(context, numberOfColumns));
+
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView1.setNestedScrollingEnabled(false);
 
         fam = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
         fam.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
@@ -178,8 +184,10 @@ public class CommunityFragment extends Fragment{
                     public int heartCount=0; //pila ka heart * 0.4
                     public int starCount=0; //pila ka bookmark * 0.6
 
+
                     public double totalBmLike = ((starCount * 0.6) + (heartCount * 0.4));// i plus ang total percent sa bookmark ug like
                     public int totalDIYs = 0; //pila kabuok diys ang under ana nga tag nya i divide daton nas totaBmLike times 100
+
                     @Override
                     protected void populateViewHolder(final ItemViewHolder viewHolder, final DIYnames model, final int position) {
                         viewHolder.mNameView.setText(model.diyName);
@@ -277,8 +285,14 @@ public class CommunityFragment extends Fragment{
                     }
                 };
 
+        cAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                recyclerView.smoothScrollToPosition(cAdapter.getItemCount());
+            }
+        });
 
-       // recyclerView.setAdapter(cAdapter);
+        recyclerView.setAdapter(cAdapter);
 
         //selling DIY
         Toast.makeText(getActivity(), "Welcome!", Toast.LENGTH_SHORT).show();
@@ -378,7 +392,7 @@ public class CommunityFragment extends Fragment{
                                 if (null != mlistener) {
                                     // Notify the active callbacks interface (the activity, if the
                                     // fragment is attached to one) that an item has been selected.
-                                    mlistener.onListFragmentInteractionListener(getRef(position));
+                                    mlistener.onListFragmentInteraction(getRef(position));
 
                                     Toast.makeText(getActivity(), "You clicked on position!" + " " + position, Toast.LENGTH_SHORT).show();
                                 }
@@ -387,21 +401,28 @@ public class CommunityFragment extends Fragment{
                     }
                 };
 
-        //recyclerView.setAdapter(mAdapter);
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                recyclerView1.smoothScrollToPosition(mAdapter.getItemCount());
+            }
+        });
 
+
+        recyclerView1.setAdapter(mAdapter);
 
         //adapter in  main page
-        if(mListener != null){
-            Toast.makeText(getActivity(), "Yowwwwaaaaaaa!", Toast.LENGTH_SHORT).show();
-            recyclerView.setAdapter(cAdapter);
-        }
-        if(mlistener != null){
-            Toast.makeText(getActivity(), "Yowwwwiiiiiiiii!", Toast.LENGTH_SHORT).show();
-            recyclerView.setAdapter(mAdapter);
-        }
-        else{
-            Toast.makeText(getActivity(), "SHIT!", Toast.LENGTH_SHORT).show();
-        }
+//        if(mListener != null){
+//            Toast.makeText(getActivity(), "Yowwwwaaaaaaa!", Toast.LENGTH_SHORT).show();
+//            recyclerView.setAdapter(cAdapter);
+//        }
+//        if(mlistener != null){
+//            Toast.makeText(getActivity(), "Yowwwwiiiiiiiii!", Toast.LENGTH_SHORT).show();
+//            recyclerView1.setAdapter(mAdapter);
+//        }
+//        else{
+//            Toast.makeText(getActivity(), "SHIT!", Toast.LENGTH_SHORT).show();
+//        }
     }
 
 
@@ -459,8 +480,8 @@ public class CommunityFragment extends Fragment{
         if (context instanceof CommunityFragment.OnListFragmentInteractionListener) {
             mListener = (CommunityFragment.OnListFragmentInteractionListener) context;
         }
-        if (context instanceof CommunityFragment.OnListFragmentInteractionListener) {
-            mlistener = (CommunityFragment.OnListFragmentInteractionListener) context;
+        if(context instanceof CommunityFragment.OnListFragmentInteraction) {
+            mListener = (CommunityFragment.OnListFragmentInteractionListener) context;
         }
         else {
             throw new RuntimeException(context.toString()
@@ -480,8 +501,9 @@ public class CommunityFragment extends Fragment{
 
     }
 
-//    public class OnListFragmentInteraction {
-//        public void onListFragmentInteraction(DatabaseReference ref) {
-//        }
-//    }
+    public interface OnListFragmentInteraction {
+        void onListFragmentInteraction(DatabaseReference ref);
+
+    }
+
 }

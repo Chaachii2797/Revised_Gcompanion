@@ -16,7 +16,7 @@ public class DIYSell implements Comparable<DIYSell>, Serializable {
     public String productID;
     public Float bookmarks;
     public Float likes;
-    public int materialMatches;
+    //public int materialMatches;
 
     public DIYSell(){}
 
@@ -30,13 +30,13 @@ public class DIYSell implements Comparable<DIYSell>, Serializable {
         this.likes = likes;
     }
 
-    public int getMaterialMatches() {
-        return materialMatches;
-    }
-
-    public void setMaterialMatches(int materialMatches) {
-        this.materialMatches = materialMatches;
-    }
+//    public int getMaterialMatches() {
+//        return materialMatches;
+//    }
+//
+//    public void setMaterialMatches(int materialMatches) {
+//        this.materialMatches = materialMatches;
+//    }
 
     public String getDiyName() {
         return diyName;
@@ -100,6 +100,6 @@ public class DIYSell implements Comparable<DIYSell>, Serializable {
 
     @Override
     public String toString() {
-        return "product name : "+diyName;
+        return "product name : " + diyName;
     }
 }

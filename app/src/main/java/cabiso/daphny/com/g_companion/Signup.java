@@ -1,6 +1,7 @@
 package cabiso.daphny.com.g_companion;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,12 @@ public class Signup extends AppCompatActivity implements View.OnClickListener{
     private EditText email, password, username, address;
     private TextView login;
     private FirebaseAuth mAuth;
+
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    SharedPreference session;
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
@@ -37,6 +44,46 @@ public class Signup extends AppCompatActivity implements View.OnClickListener{
 
         signup.setOnClickListener(this);
         login.setOnClickListener(this);
+        sharedPreferences = getApplicationContext().getSharedPreferences("Reg", 0);
+// get editor to edit in file
+        editor = sharedPreferences.edit();
+
+        signup.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick (View v) {
+                String name = username.getText().toString();
+                String emails = email.getText().toString();
+                String pass = password.getText().toString();
+                String add = address.getText().toString();
+
+                if(username.getText().length()<=0){
+                    Toast.makeText(Signup.this, "Enter name", Toast.LENGTH_SHORT).show();
+                }
+                else if( email.getText().length()<=0){
+                    Toast.makeText(Signup.this, "Enter email", Toast.LENGTH_SHORT).show();
+                }
+                else if( password.getText().length()<=0){
+                    Toast.makeText(Signup.this, "Enter password", Toast.LENGTH_SHORT).show();
+                }
+                else if( address.getText().length()<=0){
+                    Toast.makeText(Signup.this, "Enter Address", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    // as now we have information in string. Lets stored them with the help of editor
+                    editor.putString("Name", name);
+                    editor.putString("Email",emails);
+                    editor.putString("txtPassword",pass);
+                    editor.putString("txtAddress",add);
+
+                    editor.commit();}   // commit the values
+
+                // after saving the value open next activity
+                Intent ob = new Intent(Signup.this, Login.class);
+                startActivity(ob);
+
+            }
+        });
+
     }
     public void register(){
         String em = email.getText().toString().trim();

@@ -53,7 +53,7 @@ public class SellDIYDetail extends AppCompatActivity {
     private DatabaseReference dbRef;
     private StorageReference mStorageRef;
 
-    private TextView diy_name, diy_materials, diy_procedures, diy_sell;
+    private TextView name, materials, procedures, diy_sell;
     private Button btnSell;
     private ImageView diy_image;
     private String userID;
@@ -62,8 +62,8 @@ public class SellDIYDetail extends AppCompatActivity {
     final Context context = this;
     List<String> item = new ArrayList<>();
 
-    private DIYImagesViewPagerAdapter diyImagesViewPagerAdapter;
-    private ViewPager diyImagesViewPager;
+    private DIYImagesPagerAdapter diyImagesPagerAdapter;
+    private ViewPager diyImagesPager;
 
 
     @Override
@@ -76,12 +76,12 @@ public class SellDIYDetail extends AppCompatActivity {
         dbRef = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceStrings);
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDetails);
-        setSupportActionBar(toolbar);
+        Toolbar toolbarr = (Toolbar) findViewById(R.id.toolbarDetails);
+        setSupportActionBar(toolbarr);
 
-        toolbar.setNavigationIcon(R.drawable.back_btn);
-        toolbar.setTitle("DIY Details");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbarr.setNavigationIcon(R.drawable.back_btn);
+        toolbarr.setTitle("Sell DIY Details");
+        toolbarr.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
@@ -92,9 +92,9 @@ public class SellDIYDetail extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         progressDialog = new ProgressDialog(this);
-        diy_name = (TextView) findViewById(R.id.diy_name);
-        diy_materials = (TextView) findViewById(R.id.diy_material);
-        diy_procedures = (TextView) findViewById(R.id.diy_procedure);
+        name = (TextView) findViewById(R.id.name_diy);
+        materials = (TextView) findViewById(R.id.material_diy);
+        procedures = (TextView) findViewById(R.id.procedure_diy);
         diy_sell = (TextView) findViewById(R.id.sellDetails);
         btnSell = (Button) findViewById(R.id.buyBtn);
 
@@ -102,20 +102,22 @@ public class SellDIYDetail extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DIYSell diyInfos = dataSnapshot.getValue(DIYSell.class);
+                Toast.makeText(SellDIYDetail.this, (CharSequence) name, Toast.LENGTH_SHORT).show();
 
-                btnSell.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(SellDIYDetail.this, "BUY ITEM!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                //name.setText(diyInfos.diyName);
+//                btnSell.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Toast.makeText(SellDIYDetail.this, "BUY ITEM!", Toast.LENGTH_SHORT).show();
+//                    }
 
-                diy_name.setText(diyInfos.diyName);
+//                });
+
 
                 //for temporary price
-                    String sellItem = dataSnapshot.child("DIY Price").getValue().toString();
-                    diy_sell = (TextView) findViewById(R.id.sellDetails);
-                    diy_sell.setText(sellItem);
+//                    String sellItem = dataSnapshot.child("DIY Price").getValue().toString();
+//                    diy_sell = (TextView) findViewById(R.id.sellDetails);
+//                    diy_sell.setText(sellItem);
 
 
                 CommunityItem item = dataSnapshot.getValue(CommunityItem.class);
@@ -152,8 +154,8 @@ public class SellDIYDetail extends AppCompatActivity {
 
                     Log.d("MessageProcedure", messageProcedure.toString());
 
-                    diy_materials.setText(messageMat);
-                    diy_procedures.setText(messageProd);
+                    materials.setText(messageMat);
+                    procedures.setText(messageProd);
 
                     Log.d("SnapItem", "not null");
                     Log.d("SnapMaterial", ""+item);
@@ -163,9 +165,9 @@ public class SellDIYDetail extends AppCompatActivity {
                 }
 
                 if (diyInfos.diyUrl != null) {
-                    diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers);
-                    diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), diyInfos.diyUrl);
-                    diyImagesViewPager.setAdapter(diyImagesViewPagerAdapter);
+                    diyImagesPager = (ViewPager) findViewById(R.id.diyImagesViewPagers);
+                    diyImagesPagerAdapter = new DIYImagesPagerAdapter(getBaseContext(), diyInfos.diyUrl);
+                    diyImagesPager.setAdapter(diyImagesPagerAdapter);
 
                     Toast.makeText(SellDIYDetail.this, diyInfos.diyUrl, Toast.LENGTH_SHORT).show();
                 }
@@ -186,12 +188,12 @@ public class SellDIYDetail extends AppCompatActivity {
 
 
 
-    private class DIYImagesViewPagerAdapter extends PagerAdapter {
+    private class DIYImagesPagerAdapter extends PagerAdapter {
 
         private Context context;
         private String diyUrl;
 
-        public DIYImagesViewPagerAdapter(Context context, String diyUrl) {
+        public DIYImagesPagerAdapter(Context context, String diyUrl) {
             this.context = context;
             this.diyUrl = diyUrl;
         }

@@ -136,7 +136,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     String spinner_item_q;
     SpinnerAdapter umAdapter;
     SpinnerAdapter1 qAdapter;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -253,7 +253,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         getWordBank();
         prepareTags();
 
-
+// ADD DIY TO THE COMMUNITY
         btnAddMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -346,9 +346,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     Toast.makeText(CaptureDIY.this, "Please enter procedures", Toast.LENGTH_SHORT).show();
                 } else {
                     CommunityItem md = new CommunityItem(inputProcedure);
-                        itemProcedure.add(md);
-                        pAdapter.notifyDataSetChanged();
-                        procedure.setText(" ");
+                    itemProcedure.add(md);
+                    pAdapter.notifyDataSetChanged();
+                    procedure.setText(" ");
 
                 }
             }
@@ -441,6 +441,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             }
         });
 
+
+        //SELL DIY TO THE COMMUNITY
         sellButton = (Button) findViewById(R.id.sellDiy);
         sellButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -517,6 +519,10 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 dbRef.child(upload).child("procedures").setValue(itemProcedure);
 
                                 dbRef.child(upload).child("DIY Price").setValue(etPrice.getText().toString());
+
+                                dbRef.child(upload).child("Item Quantity").setValue(etQuantity.getText().toString());
+
+                                dbRef.child(upload).child("Item Description").setValue(etDescription.getText().toString());
 
                                 Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
@@ -836,4 +842,3 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     }
 
 }
-

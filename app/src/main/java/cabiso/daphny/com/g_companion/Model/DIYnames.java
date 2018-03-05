@@ -94,6 +94,6 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
 
     @Override
     public String toString() {
-        return "product name : "+diyName;
+        return "product name : " + diyName;
     }
 }

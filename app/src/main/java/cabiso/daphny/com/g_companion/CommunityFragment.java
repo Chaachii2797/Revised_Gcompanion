@@ -404,6 +404,9 @@ public class CommunityFragment extends Fragment{
         }
     }
 
+    public interface OnListFragmentInteraction {
+    }
+
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
 
@@ -478,6 +481,7 @@ public class CommunityFragment extends Fragment{
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteractionListener(DatabaseReference ref);
 
+        void onListFragmentInteraction(DatabaseReference ref);
     }
 
 //    public class OnListFragmentInteraction {

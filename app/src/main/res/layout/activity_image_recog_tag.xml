@@ -6,30 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Spinner
-        android:id="@+id/spinnerUM2"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_below="@+id/spinnerUM1"
-        android:layout_centerHorizontal="true" />
-
-    <Spinner
-        android:id="@+id/spinnerUM1"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView26"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="37dp" />
-
-    <Spinner
-        android:id="@+id/spinnerqty1"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/spinnerUM1"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <ImageView
         android:id="@+id/imgPhotoSaver"
         android:layout_width="350dp"
@@ -41,19 +17,38 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+
+    <EditText
+        android:id="@+id/addMaterials"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:background="@drawable/edittext_background"
+        android:hint="DIY Materials: "
+        android:imeOptions="actionNext"
+        android:paddingLeft="10dp"
+        android:singleLine="true"
+        tools:layout_editor_absoluteY="314dp"
+        tools:layout_editor_absoluteX="99dp"
+        android:layout_below="@+id/textView26"
+        android:layout_toLeftOf="@+id/btnAddMaterial"
+        android:layout_toStartOf="@+id/btnAddMaterial"
+        android:layout_marginRight="7dp"
+        android:layout_marginEnd="7dp" />
+
     <TextView
         android:id="@+id/tvTag"
-        android:layout_width="280dp"
-        android:layout_height="150dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/imgPhotoSaver"
-        android:layout_marginTop="22dp"
+        android:layout_width="270dp"
+        android:layout_height="100dp"
+        android:background="@drawable/edittext_background"
         android:gravity="center"
         android:lineSpacingExtra="10sp"
-        android:textAlignment="textEnd"
-        android:textSize="18sp" />
-
+        android:textSize="18sp"
+        tools:layout_editor_absoluteY="371dp"
+        tools:layout_editor_absoluteX="29dp"
+        android:layout_below="@+id/addMaterials"
+        android:layout_alignLeft="@+id/etQuantity"
+        android:layout_alignStart="@+id/etQuantity"
+        android:layout_marginTop="33dp" />
 
     <Button
         android:id="@+id/btnDIY"
@@ -64,35 +59,11 @@
         android:onClick="onClick"
         android:text="DIY"
         android:textColor="@android:color/background_light"
-        tools:layout_editor_absoluteX="311dp"
-        tools:layout_editor_absoluteY="473dp"
-        android:layout_marginBottom="13dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <Spinner
-        android:id="@+id/spinnerUM3"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView26"
-        android:layout_alignLeft="@+id/spinnerUM1"
-        android:layout_alignStart="@+id/spinnerUM1" />
-
-    <Spinner
-        android:id="@+id/spinnerqty2"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/spinnerUM2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Spinner
-        android:id="@+id/spinnerqty3"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView25"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        tools:layout_editor_absoluteY="481dp"
+        tools:layout_editor_absoluteX="145dp"
+        android:layout_below="@+id/tvTag"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp" />
 
     <TextView
         android:id="@+id/textView25"
@@ -100,12 +71,11 @@
         android:layout_height="wrap_content"
         android:text="Quantity: "
         android:textStyle="bold"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:layout_below="@+id/imgPhotoSaver"
-        android:layout_alignLeft="@+id/imgPhotoSaver"
-        android:layout_alignStart="@+id/imgPhotoSaver"
-        android:layout_marginTop="42dp" />
+        android:layout_centerVertical="true"
+        android:layout_alignRight="@+id/etQuantity"
+        android:layout_alignEnd="@+id/etQuantity"
+        tools:layout_editor_absoluteY="275dp"
+        tools:layout_editor_absoluteX="38dp" />
 
     <TextView
         android:id="@+id/textView26"
@@ -113,40 +83,40 @@
         android:layout_height="wrap_content"
         android:text="Unit of Measurement: "
         android:textStyle="bold"
+        tools:layout_editor_absoluteY="275dp"
+        tools:layout_editor_absoluteX="128dp"
         android:layout_alignBaseline="@+id/textView25"
         android:layout_alignBottom="@+id/textView25"
-        android:layout_toRightOf="@+id/spinnerqty2"
-        android:layout_toEndOf="@+id/spinnerqty2" />
-
-    <EditText
-        android:id="@+id/addMaterials"
-        android:layout_width="270dp"
-        android:layout_height="40dp"
-        android:paddingLeft="10dp"
-        android:background="@drawable/edittext_background"
-        android:hint="DIY Materials: "
-        android:imeOptions="actionNext"
-        android:singleLine="true"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/btnMaterial"
-        app:layout_constraintTop_toBottomOf="@+id/add_diy_name"
-        android:layout_marginBottom="13dp"
-        android:layout_above="@+id/btnDIY"
-        android:layout_alignLeft="@+id/textView25"
-        android:layout_alignStart="@+id/textView25" />
+        android:layout_alignLeft="@+id/addMaterials"
+        android:layout_alignStart="@+id/addMaterials"
+        android:layout_marginLeft="23dp"
+        android:layout_marginStart="23dp" />
 
     <ImageButton
         android:id="@+id/btnAddMaterial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_add"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_diy_name"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="35dp"
+        android:layout_height="38dp"
         android:layout_alignTop="@+id/addMaterials"
-        android:layout_toRightOf="@+id/addMaterials"
-        android:layout_toEndOf="@+id/addMaterials" />
+        android:layout_alignRight="@+id/imgPhotoSaver"
+        android:layout_alignEnd="@+id/imgPhotoSaver"
+        tools:layout_editor_absoluteY="314dp"
+        tools:layout_editor_absoluteX="306dp" />
+
+    <EditText
+        android:id="@+id/etQuantity"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:hint="Qty"
+        android:gravity="center"
+        android:background="@drawable/edittext_background"
+        android:ems="10"
+        android:inputType="number"
+        tools:layout_editor_absoluteY="314dp"
+        tools:layout_editor_absoluteX="31dp"
+        android:layout_alignBottom="@+id/btnAddMaterial"
+        android:layout_alignLeft="@+id/imgPhotoSaver"
+        android:layout_alignStart="@+id/imgPhotoSaver"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp" />
 
 </RelativeLayout>

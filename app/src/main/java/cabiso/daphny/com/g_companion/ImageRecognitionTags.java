@@ -92,13 +92,13 @@ public class ImageRecognitionTags extends AppCompatActivity{
         addMaterial = (EditText) findViewById(R.id.addMaterials);
         btnMaterial = (ImageButton) findViewById(R.id.btnAddMaterial);
 
-        Spinner spinnerUm1 = (Spinner) findViewById(R.id.spinnerUM1);
-        Spinner spinnerUm2 = (Spinner) findViewById(R.id.spinnerUM2);
-        Spinner spinnerUm3 = (Spinner) findViewById(R.id.spinnerUM3);
+//        Spinner spinnerUm1 = (Spinner) findViewById(R.id.spinnerUM1);
+//        Spinner spinnerUm2 = (Spinner) findViewById(R.id.spinnerUM2);
+//        Spinner spinnerUm3 = (Spinner) findViewById(R.id.spinnerUM3);
 
-        Spinner spinnerQty1 = (Spinner) findViewById(R.id.spinnerqty1);
-        Spinner spinnerQty2 = (Spinner) findViewById(R.id.spinnerqty2);
-        Spinner spinnerQty3 = (Spinner) findViewById(R.id.spinnerqty3);
+//        Spinner spinnerQty1 = (Spinner) findViewById(R.id.spinnerqty1);
+//        Spinner spinnerQty2 = (Spinner) findViewById(R.id.spinnerqty2);
+//        Spinner spinnerQty3 = (Spinner) findViewById(R.id.spinnerqty3);
 
         unitOfMeasurement = getResources().getStringArray(R.array.UM);
         nsAdapter= new SpinnerAdapter(getApplicationContext());
@@ -106,127 +106,128 @@ public class ImageRecognitionTags extends AppCompatActivity{
         quantity = getResources().getStringArray(R.array.qty);
         qtyAdapter=new SpinnerAdapter1(getApplicationContext());
 
-        spinnerUm1.setAdapter(nsAdapter);
-        spinnerUm2.setAdapter(nsAdapter);
+//        spinnerUm1.setAdapter(nsAdapter);
+//        spinnerUm2.setAdapter(nsAdapter);
+//        spinnerUm3.setAdapter(nsAdapter);
 
-        spinnerUm3.setAdapter(nsAdapter);
+//        spinnerQty1.setAdapter(qtyAdapter);
+//        spinnerQty2.setAdapter(qtyAdapter);
+//        spinnerQty3.setAdapter(qtyAdapter);
 
-        spinnerQty1.setAdapter(qtyAdapter);
-        spinnerQty2.setAdapter(qtyAdapter);
-        spinnerQty3.setAdapter(qtyAdapter);
+//        spinnerUm1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                // TODO Auto-generated method stub
+//                spinner_item_um = unitOfMeasurement[position];
+//
+//                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//        });
+//        spinnerUm1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                // TODO Auto-generated method stub
+//                spinner_item_um = unitOfMeasurement[position];
+//
+//                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//        });
 
-        spinnerUm1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // TODO Auto-generated method stub
-                spinner_item_um = unitOfMeasurement[position];
+//        spinnerUm2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                // TODO Auto-generated method stub
+//                spinner_item_um = unitOfMeasurement[position];
+//
+//                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//        });spinnerUm3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                // TODO Auto-generated method stub
+//                spinner_item_um = unitOfMeasurement[position];
+//
+//                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//        });
 
-                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
+//        spinnerQty1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                // TODO Auto-generated method stub
+//                spinner_item_q = quantity[position];
+//
+//                Toast.makeText(ImageRecognitionTags.this, spinner_item_q, Toast.LENGTH_SHORT).show();
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//        });
 
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-
-            }
-        });
-        spinnerUm1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // TODO Auto-generated method stub
-                spinner_item_um = unitOfMeasurement[position];
-
-                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-
-            }
-        });
-        spinnerUm2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // TODO Auto-generated method stub
-                spinner_item_um = unitOfMeasurement[position];
-
-                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-
-            }
-        });spinnerUm3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // TODO Auto-generated method stub
-                spinner_item_um = unitOfMeasurement[position];
-
-                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-
-            }
-        });
-
-        spinnerQty1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // TODO Auto-generated method stub
-                spinner_item_q = quantity[position];
-
-                Toast.makeText(ImageRecognitionTags.this, spinner_item_q, Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-
-            }
-        });
-        spinnerQty2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // TODO Auto-generated method stub
-                spinner_item_q = quantity[position];
-
-                Toast.makeText(ImageRecognitionTags.this, spinner_item_q, Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-
-            }
-        });
-        spinnerQty3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // TODO Auto-generated method stub
-                spinner_item_q = quantity[position];
-
-                Toast.makeText(ImageRecognitionTags.this, spinner_item_q, Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
-
-            }
-        });
+//        spinnerQty2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                // TODO Auto-generated method stub
+//                spinner_item_q = quantity[position];
+//
+//                Toast.makeText(ImageRecognitionTags.this, spinner_item_q, Toast.LENGTH_SHORT).show();
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//        });
+//        spinnerQty3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                // TODO Auto-generated method stub
+//                spinner_item_q = quantity[position];
+//
+//                Toast.makeText(ImageRecognitionTags.this, spinner_item_q, Toast.LENGTH_SHORT).show();
+//
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//        });
 
         btnMaterial.setOnClickListener(new View.OnClickListener() {
             @Override

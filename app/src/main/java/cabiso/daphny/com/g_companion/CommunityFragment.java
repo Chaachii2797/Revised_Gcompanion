@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -138,6 +139,9 @@ public class CommunityFragment extends Fragment{
             @Override
             public void onMenuToggle(boolean opened) {
                 if (opened) {
+                    WindowManager.LayoutParams windowManager = getActivity().getWindow().getAttributes();
+                    windowManager.dimAmount = 0.75f;
+                    getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                 } else {
                 }
             }
@@ -285,13 +289,6 @@ public class CommunityFragment extends Fragment{
                     }
                 };
 
-        cAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                recyclerView.smoothScrollToPosition(cAdapter.getItemCount());
-            }
-        });
-
         recyclerView.setAdapter(cAdapter);
 
         //selling DIY
@@ -401,14 +398,6 @@ public class CommunityFragment extends Fragment{
                     }
                 };
 
-        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                recyclerView1.smoothScrollToPosition(mAdapter.getItemCount());
-            }
-        });
-
-
         recyclerView1.setAdapter(mAdapter);
 
         //adapter in  main page
@@ -425,8 +414,7 @@ public class CommunityFragment extends Fragment{
 //        }
     }
 
-    public interface OnListFragmentInteraction {
-    }
+
 
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
@@ -507,7 +495,6 @@ public class CommunityFragment extends Fragment{
 
     public interface OnListFragmentInteraction {
         void onListFragmentInteraction(DatabaseReference ref);
-
     }
 
 }

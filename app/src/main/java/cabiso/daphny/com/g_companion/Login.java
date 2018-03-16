@@ -3,7 +3,6 @@ package cabiso.daphny.com.g_companion;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -71,6 +70,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_login);
+<<<<<<< HEAD
         Toast.makeText(this, "LOGGGGGG", Toast.LENGTH_SHORT).show();
 //gikan ari
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0); // 0 - for private mode
@@ -94,6 +94,30 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
             this.finish();
         }
 // ari kutob
+=======
+
+//
+//        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0); // 0 - for private mode
+//        SharedPreferences.Editor editor = settings.edit();
+//
+//        //Set "hasLoggedIn" to true
+//        editor.putBoolean("hasLoggedIn", true);
+//
+//        // Commit the edits!
+//        editor.commit();
+//
+//        //Kani kay mo deretso sa main. Pero ika logout gg! mo stop besh!
+//        //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
+//        boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", true);
+//
+//        if (hasLoggedIn) {
+//            //Go directly to main activity.
+//            Intent intent = new Intent(Login.this, MainActivity.class);
+//            startActivity(intent);
+//            this.finish();
+//        }
+
+>>>>>>> 0041111bd62c3367ac2a3a94d00485baaa32d2ab
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()

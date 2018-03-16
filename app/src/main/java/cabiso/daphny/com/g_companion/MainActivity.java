@@ -56,9 +56,6 @@ public class MainActivity extends AppCompatActivity
 
     final ClarifaiClient client = new ClarifaiBuilder("b7aa33dc206c40a4b9cffc09a2e72a9d").buildSync();
 
-    private SharedPreferences sharedPref;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,10 +158,6 @@ public class MainActivity extends AppCompatActivity
 
         return super.onCreateOptionsMenu(menu);
     }
-
-
-
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

@@ -160,6 +160,7 @@ public class WelcomeActivity extends AppCompatActivity {
             } else {
                 // still pages are left
                 btnNext.setText(getString(R.string.next));
+                launchHomeScreen();
                 btnSkip.setVisibility(View.VISIBLE);
             }
         }

@@ -74,8 +74,6 @@ public class ImageRecognitionTags extends AppCompatActivity{
     public ImageRecognitionTags() {
         client = new ClarifaiBuilder("cb169e9d3f9e4ec5a7769cc0422f3162").buildSync();
     }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,151 +81,27 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
         getWordBank();
 
-        //  firstFrame = (FrameLayout)findViewById(R.id.FirstFrame);
         diyBtn = (Button)findViewById(R.id.btnDIY);
         imageView = (ImageView)findViewById(R.id.imgPhotoSaver);
         tvTag = (TextView) findViewById(R.id.tvTag);
-        //tv_category = (TextView) findViewById(R.id.tvCategory);
 
         addMaterial = (EditText) findViewById(R.id.addMaterials);
         btnMaterial = (ImageButton) findViewById(R.id.btnAddMaterial);
 
-//        Spinner spinnerUm1 = (Spinner) findViewById(R.id.spinnerUM1);
-//        Spinner spinnerUm2 = (Spinner) findViewById(R.id.spinnerUM2);
-//        Spinner spinnerUm3 = (Spinner) findViewById(R.id.spinnerUM3);
-
-//        Spinner spinnerQty1 = (Spinner) findViewById(R.id.spinnerqty1);
-//        Spinner spinnerQty2 = (Spinner) findViewById(R.id.spinnerqty2);
-//        Spinner spinnerQty3 = (Spinner) findViewById(R.id.spinnerqty3);
-
         unitOfMeasurement = getResources().getStringArray(R.array.UM);
         nsAdapter= new SpinnerAdapter(getApplicationContext());
 
+        imageView.setClickable(true);
+        addMaterial.setText(" ");
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent();
+                printTags();
+            }
+        });
         quantity = getResources().getStringArray(R.array.qty);
         qtyAdapter=new SpinnerAdapter1(getApplicationContext());
-
-//        spinnerUm1.setAdapter(nsAdapter);
-//        spinnerUm2.setAdapter(nsAdapter);
-//        spinnerUm3.setAdapter(nsAdapter);
-
-//        spinnerQty1.setAdapter(qtyAdapter);
-//        spinnerQty2.setAdapter(qtyAdapter);
-//        spinnerQty3.setAdapter(qtyAdapter);
-
-//        spinnerUm1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                // TODO Auto-generated method stub
-//                spinner_item_um = unitOfMeasurement[position];
-//
-//                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });
-//        spinnerUm1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                // TODO Auto-generated method stub
-//                spinner_item_um = unitOfMeasurement[position];
-//
-//                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });
-
-//        spinnerUm2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                // TODO Auto-generated method stub
-//                spinner_item_um = unitOfMeasurement[position];
-//
-//                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });spinnerUm3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                // TODO Auto-generated method stub
-//                spinner_item_um = unitOfMeasurement[position];
-//
-//                Toast.makeText(ImageRecognitionTags.this, spinner_item_um, Toast.LENGTH_SHORT).show();
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });
-
-//        spinnerQty1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                // TODO Auto-generated method stub
-//                spinner_item_q = quantity[position];
-//
-//                Toast.makeText(ImageRecognitionTags.this, spinner_item_q, Toast.LENGTH_SHORT).show();
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });
-
-//        spinnerQty2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                // TODO Auto-generated method stub
-//                spinner_item_q = quantity[position];
-//
-//                Toast.makeText(ImageRecognitionTags.this, spinner_item_q, Toast.LENGTH_SHORT).show();
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });
-//        spinnerQty3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                // TODO Auto-generated method stub
-//                spinner_item_q = quantity[position];
-//
-//                Toast.makeText(ImageRecognitionTags.this, spinner_item_q, Toast.LENGTH_SHORT).show();
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                // TODO Auto-generated method stub
-//
-//            }
-//        });
 
         btnMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -243,7 +117,6 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
                 spinnerQty.setAdapter(qtyAdapter);
                 spinnerUM.setAdapter(nsAdapter);
-
 
                 spinnerUM.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -311,10 +184,14 @@ public class ImageRecognitionTags extends AppCompatActivity{
                     priority +=" "+extras.get(i);
                     Log.e("RESULT: ",""+results);
                     Intent intent = new Intent(ImageRecognitionTags.this,Bottle_Recommend.class);
+                    String quantity_unit = spinner_item_q + " " + spinner_item_um;
                     intent.putExtra("result_priority", priority);
+                    intent.putExtra("qty_unit", quantity_unit);
                     intent.putExtra("result_tag", results);
                     Log.e("PRIORITY: ",""+priority);
                     Log.e("RESULTS: ",""+results);
+                    Log.e("qty_unit: ",""+quantity_unit);
+
                     startActivity(intent);
                 }
             }
@@ -431,14 +308,16 @@ public class ImageRecognitionTags extends AppCompatActivity{
     }
 
     public void printTags() {
-        String results = "Tags: ";
-        for(int i = 0; i < 10; i++) {
+        String results = "";
+        for(int i = 0; i < 1; i++) {
             for(int c = 0; c < validWords.size(); c++){
                 if(tags.get(i).contains(validWords.get(c))){
                     results += "\n" + tags.get(i);
                     Log.e("tags_here", ""+results);
                     Log.e("value_here",extras.get(i));
-                    tvTag.setText(results);
+//                    tvTag.setText(results);
+                    addMaterial.setText(results);
+
 
                 }else{
                     //invalid words

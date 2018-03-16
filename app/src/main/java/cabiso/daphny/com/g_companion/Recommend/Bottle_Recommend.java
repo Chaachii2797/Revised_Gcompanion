@@ -33,6 +33,7 @@ import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.MaterialsComparator;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.Model.QuantityItem;
 import cabiso.daphny.com.g_companion.R;
 
 /**
@@ -130,13 +131,17 @@ public class Bottle_Recommend extends AppCompatActivity {
         Log.e("PRIORITY_next ", "" + priority);
 
         final String data = getIntent().getStringExtra("result_tag");
+        final String qtu = getIntent().getStringExtra("qty_unit");
         final String[] items = data.split(" ");
+        final String[] qtys = qtu.split(" ");
+
         for (final String item : items) {
             Log.e("itemsMASO: ", "" + item);
             final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
             myRef.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
                     if (item != null) {
                         DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
                         DataSnapshot commu_snapshot = dataSnapshot.child("materials");
@@ -144,54 +149,40 @@ public class Bottle_Recommend extends AppCompatActivity {
 
                         if (!exists(diYnames)) {
                             Log.d(diYnames.getProductID(), "Does not exist");
-                            String messageProd = "";
-                            int[] has;
-                            int count = 0;
-                            diYnames.setMaterialMatches(counter(items, splits));
+                            diYnames.setMaterialMatches(counter(items, splits, qtys));
+
                             if (diYnames.getMaterialMatches() > 0) {
                                 for (int i = 0; i < splits.length; i++) {
                                     Log.e("splits: ", "" + splits);
                                     String message = splits[i].substring(0, splits[i].length()).replaceAll("\\}", " ").replaceAll("=", " ")
                                             .replaceAll("\\{", " ").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials,", "")
                                             .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]", "").trim();
-                                    messageProd = " " + message;
                                     messageProcedure.add(message);
+                                    Log.e("message: ", "" + message);
 
-                                    Log.d("DiyMess", message);
+                                    String sample = splits[i].substring(0, splits[i].length()).replaceAll("\\}", " ").replaceAll("=", " ")
+                                            .replaceAll("\\{", " ").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials,", "")
+                                            .replaceAll("value", "").replaceAll("val", "");
+                                    Log.e("sample: ", "" + sample);
+                                    Log.e("items: ", "" + items);
 
-                                    if (item.equalsIgnoreCase(message)) {
-                                        //  if(diYnames.getProductID().equals(diYnames.getProductID())) {
-//                            if(splits[i].contains(message)){
-                                        Log.e("messageProd: ", "" + messageProd);
-                                        Log.e("messageeeeeeees: ", "" + message);
-                                        Log.e("counting: ", "" + count++);
 
-                                        for (int get = 0; get < diyList.size(); get++) {
-                                            Log.d("naayParehas", "inside");
-                                            if (diYnames.getProductID().equals(diyList.get(get).getProductID())) {
-                                                addDiy = false;
-
-                                                Log.d("countExist", String.valueOf(diYnames.getMaterialMatches()));
-
-                                                Log.d("naayParehas", diyList.get(get).toString());
-
-//                                    String toMoveUp = String.valueOf(init);
-//                                    while(diyList.indexOf(toMoveUp)!=0){
-//                                        int til = diyList.indexOf(toMoveUp);
-//                                        Collections.swap(diyList, til, til-1);
-//                                    }
-//                                    Log.d("currDIY", diyList.toString());
-//                                    diyList.add(0, diyList.get(init));
-//                                    diyList.remove(diyList.get(init+1));
-//                                    Log.d("ListDiy", diyList.toString());
-//                                    adapter.notifyDataSetChanged();
+                                    for(final String qty :qtys) {
+                                        for (int a = 0; a < splits.length; i++) {
+                                            if (qty.equals(sample)) {
+                                                Log.e("qtys: ", "" + qty);
                                             }
                                         }
-                                        /*if (addDiy) {
-                                            diyList.add(diYnames);
-                                        } else {
-                                            addDiy = true;
-                                        }*/
+                                    }
+
+                                    if (item.equalsIgnoreCase(message) || qtys.equals(sample)){
+                                        for (int get = 0; get < diyList.size(); get++) {
+                                            if (diYnames.getProductID().equals(diyList.get(get).getProductID())) {
+
+                                                addDiy = false;
+                                            }
+                                        }
+
                                         diyList.add(diYnames);
                                         Collections.sort(diyList);
                                         Collections.reverse(diyList);
@@ -200,25 +191,15 @@ public class Bottle_Recommend extends AppCompatActivity {
                                                 .replaceAll("\\{", "").replaceAll("DataSnapshot", "").replaceAll("\\[", "").replaceAll("val", "")
                                                 .replaceAll(",", "").replaceAll("\\]", "");
                                         check.add(commu);
-                                        boolean matches = false;
-                                        for (int j = 0; j < commu.length(); j++) {
-
-                                        }
-
-                                        Log.d("countItem", String.valueOf(count));
-                                        Log.e("commuuu: ", " " + commu);
-                                        Log.e("commu_snapshot: ", " " + commu_snapshot);
-                                        // }
+                                        Log.e("NAAY_COMMU", commu);
                                     }
                                 }
                                 Collections.sort(diyList, new MaterialsComparator());
                                 progressDialog.dismiss();
                             }
 
-
                         }
                     }
-
                 }
 
                 @Override
@@ -256,8 +237,7 @@ public class Bottle_Recommend extends AppCompatActivity {
         return flag;
     }
 
-
-    private int counter(String[] items, String[] materials) {
+    private int counter(String[] items, String[] materials, String[] quantity) {
         int count = 0;
         for (String item : items) {
             for (String mat : materials) {
@@ -266,15 +246,20 @@ public class Bottle_Recommend extends AppCompatActivity {
                         .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]", "").trim();
                 if (item.equals(message)) {
                     count++;
+                    Log.e("damn", message);
+                }
+            }
+            for(String qty : quantity){
+//                String num = qty.substring(0, qty.length()).replaceAll("[A-Z]", "").replaceAll("[a-z]","");
+                String sample = qty.substring(0, qty.length());
+//                String lett = qty.substring(0, qty.length()).replaceAll("[0-9]", "");
+                if(qty.equals(sample)){
+                    count++;
+                    Log.e("QUACK", sample);
                 }
             }
         }
         return count;
-    }
-
-
-    public void sort_to_recommend() {
-        DatabaseReference myRef = database.getReference("dy_by_tags");
     }
 
     @Override

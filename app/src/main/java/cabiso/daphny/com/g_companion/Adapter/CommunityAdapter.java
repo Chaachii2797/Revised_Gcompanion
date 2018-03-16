@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
+import cabiso.daphny.com.g_companion.Model.QuantityItem;
 import cabiso.daphny.com.g_companion.R;
 
 /**
@@ -22,6 +23,7 @@ public class CommunityAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<CommunityItem> itemList;
+    ArrayList<QuantityItem> itemQty;
 
     public CommunityAdapter(Context context, ArrayList<CommunityItem> modelList) {
         this.context = context;

@@ -42,8 +42,11 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cabiso.daphny.com.g_companion.ImageRecognitionTags;
+import cabiso.daphny.com.g_companion.CaptureDIY;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.R;
 import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
 /**
@@ -188,14 +191,13 @@ public class CommunityFragment extends Fragment{
                     public int heartCount=0; //pila ka heart * 0.4
                     public int starCount=0; //pila ka bookmark * 0.6
 
-
                     public double totalBmLike = ((starCount * 0.6) + (heartCount * 0.4));// i plus ang total percent sa bookmark ug like
                     public int totalDIYs = 0; //pila kabuok diys ang under ana nga tag nya i divide daton nas totaBmLike times 100
 
                     @Override
                     protected void populateViewHolder(final ItemViewHolder viewHolder, final DIYnames model, final int position) {
                         viewHolder.mNameView.setText(model.diyName);
-                     //   viewHolder.mCategory.setText(model.tag);
+                        //   viewHolder.mCategory.setText(model.tag);
 
                         //dec.29,2017
                         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
@@ -214,27 +216,27 @@ public class CommunityFragment extends Fragment{
 
                         final String key = this.getRef(position).getKey();
 
-                            viewHolder.mStar.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(getContext(), "Bookmark DIY!" + " " + starCount, Toast.LENGTH_SHORT).show();
-                                    starCount++;
-                                    totalBmLike++;
+                        viewHolder.mStar.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(getContext(), "Bookmark DIY!" + " " + starCount, Toast.LENGTH_SHORT).show();
+                                starCount++;
+                                totalBmLike++;
 
-                                    final DatabaseReference db = FirebaseDatabase.getInstance().getReference("bookmarks");
-                                    db.child(userID).push().setValue(model);
+                                final DatabaseReference db = FirebaseDatabase.getInstance().getReference("bookmarks");
+                                db.child(userID).push().setValue(model);
 
-                                    viewHolder.mStar.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
+                                viewHolder.mStar.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
 
-                                    if (viewHolder.starResult.put("bookmarks", starCount * 0.6) != null) {
-                                        reference.child(key).updateChildren(viewHolder.starResult);
+                                if (viewHolder.starResult.put("bookmarks", starCount * 0.6) != null) {
+                                    reference.child(key).updateChildren(viewHolder.starResult);
 
-                                    }
                                 }
-                            });
+                            }
+                        });
 
 
-                            viewHolder.mHeart.setOnClickListener(new View.OnClickListener() {
+                        viewHolder.mHeart.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Toast.makeText(getContext(), "Liked DIY!" + " " + heartCount, Toast.LENGTH_SHORT).show();
@@ -247,7 +249,7 @@ public class CommunityFragment extends Fragment{
                                     reference.child(key).updateChildren(viewHolder.likeResult);
                                 }
                             }
-                            });
+                        });
 
 
                         try{

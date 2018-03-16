@@ -70,6 +70,7 @@ import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.Constants;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.Model.QuantityItem;
 import cabiso.daphny.com.g_companion.Model.TagClass;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
@@ -123,7 +124,10 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     private CommunityAdapter pAdapter;
     private CommunityAdapter mAdapter;
     ArrayList<CommunityItem> itemMaterial;
+    ArrayList<CommunityItem> itemMat;
+    ArrayList<CommunityItem> itemForMaterials;
     ArrayList<CommunityItem> itemProcedure;
+    ArrayList<QuantityItem> itemQuantity;
     private List<String> diys = new ArrayList<String>();
 
     private ProgressDialog progressDialog;
@@ -239,8 +243,11 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         proceduresList = (ListView) findViewById(R.id.proceduresList);
         btnAddMaterial = (ImageButton) findViewById(R.id.btnMaterial);
         btnAddProcedure = (ImageButton) findViewById(R.id.btnProcedure);
+
         itemMaterial = new ArrayList<>();
         itemProcedure = new ArrayList<>();
+        itemMat = new ArrayList<>();
+        itemQuantity = new ArrayList<>();
 
         mAdapter = new CommunityAdapter(getApplicationContext(), itemMaterial);
         pAdapter = new CommunityAdapter(getApplicationContext(), itemProcedure);
@@ -304,13 +311,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 if (inputMaterials.isEmpty()) {
                     Toast.makeText(CaptureDIY.this, "Please enter materials", Toast.LENGTH_SHORT).show();
                 } else {
-//                    String quantityMaterial = spinner_item + " " + material.getText().toString();
-//
-//                    CommunityItem qm = new CommunityItem(quantityMaterial);
-//                    itemMaterial.add(qm);
-//                    mAdapter.notifyDataSetChanged();
-//                    material.setText(" ");
-
                     Toast.makeText(CaptureDIY.this, spinner_item_q + spinner_item_um, Toast.LENGTH_SHORT).show();
                 }
 
@@ -319,10 +319,16 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String quantityMaterial = spinner_item_q + " " + spinner_item_um + " " + material.getText().toString();
-
-                        CommunityItem qm = new CommunityItem(quantityMaterial);
+                        String quantityMaterials = spinner_item_q + " " + spinner_item_um + " " + material.getText().toString();
+                        String quantityMaterial = spinner_item_q + " " + spinner_item_um;
+                        String materials = material.getText().toString();
+                        CommunityItem qm = new CommunityItem(quantityMaterials);
+                        CommunityItem mat = new CommunityItem(materials);
+                        QuantityItem qty = new QuantityItem(quantityMaterial);
                         itemMaterial.add(qm);
+                        itemQuantity.add(qty);
+                        itemMat.add(mat);
+
                         mAdapter.notifyDataSetChanged();
                         material.setText(" ");
 
@@ -334,9 +340,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
             }
         });
-
-
-
 
         btnAddProcedure.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -415,7 +418,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 taskSnapshot.getDownloadUrl().toString(), userID, "prod_000"+ productID,
                                 float_this, float_this));
 
-                        databaseReference.child(upload).child("materials").setValue(itemMaterial);
+                        databaseReference.child(upload).child("materials").setValue(itemMat);
+
+                        databaseReference.child(upload).child("quantity").setValue(itemQuantity);
 
                         databaseReference.child(upload).child("procedures").setValue(itemProcedure);
 

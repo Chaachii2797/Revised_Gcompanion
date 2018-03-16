@@ -16,7 +16,6 @@ public class CommunityItem implements CharSequence {
         this.val = val;
     }
 
-
     public String getVal() {
         return val;
     }

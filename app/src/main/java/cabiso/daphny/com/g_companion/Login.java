@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -30,6 +31,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -68,8 +71,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_login);
-
-
+        Toast.makeText(this, "LOGGGGGG", Toast.LENGTH_SHORT).show();
+//gikan ari
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0); // 0 - for private mode
         SharedPreferences.Editor editor = settings.edit();
 
@@ -79,17 +82,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         // Commit the edits!
         editor.commit();
 
+
         //Kani kay mo deretso sa main. Pero ika logout gg! mo stop besh!
         //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
         boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", true);
 
-        if (hasLoggedIn) {
+       if (hasLoggedIn) {
             //Go directly to main activity.
             Intent intent = new Intent(Login.this, MainActivity.class);
             startActivity(intent);
             this.finish();
         }
-
+// ari kutob
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -163,7 +167,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         }
     }
 
-
 //If naa siya, naa gihapon ang log in everytime, pero ika back muadto sa main dayon
 //    @Override
 //    protected void onStop(){
@@ -181,7 +184,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 //
 //        }
 //    }
-
 
     private void signInGoogle() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
@@ -233,7 +235,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                             else if (task.isSuccessful()){
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 Intent intent = new Intent(Login.this, MainActivity.class);
+                                Toast.makeText(Login.this, "BUSET", Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
+//                                Bundle bundle = new Bundle();
+//                                bundle.putString("get", "THIS");
+//                                CommunityFragment comFrag = new CommunityFragment();
+//                                comFrag.setArguments(bundle);
+//
+//                                Fragment fragment = new CommunityFragment();
+//                                getSupportFragmentManager().beginTransaction()
+//                                            .replace(R.id.theFragmentFrame, fragment, fragment.getClass().getSimpleName())
+//                                        .addToBackStack(null)
+//                                        .commit();
                             }
                         }
                     });
@@ -309,28 +322,28 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         }
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-//        if (opr.isDone()) {
-//            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
-//            // and the GoogleSignInResult will be available instantly.
-//            Log.d(TAG, "Got cached sign-in");
-//            GoogleSignInResult result = opr.get();
-//            handleSignInResult(result);
-//        } else {
-//            // If the user has not previously signed in on this device or the sign-in has expired,
-//            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
-//            // single sign-on will occur in this branch.
-//            showProgressDialog();
-//            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
-//                @Override
-//                public void onResult(GoogleSignInResult googleSignInResult) {
-//                    hideProgressDialog();
-//                    handleSignInResult(googleSignInResult);
-//                }
-//            });
-//        }
-//    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if (opr.isDone()) {
+            // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
+            // and the GoogleSignInResult will be available instantly.
+            Log.d(TAG, "Got cached sign-in");
+            GoogleSignInResult result = opr.get();
+            handleSignInResult(result);
+        } else {
+            // If the user has not previously signed in on this device or the sign-in has expired,
+            // this asynchronous branch will attempt to sign in the user silently.  Cross-device
+            // single sign-on will occur in this branch.
+            showProgressDialog();
+            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(GoogleSignInResult googleSignInResult) {
+                    hideProgressDialog();
+                    handleSignInResult(googleSignInResult);
+                }
+            });
+        }
+    }
 }

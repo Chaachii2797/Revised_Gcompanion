@@ -30,16 +30,13 @@ public class SplashActivity extends AppCompatActivity{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
-
                     Intent intent = new Intent();
                     intent.setClass(SplashActivity.this, Login.class);
                     startActivity(intent);
-                    SplashActivity.this.finish();
+                    SplashActivity.this.closeContextMenu();
                 }
             }
         };
         timer.start();
-
-
     }
 }

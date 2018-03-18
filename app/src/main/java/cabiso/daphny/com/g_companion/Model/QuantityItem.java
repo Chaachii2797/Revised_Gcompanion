@@ -7,11 +7,20 @@ package cabiso.daphny.com.g_companion.Model;
 public class QuantityItem implements CharSequence{
 
     String quantity;
+    int qty_matches;
 
     public QuantityItem(){}
 
     public QuantityItem(String quantity) {
         this.quantity = quantity;
+    }
+
+    public int getQty_matches() {
+        return qty_matches;
+    }
+
+    public void setQty_matches(int qty_matches) {
+        this.qty_matches = qty_matches;
     }
 
     public String getQuantity() {

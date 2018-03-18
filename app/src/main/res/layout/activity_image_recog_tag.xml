@@ -22,18 +22,19 @@
         android:id="@+id/addMaterials"
         android:layout_width="200dp"
         android:layout_height="40dp"
+        android:layout_alignLeft="@+id/tvTag"
+        android:layout_alignStart="@+id/tvTag"
+        android:layout_below="@+id/textView26"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_toLeftOf="@+id/btnAddMaterial"
         android:background="@drawable/edittext_background"
-        android:hint="DIY Materials: "
+        android:hint="Recognize tag:"
         android:imeOptions="actionNext"
         android:paddingLeft="10dp"
         android:singleLine="true"
-        tools:layout_editor_absoluteY="314dp"
         tools:layout_editor_absoluteX="99dp"
-        android:layout_below="@+id/textView26"
-        android:layout_toLeftOf="@+id/btnAddMaterial"
-        android:layout_toStartOf="@+id/btnAddMaterial"
-        android:layout_marginRight="7dp"
-        android:layout_marginEnd="7dp" />
+        tools:layout_editor_absoluteY="314dp" />
 
     <TextView
         android:id="@+id/tvTag"
@@ -45,10 +46,10 @@
         android:textSize="18sp"
         tools:layout_editor_absoluteY="371dp"
         tools:layout_editor_absoluteX="29dp"
+        android:layout_marginTop="31dp"
         android:layout_below="@+id/addMaterials"
-        android:layout_alignLeft="@+id/etQuantity"
-        android:layout_alignStart="@+id/etQuantity"
-        android:layout_marginTop="33dp" />
+        android:layout_toLeftOf="@+id/btnAddMaterial"
+        android:layout_toStartOf="@+id/btnAddMaterial" />
 
     <Button
         android:id="@+id/btnDIY"
@@ -69,28 +70,27 @@
         android:id="@+id/textView25"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Quantity: "
+        android:text="Quantity and Unit of Measurement: "
         android:textStyle="bold"
-        android:layout_centerVertical="true"
-        android:layout_alignRight="@+id/etQuantity"
-        android:layout_alignEnd="@+id/etQuantity"
+        tools:layout_editor_absoluteX="38dp"
         tools:layout_editor_absoluteY="275dp"
-        tools:layout_editor_absoluteX="38dp" />
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/imgPhotoSaver"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:id="@+id/textView26"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Unit of Measurement: "
-        android:textStyle="bold"
-        tools:layout_editor_absoluteY="275dp"
-        tools:layout_editor_absoluteX="128dp"
         android:layout_alignBaseline="@+id/textView25"
         android:layout_alignBottom="@+id/textView25"
-        android:layout_alignLeft="@+id/addMaterials"
-        android:layout_alignStart="@+id/addMaterials"
-        android:layout_marginLeft="23dp"
-        android:layout_marginStart="23dp" />
+        android:layout_alignLeft="@+id/btnDIY"
+        android:layout_alignStart="@+id/btnDIY"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteX="128dp"
+        tools:layout_editor_absoluteY="275dp" />
 
     <ImageButton
         android:id="@+id/btnAddMaterial"
@@ -101,22 +101,5 @@
         android:layout_alignEnd="@+id/imgPhotoSaver"
         tools:layout_editor_absoluteY="314dp"
         tools:layout_editor_absoluteX="306dp" />
-
-    <EditText
-        android:id="@+id/etQuantity"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
-        android:hint="Qty"
-        android:gravity="center"
-        android:background="@drawable/edittext_background"
-        android:ems="10"
-        android:inputType="number"
-        tools:layout_editor_absoluteY="314dp"
-        tools:layout_editor_absoluteX="31dp"
-        android:layout_alignBottom="@+id/btnAddMaterial"
-        android:layout_alignLeft="@+id/imgPhotoSaver"
-        android:layout_alignStart="@+id/imgPhotoSaver"
-        android:layout_marginLeft="25dp"
-        android:layout_marginStart="25dp" />
 
 </RelativeLayout>

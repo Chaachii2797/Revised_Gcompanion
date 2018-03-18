@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -136,6 +137,7 @@ public class Bottle_Recommend extends AppCompatActivity {
         final String[] qtys = qtu.split(" ");
 
         for (final String item : items) {
+            for(final String quantity : qtys){
             Log.e("itemsMASO: ", "" + item);
             final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
             myRef.addChildEventListener(new ChildEventListener() {
@@ -145,7 +147,9 @@ public class Bottle_Recommend extends AppCompatActivity {
                     if (item != null) {
                         DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
                         DataSnapshot commu_snapshot = dataSnapshot.child("materials");
+                        DataSnapshot qty_snapshot = dataSnapshot.child("quantity");
                         String[] splits = commu_snapshot.toString().split(",");
+                        String[] split_qty = qty_snapshot.toString().split(",");
 
                         if (!exists(diYnames)) {
                             Log.d(diYnames.getProductID(), "Does not exist");
@@ -153,32 +157,41 @@ public class Bottle_Recommend extends AppCompatActivity {
 
                             if (diYnames.getMaterialMatches() > 0) {
                                 for (int i = 0; i < splits.length; i++) {
+//                                    for(int a=0; a< split_qty.length; a++){
                                     Log.e("splits: ", "" + splits);
                                     String message = splits[i].substring(0, splits[i].length()).replaceAll("\\}", " ").replaceAll("=", " ")
                                             .replaceAll("\\{", " ").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials,", "")
                                             .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]", "").trim();
                                     messageProcedure.add(message);
+
                                     Log.e("message: ", "" + message);
 
-                                    String sample = splits[i].substring(0, splits[i].length()).replaceAll("\\}", " ").replaceAll("=", " ")
+                                    String sample = splits[i].substring(0, splits[i].length()).replaceAll("\\}", " ").replaceAll("=", " ").replaceAll("0", " ")
                                             .replaceAll("\\{", " ").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials,", "")
                                             .replaceAll("value", "").replaceAll("val", "");
                                     Log.e("sample: ", "" + sample);
-                                    Log.e("items: ", "" + items);
 
+                                    String num = splits[i].substring(0, splits[i].length()).replaceAll("\\}", " ").replaceAll("=", " ").replaceAll("0", " ")
+                                            .replaceAll("\\{", " ").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials,", "")
+                                            .replaceAll("value", "").replaceAll("val", "").replaceAll("[A-Z]","").replaceAll("[a-z]","");
+                                    Log.e("num: ", "" + num);
 
-                                    for(final String qty :qtys) {
-                                        for (int a = 0; a < splits.length; i++) {
-                                            if (qty.equals(sample)) {
-                                                Log.e("qtys: ", "" + qty);
-                                            }
-                                        }
-                                    }
+                                    String alpha = splits[i].substring(0, splits[i].length()).replaceAll("\\}", " ").replaceAll("=", " ").replaceAll("0", " ")
+                                            .replaceAll("\\{", " ").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials", "")
+                                            .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]","");
+                                    Log.e("alpha: ", "" + alpha);
+                                    Log.e("quantity: ", "" + quantity);
 
-                                    if (item.equalsIgnoreCase(message) || qtys.equals(sample)){
+//                                    int qty =Integer.parseInt(quantity);
+//
+//                                    if(qty<=Integer.valueOf(num)){
+//                                        Toast.makeText(Bottle_Recommend.this, "YEEEEEEEES", Toast.LENGTH_SHORT).show();
+//                                    }else{
+//                                        Toast.makeText(Bottle_Recommend.this, "NOOOOOOOOO", Toast.LENGTH_SHORT).show();
+//                                    }
+                                    if (item.equalsIgnoreCase(message) || qtys.equals(sample)) {
                                         for (int get = 0; get < diyList.size(); get++) {
                                             if (diYnames.getProductID().equals(diyList.get(get).getProductID())) {
-
                                                 addDiy = false;
                                             }
                                         }
@@ -192,6 +205,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                                                 .replaceAll(",", "").replaceAll("\\]", "");
                                         check.add(commu);
                                         Log.e("NAAY_COMMU", commu);
+//                                        }
                                     }
                                 }
                                 Collections.sort(diyList, new MaterialsComparator());
@@ -223,7 +237,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                 }
             });
 
-//        }
+            }
         }
     }
 

@@ -61,9 +61,7 @@
         <item>square inches</item>
         <item>pieces</item>
         <item>dozen</item>
-
     </string-array>
-
 
     <string-array name="qty">
         <item>Choose</item>

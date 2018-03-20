@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,7 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -64,6 +62,7 @@ public class Bottle_Recommend extends AppCompatActivity {
     private FirebaseUser mFirebaseUser;
     //ArrayList<CommunityItem> itemMaterial;
     private List<String> tags = new ArrayList<>();
+//    private List<Integer> numberList = new ArrayList<>();
     private Activity context;
 
 
@@ -173,8 +172,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                                     Log.e("sample: ", "" + sample);
 
                                     String num = split_qty[i].substring(0, split_qty[i].length()).replaceAll("\\}", "").replaceAll("=", "")
-                                            .replaceAll("\\{", " ").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials,", "")
-                                            .replaceAll("value", "").replaceAll("val", "").replaceAll("[A-Z]","").replaceAll("[a-z]","").replaceAll("0", "").trim();
+                                            .replaceAll("\\{", "").replaceAll("[A-Z]","").replaceAll("[a-z]","").replaceAll("0", "").trim();
                                     Log.e("num: ", "" + num);
 
                                     String alpha = split_qty[i].substring(0, split_qty[i].length()).replaceAll("\\}", " ").replaceAll("=", " ").replaceAll("0", " ")
@@ -182,34 +180,41 @@ public class Bottle_Recommend extends AppCompatActivity {
                                             .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]","");
                                     Log.e("alpha: ", "" + alpha);
 
-                                    String qty_num_img_recog = quantity.substring(0, quantity.length()).replaceAll("quantity", "").replaceAll("[A-Z]","");
-                                    Log.e("qtynum_img_recog: ", "" + qty_num_img_recog);
+                                    String qty_num_img_recog = quantity.substring(0, quantity.length()).replaceAll("[A-Z]","")
+                                            .replaceAll("[a-z]","");
+                                    Log.e("qty_num_img_recog: ", "" + qty_num_img_recog);
 
-                                    String qty_uni_img_recog = quantity.substring(0, quantity.length()).replaceAll("quantity", "").replaceAll("[A-Z]","");
+                                    String qty_uni_img_recog = quantity.substring(0, quantity.length()).replaceAll("quantity", "").replaceAll("[0-9]","");
                                     Log.e("qty_uni_img_recog: ", "" + qty_uni_img_recog);
+                                    String[] qty_num;
+                                    try{
+                                        int qty_nums = Integer.parseInt(qty_num_img_recog);
+                                        int qty_final = Integer.parseInt(num);
+                                        Log.e("qty_nums: ", "" + qty_nums);
 
-//                                    QuantityItem qty_items
-
-                                    if(qty_uni_img_recog.equals(num)){
-                                        if (item.equalsIgnoreCase(message)){
-                                            for (int get = 0; get < diyList.size(); get++) {
-                                                if (diYnames.getProductID().equals(diyList.get(get).getProductID())) {
-                                                    addDiy = false;
+                                        if(qty_final<=qty_nums){
+                                            if (item.equalsIgnoreCase(message)){
+                                                for (int get = 0; get < diyList.size(); get++) {
+                                                    if (diYnames.getProductID().equals(diyList.get(get).getProductID())) {
+                                                        addDiy = false;
+                                                    }
                                                 }
+
+                                                diyList.add(diYnames);
+                                                Collections.sort(diyList);
+                                                Collections.reverse(diyList);
+
+                                                String commu = commu_snapshot.getValue().toString().replaceAll("\\}", "").replaceAll("=", "")
+                                                        .replaceAll("\\{", "").replaceAll("DataSnapshot", "").replaceAll("\\[", "").replaceAll("val", "")
+                                                        .replaceAll(",", "").replaceAll("\\]", "");
+                                                check.add(commu);
+                                                Log.e("NAAY_COMMU", commu);
+//                                        }d
                                             }
-
-                                            diyList.add(diYnames);
-                                            Collections.sort(diyList);
-                                            Collections.reverse(diyList);
-
-                                            String commu = commu_snapshot.getValue().toString().replaceAll("\\}", "").replaceAll("=", "")
-                                                    .replaceAll("\\{", "").replaceAll("DataSnapshot", "").replaceAll("\\[", "").replaceAll("val", "")
-                                                    .replaceAll(",", "").replaceAll("\\]", "");
-                                            check.add(commu);
-                                            Log.e("NAAY_COMMU", commu);
-//                                        }
+                                            Log.e("QUANTITATIES: ", "" + quantity);
                                         }
-                                        Log.e("QUANTITATIES: ", "" + quantity);
+                                    }catch (NumberFormatException e){
+                                        e.printStackTrace();
                                     }
                                 }
                                 Collections.sort(diyList, new MaterialsComparator());
@@ -254,13 +259,6 @@ public class Bottle_Recommend extends AppCompatActivity {
         }
         return flag;
     }
-    private boolean matches(QuantityItem qty_items){
-        boolean flag = false;
-        for(QuantityItem qty_item : qty_list){
-
-        }
-        return flag;
-    }
 
     private int counter(String[] items, String[] materials) {
         int count = 0;
@@ -269,24 +267,13 @@ public class Bottle_Recommend extends AppCompatActivity {
                 String message = mat.substring(0, mat.length()).replaceAll("\\}", " ").replaceAll("=", " ")
                         .replaceAll("\\{", " ").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials,", "")
                         .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]", "").trim();
+//                int mess_int = Integer.parseInt(message);
+//                Log.e("mess_int", String.valueOf(mess_int));
+
                 if (item.equals(message)) {
                     count++;
                     Log.e("damn", message);
                 }
-            }
-        }
-        return count;
-    }
-
-    private int check_qty(String [] quantity){
-        int count = 0;
-        for(String qty : quantity){
-//                String num = qty.substring(0, qty.length()).replaceAll("[A-Z]", "").replaceAll("[a-z]","");
-            String sample = qty.substring(0, qty.length());
-//                String lett = qty.substring(0, qty.length()).replaceAll("[0-9]", "");
-            if(qty.equals(sample)){
-                count++;
-                Log.e("QUACK", sample);
             }
         }
         return count;

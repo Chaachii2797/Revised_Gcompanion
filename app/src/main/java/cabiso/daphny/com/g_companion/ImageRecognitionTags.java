@@ -309,7 +309,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
     public void printTags() {
         String results = "";
-        for(int i = 0; i < 1; i++) {
+        for(int i = 0; i < 10; i++) {
             for(int c = 0; c < validWords.size(); c++){
                 if(tags.get(i).contains(validWords.get(c))){
                     results += "\n" + tags.get(i);

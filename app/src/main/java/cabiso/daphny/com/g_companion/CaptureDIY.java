@@ -320,11 +320,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     @Override
                     public void onClick(View v) {
                         String quantityMaterials = spinner_item_q + " " + spinner_item_um + " " + material.getText().toString();
-                        String quantityMaterial = spinner_item_q + " " + spinner_item_um;
+                        String quantity_material = spinner_item_q;
+                        int unit_material = Integer.parseInt(spinner_item_um);
                         String materials = material.getText().toString();
                         CommunityItem qm = new CommunityItem(quantityMaterials);
                         CommunityItem mat = new CommunityItem(materials);
-                        QuantityItem qty = new QuantityItem(quantityMaterial);
+                        QuantityItem qty = new QuantityItem(unit_material,quantity_material);
                         itemMaterial.add(qm);
                         itemQuantity.add(qty);
                         itemMat.add(mat);

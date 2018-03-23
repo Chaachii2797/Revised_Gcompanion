@@ -6,9 +6,9 @@
         <item name="colorPrimary">@color/gen_scheme2</item>
         <item name="colorPrimaryDark">@color/gen_scheme2</item>
         <item name="colorAccent">@android:color/holo_orange_dark</item>
-        <item name="android:colorBackground">#FFFFFF</item>
+        <item name="android:colorBackground">@color/gen_scheme3</item>
         <item name="android:statusBarColor">@color/gen_scheme2</item>
-        <item name="android:colorForeground">#FFFFFF</item>
-        <item name="android:navigationBarColor">#FFFFFF</item>
+        <item name="android:colorForeground">@color/backgroundColor</item>
+        <item name="android:navigationBarColor">@color/backgroundColor</item>
     </style>
 </resources>

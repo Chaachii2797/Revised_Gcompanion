@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,6 +87,23 @@ public class ImageRecognitionTags extends AppCompatActivity{
         diyBtn = (Button)findViewById(R.id.btnDIY);
         imageView = (ImageView)findViewById(R.id.imgPhotoSaver);
         tvTag = (TextView) findViewById(R.id.tvTag);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.imToolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        toolbar.setNavigationIcon(R.drawable.back_btn);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent im = new Intent(ImageRecognitionTags.this,MainActivity.class);
+                startActivity(im);
+            }
+        });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         addMaterial = (EditText) findViewById(R.id.addMaterials);
         btnMaterial = (ImageButton) findViewById(R.id.btnAddMaterial);

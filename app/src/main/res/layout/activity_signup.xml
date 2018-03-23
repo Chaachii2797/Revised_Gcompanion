@@ -3,16 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg">
-
-    <View
-        android:id="@+id/opacityFilter"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ceffce"
-        android:layout_alignParentBottom="true"
-        android:alpha="0.7">
-    </View>
+    android:background="@color/backgroundColor">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -21,47 +12,59 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
-        app:srcCompat="@drawable/gc_logo" />
+        app:srcCompat="@drawable/new_logo_green1" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="50dp"
+        android:backgroundTintMode="src_over"
+        app:srcCompat="@drawable/new_logo_word" />
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_alignLeft="@+id/userName"
-        android:layout_alignStart="@+id/userName"
-        android:layout_below="@+id/userName"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/edittext_background"
+        style="@style/LoginStyle"
+        android:backgroundTint="@color/gen_scheme3"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:paddingLeft="15dp" />
+        android:paddingLeft="20dp"
+        android:layout_below="@+id/imageView3"
+        android:layout_alignLeft="@+id/userName"
+        android:layout_alignStart="@+id/userName"
+        android:layout_marginTop="24dp" />
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_alignLeft="@+id/etEmail"
-        android:layout_alignStart="@+id/etEmail"
-        android:layout_below="@+id/etEmail"
-        android:layout_marginTop="17dp"
-        android:background="@drawable/edittext_background"
+        style="@style/LoginStyle"
+        android:backgroundTint="@color/gen_scheme3"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
-        android:paddingLeft="15dp" />
+        android:paddingLeft="20dp"
+        android:layout_below="@+id/etEmail"
+        android:layout_alignLeft="@+id/etEmail"
+        android:layout_alignStart="@+id/etEmail"
+        android:layout_marginTop="20dp" />
 
     <Button
         android:id="@+id/btnLogin"
         style="@style/LoginStyle"
-        android:layout_width="200dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/userAddress"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="29dp"
-        android:backgroundTint="@color/bg_screen2"
+        android:backgroundTint="@color/gen_scheme1"
         android:text="Signup"
-        android:textColor="@android:color/background_light" />
+        android:textColor="@android:color/background_light"
+        android:layout_below="@+id/userAddress"
+        android:layout_alignLeft="@+id/userAddress"
+        android:layout_alignStart="@+id/userAddress"
+        android:layout_marginTop="28dp" />
 
     <TextView
         android:id="@+id/tvLogin"
@@ -77,28 +80,29 @@
         android:id="@+id/userName"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_below="@+id/imageView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/edittext_background"
+        style="@style/LoginStyle"
+        android:backgroundTint="@color/gen_scheme3"
         android:ems="10"
         android:hint="Username"
         android:inputType="textPersonName"
-        android:paddingLeft="15dp" />
+        android:paddingLeft="20dp"
+        android:layout_alignBottom="@+id/imageView3"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:id="@+id/userAddress"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_alignLeft="@+id/etPassword"
-        android:layout_alignStart="@+id/etPassword"
-        android:layout_below="@+id/etPassword"
-        android:layout_marginTop="17dp"
-        android:background="@drawable/edittext_background"
+        style="@style/LoginStyle"
+        android:backgroundTint="@color/gen_scheme3"
         android:ems="10"
         android:hint="Address"
         android:inputType="textPersonName"
-        android:paddingLeft="15dp" />
+        android:paddingLeft="20dp"
+        android:layout_below="@+id/etPassword"
+        android:layout_alignLeft="@+id/etPassword"
+        android:layout_alignStart="@+id/etPassword"
+        android:layout_marginTop="25dp" />
 
 
 </RelativeLayout>

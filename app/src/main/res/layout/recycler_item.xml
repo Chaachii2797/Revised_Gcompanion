@@ -2,14 +2,14 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="330dp"
-    android:layout_height="280dp"
+    android:layout_height="270dp"
     android:layout_marginBottom="5dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:layout_marginTop="5dp"
-    app:elevation="5dp"
+    app:cardBackgroundColor="@color/backgroundColor"
     app:cardCornerRadius="10dp"
-    app:cardBackgroundColor="@color/backgroundColor">
+    app:elevation="5dp">
 
 
     <ImageButton
@@ -23,7 +23,7 @@
         android:layout_alignStart="@+id/staru"
         android:layout_below="@+id/get_diyName"
         android:layout_marginLeft="280dp"
-        android:layout_marginTop="235dp"
+        android:layout_marginTop="230dp"
         android:background="@null"
         android:src="@drawable/vector_heart" />
 
@@ -88,17 +88,17 @@
         android:id="@+id/diy_item_icon"
         android:layout_width="305dp"
         android:layout_height="130dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
         android:layout_marginBottom="15dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:adjustViewBounds="true"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:layout_marginTop="15dp" />
+        android:scaleType="fitXY" />
 
 
 </android.support.v7.widget.CardView>

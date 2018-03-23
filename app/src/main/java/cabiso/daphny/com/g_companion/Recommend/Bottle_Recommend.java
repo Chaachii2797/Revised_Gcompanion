@@ -1,15 +1,19 @@
 package cabiso.daphny.com.g_companion.Recommend;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -94,7 +98,6 @@ public class Bottle_Recommend extends AppCompatActivity {
         progressDialog.setMessage("Please wait loading DIYs...");
 //        progressDialog.show();
 
-
         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
         lv.setAdapter(adapter);
 
@@ -172,18 +175,14 @@ public class Bottle_Recommend extends AppCompatActivity {
                                     messageProcedure.add(message);
                                     Log.e("message: ", "" + message);
 
-                                    String sample = splits[i].substring(0, splits[i].length()).replaceAll("\\}", " ").replaceAll("=", " ").replaceAll("0", "")
-                                            .replaceAll("\\{", " ").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials,", "")
-                                            .replaceAll("value", "").replaceAll("val", "");
-                                    Log.e("sample: ", "" + sample);
-
+                                    try{
                                     String num = split_qty[i].substring(0, split_qty[i].length()).replaceAll("\\}", "").replaceAll("=", "")
                                             .replaceAll("\\{", "").replaceAll("[A-Z]","").replaceAll("[a-z]","").replaceAll("0", "").trim();
                                     Log.e("num: ", "" + num);
 
-                                    String alpha = split_qty[i].substring(0, split_qty[i].length()).replaceAll("\\}", " ").replaceAll("=", " ").replaceAll("0", " ")
-                                            .replaceAll("\\{", " ").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials", "")
-                                            .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]","");
+                                    String alpha = split_qty[i].substring(0, split_qty[i].length()).replaceAll("\\}", "").replaceAll("=", "").replaceAll("0", "")
+                                            .replaceAll("\\{", "").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials", "")
+                                            .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]","").replaceAll("quantity", "").trim();
                                     Log.e("alpha: ", "" + alpha);
 
                                     String qty_num_img_recog = quantity.substring(0, quantity.length()).replaceAll("[A-Z]","")
@@ -192,13 +191,14 @@ public class Bottle_Recommend extends AppCompatActivity {
 
                                     String qty_uni_img_recog = quantity.substring(0, quantity.length()).replaceAll("quantity", "").replaceAll("[0-9]","");
                                     Log.e("qty_uni_img_recog: ", "" + qty_uni_img_recog);
-                                    String[] qty_num;
-                                    try{
-                                        int qty_nums = Integer.parseInt(qty_num_img_recog);
-                                        int qty_final = Integer.parseInt(num);
-                                        Log.e("qty_nums: ", "" + qty_nums);
 
-                                        if(qty_final<=qty_nums){
+                                        int qty_nums = Integer.valueOf(qty_num_img_recog);
+                                        int qty_final = Integer.parseInt(num);
+
+                                        Log.e("qty_nums: ", "" + qty_nums);
+                                        Log.e("qty_final: ", "" + qty_final);
+
+                                        if(qty_final<=qty_nums && qty_uni_img_recog.equals(alpha)){
                                             if (item.equalsIgnoreCase(message)){
                                                 for (int get = 0; get < diyList.size(); get++) {
                                                     if (diYnames.getProductID().equals(diyList.get(get).getProductID())) {
@@ -209,15 +209,14 @@ public class Bottle_Recommend extends AppCompatActivity {
                                                 diyList.add(diYnames);
                                                 Collections.sort(diyList);
                                                 Collections.reverse(diyList);
-
-                                                String commu = commu_snapshot.getValue().toString().replaceAll("\\}", "").replaceAll("=", "")
-                                                        .replaceAll("\\{", "").replaceAll("DataSnapshot", "").replaceAll("\\[", "").replaceAll("val", "")
-                                                        .replaceAll(",", "").replaceAll("\\]", "");
-                                                check.add(commu);
-                                                Log.e("NAAY_COMMU", commu);
-//                                        }d
+//                                                String commu = commu_snapshot.getValue().toString().replaceAll("\\}", "").replaceAll("=", "")
+//                                                        .replaceAll("\\{", "").replaceAll("DataSnapshot", "").replaceAll("\\[", "").replaceAll("val", "")
+//                                                        .replaceAll(",", "").replaceAll("\\]", "");
+//                                                check.add(commu);
+//                                                Log.e("NAAY_COMMU", commu);
                                             }
-                                            Log.e("QUANTITATIES: ", "" + quantity);
+                                        }else if(!(qty_final <=qty_nums) || !(qty_uni_img_recog.equals(alpha))){
+                                            Toast.makeText(Bottle_Recommend.this, "WALAY NA MACTH", Toast.LENGTH_SHORT).show();
                                         }
                                     }catch (NumberFormatException e){
                                         e.printStackTrace();
@@ -284,6 +283,8 @@ public class Bottle_Recommend extends AppCompatActivity {
         }
         return count;
     }
+
+    
 
     @Override
     public void onBackPressed() {

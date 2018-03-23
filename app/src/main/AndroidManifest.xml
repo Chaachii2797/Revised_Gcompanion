@@ -98,9 +98,7 @@
         </intent-filter>
 
         <activity android:name=".Admin" />
-        <activity android:name=".Bookmark_Activity">
-
-        </activity>
+        <activity android:name=".Bookmark_Activity"/>
     </application>
 
 </manifest>

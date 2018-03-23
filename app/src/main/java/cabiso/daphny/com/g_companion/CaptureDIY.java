@@ -683,7 +683,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         ArrayList<Tag> tags = new ArrayList<>();
         Tag tag;
 
-
         for (int i = 0; i < tagList.size(); i++) {
             if (tagList.get(i).getName().toLowerCase().startsWith(text.toLowerCase())) {
                 tag = new Tag(tagList.get(i).getName());

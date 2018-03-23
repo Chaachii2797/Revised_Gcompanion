@@ -3,6 +3,7 @@ package cabiso.daphny.com.g_companion;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -91,8 +92,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 //            this.finish();
 //        }
 
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -164,7 +165,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         }
     }
 
-//If naa siya, naa gihapon ang log in everytime, pero ika back muadto sa main dayon
+////If naa siya, naa gihapon ang log in everytime, pero ika back muadto sa main dayon
 //    @Override
 //    protected void onStop(){
 //        super.onStop();
@@ -204,11 +205,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         }
     }
 
-    private void signIn(){
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
     public void signin(){
         String em = email.getText().toString().trim();
         String pass = password.getText().toString().trim();
@@ -234,16 +230,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                                 Intent intent = new Intent(Login.this, MainActivity.class);
                                 Toast.makeText(Login.this, "BUSET", Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
-//                                Bundle bundle = new Bundle();
-//                                bundle.putString("get", "THIS");
-//                                CommunityFragment comFrag = new CommunityFragment();
-//                                comFrag.setArguments(bundle);
-//
-//                                Fragment fragment = new CommunityFragment();
-//                                getSupportFragmentManager().beginTransaction()
-//                                            .replace(R.id.theFragmentFrame, fragment, fragment.getClass().getSimpleName())
-//                                        .addToBackStack(null)
-//                                        .commit();
                             }
                         }
                     });

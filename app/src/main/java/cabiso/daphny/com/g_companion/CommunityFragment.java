@@ -198,18 +198,6 @@ public class CommunityFragment extends Fragment{
 
                         //dec.29,2017
                         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
-//                        reference.addValueEventListener(new ValueEventListener() {
-//                            public void onDataChange(DataSnapshot dataSnapshot) {
-//                                String sellItem = dataSnapshot.child("DIY Price").getValue().toString();
-//                                viewHolder.mPriceView.setText(sellItem);
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(DatabaseError databaseError) {
-//
-//                            }
-//                        });
-
 
                         final String key = this.getRef(position).getKey();
 
@@ -310,18 +298,6 @@ public class CommunityFragment extends Fragment{
 
                         //dec.29,2017
                         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Sell DIY");
-//                        reference.addValueEventListener(new ValueEventListener() {
-//                            public void onDataChange(DataSnapshot dataSnapshot) {
-//                                String sellItem = dataSnapshot.child("DIY Price").getValue().toString();
-//                                viewHolder.mPriceView.setText(sellItem);
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(DatabaseError databaseError) {
-//
-//                            }
-//                        });
-
 
                         final String key = this.getRef(position).getKey();
 
@@ -406,19 +382,6 @@ public class CommunityFragment extends Fragment{
                 };
 
         recyclerView1.setAdapter(mAdapter);
-
-        //adapter in  main page
-//        if(mListener != null){
-//            Toast.makeText(getActivity(), "Yowwwwaaaaaaa!", Toast.LENGTH_SHORT).show();
-//            recyclerView.setAdapter(cAdapter);
-//        }
-//        if(mlistener != null){
-//            Toast.makeText(getActivity(), "Yowwwwiiiiiiiii!", Toast.LENGTH_SHORT).show();
-//            recyclerView1.setAdapter(mAdapter);
-//        }
-//        else{
-//            Toast.makeText(getActivity(), "SHIT!", Toast.LENGTH_SHORT).show();
-//        }
     }
 
 

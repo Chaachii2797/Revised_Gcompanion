@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -77,8 +78,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDetails);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         toolbar.setNavigationIcon(R.drawable.back_btn);
-        toolbar.setTitle("DIY Details");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,7 +199,10 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     public void onSuccess(Uri uri) {
                         Log.d("Image Download URI", uri.toString());
                         //Picasso.with(context).load(uri.getLastPathSegment()).resize(350,350).into(productImageView);
-                        Glide.with(context).load(uri.toString()).into(diyImageView);
+                        Glide.with(context).load(uri.toString())
+                                .fitCenter().centerCrop().crossFade()
+                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                .into(diyImageView);
 
                     }
                 });

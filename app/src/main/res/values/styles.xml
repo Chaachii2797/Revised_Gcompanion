@@ -3,18 +3,24 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/bg_screen2</item>
-        <item name="colorPrimaryDark">@color/bg_screen2</item>
+        <item name="colorPrimary">@color/gen_scheme2</item>
+        <item name="colorPrimaryDark">@color/gen_scheme2</item>
         <item name="colorAccent">@android:color/holo_orange_dark</item>
-        <item name="android:colorBackground">@color/background_material_light</item>
+        <item name="android:colorBackground">#FFFFFF</item>
+        <item name="android:colorForeground">#FFFFFF</item>
     </style>
 
     <style name="LoginStyle">
-        <item name="android:background">@drawable/button_background</item>
+        <item name="android:background">@drawable/et_background_style</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/backgroundColor</item>
     </style>
 
+    <style name="LoginStyle2">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/backgroundColor</item>
+    </style>
 
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>

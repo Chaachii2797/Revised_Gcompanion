@@ -4,17 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg1"
+    android:background="@color/gen_scheme3"
     tools:context="cabiso.daphny.com.g_companion.MainActivity">
 
-    <View
-        android:id="@+id/opacityFilter"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ceffce"
-        android:layout_alignParentBottom="true"
-        android:alpha="0.5">
-    </View>
+    <!--<View-->
+        <!--android:id="@+id/opacityFilter"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="#ceffce"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:alpha="0.5">-->
+    <!--</View>-->
+
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="#ecf0f1">-->
+    <!--</View>-->
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -26,8 +32,14 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            android:gravity="center"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:gravity="center">
+
+            <ImageView
+                android:src="@drawable/new_logo_white"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center" />
+        </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tab"

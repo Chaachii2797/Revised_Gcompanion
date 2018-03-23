@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Lenovo on 1/7/2018.
  */
 
-public class DIYSell implements Comparable<DIYSell>, Serializable {
+public class DIYSell implements Comparable<DIYSell>, Serializable{
 
     public String diyName;
     public String diyUrl;
@@ -16,10 +16,9 @@ public class DIYSell implements Comparable<DIYSell>, Serializable {
     public String productID;
     public Float bookmarks;
     public Float likes;
-    //public int materialMatches;
+    public int materialMatches;
 
     public DIYSell(){}
-
     public DIYSell(String diyName, String diyUrl, String user_id, String productID,
                     Float bookmarks, Float likes){
         this.diyName = diyName;
@@ -30,13 +29,13 @@ public class DIYSell implements Comparable<DIYSell>, Serializable {
         this.likes = likes;
     }
 
-//    public int getMaterialMatches() {
-//        return materialMatches;
-//    }
-//
-//    public void setMaterialMatches(int materialMatches) {
-//        this.materialMatches = materialMatches;
-//    }
+    public int getMaterialMatches() {
+        return materialMatches;
+    }
+
+    public void setMaterialMatches(int materialMatches) {
+        this.materialMatches = materialMatches;
+    }
 
     public String getDiyName() {
         return diyName;
@@ -86,7 +85,6 @@ public class DIYSell implements Comparable<DIYSell>, Serializable {
         this.likes = likes;
     }
 
-
     @Override
     public int compareTo(@NonNull DIYSell o) {
         if(bookmarks.floatValue() > o.bookmarks.floatValue() && likes.floatValue() > o.likes.floatValue()) {
@@ -102,4 +100,6 @@ public class DIYSell implements Comparable<DIYSell>, Serializable {
     public String toString() {
         return "product name : " + diyName;
     }
+
+
 }

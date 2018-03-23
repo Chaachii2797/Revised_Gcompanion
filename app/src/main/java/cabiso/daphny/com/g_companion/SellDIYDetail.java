@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -75,7 +76,6 @@ public class SellDIYDetail extends AppCompatActivity {
 
         dbRef = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceStrings);
 
-
         Toolbar toolbarr = (Toolbar) findViewById(R.id.toolbarDetails);
         setSupportActionBar(toolbarr);
 
@@ -102,16 +102,17 @@ public class SellDIYDetail extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DIYSell diyInfos = dataSnapshot.getValue(DIYSell.class);
-                Toast.makeText(SellDIYDetail.this, (CharSequence) name, Toast.LENGTH_SHORT).show();
+                Toast.makeText(SellDIYDetail.this, "HOY!", Toast.LENGTH_SHORT).show();
 
                 //name.setText(diyInfos.diyName);
-//                btnSell.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Toast.makeText(SellDIYDetail.this, "BUY ITEM!", Toast.LENGTH_SHORT).show();
-//                    }
 
-//                });
+                btnSell.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(SellDIYDetail.this, "BUY ITEM!", Toast.LENGTH_SHORT).show();
+                    }
+
+                });
 
 
                 //for temporary price
@@ -209,7 +210,10 @@ public class SellDIYDetail extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         Log.d("Image Download URI", uri.toString());
                         //Picasso.with(context).load(uri.getLastPathSegment()).resize(350,350).into(productImageView);
-                        Glide.with(context).load(uri.toString()).into(diyImageView);
+                        Glide.with(context).load(uri.toString())
+                                .fitCenter().centerCrop().crossFade()
+                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                .into(diyImageView);
 
                     }
                 });

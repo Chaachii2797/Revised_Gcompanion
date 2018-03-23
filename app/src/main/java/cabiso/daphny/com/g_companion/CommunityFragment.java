@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -42,11 +43,8 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import cabiso.daphny.com.g_companion.ImageRecognitionTags;
-import cabiso.daphny.com.g_companion.CaptureDIY;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
-import cabiso.daphny.com.g_companion.R;
 import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
 /**
@@ -125,12 +123,11 @@ public class CommunityFragment extends Fragment{
 
 
 
-        final Context context = view.getContext();
         recyclerView = (RecyclerView) view.findViewById(R.id.communityList);
 
         recyclerView1 = (RecyclerView) view.findViewById(R.id.marketList);
 
-        int numberOfColumns = 2;
+        int numberOfColumns = 1;
         recyclerView.setLayoutManager(new GridLayoutManager(context, numberOfColumns));
         recyclerView1.setLayoutManager(new GridLayoutManager(context, numberOfColumns));
 
@@ -262,7 +259,10 @@ public class CommunityFragment extends Fragment{
                                     // Got the download URL for 'users/me/profile.png'
                                     // Pass it to Picasso to download, show in ImageView and caching
                                     Log.d("Product Picture URI is", uri.toString());
-                                    Glide.with(getContext()).load(uri).into(viewHolder.mProductImageView);
+                                    Glide.with(getContext()).load(uri)
+                                            .fitCenter().centerCrop()
+                                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                            .into(viewHolder.mProductImageView);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -325,7 +325,9 @@ public class CommunityFragment extends Fragment{
 
                         final String key = this.getRef(position).getKey();
 
-                        viewHolder.mStars.setOnClickListener(new View.OnClickListener() {
+                        viewHolder.mStars.setOnClickListener(
+
+                                new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Toast.makeText(getContext(), "Bookmark DIY!" + " " + starCount, Toast.LENGTH_SHORT).show();
@@ -371,7 +373,10 @@ public class CommunityFragment extends Fragment{
                                     // Got the download URL for 'users/me/profile.png'
                                     // Pass it to Picasso to download, show in ImageView and caching
                                     Log.d("Product Picture URI is", uri.toString());
-                                    Glide.with(getContext()).load(uri).into(viewHolder.mProductImageViews);
+                                    Glide.with(getContext()).load(uri)
+                                            .fitCenter().centerCrop().crossFade()
+                                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                            .into(viewHolder.mProductImageViews);
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -474,7 +479,7 @@ public class CommunityFragment extends Fragment{
             mListener = (CommunityFragment.OnListFragmentInteractionListener) context;
         }
         if(context instanceof CommunityFragment.OnListFragmentInteraction) {
-            mListener = (CommunityFragment.OnListFragmentInteractionListener) context;
+            mlistener = (CommunityFragment.OnListFragmentInteraction) context;
         }
         else {
             throw new RuntimeException(context.toString()
@@ -491,8 +496,6 @@ public class CommunityFragment extends Fragment{
 
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteractionListener(DatabaseReference ref);
-
-        void onListFragmentInteraction(DatabaseReference ref);
     }
 
     public interface OnListFragmentInteraction {

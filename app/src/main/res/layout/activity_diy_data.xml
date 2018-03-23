@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_screen1"
+    android:background="@color/gen_scheme3"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -19,11 +19,14 @@
             android:id="@+id/toolbarDetails"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:gravity="center"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="DIY Details"
-            app:titleMarginStart="30dp" />
+            android:background="?attr/colorPrimary">
+
+            <ImageView
+                android:src="@drawable/new_logo_white"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center" />
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -72,7 +75,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/cardView1"
-            android:background="@android:color/holo_green_light"
+            android:background="@color/gen_scheme1"
             android:capitalize="words"
             android:paddingBottom="10dp"
             android:paddingLeft="15dp"
@@ -91,7 +94,9 @@
             app:cardBackgroundColor="@android:color/white"
             android:layout_marginTop="30dp"
             android:layout_below="@+id/diy_name"
-            android:layout_centerHorizontal="true">
+            android:layout_centerHorizontal="true"
+            app:cardCornerRadius="5dp"
+            app:elevation="5dp">
 
             <TextView
                 android:id="@+id/diy_material"
@@ -115,7 +120,7 @@
                 android:layout_alignLeft="@+id/diy_procedure"
                 android:layout_alignStart="@+id/diy_procedure"
                 android:layout_below="@+id/diyImagesViewPagers"
-                android:background="@color/bg_screen3"
+                android:background="@color/gen_scheme1"
                 android:paddingLeft="10dp"
                 android:text="Materials:"
                 android:textColor="@android:color/black"
@@ -136,7 +141,9 @@
             app:cardBackgroundColor="@android:color/white"
             android:layout_below="@+id/cardView"
             android:layout_alignLeft="@+id/cardView"
-            android:layout_alignStart="@+id/cardView">
+            android:layout_alignStart="@+id/cardView"
+            app:cardCornerRadius="5dp"
+            app:elevation="5dp">
 
             <TextView
                 android:id="@+id/textView31"
@@ -145,7 +152,7 @@
                 android:layout_alignLeft="@+id/textView29"
                 android:layout_alignStart="@+id/textView29"
                 android:layout_below="@+id/diy_material"
-                android:background="@color/bg_screen3"
+                android:background="@color/gen_scheme1"
                 android:paddingLeft="10dp"
                 android:text="Procedures:"
                 android:textColor="@android:color/black"

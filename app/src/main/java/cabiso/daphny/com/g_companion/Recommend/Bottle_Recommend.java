@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,6 +55,8 @@ public class Bottle_Recommend extends AppCompatActivity {
     private RecommendDIYAdapter adapter;
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
+    private ProgressBar mprogressBar;
+
 
     // ImageButton star;
 
@@ -87,8 +90,9 @@ public class Bottle_Recommend extends AppCompatActivity {
         lv = (ListView) findViewById(R.id.recommendLvView);
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Please Wait loading DIYs.....");
-        progressDialog.show();
+        progressDialog.setTitle("Processing...");
+        progressDialog.setMessage("Please wait loading DIYs...");
+//        progressDialog.show();
 
 
         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
@@ -97,6 +101,7 @@ public class Bottle_Recommend extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+
                 Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName(), Toast.LENGTH_SHORT).show();
                 DIYnames selectedItem = adapter.getItem(position);
 
@@ -144,6 +149,7 @@ public class Bottle_Recommend extends AppCompatActivity {
             myRef.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    progressDialog.show();
 
                     if (item != null) {
                         DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);

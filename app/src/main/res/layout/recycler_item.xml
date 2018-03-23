@@ -1,25 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="160dp"
-    android:layout_height="230dp"
+    android:layout_width="330dp"
+    android:layout_height="280dp"
     android:layout_marginBottom="5dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:layout_marginTop="5dp"
-    app:cardBackgroundColor="#c1f0c1">
+    app:elevation="5dp"
+    app:cardCornerRadius="10dp"
+    app:cardBackgroundColor="@color/backgroundColor">
 
-
-    <ImageView
-        android:id="@+id/diy_item_icon"
-        android:layout_width="140dp"
-        android:layout_height="130dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="15dp" />
 
     <ImageButton
         android:id="@+id/heartu"
@@ -31,30 +22,32 @@
         android:layout_alignParentRight="true"
         android:layout_alignStart="@+id/staru"
         android:layout_below="@+id/get_diyName"
-        android:layout_marginLeft="110dp"
-        android:layout_marginTop="188dp"
+        android:layout_marginLeft="280dp"
+        android:layout_marginTop="235dp"
         android:background="@null"
         android:src="@drawable/vector_heart" />
 
     <ImageButton
         android:id="@+id/staru"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="110dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginLeft="280dp"
+        android:layout_marginTop="150dp"
         android:background="@null"
         android:descendantFocusability="blocksDescendants"
         android:src="@android:drawable/btn_star" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="160dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="180dp"
-        android:text="  ________________________ "
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="220dp"
+        android:text="  _________________________________________________"
         android:textStyle="bold"
         android:visibility="visible" />
 
@@ -62,13 +55,50 @@
         android:id="@+id/item_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="160dp"
         android:gravity="center"
         android:text="Computer Desk"
         android:textAlignment="center"
         android:textAppearance="?attr/textAppearanceListItem"
-        android:textSize="20sp" />
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/item_name_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="200dp"
+        android:gravity="center"
+        android:text="by: Daphny Cabiso"
+        android:textAlignment="center"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="18sp" />
+
+
+    <ImageView
+        android:id="@+id/owner_pic"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="160dp"
+        app:srcCompat="@drawable/main_view" />
+
+    <ImageView
+        android:id="@+id/diy_item_icon"
+        android:layout_width="305dp"
+        android:layout_height="130dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="15dp" />
 
 
 </android.support.v7.widget.CardView>

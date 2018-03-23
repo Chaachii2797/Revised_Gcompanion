@@ -4,25 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg">
+    android:background="@color/backgroundColor">
 
-    <View
-        android:id="@+id/opacityFilter"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ceffce"
-        android:layout_alignParentBottom="true"
-        android:alpha="0.7">
-    </View>
+    <!--<View-->
+        <!--android:id="@+id/opacityFilter"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="#ceffce"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:alpha="0.7">-->
+    <!--</View>-->
+
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="270dp"
         android:layout_height="270dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="147dp"
+        android:layout_marginTop="128dp"
         android:backgroundTintMode="src_over"
-        app:srcCompat="@drawable/gc_logo" />
+        app:srcCompat="@drawable/new_logo_green1"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="90dp"
+        android:backgroundTintMode="src_over"
+        app:srcCompat="@drawable/new_logo_word"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>

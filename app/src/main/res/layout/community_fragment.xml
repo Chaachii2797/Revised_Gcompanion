@@ -28,6 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
                 tools:context="cabiso.daphny.com.g_companion.CommunityFragment"
                 tools:listitem="@layout/recycler_item" />
 
@@ -37,6 +39,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/communityList"
                 android:layout_marginBottom="10dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginLeft="5dp"
                 tools:context="cabiso.daphny.com.g_companion.CommunityFragment"
                 tools:listitem="@layout/diy_item" />
 
@@ -53,12 +57,11 @@
 
         fab:menu_fab_size="normal"
         fab:menu_showShadow="true"
-        fab:menu_shadowColor="#66000000"
         fab:menu_shadowRadius="4dp"
         fab:menu_shadowXOffset="1dp"
         fab:menu_shadowYOffset="3dp"
-        fab:menu_colorNormal="#007f00"
-        fab:menu_colorPressed="#7fff7f"
+        fab:menu_colorNormal="#16a085"
+        fab:menu_colorPressed="#1abc9c"
         fab:menu_colorRipple="#99FFFFFF"
         fab:menu_animationDelayPerItem="50"
         fab:menu_icon="@drawable/fab_add"
@@ -94,8 +97,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add_diy"
-            fab:fab_colorNormal="#00cc00"
-            fab:fab_colorPressed="#7fff7f"
+            fab:fab_colorNormal="#16a085"
+            fab:fab_colorPressed="#1abc9c"
             fab:fab_label="Upload DIY"
             fab:fab_size="normal" />
 
@@ -104,8 +107,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_camera"
-            fab:fab_colorNormal="#00cc00"
-            fab:fab_colorPressed="#7fff7f"
+            fab:fab_colorNormal="#16a085"
+            fab:fab_colorPressed="#1abc9c"
             fab:fab_label="Image Recognition"
             fab:fab_size="normal" />
 

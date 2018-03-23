@@ -10,8 +10,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 class ViewPagerAdapter extends FragmentStatePagerAdapter{
 
-    private static int TAB_COUNT = 1;
-    private static String PAGE_TITLE = "DIY Items";
+    private static int TAB_COUNT = 2;
+    private static String PAGE_TITLE = "Recommended";
+    private static String MY_DIY_TITLE = "My Items";
+
 
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -21,10 +23,10 @@ class ViewPagerAdapter extends FragmentStatePagerAdapter{
     public Fragment getItem(int position) {
 
         switch (position) {
-//            case 0:
-//                return SellingFragment.newInstance();
-//            case 1:
-//                return CommunityFragment.newInstance();
+            case 0:
+                return CommunityFragment.newInstance();
+            case 1:
+                return YouItemsFragment.newInstance();
             default:
                 return CommunityFragment.newInstance();
         }
@@ -39,11 +41,12 @@ class ViewPagerAdapter extends FragmentStatePagerAdapter{
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-              //  return TITLE;
-
-//            case 1:
+                return PAGE_TITLE;
+            case 1:
+                return MY_DIY_TITLE;
+            default:
                 return PAGE_TITLE;
         }
-        return super.getPageTitle(position);
+        //return super.getPageTitle(position);
     }
 }

@@ -1,6 +1,7 @@
 package cabiso.daphny.com.g_companion;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -57,6 +58,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
     private TextView tvTag, tv_category;
     private EditText addMaterial;
     private ImageButton btnMaterial;
+    private ProgressDialog progressDialog;
 
     private List<String> tags = new ArrayList<>();
     private List<String> extras = new ArrayList<>();
@@ -176,6 +178,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
         diyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String results = " ";
                 String priority = " ";
 
@@ -184,15 +187,22 @@ public class ImageRecognitionTags extends AppCompatActivity{
                     priority +=" "+extras.get(i);
                     Log.e("RESULT: ",""+results);
                     Intent intent = new Intent(ImageRecognitionTags.this,Bottle_Recommend.class);
+
                     String quantity_unit = spinner_item_q + " " + spinner_item_um;
                     intent.putExtra("result_priority", priority);
                     intent.putExtra("qty_unit", quantity_unit);
                     intent.putExtra("result_tag", results);
+
                     Log.e("PRIORITY: ",""+priority);
                     Log.e("RESULTS: ",""+results);
                     Log.e("qty_unit: ",""+quantity_unit);
 
                     startActivity(intent);
+
+                    progressDialog = new ProgressDialog(ImageRecognitionTags.this);
+                    progressDialog.setTitle("Processing...");
+                    progressDialog.setMessage("Please wait loading DIYs...");
+                    progressDialog.show();
                 }
             }
         });
@@ -313,9 +323,10 @@ public class ImageRecognitionTags extends AppCompatActivity{
             for(int c = 0; c < validWords.size(); c++){
                 if(tags.get(i).contains(validWords.get(c))){
                     results += "\n" + tags.get(i);
-                    Log.e("tags_here", ""+results);
+                    Log.e("TAGS:", " " +results);
+
                     Log.e("value_here",extras.get(i));
-//                    tvTag.setText(results);
+                    //tvTag.setText(results);
                     addMaterial.setText(results);
 
 
@@ -323,7 +334,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
                     //invalid words
                 }
             }
-            Log.e("tags", ""+results);
+            Log.e("tags: ", " "+results);
             Log.e("value",extras.get(i));
 
         }

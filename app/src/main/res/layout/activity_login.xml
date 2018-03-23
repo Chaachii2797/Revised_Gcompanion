@@ -4,72 +4,87 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg">
+    android:background="@color/backgroundColor">
 
-    <View
-        android:id="@+id/opacityFilter"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ceffce"
-        android:layout_alignParentBottom="true"
-        android:alpha="0.7">
-    </View>
+    <!--<View-->
+        <!--android:id="@+id/opacityFilter"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="#FFFFFF"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:alpha="0.7">-->
+    <!--</View>-->
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="170dp"
         android:layout_height="170dp"
-        android:layout_marginTop="74dp"
+        android:layout_marginTop="64dp"
         android:backgroundTintMode="src_over"
-        app:srcCompat="@drawable/gc_logo"
+        app:srcCompat="@drawable/new_logo_green1"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:backgroundTintMode="src_over"
+        app:srcCompat="@drawable/new_logo_word"
+        android:layout_marginBottom="40dp"
+        android:layout_above="@+id/btnLogin"
+        android:layout_alignLeft="@+id/etEmail"
+        android:layout_alignStart="@+id/etEmail" />
+
     <EditText
         android:id="@+id/etEmail"
-        android:layout_width="250dp"
+        style="@style/LoginStyle2"
+        android:layout_width="300dp"
         android:layout_height="50dp"
+        android:layout_alignLeft="@+id/btnWithGoogle"
+        android:layout_alignStart="@+id/btnWithGoogle"
         android:layout_below="@+id/imageView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/edittext_background"
+        android:layout_marginTop="100dp"
+        android:backgroundTint="#FFE8EAEA"
         android:ems="10"
         android:fontFamily="sans-serif"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:paddingLeft="15dp"
-        android:textColor="@android:color/black"
-        android:textStyle="bold" />
+        android:paddingLeft="30dp"
+        android:textColor="#7f8c8d"
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/etPassword"
-        android:layout_width="250dp"
+        style="@style/LoginStyle2"
+        android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_alignLeft="@+id/etEmail"
-        android:layout_alignStart="@+id/etEmail"
-        android:layout_below="@+id/etEmail"
-        android:layout_marginTop="18dp"
-        android:background="@drawable/edittext_background"
+        android:layout_marginTop="14dp"
+        android:backgroundTint="#FFE8EAEA"
         android:ems="10"
         android:fontFamily="sans-serif"
         android:hint="Password"
         android:inputType="textPassword"
-        android:paddingLeft="15dp"
-        android:textColor="@android:color/black"
-        android:textStyle="bold" />
+        android:paddingLeft="30dp"
+        android:textColor="#7f8c8d"
+        android:textSize="18sp"
+        android:layout_below="@+id/etEmail"
+        android:layout_alignLeft="@+id/imageView3"
+        android:layout_alignStart="@+id/imageView3" />
 
     <Button
         android:id="@+id/btnLogin"
         style="@style/LoginStyle"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="@color/bg_screen2"
-        android:text="Login"
-        android:textColor="@android:color/background_light"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/etPassword"
+        android:layout_alignStart="@+id/etPassword"
         android:layout_below="@+id/etPassword"
-        android:layout_alignLeft="@+id/btnWithGoogle"
-        android:layout_alignStart="@+id/btnWithGoogle" />
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/gen_scheme1"
+        android:text="Log in"
+        android:textColor="@android:color/background_light"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tvSignup"
@@ -84,13 +99,14 @@
     <Button
         android:id="@+id/btnWithGoogle"
         style="@style/LoginStyle"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/gen_scheme1"
+        android:text="Sign in with Google"
+        android:textColor="@android:color/background_light"
+        android:textSize="20sp"
         android:layout_below="@+id/btnLogin"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="12dp"
-        android:backgroundTint="@color/bg_screen2"
-        android:text="Signin with Google"
-        android:textColor="@android:color/background_light" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

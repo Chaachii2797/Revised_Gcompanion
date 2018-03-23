@@ -161,12 +161,14 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarAddDIY);
         setSupportActionBar(toolbar);
 
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         toolbar.setNavigationIcon(R.drawable.back_btn);
-        toolbar.setTitle("Upload DIY");
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                Intent im = new Intent(CaptureDIY.this,MainActivity.class);
+                startActivity(im);
             }
         });
 
@@ -264,7 +266,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         btnAddMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(CaptureDIY.this, R.style.MyAlertDialogStyle);
+                final Dialog dialog = new Dialog(CaptureDIY.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.row_spinner);
                 dialog.setCancelable(true);

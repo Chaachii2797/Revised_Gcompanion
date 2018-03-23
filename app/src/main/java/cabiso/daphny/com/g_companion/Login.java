@@ -3,7 +3,6 @@ package cabiso.daphny.com.g_companion;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -228,7 +227,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                             else if (task.isSuccessful()){
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 Intent intent = new Intent(Login.this, MainActivity.class);
-                                Toast.makeText(Login.this, "BUSET", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Login.this, "Logging in...", Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
                             }
                         }

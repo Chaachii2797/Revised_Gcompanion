@@ -34,8 +34,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="13dp"
-        android:background="@drawable/shape"
-        android:backgroundTint="@color/bg_screen2"
+        style="@style/LoginStyle"
+        android:backgroundTint="@color/gen_scheme1"
         android:text="Okay"
         android:textColor="@android:color/white" />
 

@@ -6,17 +6,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -216,7 +215,25 @@ public class Bottle_Recommend extends AppCompatActivity {
 //                                                Log.e("NAAY_COMMU", commu);
                                             }
                                         }else if(!(qty_final <=qty_nums) || !(qty_uni_img_recog.equals(alpha))){
-                                            Toast.makeText(Bottle_Recommend.this, "WALAY NA MACTH", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(Bottle_Recommend.this, "WALAY NA MATCH!", Toast.LENGTH_SHORT).show();
+
+                                            final Dialog dialog = new Dialog(Bottle_Recommend.this);
+                                            dialog.setContentView(R.layout.new_alert_dialog);
+                                            TextView text = (TextView) dialog.findViewById(R.id.text);
+                                            text.setText("No DIY matched!");
+                                            ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
+                                            image.setImageResource(R.drawable.no_item_match_dialog);
+
+                                            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                                            // if button is clicked, close the custom dialog
+                                            dialogButton.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    Intent intent = new Intent(Bottle_Recommend.this, MainActivity.class);
+                                                    startActivity(intent);
+                                                }
+                                            });
+                                            dialog.show();
                                         }
                                     }catch (NumberFormatException e){
                                         e.printStackTrace();

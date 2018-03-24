@@ -151,8 +151,7 @@ public class Bottle_Recommend extends AppCompatActivity {
             myRef.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    progressDialog.show();
-
+//                    progressDialog.show();
                     if (item != null) {
                         DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
                         DataSnapshot commu_snapshot = dataSnapshot.child("materials");

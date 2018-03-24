@@ -6,31 +6,20 @@ package cabiso.daphny.com.g_companion.Model;
 
 public class QuantityItem implements CharSequence{
 
-    int quantity;
-    String unit;
-    int qty_matches;
+    String val;
 
     public QuantityItem(){}
 
-    public QuantityItem(int quantity, String unit) {
-        this.quantity = quantity;
-        this.unit = unit;
+    public QuantityItem(String val) {
+        this.val = val;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public String getVal() {
+        return val;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
+    public void setVal(String val) {
+        this.val = val;
     }
 
     @Override

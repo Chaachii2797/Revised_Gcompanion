@@ -207,11 +207,6 @@ public class Bottle_Recommend extends AppCompatActivity {
                                                 diyList.add(diYnames);
                                                 Collections.sort(diyList);
                                                 Collections.reverse(diyList);
-//                                                String commu = commu_snapshot.getValue().toString().replaceAll("\\}", "").replaceAll("=", "")
-//                                                        .replaceAll("\\{", "").replaceAll("DataSnapshot", "").replaceAll("\\[", "").replaceAll("val", "")
-//                                                        .replaceAll(",", "").replaceAll("\\]", "");
-//                                                check.add(commu);
-//                                                Log.e("NAAY_COMMU", commu);
                                             }
                                         }else if(!(qty_final <=qty_nums) || !(qty_uni_img_recog.equals(alpha))){
                                             Toast.makeText(Bottle_Recommend.this, "WALAY NA MATCH!", Toast.LENGTH_SHORT).show();

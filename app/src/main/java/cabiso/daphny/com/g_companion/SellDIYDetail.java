@@ -53,6 +53,7 @@ public class SellDIYDetail extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference dbRef;
     private StorageReference mStorageRef;
+    private DIYSell diySellModel;
 
     private TextView name, materials, procedures, diy_sell;
     private Button btnSell;
@@ -73,14 +74,17 @@ public class SellDIYDetail extends AppCompatActivity {
         setContentView(R.layout.activity_diy_sell_data);
 
         String diyReferenceStrings = getIntent().getStringExtra("Market Ref");
+        Toast.makeText(this, "MARKET REF" +diyReferenceStrings, Toast.LENGTH_SHORT).show();
 
         dbRef = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceStrings);
 
         Toolbar toolbarr = (Toolbar) findViewById(R.id.toolbarDetails);
         setSupportActionBar(toolbarr);
 
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         toolbarr.setNavigationIcon(R.drawable.back_btn);
-        toolbarr.setTitle("Sell DIY Details");
+//        toolbarr.setTitle("Sell DIY Details");
         toolbarr.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +107,6 @@ public class SellDIYDetail extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DIYSell diyInfos = dataSnapshot.getValue(DIYSell.class);
                 Toast.makeText(SellDIYDetail.this, "HOY!", Toast.LENGTH_SHORT).show();
-
                 //name.setText(diyInfos.diyName);
 
                 btnSell.setOnClickListener(new View.OnClickListener() {
@@ -165,12 +168,22 @@ public class SellDIYDetail extends AppCompatActivity {
                     Log.d("SnapItem", "null");
                 }
 
-                if (diyInfos.diyUrl != null) {
-                    diyImagesPager = (ViewPager) findViewById(R.id.diyImagesViewPagers);
-                    diyImagesPagerAdapter = new DIYImagesPagerAdapter(getBaseContext(), diyInfos.diyUrl);
-                    diyImagesPager.setAdapter(diyImagesPagerAdapter);
+                try{
+                    if (diyInfos.diyUrl != null) {
+                        diyImagesPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
+                        diyImagesPagerAdapter = new DIYImagesPagerAdapter(getBaseContext(), diyInfos.diyUrl);
+                        diyImagesPager.setAdapter(diyImagesPagerAdapter);
 
-                    Toast.makeText(SellDIYDetail.this, diyInfos.diyUrl, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SellDIYDetail.this, diyInfos.diyUrl, Toast.LENGTH_SHORT).show();
+                    }else{
+                        diyImagesPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
+                        diyImagesPagerAdapter = new DIYImagesPagerAdapter(getBaseContext(), diyInfos.diyUrl);
+                        diyImagesPager.setAdapter(diyImagesPagerAdapter);
+
+                        Toast.makeText(SellDIYDetail.this, diyInfos.diyUrl, Toast.LENGTH_SHORT).show();
+                    }
+                }catch (NullPointerException ex){
+                    ex.printStackTrace();
                 }
             }
 
@@ -201,8 +214,8 @@ public class SellDIYDetail extends AppCompatActivity {
 
         @Override
         public View instantiateItem(ViewGroup container, int position) {
-            View currentView = LayoutInflater.from(context).inflate(R.layout.viewpager_product_images, container, false);
-            final ImageView diyImageView = (ImageView) currentView.findViewById(R.id.viewpager_productImage);
+            View currentView = LayoutInflater.from(context).inflate(R.layout.viewpager_product_images_sell, container, false);
+            final ImageView diyImageView = (ImageView) currentView.findViewById(R.id.viewpager_productImage_sell);
             try {
                 final StorageReference diyImageStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(diyUrl);
                 diyImageStorageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

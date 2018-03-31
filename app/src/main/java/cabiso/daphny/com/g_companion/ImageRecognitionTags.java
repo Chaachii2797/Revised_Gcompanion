@@ -220,7 +220,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
                     progressDialog = new ProgressDialog(ImageRecognitionTags.this);
                     progressDialog.setTitle("Processing...");
                     progressDialog.setMessage("Please wait loading DIYs...");
-                    progressDialog.show();
+//                    progressDialog.show();
                 }
             }
         });

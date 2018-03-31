@@ -144,8 +144,10 @@ public class Bottle_Recommend extends AppCompatActivity {
         final String[] items = data.split(" ");
         final String[] qtys = qtu.split(" ");
 
-        for (final String item : items) {
-            for(final String quantity : qtys){
+        for (String firstLoopitem : items) {
+            final String item = firstLoopitem;
+            for(String firstLoopQty : qtys){
+                final String quantity = firstLoopQty;
             Log.e("itemsMASO: ", "" + item);
             final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
             myRef.addChildEventListener(new ChildEventListener() {
@@ -154,88 +156,177 @@ public class Bottle_Recommend extends AppCompatActivity {
 //                    progressDialog.show();
                     if (item != null) {
                         DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
+                        Log.e("DIYLength", String.valueOf(diYnames.diyName.length()));
                         DataSnapshot commu_snapshot = dataSnapshot.child("materials");
                         DataSnapshot qty_snapshot = dataSnapshot.child("quantity");
                         String[] splits = commu_snapshot.toString().split(",");
                         String[] split_qty = qty_snapshot.toString().split(",");
+                        Log.e("diyListTAAS: ", "" + diYnames);
+                        Log.e("split_qty: ", "" + split_qty);
 
                         if (!exists(diYnames)) {
+                            Log.e("checkIfAlreadyExist: ", "" + diYnames);
                             Log.d(diYnames.getProductID(), "Does not exist");
                             diYnames.setMaterialMatches(counter(items, splits));
 
-                            if (diYnames.getMaterialMatches() > 0) {
-                                for (int i = 0; i < split_qty.length; i++) {
-//                                    for(int a=0; a< split_qty.length; a++){
-                                    Log.e("splits: ", "" + splits);
-                                    String message = splits[i].substring(0, splits[i].length()).replaceAll("\\}", " ").replaceAll("=", " ")
+//                            if (diYnames.getMaterialMatches() > 0) {
+                                for(int a = 0; a < splits.length; a++){
+                                    String message = splits[a].substring(0, splits[a].length()).replaceAll("\\}", " ").replaceAll("=", " ")
                                             .replaceAll("\\{", " ").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials,", "")
-                                            .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]", "").trim();
+                                            .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]", "").replaceAll("quantity","").trim();
                                     messageProcedure.add(message);
-                                    Log.e("message: ", "" + message);
 
-                                    try{
-                                    String num = split_qty[i].substring(0, split_qty[i].length()).replaceAll("\\}", "").replaceAll("=", "")
-                                            .replaceAll("\\{", "").replaceAll("[A-Z]","").replaceAll("[a-z]","").replaceAll("0", "").trim();
-                                    Log.e("num: ", "" + num);
+                                    for(String splitted : split_qty){
+                                        Log.e("splittedFromFOR: ", "" + splitted);
+                                    }
 
-                                    String alpha = split_qty[i].substring(0, split_qty[i].length()).replaceAll("\\}", "").replaceAll("=", "").replaceAll("0", "")
+                                    if (item.equalsIgnoreCase(message)) {
+                                        Log.d("MATCHED! ", item+" == "+message);
+                                        for(String splitted : split_qty){
+                                            String num = splitted.substring(0, splitted.length()).replaceAll("\\}", "").replaceAll("=", "")
+                                                    .replaceAll("\\{", "").replaceAll("[A-Z]", "").replaceAll("[a-z]", "").replaceAll("val", "")
+                                                    .replaceAll("quantity", "").trim();
+                                            Log.e("splitted ", splitted);
+                                            Log.e("checingQuantity ", num);
+                                            String qty_num_img_recog = quantity.substring(0, quantity.length()).replaceAll("[A-Z]", "")
+                                                    .replaceAll("[a-z]", "");
+
+                                            String qty_uni_img_recog = quantity.substring(0, quantity.length()).replaceAll("quantity", "")
+                                                    .replaceAll("[0-9]", "").trim();
+                                            Log.e("qty_uni_img_recog ", qty_uni_img_recog);
+
+                                            String unitOfMeasure = splitted.substring(0, splitted.length()).replaceAll("\\}", "").replaceAll("=", "")
                                             .replaceAll("\\{", "").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials", "")
-                                            .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]","").replaceAll("quantity", "").trim();
-                                    Log.e("alpha: ", "" + alpha);
+                                            .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]", "").replaceAll("quantity", "").trim();
+                                            Log.e("unitOfMeasure ", unitOfMeasure);
 
-                                    String qty_num_img_recog = quantity.substring(0, quantity.length()).replaceAll("[A-Z]","")
-                                            .replaceAll("[a-z]","");
-                                    Log.e("qty_num_img_recog: ", "" + qty_num_img_recog);
-
-                                    String qty_uni_img_recog = quantity.substring(0, quantity.length()).replaceAll("quantity", "").replaceAll("[0-9]","");
-                                    Log.e("qty_uni_img_recog: ", "" + qty_uni_img_recog);
-
-                                        int qty_nums = Integer.valueOf(qty_num_img_recog);
-                                        int qty_final = Integer.parseInt(num);
-
-                                        Log.e("qty_nums: ", "" + qty_nums);
-                                        Log.e("qty_final: ", "" + qty_final);
-
-                                        if(qty_final<=qty_nums && qty_uni_img_recog.equals(alpha)){
-                                            if (item.equalsIgnoreCase(message)){
-                                                for (int get = 0; get < diyList.size(); get++) {
-                                                    if (diYnames.getProductID().equals(diyList.get(get).getProductID())) {
-                                                        addDiy = false;
+                                            int qty_nums = 0;
+                                            int qty_final =0;
+                                            try {
+                                                qty_nums = Integer.valueOf(qty_num_img_recog);
+                                                qty_final = Integer.valueOf(num);
+                                            } catch (NumberFormatException e) {
+                                                e.printStackTrace();
+                                            }
+                                                Log.e("checkingQuantity ", qty_nums+" == "+qty_final);
+                                                if (qty_final <= qty_nums) {
+                                                    Log.e("checkingUnitABOVE ", qty_uni_img_recog+" == "+unitOfMeasure);
+                                                    Log.e("qty_uni_img_recog ", unitOfMeasure);
+                                                    Log.e("unitOfMeasureINSIDE ", qty_uni_img_recog);
+                                                    Log.e("QuantityMATCHED! ", qty_nums + " == " + qty_final);
+                                                    if(unitOfMeasure.equalsIgnoreCase(qty_uni_img_recog)) {
+                                                        Log.e("checkingUnit ", unitOfMeasure+" == "+qty_uni_img_recog);
+                                                        Log.e("QuantityMATCHED! ", qty_nums + " == " + qty_final);
+                                                        for (int get = 0; get < diyList.size(); get++) {
+                                                            if (diYnames.getProductID().equals(diyList.get(get).getProductID())) {
+                                                                addDiy = false;
+                                                            }
+                                                        }
+                                                        diyList.add(diYnames);
+                                                        Collections.sort(diyList);
+                                                        Collections.reverse(diyList);
+                                                        Log.e("ItemAddition ", "added " + item + " item");
                                                     }
                                                 }
 
-                                                diyList.add(diYnames);
-                                                Collections.sort(diyList);
-                                                Collections.reverse(diyList);
-                                            }
-                                        }else if(!(qty_final <=qty_nums) || !(qty_uni_img_recog.equals(alpha))){
-                                            Toast.makeText(Bottle_Recommend.this, "WALAY NA MATCH!", Toast.LENGTH_SHORT).show();
 
-                                            final Dialog dialog = new Dialog(Bottle_Recommend.this);
-                                            dialog.setContentView(R.layout.new_alert_dialog);
-                                            TextView text = (TextView) dialog.findViewById(R.id.text);
-                                            text.setText("No DIY matched!");
-                                            ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
-                                            image.setImageResource(R.drawable.no_item_match_dialog);
-
-                                            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-                                            // if button is clicked, close the custom dialog
-                                            dialogButton.setOnClickListener(new View.OnClickListener() {
-                                                @Override
-                                                public void onClick(View v) {
-                                                    Intent intent = new Intent(Bottle_Recommend.this, MainActivity.class);
-                                                    startActivity(intent);
-                                                }
-                                            });
-                                            dialog.show();
                                         }
-                                    }catch (NumberFormatException e){
-                                        e.printStackTrace();
                                     }
                                 }
+                                adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
+                                lv.setAdapter(adapter);
+
+                                Log.e("checkMatchedMaterials: ", "" + diYnames);
+//                                for (int i = 0; i < split_qty.length; i++) {
+//                                    for(int a=0; a< splits.length; a++){
+//                                    Log.e("splits: ", "" + splits);
+//                                    String message = split_qty[i].substring(0, split_qty[i].length()).replaceAll("\\}", " ").replaceAll("=", " ")
+//                                            .replaceAll("\\{", " ").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials,", "")
+//                                            .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]", "").replaceAll("quantity","").trim();
+//                                    messageProcedure.add(message);
+//                                    Log.e("message: ", "" + message);
+//
+//                                    String num = splits[i].substring(0, splits[i].length()).replaceAll("\\}", "").replaceAll("=", "")
+//                                            .replaceAll("\\{", "").replaceAll("[A-Z]", "").replaceAll("[a-z]", "").replaceAll("val", "")
+//                                            .replaceAll("quantity", "").replaceAll("0", "").trim();
+////                                    String num = split_qty[i].substring(0, split_qty[i].length());
+//                                    Log.e("numbaaaaaaaaaaaaaaaa: ", "" + num);
+//
+//                                    String alpha = splits[i].substring(0, splits[i].length()).replaceAll("\\}", "").replaceAll("=", "")
+//                                            .replaceAll("\\{", "").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials", "")
+//                                            .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]", "").replaceAll("quantity", "").trim();
+////                                    String alpha = split_qty[i].substring(0, split_qty[i].length());
+//                                    Log.e("alpha: ", "" + alpha);
+//
+//                                    //gikan ni sha sa pag image recog na quantity
+//                                    String qty_num_img_recog = quantity.substring(0, quantity.length()).replaceAll("[A-Z]", "")
+//                                            .replaceAll("[a-z]", "");
+//                                    Log.e("qty_num_img_recog: ", "" + qty_num_img_recog);
+//
+//                                    //gikan ni sha sa pag image recog na unit
+//                                    String qty_uni_img_recog = quantity.substring(0, quantity.length()).replaceAll("quantity", "").replaceAll("[0-9]", "").trim();
+//                                    Log.e("qty_uni_img_recog: ", "" + qty_uni_img_recog);
+//
+//                                    try {
+//                                        int qty_nums = Integer.valueOf(qty_num_img_recog);
+//                                        int qty_final = Integer.valueOf(num);
+//
+//                                        Log.e("qty_nums: ", "" + qty_nums);
+//                                        Log.e("qty_final: ", "" + qty_final);
+//                                        String[] this_new = qty_uni_img_recog.split(" ");
+//                                        Log.e("this_new", "" + this_new);
+//                                        String[] new_string = new String[qty_uni_img_recog.split("").length];
+//                                        Log.e("new_String", "" + new_string);
+//                                        if (qty_final == qty_nums) {
+//                                            Log.e("checkIfQtyMatched: ", "" + diYnames);
+//                                            Log.e("forMatchingTAAS: ", "" + qty_num_img_recog);
+////                                            if(qty_uni_img_recog.equals(alpha)){
+//                                            Log.e("finalMatching: ", "" + item +" equalsIgnoreCase "+message);
+//                                            if (item.equalsIgnoreCase(message)) {
+//
+////                                                for (int get = 0; get < diyList.size(); get++) {
+////                                                    if (diYnames.getProductID().equals(diyList.get(get).getProductID())) {
+////                                                        addDiy = false;
+////                                                        Log.e("forMatchingInside: ", "" + qty_num_img_recog);
+////                                                    }
+////                                                }
+//                                                diyList.add(diYnames);
+//                                                Collections.sort(diyList);
+//                                                Collections.reverse(diyList);
+//                                                Log.e("diyList: ", "" + diYnames);
+//                                                Log.e("forMatching: ", "" + qty_num_img_recog);
+//                                            }
+////                                        }
+//                                        }
+////                                        else if(!(qty_final <=qty_nums) || !(qty_uni_img_recog.equals(alpha))){
+////                                            Toast.makeText(Bottle_Recommend.this, "WALAY NA MATCH!", Toast.LENGTH_SHORT).show();
+////
+////                                            final Dialog dialog = new Dialog(Bottle_Recommend.this);
+////                                            dialog.setContentView(R.layout.new_alert_dialog);
+////                                            TextView text = (TextView) dialog.findViewById(R.id.text);
+////                                            text.setText("No DIY matched!");
+////                                            ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
+////                                            image.setImageResource(R.drawable.no_item_match_dialog);
+////
+////                                            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+////                                            // if button is clicked, close the custom dialog
+////                                            dialogButton.setOnClickListener(new View.OnClickListener() {
+////                                                @Override
+////                                                public void onClick(View v) {
+////                                                    Intent intent = new Intent(Bottle_Recommend.this, MainActivity.class);
+////                                                    startActivity(intent);
+////                                                }
+////                                            });
+////                                            dialog.show();
+////                                        }
+//                                    } catch (NumberFormatException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+//                                }
                                 Collections.sort(diyList, new MaterialsComparator());
                                 progressDialog.dismiss();
-                            }
+//                            }
 
                         }
                     }
@@ -275,6 +366,11 @@ public class Bottle_Recommend extends AppCompatActivity {
         }
         return flag;
     }
+
+//    private boolean matched(QuantityItem quantityItems){
+//        boolean flag = false;
+//        for(QuantityItem quantityItem :quan)
+//    }
 
     private int counter(String[] items, String[] materials) {
         int count = 0;

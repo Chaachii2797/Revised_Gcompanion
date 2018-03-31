@@ -128,6 +128,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     ArrayList<CommunityItem> itemForMaterials;
     ArrayList<CommunityItem> itemProcedure;
     ArrayList<QuantityItem> itemQuantity;
+    ArrayList<QuantityItem> itemUnit;
     private List<String> diys = new ArrayList<String>();
 
     private ProgressDialog progressDialog;
@@ -322,13 +323,15 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     @Override
                     public void onClick(View v) {
                         String quantityMaterials = spinner_item_q + " " + spinner_item_um + " " + material.getText().toString();
-                        String quantity_uni_mat = spinner_item_q + " " + spinner_item_um ;
+                        String qty_uni_mat = spinner_item_q + " " + spinner_item_um ;
+//                        String unit_material = spinner_item_um;
+//                        String quantity_material = spinner_item_q;
                         String materials = material.getText().toString();
                         CommunityItem qm = new CommunityItem(quantityMaterials);
                         CommunityItem mat = new CommunityItem(materials);
-                        QuantityItem qty = new QuantityItem(quantity_uni_mat);
+                        QuantityItem qty_unit_mat = new QuantityItem(qty_uni_mat);
                         itemMaterial.add(qm);
-                        itemQuantity.add(qty);
+                        itemQuantity.add(qty_unit_mat);
                         itemMat.add(mat);
 
                         mAdapter.notifyDataSetChanged();
@@ -421,9 +424,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 float_this, float_this));
 
                         databaseReference.child(upload).child("materials").setValue(itemMat);
-
                         databaseReference.child(upload).child("quantity").setValue(itemQuantity);
-
                         databaseReference.child(upload).child("procedures").setValue(itemProcedure);
 
 
@@ -809,7 +810,13 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             if (resultCode == MainActivity.RESULT_OK) {
 
                 diyPictureUri = data.getData();
-                imgView.setImageURI(diyPictureUri);
+                if(diyPictureUri==null){
+                    imgView.setImageURI(diyPictureUri);
+                    Toast.makeText(this, "NULL PICTURE", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(this, "NOT NULL BESH ", Toast.LENGTH_SHORT).show();
+                }
+
 
                 Bitmap bmp = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();

@@ -3,7 +3,7 @@
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/viewpager_productImage"
+        android:id="@+id/viewpager_productImage_community"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </FrameLayout>

@@ -69,9 +69,11 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diy_data);
 
         String diyReferenceString = getIntent().getStringExtra("Community Ref");
+        Toast.makeText(this, "COMMUNITY REF huhu"+diyReferenceString, Toast.LENGTH_SHORT).show();
 
         databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceString);
 
@@ -81,7 +83,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         toolbar.setNavigationIcon(R.drawable.back_btn);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(   new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
@@ -155,7 +157,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                 }
 
                 if (diyInfo.diyUrl != null) {
-                    diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers);
+                    diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
                     diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), diyInfo.diyUrl);
                     diyImagesViewPager.setAdapter(diyImagesViewPagerAdapter);
 
@@ -190,8 +192,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
         @Override
         public View instantiateItem(ViewGroup container, int position) {
-            View currentView = LayoutInflater.from(context).inflate(R.layout.viewpager_product_images, container, false);
-            final ImageView diyImageView = (ImageView) currentView.findViewById(R.id.viewpager_productImage);
+            View currentView = LayoutInflater.from(context).inflate(R.layout.viewpager_product_images_commu, container, false);
+            final ImageView diyImageView = (ImageView) currentView.findViewById(R.id.viewpager_productImage_community);
             try {
                 final StorageReference diyImageStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(diyUrl);
                 diyImageStorageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

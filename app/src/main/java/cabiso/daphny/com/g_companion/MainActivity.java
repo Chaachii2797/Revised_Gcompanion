@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -222,16 +221,16 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteractionListener(DatabaseReference ref) {
-        Intent intent = new Intent(this, DIYDetailViewActivity.class);
-        intent.putExtra("Community Ref", ref.toString());
-        startActivity(intent);
+        Intent intent_commu = new Intent(this, DIYDetailViewActivity.class);
+        intent_commu.putExtra("Community Ref", ref.toString());
+        startActivity(intent_commu);
     }
 
     @Override
     public void onListFragmentInteraction(DatabaseReference ref) {
-        Intent intent = new Intent(this, SellDIYDetail.class);
-        intent.putExtra("Market Ref", ref.toString());
-        startActivity(intent);
+        Intent intent_sell = new Intent(this, SellDIYDetail.class);
+        intent_sell.putExtra("Market Ref", ref.toString());
+        startActivity(intent_sell);
     }
 
 }

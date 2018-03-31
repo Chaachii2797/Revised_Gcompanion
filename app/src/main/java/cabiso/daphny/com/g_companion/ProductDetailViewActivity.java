@@ -218,8 +218,8 @@ public class ProductDetailViewActivity extends AppCompatActivity{
 
         @Override
         public View instantiateItem(ViewGroup container, int position){
-            View currentView = LayoutInflater.from(context).inflate(R.layout.viewpager_product_images, container, false);
-            final ImageView productImageView = (ImageView) currentView.findViewById(R.id.viewpager_productImage);
+            View currentView = LayoutInflater.from(context).inflate(R.layout.viewpager_product_images_commu, container, false);
+            final ImageView productImageView = (ImageView) currentView.findViewById(R.id.viewpager_productImage_community);
             try{
                 StorageReference productImageStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(productPictureURLs.get(position));
                 Log.d("Image Storage Reference", productImageStorageReference.toString());

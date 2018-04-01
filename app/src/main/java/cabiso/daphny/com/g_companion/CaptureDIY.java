@@ -249,6 +249,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
         itemMaterial = new ArrayList<>();
         itemProcedure = new ArrayList<>();
+        itemUnit = new ArrayList<>();
         itemMat = new ArrayList<>();
         itemQuantity = new ArrayList<>();
 
@@ -323,15 +324,21 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     @Override
                     public void onClick(View v) {
                         String quantityMaterials = spinner_item_q + " " + spinner_item_um + " " + material.getText().toString();
-                        String qty_uni_mat = spinner_item_q + " " + spinner_item_um ;
-//                        String unit_material = spinner_item_um;
-//                        String quantity_material = spinner_item_q;
+//                        String qty_uni_mat = spinner_item_q + " " + spinner_item_um ;
+                        String unit_material = spinner_item_um;
+                        int quantity = Integer.parseInt(spinner_item_q);
                         String materials = material.getText().toString();
+
                         CommunityItem qm = new CommunityItem(quantityMaterials);
                         CommunityItem mat = new CommunityItem(materials);
-                        QuantityItem qty_unit_mat = new QuantityItem(qty_uni_mat);
+
+                        QuantityItem qty_qty_mat = new QuantityItem(quantity);
+                        QuantityItem _unit = new QuantityItem(unit_material);
                         itemMaterial.add(qm);
-                        itemQuantity.add(qty_unit_mat);
+
+                        itemQuantity.add(qty_qty_mat);
+                        itemUnit.add(_unit);
+
                         itemMat.add(mat);
 
                         mAdapter.notifyDataSetChanged();
@@ -424,7 +431,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 float_this, float_this));
 
                         databaseReference.child(upload).child("materials").setValue(itemMat);
-                        databaseReference.child(upload).child("quantity").setValue(itemQuantity);
+                        databaseReference.child(upload).child("quantity_unit").child("quantity").setValue(itemQuantity);
+                        databaseReference.child(upload).child("quantity_unit").child("unit").setValue(itemUnit);
                         databaseReference.child(upload).child("procedures").setValue(itemProcedure);
 
 

@@ -96,46 +96,11 @@ public class Bottle_Recommend extends AppCompatActivity {
         progressDialog.setTitle("Processing...");
         progressDialog.setMessage("Please wait loading DIYs...");
 //        progressDialog.show();
+//
+//        adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
+//        lv.setAdapter(adapter);
 
-        adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
-        lv.setAdapter(adapter);
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-
-                Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName(), Toast.LENGTH_SHORT).show();
-                DIYnames selectedItem = adapter.getItem(position);
-
-                Toast.makeText(getApplicationContext(), "chiii " + position, Toast.LENGTH_SHORT).show();
-
-//                                //To-DO get you data from the ItemDetails Getter
-//                                // selectedItem.getImage() or selectedItem.getName() .. etc
-//                                // the  send the data using intent when opening another activity
-                Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("diyName", diyList.get(position));
-                intent.putExtras(bundle);
-                intent.putExtra("pos", position);
-                intent.putExtra("image", selectedItem.getDiyUrl().getBytes());
-                intent.putExtra("name", selectedItem.getDiyName());
-
-                Toast.makeText(getApplicationContext(), "piste " + selectedItem, Toast.LENGTH_SHORT).show();
-                Toast.makeText(getApplicationContext(), "piste@@@@ " + position, Toast.LENGTH_SHORT).show();
-                Log.e("communityItem: ", "" + position);
-
-                view.buildDrawingCache();
-                Bitmap image = view.getDrawingCache();
-                Bundle extras = new Bundle();
-                extras.putParcelable("imagebitmap", image);
-
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-                intent.putExtra("image", byteArray);
-                startActivity(intent);
-            }
-        });
         final String priority = getIntent().getStringExtra("result_priority");
         Log.e("PRIORITY_next ", "" + priority);
 
@@ -146,9 +111,11 @@ public class Bottle_Recommend extends AppCompatActivity {
 
         for (String firstLoopitem : items) {
             final String item = firstLoopitem;
-            for(String firstLoopQty : qtys){
+            for(final String firstLoopQty : qtys){
                 final String quantity = firstLoopQty;
-            Log.e("itemsMASO: ", "" + item);
+            Log.e("quantity: ", "" + quantity);
+            Log.e("itemsMASO: ", "" + firstLoopQty);
+                Log.e("qty_unit: ", "" + item);
             final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
             myRef.addChildEventListener(new ChildEventListener() {
                 @Override
@@ -182,59 +149,119 @@ public class Bottle_Recommend extends AppCompatActivity {
 
                                     if (item.equalsIgnoreCase(message)) {
                                         Log.d("MATCHED! ", item+" == "+message);
+                                        int split_id = 0;
                                         for(String splitted : split_qty){
                                             String num = splitted.substring(0, splitted.length()).replaceAll("\\}", "").replaceAll("=", "")
                                                     .replaceAll("\\{", "").replaceAll("[A-Z]", "").replaceAll("[a-z]", "").replaceAll("val", "")
                                                     .replaceAll("quantity", "").trim();
                                             Log.e("splitted ", splitted);
                                             Log.e("checingQuantity ", num);
-                                            String qty_num_img_recog = quantity.substring(0, quantity.length()).replaceAll("[A-Z]", "")
+                                            String qty_num_img_recog = firstLoopQty.substring(0, firstLoopQty.length()).replaceAll("[A-Z]", "")
                                                     .replaceAll("[a-z]", "");
 
-                                            String qty_uni_img_recog = quantity.substring(0, quantity.length()).replaceAll("quantity", "")
-                                                    .replaceAll("[0-9]", "").trim();
-                                            Log.e("qty_uni_img_recog ", qty_uni_img_recog);
+                                            String qty_uni_img_recog = firstLoopQty.substring(0, firstLoopQty.length()).replaceAll("quantity", "")
+                                                    .replaceAll("[0-9]", "");
+                                            Log.e("qtyuniimgrecog111", qty_uni_img_recog);
 
                                             String unitOfMeasure = splitted.substring(0, splitted.length()).replaceAll("\\}", "").replaceAll("=", "")
                                             .replaceAll("\\{", "").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials", "")
                                             .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]", "").replaceAll("quantity", "").trim();
-                                            Log.e("unitOfMeasure ", unitOfMeasure);
+                                            Log.e("checkMatchMeasure", unitOfMeasure+" == "+qty_uni_img_recog);
+                                            boolean validationQuantity = false;
 
-                                            int qty_nums = 0;
-                                            int qty_final =0;
                                             try {
-                                                qty_nums = Integer.valueOf(qty_num_img_recog);
-                                                qty_final = Integer.valueOf(num);
-                                            } catch (NumberFormatException e) {
-                                                e.printStackTrace();
-                                            }
-                                                Log.e("checkingQuantity ", qty_nums+" == "+qty_final);
+                                                boolean validationMeasure = false;
+                                                if(unitOfMeasure.equalsIgnoreCase(qty_uni_img_recog)) {
+                                                    Log.e("tryUnitMeasure11","TEST "+split_id+" : PASSED "+unitOfMeasure+" == "+qty_uni_img_recog);
+                                                    validationMeasure = true;
+                                                }
+                                                int qty_nums = Integer.parseInt(qty_num_img_recog);
+                                                int qty_final = Integer.parseInt(num);
+                                                Log.e("tryUnitMeasure22","TEST "+split_id+" : "+validationMeasure+" && "+qty_nums+" == "+qty_final);
                                                 if (qty_final <= qty_nums) {
-                                                    Log.e("checkingUnitABOVE ", qty_uni_img_recog+" == "+unitOfMeasure);
-                                                    Log.e("qty_uni_img_recog ", unitOfMeasure);
-                                                    Log.e("unitOfMeasureINSIDE ", qty_uni_img_recog);
-                                                    Log.e("QuantityMATCHED! ", qty_nums + " == " + qty_final);
-                                                    if(unitOfMeasure.equalsIgnoreCase(qty_uni_img_recog)) {
-                                                        Log.e("checkingUnit ", unitOfMeasure+" == "+qty_uni_img_recog);
-                                                        Log.e("QuantityMATCHED! ", qty_nums + " == " + qty_final);
                                                         for (int get = 0; get < diyList.size(); get++) {
                                                             if (diYnames.getProductID().equals(diyList.get(get).getProductID())) {
                                                                 addDiy = false;
                                                             }
                                                         }
                                                         diyList.add(diYnames);
-                                                        Collections.sort(diyList);
-                                                        Collections.reverse(diyList);
-                                                        Log.e("ItemAddition ", "added " + item + " item");
-                                                    }
                                                 }
-
-
+                                            } catch (NumberFormatException e) {
+                                                e.printStackTrace();
+                                                Log.e("qtyException", "naay numberformat exception");
+                                            } catch ( NullPointerException nullEx){
+                                                nullEx.getMessage();
+                                            }
+                                            split_id++;
+//                                            try {
+//                                                int qty_nums = Integer.valueOf(qty_num_img_recog);
+//                                                int qty_final = Integer.valueOf(num);
+//                                                Log.e("qtyuniimgrecog222", qty_uni_img_recog);
+//                                                    if(unitOfMeasure.equalsIgnoreCase(qty_uni_img_recog)){
+//                                                        Log.e("qtyuniimgrecog444", qty_uni_img_recog);
+//                                                        if (qty_final <= qty_nums) {
+//                                                            for (int get = 0; get < diyList.size(); get++) {
+//                                                                if (diYnames.getProductID().equals(diyList.get(get).getProductID())) {
+//                                                                    addDiy = false;
+//                                                                }
+//                                                            }
+//                                                            diyList.add(diYnames);
+//                                                            Collections.sort(diyList);
+//                                                            Collections.reverse(diyList);
+//                                                            Log.e("ItemAddition ", "added " + item + " item");
+//                                                        }
+//                                                    }
+////                                                }
+//                                            } catch (NumberFormatException e) {
+//                                                e.printStackTrace();
+//                                            }catch ( NullPointerException nullEx){
+//                                                nullEx.getMessage();
+//                                            }
                                         }
                                     }
                                 }
+                                Collections.sort(diyList);
+                                Collections.reverse(diyList);
                                 adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
                                 lv.setAdapter(adapter);
+                                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                                    Toast.makeText(getApplicationContext(), diyList.get(position).getDiyName(), Toast.LENGTH_SHORT).show();
+                                    DIYnames selectedItem = adapter.getItem(position);
+                                    Log.e("SELECTEDNAME",selectedItem.getDiyName());
+                                    Log.e("SELECTEDURL",selectedItem.getDiyName());
+
+                                    Toast.makeText(getApplicationContext(), "chiii " + position, Toast.LENGTH_SHORT).show();
+
+//                                //To-DO get you data from the ItemDetails Getter
+//                                // selectedItem.getImage() or selectedItem.getName() .. etc
+//                                // the  send the data using intent when opening another activity
+                                    Intent intent = new Intent(Bottle_Recommend.this, DIYDataActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("diyName", diyList.get(position));
+                                    intent.putExtras(bundle);
+                                    intent.putExtra("pos", position);
+                                    intent.putExtra("image", selectedItem.getDiyUrl().getBytes());
+                                    intent.putExtra("name", selectedItem.getDiyName());
+
+                                    Toast.makeText(getApplicationContext(), "piste " + selectedItem, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "piste@@@@ " + position, Toast.LENGTH_SHORT).show();
+                                    Log.e("communityItem: ", "" + position);
+
+                                    view.buildDrawingCache();
+                                    Bitmap image = view.getDrawingCache();
+                                    Bundle extras = new Bundle();
+                                    extras.putParcelable("imagebitmap", image);
+
+                                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                    byte[] byteArray = stream.toByteArray();
+                                    intent.putExtra("image", byteArray);
+                                    startActivity(intent);
+                                }
+                            });
 
                                 Log.e("checkMatchedMaterials: ", "" + diYnames);
 //                                for (int i = 0; i < split_qty.length; i++) {

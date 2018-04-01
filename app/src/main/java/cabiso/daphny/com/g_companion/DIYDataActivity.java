@@ -57,7 +57,7 @@ public class DIYDataActivity extends AppCompatActivity {
         String diyReferenceString = getIntent().getStringExtra("Community Ref");
         final String data = getIntent().getStringExtra("image");
 
-        databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceString);
+        databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(data);
 
         diYnamesModel = new DIYnames();
 

@@ -51,11 +51,10 @@ public class SellDIYDetail extends AppCompatActivity {
     private RecyclerView recyclerView;
 
     private FirebaseDatabase database;
-    private DatabaseReference dbRef;
+    private DatabaseReference dbRef, dbReference;
     private StorageReference mStorageRef;
-    private DIYSell diySellModel;
-
-    private TextView name, materials, procedures, diy_sell;
+    private DIYSell mSellDIY;
+    private TextView name_diys, materials_diys, procedures_diys, diy_sell;
     private Button btnSell;
     private ImageView diy_image;
     private String userID;
@@ -74,9 +73,10 @@ public class SellDIYDetail extends AppCompatActivity {
         setContentView(R.layout.activity_diy_sell_data);
 
         String diyReferenceStrings = getIntent().getStringExtra("Market Ref");
-        Toast.makeText(this, "MARKET REF" +diyReferenceStrings, Toast.LENGTH_SHORT).show();
 
         dbRef = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceStrings);
+
+        dbReference = FirebaseDatabase.getInstance().getReference().child("Sell DIY");
 
         Toolbar toolbarr = (Toolbar) findViewById(R.id.toolbarDetails);
         setSupportActionBar(toolbarr);
@@ -84,7 +84,6 @@ public class SellDIYDetail extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         toolbarr.setNavigationIcon(R.drawable.back_btn);
-//        toolbarr.setTitle("Sell DIY Details");
         toolbarr.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,38 +95,55 @@ public class SellDIYDetail extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         progressDialog = new ProgressDialog(this);
-        name = (TextView) findViewById(R.id.name_diy);
-        materials = (TextView) findViewById(R.id.material_diy);
-        procedures = (TextView) findViewById(R.id.procedure_diy);
+        name_diys = (TextView) findViewById(R.id.name_diys);
+        materials_diys = (TextView) findViewById(R.id.material_diys);
+        procedures_diys = (TextView) findViewById(R.id.procedure_diys);
         diy_sell = (TextView) findViewById(R.id.sellDetails);
         btnSell = (Button) findViewById(R.id.buyBtn);
 
-        dbRef.addValueEventListener(new ValueEventListener() {
+        dbReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DIYSell diyInfos = dataSnapshot.getValue(DIYSell.class);
-                Toast.makeText(SellDIYDetail.this, "HOY!", Toast.LENGTH_SHORT).show();
-                //name.setText(diyInfos.diyName);
+                Toast.makeText(SellDIYDetail.this, "SHT!" + dataSnapshot.getValue(DIYSell.class), Toast.LENGTH_SHORT).show();
 
-                btnSell.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(SellDIYDetail.this, "BUY ITEM!", Toast.LENGTH_SHORT).show();
-                    }
+                //returns NULL BWESIT SA PIKAS DLI NULL
+//                DIYSell sell = dataSnapshot.getValue(DIYSell.class);
+//                if(dataSnapshot.getValue(DIYSell.class) != null) {
+//                    String sname = sell.diyName;
+//                    Log.e("SELL_SHT", "" + sell.getDiyName());
+//                    Log.e("SELL_SHTs", "" + sell.diyUrl);
+//                    name_diys.setText("" + sname);
+//                }
+//                else{
+//                    Log.e("HAYS", "" + sell.diyName);
+//
+//                }
 
-                });
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    DIYSell info = snapshot.getValue(DIYSell.class);
+
+                    name_diys.setText("" + info.getDiyName());
+                    Log.e("SELL_SHT", "" + info.diyName);
+
+                    //for temporary price
+                    String sellItem = snapshot.child("DIY Price").getValue().toString();
+                    diy_sell = (TextView) findViewById(R.id.sellDetails);
+                    diy_sell.setText(sellItem);
 
 
-                //for temporary price
-//                    String sellItem = dataSnapshot.child("DIY Price").getValue().toString();
-//                    diy_sell = (TextView) findViewById(R.id.sellDetails);
-//                    diy_sell.setText(sellItem);
+                    btnSell.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(SellDIYDetail.this, "BUY ITEM!", Toast.LENGTH_SHORT).show();
+                        }
+
+                    });
 
 
-                CommunityItem item = dataSnapshot.getValue(CommunityItem.class);
+                CommunityItem item = snapshot.getValue(CommunityItem.class);
 
                 if(item!=null){
-                    String[] splitsMat = dataSnapshot.child("materials").getValue().toString().split(",");
+                    String[] splitsMat = snapshot.child("materials").getValue().toString().split(",");
                     Log.e("messageProd", ""+splitsMat);
 
                     String messageMat = "";
@@ -142,7 +158,7 @@ public class SellDIYDetail extends AppCompatActivity {
                         Log.d("messageProd", messageMat);
                     }
 
-                    String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
+                    String[] splits = snapshot.child("procedures").getValue().toString().split(",");
                     Log.e("splits", ""+splits);
 
                     String messageProd = "";
@@ -158,37 +174,29 @@ public class SellDIYDetail extends AppCompatActivity {
 
                     Log.d("MessageProcedure", messageProcedure.toString());
 
-                    materials.setText(messageMat);
-                    procedures.setText(messageProd);
+                    materials_diys.setText(messageMat);
+                    procedures_diys.setText(messageProd);
 
                     Log.d("SnapItem", "not null");
                     Log.d("SnapMaterial", ""+item);
-                    Log.d("SnapDataSnap", ""+dataSnapshot.child("materials").getValue());
+                    Log.d("SnapDataSnap", ""+snapshot.child("materials").getValue());
                 }else{
                     Log.d("SnapItem", "null");
                 }
 
-                try{
-                    if (diyInfos.diyUrl != null) {
-                        diyImagesPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
-                        diyImagesPagerAdapter = new DIYImagesPagerAdapter(getBaseContext(), diyInfos.diyUrl);
+                    if (info.diyUrl != null) {
+                        diyImagesPager = (ViewPager) findViewById(R.id.diyImagesViewPagers);
+                        diyImagesPagerAdapter = new DIYImagesPagerAdapter(getBaseContext(), info.diyUrl);
                         diyImagesPager.setAdapter(diyImagesPagerAdapter);
 
-                        Toast.makeText(SellDIYDetail.this, diyInfos.diyUrl, Toast.LENGTH_SHORT).show();
-                    }else{
-                        diyImagesPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
-                        diyImagesPagerAdapter = new DIYImagesPagerAdapter(getBaseContext(), diyInfos.diyUrl);
-                        diyImagesPager.setAdapter(diyImagesPagerAdapter);
-
-                        Toast.makeText(SellDIYDetail.this, diyInfos.diyUrl, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SellDIYDetail.this, info.diyUrl, Toast.LENGTH_SHORT).show();
                     }
-                }catch (NullPointerException ex){
-                    ex.printStackTrace();
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                Log.e("The read failed",databaseError.getDetails());
 
             }
         });
@@ -214,8 +222,8 @@ public class SellDIYDetail extends AppCompatActivity {
 
         @Override
         public View instantiateItem(ViewGroup container, int position) {
-            View currentView = LayoutInflater.from(context).inflate(R.layout.viewpager_product_images_sell, container, false);
-            final ImageView diyImageView = (ImageView) currentView.findViewById(R.id.viewpager_productImage_sell);
+            View currentView = LayoutInflater.from(context).inflate(R.layout.viewpager_product_images_commu, container, false);
+            final ImageView diyImageView = (ImageView) currentView.findViewById(R.id.viewpager_productImage_community);
             try {
                 final StorageReference diyImageStorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(diyUrl);
                 diyImageStorageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -253,4 +261,16 @@ public class SellDIYDetail extends AppCompatActivity {
             return view.equals(object);
         }
     }
+
+//    public void showData(DataSnapshot snapshot) {
+//
+//        if (snapshot!=null) {
+//            DIYSell diyInfo = snapshot.getValue(DIYSell.class);
+//            name_diys.setText(diyInfo.getDiyName());
+//            Log.e("SELL_SHT", "" + diyInfo.getDiyName());
+//        } else {
+//            name_diys.setText("NAME");
+//        }
+//
+//    }
 }

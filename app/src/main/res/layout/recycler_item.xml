@@ -2,7 +2,7 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="330dp"
-    android:layout_height="270dp"
+    android:layout_height="240dp"
     android:layout_marginBottom="5dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
@@ -22,8 +22,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignStart="@+id/staru"
         android:layout_below="@+id/get_diyName"
-        android:layout_marginLeft="280dp"
-        android:layout_marginTop="230dp"
+        android:layout_marginLeft="285dp"
+        android:layout_marginTop="190dp"
         android:background="@null"
         android:src="@drawable/vector_heart" />
 
@@ -35,21 +35,10 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="280dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="140dp"
         android:background="@null"
         android:descendantFocusability="blocksDescendants"
         android:src="@android:drawable/btn_star" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="220dp"
-        android:text="  _________________________________________________"
-        android:textStyle="bold"
-        android:visibility="visible" />
 
     <TextView
         android:id="@+id/item_name"
@@ -63,25 +52,13 @@
         android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="24sp" />
 
-    <TextView
-        android:id="@+id/item_name_owner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="200dp"
-        android:gravity="center"
-        android:text="by: Daphny Cabiso"
-        android:textAlignment="center"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textSize="18sp" />
-
 
     <ImageView
         android:id="@+id/owner_pic"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="155dp"
         app:srcCompat="@drawable/main_view" />
 
     <ImageView
@@ -99,6 +76,18 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:scaleType="fitXY" />
+
+    <TextView
+        android:id="@+id/item_name_owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginTop="190dp"
+        android:gravity="center"
+        android:text="by: Daphny Cabiso"
+        android:textAlignment="center"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="18sp" />
 
 
 </android.support.v7.widget.CardView>

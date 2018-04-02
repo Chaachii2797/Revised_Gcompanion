@@ -92,11 +92,11 @@
             android:layout_width="330dp"
             android:layout_height="130dp"
             app:cardBackgroundColor="@android:color/white"
-            android:layout_marginTop="30dp"
-            android:layout_below="@+id/diy_name"
-            android:layout_centerHorizontal="true"
+            android:layout_marginTop="22dp"
             app:cardCornerRadius="5dp"
-            app:elevation="5dp">
+            app:elevation="5dp"
+            android:layout_below="@+id/diy_name"
+            android:layout_centerHorizontal="true">
 
             <TextView
                 android:id="@+id/diy_material"
@@ -137,10 +137,11 @@
             android:id="@+id/cardView2"
             android:layout_width="330dp"
             android:layout_height="130dp"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="15dp"
             app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="5dp"
             app:elevation="5dp"
+            android:layout_marginBottom="15dp"
             android:layout_below="@+id/cardView"
             android:layout_alignLeft="@+id/cardView"
             android:layout_alignStart="@+id/cardView">

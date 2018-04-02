@@ -84,13 +84,14 @@
 
         <activity android:name=".ProductDetailViewActivity" />
         <activity android:name=".ChatWithSellerActivity" />
-        <activity android:name=".DIYDataActivity" />
         <activity android:name=".Item_Activity" />
         <activity android:name=".Sold_Activity" />
         <activity android:name=".SearchResultsActivity" />
         <activity android:name=".DIYDetailViewActivity" />
         <activity android:name=".SellDIYDetail" />
+        <activity android:name=".RecommendDIYViewDetails" />
         <activity android:name=".WelcomeActivity" />
+
 
 
         <intent-filter>

@@ -176,7 +176,7 @@ public class MyDiys extends AppCompatActivity {
                                 //To-DO get you data from the ItemDetails Getter
                                 // selectedItem.getImage() or selectedItem.getName() .. etc
                                 // the  send the data using intent when opening another activity
-                                Intent intent = new Intent(MyDiys.this, DIYDataActivity.class);
+                                Intent intent = new Intent(MyDiys.this, DIYDetailViewActivity.class);
 //                                String items = infoList.get(position).getVal();
 
                                 CommunityItem mat = (CommunityItem) parent.getItemAtPosition(position);

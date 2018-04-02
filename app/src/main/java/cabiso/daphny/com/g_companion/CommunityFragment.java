@@ -181,7 +181,7 @@ public class CommunityFragment extends Fragment{
     @Override
     public void onStart(){
         super.onStart();
-        Toast.makeText(getActivity(), "Hi! Welcome", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Hi!", Toast.LENGTH_SHORT).show();
         final FirebaseRecyclerAdapter<DIYnames, ItemViewHolder> cAdapter =
                 new FirebaseRecyclerAdapter<DIYnames, ItemViewHolder>(DIYnames.class,
                         R.layout.recycler_item,ItemViewHolder.class, communityReference) {
@@ -282,7 +282,7 @@ public class CommunityFragment extends Fragment{
         recyclerView.setAdapter(cAdapter);
 
         //selling DIY
-        Toast.makeText(getActivity(), "to G-Companion!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), " Welcome to G-Companion!", Toast.LENGTH_SHORT).show();
         final FirebaseRecyclerAdapter<DIYSell, ItemHolder> mAdapter =
                 new FirebaseRecyclerAdapter<DIYSell, ItemHolder>(DIYSell.class,
                         R.layout.diy_item,ItemHolder.class, marketplaceReference) {
@@ -383,7 +383,6 @@ public class CommunityFragment extends Fragment{
 
         recyclerView1.setAdapter(mAdapter);
     }
-
 
 
 

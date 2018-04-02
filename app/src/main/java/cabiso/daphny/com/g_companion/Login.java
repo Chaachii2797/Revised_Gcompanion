@@ -165,23 +165,23 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         }
     }
 
-////If naa siya, naa gihapon ang log in everytime, pero ika back muadto sa main dayon
-    @Override
-    protected void onStop(){
-        super.onStop();
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-//Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
-        boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", true);
-
-        if(hasLoggedIn)
-        {
-            //Go directly to main activity.
-            Intent intent = new Intent(Login.this,MainActivity.class);
-            startActivity(intent);
-            this.finish();
-
-        }
-    }
+//////If naa siya, naa gihapon ang log in everytime, pero ika back muadto sa main dayon
+//    @Override
+//    protected void onStop(){
+//        super.onStop();
+//        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+////Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
+//        boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", true);
+//
+//        if(hasLoggedIn)
+//        {
+//            //Go directly to main activity.
+//            Intent intent = new Intent(Login.this,MainActivity.class);
+//            startActivity(intent);
+//            this.finish();
+//
+//        }
+//    }
 
     private void signInGoogle() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);

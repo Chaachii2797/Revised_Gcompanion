@@ -69,11 +69,10 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diy_data);
 
         String diyReferenceString = getIntent().getStringExtra("Community Ref");
-        Toast.makeText(this, "COMMUNITY REF huhu"+diyReferenceString, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "COMMUNITY_REF"+diyReferenceString, Toast.LENGTH_SHORT).show();
 
         databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceString);
 
@@ -103,14 +102,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DIYnames diyInfo = dataSnapshot.getValue(DIYnames.class);
                 diy_name.setText(diyInfo.diyName);
-
-                //for temporary price
-//                if(dataSnapshot.child("DIY Price").getValue().toString() != null) {
-//                    String sellItem = dataSnapshot.child("DIY Price").getValue().toString();
-//                    diy_sell = (TextView) findViewById(R.id.sellDetails);
-//                    diy_sell.setText(sellItem);
-//                }
-
 
                 CommunityItem item = dataSnapshot.getValue(CommunityItem.class);
 

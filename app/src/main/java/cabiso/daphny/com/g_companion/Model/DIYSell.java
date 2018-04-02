@@ -18,11 +18,8 @@ public class DIYSell implements Comparable<DIYSell>, Serializable{
     public Float likes;
     public int materialMatches;
 
-    public DIYSell() {
-    }
-
     public DIYSell(String diyName, String diyUrl, String user_id, String productID,
-                   Float bookmarks, Float likes){
+                    Float bookmarks, Float likes){
         this.diyName = diyName;
         this.diyUrl = diyUrl;
         this.user_id = user_id;
@@ -31,12 +28,7 @@ public class DIYSell implements Comparable<DIYSell>, Serializable{
         this.likes = likes;
     }
 
-    public int getMaterialMatches() {
-        return materialMatches;
-    }
-
-    public void setMaterialMatches(int materialMatches) {
-        this.materialMatches = materialMatches;
+    public DIYSell(){
     }
 
     public String getDiyName() {
@@ -87,6 +79,14 @@ public class DIYSell implements Comparable<DIYSell>, Serializable{
         this.likes = likes;
     }
 
+    public int getMaterialMatches() {
+        return materialMatches;
+    }
+
+    public void setMaterialMatches(int materialMatches) {
+        this.materialMatches = materialMatches;
+    }
+
     @Override
     public int compareTo(@NonNull DIYSell o) {
         if(bookmarks.floatValue() > o.bookmarks.floatValue() && likes.floatValue() > o.likes.floatValue()) {
@@ -98,8 +98,9 @@ public class DIYSell implements Comparable<DIYSell>, Serializable{
         }
     }
 
-    @Override
-    public String toString() {
-        return "product name : " + diyName;
-    }
+//    @Override
+//    public String toString() {
+//        return "product name : " + diyName;
+//    }
+
 }

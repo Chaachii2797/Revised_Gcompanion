@@ -68,6 +68,7 @@ import java.util.Random;
 import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.Constants;
+import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.QuantityItem;
@@ -128,6 +129,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     ArrayList<CommunityItem> itemForMaterials;
     ArrayList<CommunityItem> itemProcedure;
     ArrayList<QuantityItem> itemQuantity;
+    ArrayList<DBMaterial> dbMaterials;
     ArrayList<QuantityItem> itemUnit;
     private List<String> diys = new ArrayList<String>();
 
@@ -252,6 +254,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         itemUnit = new ArrayList<>();
         itemMat = new ArrayList<>();
         itemQuantity = new ArrayList<>();
+        dbMaterials = new ArrayList<>();
 
         mAdapter = new CommunityAdapter(getApplicationContext(), itemMaterial);
         pAdapter = new CommunityAdapter(getApplicationContext(), itemProcedure);
@@ -335,6 +338,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         QuantityItem qty_qty_mat = new QuantityItem(quantity);
                         QuantityItem _unit = new QuantityItem(unit_material);
                         itemMaterial.add(qm);
+
+                        dbMaterials.add(new DBMaterial().setName(materials).setQuantity(quantity).setUnit(unit_material));
 
                         itemQuantity.add(qty_qty_mat);
                         itemUnit.add(_unit);
@@ -430,7 +435,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 taskSnapshot.getDownloadUrl().toString(), userID, "prod_000"+ productID,
                                 float_this, float_this));
 
-                        databaseReference.child(upload).child("materials").setValue(itemMat);
+//                        databaseReference.child(upload).child("materials").setValue(itemMat);
+                        databaseReference.child(upload).child("materials").setValue(dbMaterials);
                         databaseReference.child(upload).child("quantity_unit").child("quantity").setValue(itemQuantity);
                         databaseReference.child(upload).child("quantity_unit").child("unit").setValue(itemUnit);
                         databaseReference.child(upload).child("procedures").setValue(itemProcedure);
@@ -531,9 +537,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                         float_this, float_this));
 
                                 dbRef.child(upload).child("materials").setValue(itemMaterial);
-
                                 dbRef.child(upload).child("procedures").setValue(itemProcedure);
-
                                 dbRef.child(upload).child("DIY Price").setValue(etPrice.getText().toString());
 
                                 dbRef.child(upload).child("Item Quantity").setValue(etQuantity.getText().toString());

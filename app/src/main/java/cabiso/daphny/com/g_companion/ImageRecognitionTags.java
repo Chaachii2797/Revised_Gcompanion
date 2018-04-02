@@ -206,14 +206,15 @@ public class ImageRecognitionTags extends AppCompatActivity{
                     Log.e("RESULT: ",""+results);
                     Intent intent = new Intent(ImageRecognitionTags.this,Bottle_Recommend.class);
 
-                    String quantity_unit = spinner_item_q + " " + spinner_item_um;
+                    String quantity = spinner_item_q;
+                    String unit = spinner_item_um;
                     intent.putExtra("result_priority", priority);
-                    intent.putExtra("qty_unit", quantity_unit);
+                    intent.putExtra("qty", quantity);
+                    intent.putExtra("unit", unit);
                     intent.putExtra("result_tag", results);
 
                     Log.e("PRIORITY: ",""+priority);
                     Log.e("RESULTS: ",""+results);
-                    Log.e("qty_unit: ",""+quantity_unit);
 
                     startActivity(intent);
 

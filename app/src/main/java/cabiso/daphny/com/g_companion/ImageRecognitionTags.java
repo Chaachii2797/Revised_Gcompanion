@@ -132,6 +132,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
         imgRecogSetQties.add(new ImgRecogSetQty().setName("RODRIGO"));
         Log.e("imgRecogSetQties",imgRecogSetQties+"");
+        Log.e("imgRecogSetQties222",imgRecogSetQties+"");
 
         imgRecogSetQtyAdapter = new ImgRecogSetQtyAdapter(ImageRecognitionTags.this,imgRecogSetQties);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());

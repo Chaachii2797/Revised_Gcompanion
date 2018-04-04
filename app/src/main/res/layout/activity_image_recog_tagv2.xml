@@ -30,8 +30,8 @@
         tools:layout_editor_absoluteX="29dp"
         android:layout_marginTop="9dp"
         android:layout_below="@+id/relativeLayout"
-        android:layout_toLeftOf="@+id/btnAddMaterial"
-        android:layout_toStartOf="@+id/btnAddMaterial" />
+        android:layout_toLeftOf="@+id/btnTagQty"
+        android:layout_toStartOf="@+id/btnTagQty" />
 
     <Button
         android:id="@+id/btnDIY"
@@ -49,10 +49,10 @@
         android:layout_marginTop="12dp" />
 
     <ImageButton
-        android:id="@+id/btnAddMaterial"
+        android:id="@+id/btnTagQty"
         android:layout_width="35dp"
         android:layout_height="38dp"
-        android:layout_alignTop="@+id/addMaterials"
+        android:layout_alignTop="@+id/tvTag"
         android:layout_alignRight="@+id/imgPhotoSaver"
         android:layout_alignEnd="@+id/imgPhotoSaver"
         tools:layout_editor_absoluteY="314dp"

@@ -111,15 +111,19 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                     String messageMat = "";
                     List<String> messageMaterials = new ArrayList<String>();
-                    for(int i = 0; i<splitsMat.length; i++){
-                        Log.d("splitVal", splitsMat[i].substring(5,splitsMat[i].length()-1));
-                        String message = i+1 +".) "+ splitsMat[i].substring(5,splitsMat[i].length()-1).replaceAll("\\}", "")
-                                .replaceAll("=", "");
-                        messageMat+="\n"+message;
+                    for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
+                        String message = postSnapshot.child("name").getValue(String.class);
                         messageMaterials.add(message);
-
-                        Log.d("messageProd", messageMat);
                     }
+//                    for(int i = 0; i<splitsMat.length; i++){
+//                        Log.d("splitVal", splitsMat[i].substring(5,splitsMat[i].length()-1));
+//                        String message = i+1 +".) "+ splitsMat[i].substring(5,splitsMat[i].length()-1).replaceAll("\\}", "")
+//                                .replaceAll("=", "");
+//                        messageMat+="\n"+message;
+//                        messageMaterials.add(message);
+//
+//                        Log.d("messageProd", messageMat);
+//                    }
 
                     String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
                     Log.e("splits", ""+splits);

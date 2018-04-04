@@ -10,7 +10,7 @@
     android:paddingRight="15dp">
 
     <Spinner
-        android:id="@+id/spinner1"
+        android:id="@+id/unitspinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/okaybtn"
@@ -43,7 +43,7 @@
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/spinner1"
+        android:layout_above="@+id/unitspinner"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="9dp"

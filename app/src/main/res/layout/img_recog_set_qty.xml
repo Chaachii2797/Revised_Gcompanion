@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingTop="5dp">
+
+        <EditText
+            android:id="@+id/tvTag"
+            style="@style/LoginStyle"
+            android:layout_width="188dp"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/backgroundColor"
+            android:hint="Recognize tag:"
+            android:imeOptions="actionNext"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:textColor="#7f8c8d" />
+
+        <Spinner
+            android:id="@+id/unitspinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/okaybtn"
+            android:layout_weight="2.26" />
+
+        <Spinner
+            android:id="@+id/qtySpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="2.87" />
+
+    </LinearLayout>
+</LinearLayout>

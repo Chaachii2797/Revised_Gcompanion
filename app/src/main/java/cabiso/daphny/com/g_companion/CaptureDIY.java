@@ -276,7 +276,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 dialog.setContentView(R.layout.row_spinner);
                 dialog.setCancelable(true);
 
-                final Spinner spinner1 = (Spinner) dialog.findViewById(R.id.spinner1);
+                final Spinner spinner1 = (Spinner) dialog.findViewById(R.id.unitspinner);
                 final Spinner spinner2 = (Spinner) dialog.findViewById(R.id.qtySpinner);
                 Button okButton = (Button) dialog.findViewById(R.id.okaybtn);
 
@@ -440,7 +440,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         databaseReference.child(upload).child("quantity_unit").child("quantity").setValue(itemQuantity);
                         databaseReference.child(upload).child("quantity_unit").child("unit").setValue(itemUnit);
                         databaseReference.child(upload).child("procedures").setValue(itemProcedure);
-
 
                         Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 

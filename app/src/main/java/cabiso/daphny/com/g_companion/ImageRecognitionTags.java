@@ -10,6 +10,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +40,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import cabiso.daphny.com.g_companion.Adapter.ImgRecogSetQtyAdapter;
+import cabiso.daphny.com.g_companion.Model.ImgRecogSetQty;
 import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
@@ -45,6 +51,7 @@ import clarifai2.dto.input.ClarifaiInput;
 import clarifai2.dto.model.ConceptModel;
 import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
+import clarifai2.exception.ClarifaiException;
 
 /**
  * Created by Lenovo on 7/30/2017.
@@ -57,13 +64,20 @@ public class ImageRecognitionTags extends AppCompatActivity{
     private ImageView imageView;
     private Button diyBtn;
     private TextView tvTag, tv_category;
-    private EditText addMaterial;
-    private ImageButton btnMaterial;
+//    private EditText addMaterial;
+//    private ImageButton btnMaterial;
     private ProgressDialog progressDialog;
+
+    //added changes start
+    private ImageButton btn_imagerecog;
+    private ListView imagerecog_listview;
+    //end
 
     private List<String> tags = new ArrayList<>();
     private List<String> extras = new ArrayList<>();
     private List<String> validWords = new ArrayList<>();
+    private ArrayList<ImgRecogSetQty> imgRecogSetQties = new ArrayList<>();
+    private ImgRecogSetQtyAdapter imgRecogSetQtyAdapter;
     final ClarifaiClient client;
     String CURRENT_MODEL;
 
@@ -73,6 +87,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
     String spinner_item_q;
     SpinnerAdapter nsAdapter;
     SpinnerAdapter1 qtyAdapter;
+    RecyclerView mRvImgRecogSetQty;
 
     public ImageRecognitionTags() {
         client = new ClarifaiBuilder("cb169e9d3f9e4ec5a7769cc0422f3162").buildSync();
@@ -87,6 +102,10 @@ public class ImageRecognitionTags extends AppCompatActivity{
         diyBtn = (Button)findViewById(R.id.btnDIY);
         imageView = (ImageView)findViewById(R.id.imgPhotoSaver);
         tvTag = (TextView) findViewById(R.id.tvTag);
+        mRvImgRecogSetQty = (RecyclerView) findViewById(R.id.rvImgRecogSetQty);
+
+        //added changess star
+        imagerecog_listview = (ListView) findViewById(R.id.image_recog_lv);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.imToolbar);
         setSupportActionBar(toolbar);
@@ -105,14 +124,23 @@ public class ImageRecognitionTags extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        addMaterial = (EditText) findViewById(R.id.addMaterials);
-        btnMaterial = (ImageButton) findViewById(R.id.btnAddMaterial);
+//        addMaterial = (EditText) findViewById(R.id.tvTag);
+//        btnMaterial = (ImageButton) findViewById(R.id.btnTagQty);
 
         unitOfMeasurement = getResources().getStringArray(R.array.UM);
         nsAdapter= new SpinnerAdapter(getApplicationContext());
 
+        imgRecogSetQties.add(new ImgRecogSetQty().setName("RODRIGO"));
+        Log.e("imgRecogSetQties",imgRecogSetQties+"");
+
+        imgRecogSetQtyAdapter = new ImgRecogSetQtyAdapter(ImageRecognitionTags.this,imgRecogSetQties);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        mRvImgRecogSetQty.setLayoutManager(layoutManager);
+        mRvImgRecogSetQty.setItemAnimator(new DefaultItemAnimator());
+        mRvImgRecogSetQty.setAdapter(imgRecogSetQtyAdapter);
+
         imageView.setClickable(true);
-        addMaterial.setText(" ");
+//        addMaterial.setText(" ");
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,75 +151,76 @@ public class ImageRecognitionTags extends AppCompatActivity{
         quantity = getResources().getStringArray(R.array.qty);
         qtyAdapter=new SpinnerAdapter1(getApplicationContext());
 
-        btnMaterial.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog dialog = new Dialog(ImageRecognitionTags.this);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.row_spinner);
-                dialog.setCancelable(true);
 
-                final Spinner spinnerUM = (Spinner) dialog.findViewById(R.id.spinner1);
-                final Spinner spinnerQty = (Spinner) dialog.findViewById(R.id.qtySpinner);
-                Button okButton = (Button) dialog.findViewById(R.id.okaybtn);
-
-                spinnerQty.setAdapter(qtyAdapter);
-                spinnerUM.setAdapter(nsAdapter);
-
-                spinnerUM.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        // TODO Auto-generated method stub
-                        spinner_item_um = unitOfMeasurement[position];
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        // TODO Auto-generated method stub
-                    }
-                });
-
-                spinnerQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        // TODO Auto-generated method stub
-                        spinner_item_q = quantity[position];
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        // TODO Auto-generated method stub
-                    }
-                });
-
-                String inputMaterials = addMaterial.getText().toString();
-                if (inputMaterials.isEmpty()) {
-                    Toast.makeText(ImageRecognitionTags.this, "Please enter materials", Toast.LENGTH_SHORT).show();
-                } else {
-
-
-                    Toast.makeText(ImageRecognitionTags.this, spinner_item_q + spinner_item_um, Toast.LENGTH_SHORT).show();
-                }
-
-                dialog.show();
-
-                okButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String quantityMaterial = spinner_item_q + " " + spinner_item_um + " " + addMaterial.getText().toString();
-
-                        tvTag.append("\n" + quantityMaterial);
-
-                        Toast.makeText(ImageRecognitionTags.this, spinner_item_q + " " +spinner_item_um + " " +
-                                addMaterial.getText().toString(), Toast.LENGTH_SHORT).show();
-                        addMaterial.setText("");
-                        dialog.dismiss();
-
-                    }
-                });
-
-            }
-        });
+//        btnMaterial.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                final Dialog dialog = new Dialog(ImageRecognitionTags.this);
+//                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//                dialog.setContentView(R.layout.row_spinner);
+//                dialog.setCancelable(true);
+//
+//                final Spinner spinnerUM = (Spinner) dialog.findViewById(R.id.unitspinner);
+//                final Spinner spinnerQty = (Spinner) dialog.findViewById(R.id.qtySpinner);
+//                Button okButton = (Button) dialog.findViewById(R.id.okaybtn);
+//
+//                spinnerQty.setAdapter(qtyAdapter);
+//                spinnerUM.setAdapter(nsAdapter);
+//
+//                spinnerUM.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                    @Override
+//                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                        // TODO Auto-generated method stub
+//                        spinner_item_um = unitOfMeasurement[position];
+//                    }
+//
+//                    @Override
+//                    public void onNothingSelected(AdapterView<?> parent) {
+//                        // TODO Auto-generated method stub
+//                    }
+//                });
+//
+//                spinnerQty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//                    @Override
+//                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                        // TODO Auto-generated method stub
+//                        spinner_item_q = quantity[position];
+//                    }
+//
+//                    @Override
+//                    public void onNothingSelected(AdapterView<?> parent) {
+//                        // TODO Auto-generated method stub
+//                    }
+//                });
+//
+////                String inputMaterials = addMaterial.getText().toString();
+////                if (inputMaterials.isEmpty()) {
+////                    Toast.makeText(ImageRecognitionTags.this, "Please enter materials", Toast.LENGTH_SHORT).show();
+////                } else {
+////
+////
+////                    Toast.makeText(ImageRecognitionTags.this, spinner_item_q + spinner_item_um, Toast.LENGTH_SHORT).show();
+////                }
+//
+//                dialog.show();
+//
+////                okButton.setOnClickListener(new View.OnClickListener() {
+////                    @Override
+////                    public void onClick(View v) {
+////                        String quantityMaterial = spinner_item_q + " " + spinner_item_um + " " + addMaterial.getText().toString();
+////
+////                        tvTag.append("\n" + quantityMaterial);
+////
+////                    Toast.makeText(ImageRecognitionTags.this, spinner_item_q + " " +spinner_item_um + " " +
+////                                addMaterial.getText().toString(), Toast.LENGTH_SHORT).show();
+////                        addMaterial.setText("");
+////                        dialog.dismiss();
+////
+////                    }
+////                });
+//
+//            }
+//        });
 
         diyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -318,8 +347,8 @@ public class ImageRecognitionTags extends AppCompatActivity{
         TextView text;
     }
 
-    static class ContentQty {
-        TextView text1;
+    public static class ContentQty {
+        public TextView text1;
     }
 
 
@@ -338,25 +367,22 @@ public class ImageRecognitionTags extends AppCompatActivity{
 
     public void printTags() {
         String results = "";
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 2; i++) {
             for(int c = 0; c < validWords.size(); c++){
-                if(tags.get(i).contains(validWords.get(c))){
+                if(tags.get(i).contains(validWords.get(c))) {
                     results += "\n" + tags.get(i);
-                    Log.e("TAGS:", " " +results);
-
-                    Log.e("value_here",extras.get(i));
                     //tvTag.setText(results);
-                    addMaterial.setText(results);
-
-
+                    imgRecogSetQties.add(new ImgRecogSetQty().setName(results));
+//                    addMaterial.setText(results);
+                    Log.e("imageRecogItem",results);
                 }else{
                     //invalid words
                 }
             }
-            Log.e("tags: ", " "+results);
-            Log.e("value",extras.get(i));
-
         }
+
+        Log.e("imageRecogItemCount",imgRecogSetQties.size()+" ");
+
     }
 
     public void getWordBank(){
@@ -430,23 +456,33 @@ public class ImageRecognitionTags extends AppCompatActivity{
                     // Handling API response and then collecting and printing tags
                     @Override
                     protected void onPostExecute(ClarifaiResponse<List<ClarifaiOutput<Concept>>> response) {
-                        if (!response.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "API contact error", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-                        final List<ClarifaiOutput<Concept>> predictions = response.get();
-                        if (predictions.isEmpty()) {
-                            Toast.makeText(getApplicationContext(), "No results from API", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+                        try{
+                            if (!response.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "API contact error", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            final List<ClarifaiOutput<Concept>> predictions = response.get();
+                            if (predictions.isEmpty()) {
+                                Toast.makeText(getApplicationContext(), "No results from API", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
 
-                        final List<Concept> predictedTags = predictions.get(0).data();
-                        for(int i = 0; i < predictedTags.size(); i++) {
-                            tags.add(predictedTags.get(i).name());
-                            extras.add(String.valueOf(predictedTags.get(i).value()));
+                            final List<Concept> predictedTags = predictions.get(0).data();
+                            for(int i = 0; i < predictedTags.size(); i++) {
+                                tags.add(predictedTags.get(i).name());
+                                extras.add(String.valueOf(predictedTags.get(i).value()));
+                                ImgRecogSetQty imgRecogSetQty = new ImgRecogSetQty();
+                                imgRecogSetQty.setName(predictedTags.get(i).name());
+                                imgRecogSetQties.add(imgRecogSetQty);
+                                Log.e("imgRecogSetQtiesSizeLp",imgRecogSetQties.size()+"");
+                            }
+                            printTags();
+                            Log.e("imgRecogSetQtiesSize",imgRecogSetQties.size()+"");
+                            imgRecogSetQtyAdapter.notifyDataSetChanged();
+                        }catch (ClarifaiException ex){
+                                ex.getMessage();
+                            }
                         }
-                        printTags();
-                    }
                 }.execute(bitmap);
             }
         } else if (resultCode == RESULT_CANCELED) {
@@ -456,6 +492,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
             // capture failed or did not find file.
             Toast.makeText(getApplicationContext(), "Unknown Failure. Please notify app owner.", Toast.LENGTH_SHORT).show();
         }
+
 
     }
 

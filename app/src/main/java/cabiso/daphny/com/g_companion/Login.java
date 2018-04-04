@@ -71,7 +71,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 
         setContentView(R.layout.activity_login);
 
-
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0); // 0 - for private mode
         SharedPreferences.Editor editor = settings.edit();
 

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -43,21 +44,12 @@ import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
 public class DIYDetailViewActivity extends AppCompatActivity{
 
-    private ArrayList infoList;
-    private ListView lv;
-    private RecommendDIYAdapter adapter;
     private ProgressDialog progressDialog;
-    private RecyclerView recyclerView;
-
-    private FirebaseDatabase database;
     private DatabaseReference databaseReference;
-    private DatabaseReference dbRef;
-    private StorageReference mStorageRef;
 
     private TextView diy_name, diy_materials, diy_procedures, diy_sell;
-    private ImageView diy_image;
-    private String userID;
-    private int count=0;
+    private Button button_sell;
+
 
     final Context context = this;
     List<String> item = new ArrayList<>();
@@ -96,67 +88,132 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         diy_name = (TextView) findViewById(R.id.diy_name);
         diy_materials = (TextView) findViewById(R.id.diy_material);
         diy_procedures = (TextView) findViewById(R.id.diy_procedure);
+        diy_sell = (TextView) findViewById(R.id.sell_details);
+        button_sell = (Button) findViewById(R.id.btn_sell_diy);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                DIYnames diyInfo = dataSnapshot.getValue(DIYnames.class);
-                diy_name.setText(diyInfo.diyName);
+                    DIYnames diyInfo = dataSnapshot.getValue(DIYnames.class);
+                if(diyInfo.getStatus().equals("community")){
+                    diy_sell.setVisibility(View.INVISIBLE);
+                    button_sell.setVisibility(View.INVISIBLE);
+                    diy_name.setText(diyInfo.diyName);
 
-                CommunityItem item = dataSnapshot.getValue(CommunityItem.class);
+                    if (item != null) {
+                        String[] splitsMat = dataSnapshot.child("materials").getValue().toString().split(",");
+                        Log.e("messageProd", "" + splitsMat);
 
-                if(item!=null){
-                    String[] splitsMat = dataSnapshot.child("materials").getValue().toString().split(",");
-                    Log.e("messageProd", ""+splitsMat);
+                        String messageMat = "";
+                        List<String> messageMaterials = new ArrayList<String>();
+                        int count = 1;
+                        for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
+                            String material_name = count + ". " + postSnapshot.child("name").getValue(String.class).toUpperCase();
+                            Long material_qty = postSnapshot.child("quantity").getValue(Long.class);
+                            String material_unit = postSnapshot.child("unit").getValue(String.class);
+                            Log.e("message", "" + material_name);
+                            messageMat += "\n" + material_name + " = " + material_qty + " " + material_unit;
+                            messageMaterials.add(material_name);
+                            count++;
+                        }
+    //                    for(int i = 0; i<splitsMat.length; i++){
+    //                        Log.d("splitVal", splitsMat[i].substring(5,splitsMat[i].length()-1));
+    //                        String message = i+1 +".) "+ splitsMat[i].substring(5,splitsMat[i].length()-1).replaceAll("\\}", "")
+    //                                .replaceAll("=", "");
+    //                        messageMat+="\n"+message;
+    //                        messageMaterials.add(message);
+    //
+    //                        Log.d("messageProd", messageMat);
+    //                    }
 
-                    String messageMat = "";
-                    List<String> messageMaterials = new ArrayList<String>();
-                    for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-                        String message = postSnapshot.child("name").getValue(String.class);
-                        messageMaterials.add(message);
+                        String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
+                        Log.e("splits", "" + splits);
+
+                        String messageProd = "";
+                        List<String> messageProcedure = new ArrayList<String>();
+                        for (int i = 0; i < splits.length; i++) {
+                            Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
+                            String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
+                            messageProd += "\n" + message;
+                            messageProcedure.add(message);
+
+                            Log.d("messageProd", messageProd);
+                        }
+
+                        Log.d("MessageProcedure", messageProcedure.toString());
+
+                        diy_materials.setText(messageMat);
+                        diy_procedures.setText(messageProd);
+
+                        Log.d("SnapItem", "not null");
+                        Log.d("SnapMaterial", "" + item);
+                        Log.d("SnapDataSnap", "" + dataSnapshot.child("materials").getValue());
+                    } else {
+                        Log.d("SnapItem", "null");
                     }
-//                    for(int i = 0; i<splitsMat.length; i++){
-//                        Log.d("splitVal", splitsMat[i].substring(5,splitsMat[i].length()-1));
-//                        String message = i+1 +".) "+ splitsMat[i].substring(5,splitsMat[i].length()-1).replaceAll("\\}", "")
-//                                .replaceAll("=", "");
-//                        messageMat+="\n"+message;
-//                        messageMaterials.add(message);
-//
-//                        Log.d("messageProd", messageMat);
-//                    }
 
-                    String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
-                    Log.e("splits", ""+splits);
+                    if (diyInfo.diyUrl != null) {
+                        diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
+                        diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), diyInfo.diyUrl);
+                        diyImagesViewPager.setAdapter(diyImagesViewPagerAdapter);
 
-                    String messageProd = "";
-                    List<String> messageProcedure = new ArrayList<String>();
-                    for(int i = 0; i<splits.length; i++){
-                        Log.d("splitVal", splits[i].substring(5,splits[i].length()-1));
-                        String message = i+1 +".) "+ splits[i].substring(5,splits[i].length()-1).replaceAll("\\}", "").replaceAll("=", "");
-                        messageProd+="\n"+message;
-                        messageProcedure.add(message);
+                        Toast.makeText(DIYDetailViewActivity.this, diyInfo.diyUrl, Toast.LENGTH_SHORT).show();
+                    }
+                }else if(diyInfo.getStatus().equals("selling")){
+                    diy_sell.setVisibility(View.VISIBLE);
+                    button_sell.setVisibility(View.VISIBLE);
+                    diy_name.setText(diyInfo.diyName);
 
-                        Log.d("messageProd", messageProd);
+                    if (item != null) {
+                        String[] splitsMat = dataSnapshot.child("materials").getValue().toString().split(",");
+                        Log.e("messageProd", "" + splitsMat);
+
+                        String messageMat = "";
+                        List<String> messageMaterials = new ArrayList<String>();
+                        int count = 1;
+                        for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
+                            String material_name = count + ". " + postSnapshot.child("name").getValue(String.class).toUpperCase();
+                            Long material_qty = postSnapshot.child("quantity").getValue(Long.class);
+                            String material_unit = postSnapshot.child("unit").getValue(String.class);
+                            Log.e("message", "" + material_name);
+                            messageMat += "\n" + material_name + " = " + material_qty + " " + material_unit;
+                            messageMaterials.add(material_name);
+                            count++;
+                        }
+
+                        String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
+                        Log.e("splits", "" + splits);
+
+                        String messageProd = "";
+                        List<String> messageProcedure = new ArrayList<String>();
+                        for (int i = 0; i < splits.length; i++) {
+                            Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
+                            String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
+                            messageProd += "\n" + message;
+                            messageProcedure.add(message);
+
+                            Log.d("messageProd", messageProd);
+                        }
+
+                        Log.d("MessageProcedure", messageProcedure.toString());
+
+                        diy_materials.setText(messageMat);
+                        diy_procedures.setText(messageProd);
+
+                        Log.d("SnapItem", "not null");
+                        Log.d("SnapMaterial", "" + item);
+                        Log.d("SnapDataSnap", "" + dataSnapshot.child("materials").getValue());
+                    } else {
+                        Log.d("SnapItem", "null");
                     }
 
-                    Log.d("MessageProcedure", messageProcedure.toString());
+                    if (diyInfo.diyUrl != null) {
+                        diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
+                        diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), diyInfo.diyUrl);
+                        diyImagesViewPager.setAdapter(diyImagesViewPagerAdapter);
 
-                    diy_materials.setText(messageMat);
-                    diy_procedures.setText(messageProd);
-
-                    Log.d("SnapItem", "not null");
-                    Log.d("SnapMaterial", ""+item);
-                    Log.d("SnapDataSnap", ""+dataSnapshot.child("materials").getValue());
-                }else{
-                    Log.d("SnapItem", "null");
-                }
-
-                if (diyInfo.diyUrl != null) {
-                    diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
-                    diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), diyInfo.diyUrl);
-                    diyImagesViewPager.setAdapter(diyImagesViewPagerAdapter);
-
-                Toast.makeText(DIYDetailViewActivity.this, diyInfo.diyUrl, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DIYDetailViewActivity.this, diyInfo.diyUrl, Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 

@@ -373,7 +373,6 @@ public class CommunityFragment extends Fragment{
                                     // Notify the active callbacks interface (the activity, if the
                                     // fragment is attached to one) that an item has been selected.
                                     mlistener.onListFragmentInteraction(getRef(position));
-
                                     Toast.makeText(getActivity(), "You clicked on position!" + " " + position, Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -383,8 +382,6 @@ public class CommunityFragment extends Fragment{
 
         recyclerView1.setAdapter(mAdapter);
     }
-
-
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
 
@@ -430,9 +427,7 @@ public class CommunityFragment extends Fragment{
             mStars = (ImageButton) view.findViewById(R.id.star);
             mHearts = (ImageButton) view.findViewById(R.id.heart);
         }
-
     }
-
 
     @Override
     public void onAttach(Context context) {

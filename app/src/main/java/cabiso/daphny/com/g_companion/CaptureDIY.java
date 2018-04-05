@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
@@ -154,12 +155,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
-        dbRef = FirebaseDatabase.getInstance().getReference().child("Sell DIY");
+        dbRef = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
         mStorage = FirebaseStorage.getInstance();
         storageReference = mStorage.getReferenceFromUrl("gs://g-companion.appspot.com/").child("diy_by_tags");
 
-        storageRef = mStorage.getReferenceFromUrl("gs://g-companion.appspot.com/").child("Sell DIY");
+        storageRef = mStorage.getReferenceFromUrl("gs://g-companion.appspot.com/").child("diy_by_tags");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarAddDIY);
         setSupportActionBar(toolbar);
@@ -423,23 +424,19 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         Float float_this = Float.valueOf(0);
 
                         String upload = databaseReference.push().getKey();
-
-                        Random random = new Random();
-                        String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-                        String productID = String.valueOf(candidateChars.charAt(random.nextInt(candidateChars.length())));
+                        String productID = generateString();
 
                         //push data to Firebase Database
                         databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
                         databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
-                                taskSnapshot.getDownloadUrl().toString(), userID, "prod_000"+ productID,
+                                taskSnapshot.getDownloadUrl().toString(), userID, productID, "community",
                                 float_this, float_this));
 
 //                        databaseReference.child(upload).child("materials").setValue(itemMat);
                         databaseReference.child(upload).child("materials").setValue(dbMaterials);
-                        databaseReference.child(upload).child("quantity_unit").child("quantity").setValue(itemQuantity);
-                        databaseReference.child(upload).child("quantity_unit").child("unit").setValue(itemUnit);
                         databaseReference.child(upload).child("procedures").setValue(itemProcedure);
+                        databaseReference.child(upload).child("status").setValue("community");
 
                         Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
@@ -483,7 +480,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         Toast.makeText(CaptureDIY.this, etPrice.getText() + "," + etQuantity.getText() + "," + etDescription.getText(),
                                 Toast.LENGTH_SHORT).show();
 
@@ -526,18 +522,19 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
                                 Random random = new Random();
                                 String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-                                String productID = String.valueOf(candidateChars.charAt(random.nextInt(candidateChars.length())));
 
                                 //push data to Firebase Database
-                                dbRef = FirebaseDatabase.getInstance().getReference().child("Sell DIY");
+                                dbRef = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
+                                String productID_sell = generateString();
                                 dbRef.child(upload).setValue(new DIYSell(name.getText().toString(),
-                                        taskSnapshot.getDownloadUrl().toString(), userID, "prod_000"+ productID,
+                                        taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
                                         float_this, float_this));
 
-                                dbRef.child(upload).child("materials").setValue(itemMaterial);
+                                dbRef.child(upload).child("materials").setValue(dbMaterials);
                                 dbRef.child(upload).child("procedures").setValue(itemProcedure);
                                 dbRef.child(upload).child("DIY Price").setValue(etPrice.getText().toString());
+                                dbRef.child(upload).child("status").setValue("selling");
 
                                 dbRef.child(upload).child("Item Quantity").setValue(etQuantity.getText().toString());
 
@@ -569,7 +566,11 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
             }
         });
+    }
 
+    public static String generateString() {
+        String prod_id = UUID.randomUUID().toString();
+        return "uuid = " + prod_id;
     }
 
     public class SpinnerAdapter extends BaseAdapter {

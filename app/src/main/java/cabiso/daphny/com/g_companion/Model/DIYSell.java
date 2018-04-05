@@ -14,16 +14,18 @@ public class DIYSell implements Comparable<DIYSell>, Serializable{
     public String diyUrl;
     public String user_id;
     public String productID;
+    public String status;
     public Float bookmarks;
     public Float likes;
     public int materialMatches;
 
-    public DIYSell(String diyName, String diyUrl, String user_id, String productID,
+    public DIYSell(String diyName, String diyUrl, String user_id, String productID, String status,
                     Float bookmarks, Float likes){
         this.diyName = diyName;
         this.diyUrl = diyUrl;
         this.user_id = user_id;
         this.productID = productID;
+        this.status = status;
         this.bookmarks = bookmarks;
         this.likes = likes;
     }
@@ -61,6 +63,14 @@ public class DIYSell implements Comparable<DIYSell>, Serializable{
 
     public void setProductID(String productID) {
         this.productID = productID;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Float getBookmarks() {

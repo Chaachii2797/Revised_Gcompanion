@@ -76,7 +76,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
     private List<String> tags = new ArrayList<>();
     private List<String> extras = new ArrayList<>();
     private List<String> validWords = new ArrayList<>();
-    private ArrayList<ImgRecogSetQty> imgRecogSetQties = new ArrayList<>();
+    private ArrayList<ImgRecogSetQty> imgRecogSetQties;
     private ImgRecogSetQtyAdapter imgRecogSetQtyAdapter;
     final ClarifaiClient client;
     String CURRENT_MODEL;
@@ -103,6 +103,9 @@ public class ImageRecognitionTags extends AppCompatActivity{
         imageView = (ImageView)findViewById(R.id.imgPhotoSaver);
         tvTag = (TextView) findViewById(R.id.tvTag);
         mRvImgRecogSetQty = (RecyclerView) findViewById(R.id.rvImgRecogSetQty);
+
+
+        imgRecogSetQties  = new ArrayList<>();
 
         //added changess star
         imagerecog_listview = (ListView) findViewById(R.id.image_recog_lv);

@@ -176,6 +176,30 @@
 
         </android.support.v7.widget.CardView>
 
+        <Button
+            android:id="@+id/btn_sell_diy"
+            style="@style/LoginStyle"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/sell_details"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/gen_scheme1"
+            android:text="BUY DIY"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/sell_details"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="35dp"
+            android:text="Selling Infos:"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_below="@+id/cardView2"
+            android:layout_centerHorizontal="true" />
+
     </RelativeLayout>
 </ScrollView>
 

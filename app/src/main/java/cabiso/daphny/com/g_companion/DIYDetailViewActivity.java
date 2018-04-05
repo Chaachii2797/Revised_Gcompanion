@@ -35,7 +35,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
+import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.Model.SellingDIY;
 import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
 /**
@@ -94,7 +96,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                    DIYnames diyInfo = dataSnapshot.getValue(DIYnames.class);
+                DIYnames diyInfo = dataSnapshot.getValue(DIYnames.class);
+                DIYSell info = dataSnapshot.getValue(DIYSell.class);
+                SellingDIY info_selling = dataSnapshot.getValue(SellingDIY.class);
                 if(diyInfo.getStatus().equals("community")){
                     diy_sell.setVisibility(View.INVISIBLE);
                     button_sell.setVisibility(View.INVISIBLE);
@@ -162,7 +166,16 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                 }else if(diyInfo.getStatus().equals("selling")){
                     diy_sell.setVisibility(View.VISIBLE);
                     button_sell.setVisibility(View.VISIBLE);
-                    diy_name.setText(diyInfo.diyName);
+                    diy_name.setText(info.diyName);
+
+                    String message_price="";
+                    List<String> message_Price = new ArrayList<String>();
+                    for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
+                        int price= postSnapshot.child("selling_price").getValue(int.class);
+                        message_price += "\n" + price;
+                        message_Price.add(message_price);
+
+                    }
 
                     if (item != null) {
                         String[] splitsMat = dataSnapshot.child("materials").getValue().toString().split(",");
@@ -199,6 +212,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                         diy_materials.setText(messageMat);
                         diy_procedures.setText(messageProd);
+                        diy_sell.setText(message_price);
 
                         Log.d("SnapItem", "not null");
                         Log.d("SnapMaterial", "" + item);

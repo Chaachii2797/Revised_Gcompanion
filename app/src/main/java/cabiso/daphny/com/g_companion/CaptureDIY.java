@@ -73,6 +73,7 @@ import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.QuantityItem;
+import cabiso.daphny.com.g_companion.Model.SellingDIY;
 import cabiso.daphny.com.g_companion.Model.TagClass;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
@@ -131,6 +132,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     ArrayList<CommunityItem> itemProcedure;
     ArrayList<QuantityItem> itemQuantity;
     ArrayList<DBMaterial> dbMaterials;
+    ArrayList<SellingDIY> dbSelling;
+
     ArrayList<QuantityItem> itemUnit;
     private List<String> diys = new ArrayList<String>();
 
@@ -256,6 +259,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         itemMat = new ArrayList<>();
         itemQuantity = new ArrayList<>();
         dbMaterials = new ArrayList<>();
+        dbSelling = new ArrayList<>();
 
         mAdapter = new CommunityAdapter(getApplicationContext(), itemMaterial);
         pAdapter = new CommunityAdapter(getApplicationContext(), itemProcedure);
@@ -475,6 +479,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 final EditText etDescription = (EditText) dialog.findViewById(R.id.etDescription);
                 Button okButton = (Button) dialog.findViewById(R.id.okaybtn);
 
+
                 dialog.show();
 
                 okButton.setOnClickListener(new View.OnClickListener() {
@@ -515,6 +520,13 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                String for_price = etPrice.getText().toString();
+                                String for_qty = etQuantity.getText().toString();
+                                final String for_descr = etDescription.getText().toString();
+                                final int price = Integer.parseInt(for_price);
+                                final int qty = Integer.parseInt(for_qty);
+
                                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                 Float float_this = Float.valueOf(0);
 
@@ -522,6 +534,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
                                 Random random = new Random();
                                 String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+//                                dbMaterials.add(new DBMaterial().setName(materials).setQuantity(quantity).setUnit(unit_material));
+                                dbSelling.add(new SellingDIY().setSelling_price(price).setSelling_qty(qty).setSelling_descr(for_descr));
 
                                 //push data to Firebase Database
                                 dbRef = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
@@ -533,7 +547,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
                                 dbRef.child(upload).child("materials").setValue(dbMaterials);
                                 dbRef.child(upload).child("procedures").setValue(itemProcedure);
-                                dbRef.child(upload).child("DIY Price").setValue(etPrice.getText().toString());
+//                                dbRef.child(upload).child("DIY Price").setValue(etPrice.getText().toString());
+                                dbRef.child(upload).child("DIY Price").setValue(dbSelling);
                                 dbRef.child(upload).child("status").setValue("selling");
 
                                 dbRef.child(upload).child("Item Quantity").setValue(etQuantity.getText().toString());

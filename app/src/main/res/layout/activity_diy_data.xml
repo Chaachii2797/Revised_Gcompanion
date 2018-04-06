@@ -194,7 +194,7 @@
 
         <TextView
             android:id="@+id/sell_details"
-            android:layout_width="100dp"
+            android:layout_width="60dp"
             android:layout_height="50dp"
             android:layout_below="@+id/cardView2"
             android:layout_marginBottom="15dp"

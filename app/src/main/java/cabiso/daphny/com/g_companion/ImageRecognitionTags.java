@@ -64,9 +64,9 @@ public class ImageRecognitionTags extends AppCompatActivity{
     static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
 
     private ImageView imageView;
-    private Button diyBtn, btnAdd_tag;
+    private Button diyBtn, btnAdd_tag, btnDelete_tag;
     private TextView tvTag, tv_category;
-//    private EditText addMaterial;
+    //    private EditText addMaterial;
 //    private ImageButton btnMaterial;
     private ProgressDialog progressDialog;
 
@@ -108,6 +108,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
         mLvTags = (ListView) findViewById(R.id.lvTags);
         add_tag = (EditText) findViewById(R.id.tv_add_tag);
         btnAdd_tag = (Button) findViewById(R.id.btn_add_tag);
+        btnDelete_tag = (Button) findViewById(R.id.btn_delete_tag);
 
         imgRecogSetQties  = new ArrayList<>();
         ImgRecogSetQty item1 = new ImgRecogSetQty().setName("test11");
@@ -413,18 +414,14 @@ public class ImageRecognitionTags extends AppCompatActivity{
                                 ImgRecogSetQty imgRecogSetQty = new ImgRecogSetQty();
                                 imgRecogSetQty.setName(predictedTags.get(i).name());
                                 imgRecogSetQties.add(imgRecogSetQty);
-                                Log.e("imgRecogSetQtiesSizeLp",imgRecogSetQties.size()+"");
                             }
                             printTags();
-                            Log.e("imgRecogSetQtiesSize",imgRecogSetQties.size()+"");
-//                            imgRecogSetQtyAdapter.notifyDataSetChanged();
                         }catch (ClarifaiException ex){
-                                ex.getMessage();
-                            }
+                            ex.getMessage();
                         }
+                    }
                 }.execute(bitmap);
             }
-//            imgRecogSetQtyAdapter.notifyDataSetChanged();
         } else if (resultCode == RESULT_CANCELED) {
             // User cancelled the image capture or selection.
             Toast.makeText(getApplicationContext(), "User Cancelled", Toast.LENGTH_SHORT).show();
@@ -432,12 +429,6 @@ public class ImageRecognitionTags extends AppCompatActivity{
             // capture failed or did not find file.
             Toast.makeText(getApplicationContext(), "Unknown Failure. Please notify app owner.", Toast.LENGTH_SHORT).show();
         }
-        imgRecogSetQties.add(new ImgRecogSetQty().setName("RODRIGO"));
-        Log.e("imgRecogSetQties",imgRecogSetQties+"");
-        Log.e("imgRecogSetQties222",imgRecogSetQties+"");
-//        imgRecogSetQtyAdapter.notifyDataSetChanged();
-
-
     }
 
 }

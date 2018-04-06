@@ -76,7 +76,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         toolbar.setNavigationIcon(R.drawable.back_btn);
-        toolbar.setNavigationOnClickListener(   new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(),MainActivity.class));
@@ -106,10 +106,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     php.setVisibility(View.INVISIBLE);
                     diy_name.setText(diyInfo.diyName);
 
-                    if (item != null) {
-                        String[] splitsMat = dataSnapshot.child("materials").getValue().toString().split(",");
-                        Log.e("messageProd", "" + splitsMat);
-
                         String messageMat = "";
                         List<String> messageMaterials = new ArrayList<String>();
                         int count = 1;
@@ -122,15 +118,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                             messageMaterials.add(material_name);
                             count++;
                         }
-    //                    for(int i = 0; i<splitsMat.length; i++){
-    //                        Log.d("splitVal", splitsMat[i].substring(5,splitsMat[i].length()-1));
-    //                        String message = i+1 +".) "+ splitsMat[i].substring(5,splitsMat[i].length()-1).replaceAll("\\}", "")
-    //                                .replaceAll("=", "");
-    //                        messageMat+="\n"+message;
-    //                        messageMaterials.add(message);
-    //
-    //                        Log.d("messageProd", messageMat);
-    //                    }
 
                         String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
                         Log.e("splits", "" + splits);
@@ -142,7 +129,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                             String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
                             messageProd += "\n" + message;
                             messageProcedure.add(message);
-
                             Log.d("messageProd", messageProd);
                         }
 
@@ -154,9 +140,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         Log.d("SnapItem", "not null");
                         Log.d("SnapMaterial", "" + item);
                         Log.d("SnapDataSnap", "" + dataSnapshot.child("materials").getValue());
-                    } else {
-                        Log.d("SnapItem", "null");
-                    }
 
                     if (diyInfo.diyUrl != null) {
                         diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
@@ -239,7 +222,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
             }
         });
-
     }
 
     /**

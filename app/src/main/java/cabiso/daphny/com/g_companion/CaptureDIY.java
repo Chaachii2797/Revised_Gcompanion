@@ -587,7 +587,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     public static String generateString() {
         String prod_id = UUID.randomUUID().toString();
-        return "uuid = " + prod_id;
+        return prod_id;
     }
 
     public class SpinnerAdapter extends BaseAdapter {

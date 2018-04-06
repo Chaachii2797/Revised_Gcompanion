@@ -174,7 +174,6 @@ public class CommunityFragment extends Fragment{
         super.onResume();
     }
 
-
     @Override
     public void onStart(){
         super.onStart();

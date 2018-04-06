@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
+import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.ForCounter_Rating;
 import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 
@@ -32,7 +33,7 @@ import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 
 public class Sold_Activity extends AppCompatActivity {
 
-    private ArrayList<ProductInfo> diyList = new ArrayList<>();
+    private ArrayList<DIYSell> diyList = new ArrayList<>();
     private ListView lv;
     private Items_Adapter adapter;
     private ProgressDialog progressDialog;
@@ -74,9 +75,9 @@ public class Sold_Activity extends AppCompatActivity {
 
                     for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Log.e(String.valueOf(snapshot.getRef()), snapshot.getChildrenCount() + "");
-                        ProductInfo img = snapshot.getValue(ProductInfo.class);
+                        DIYSell img = snapshot.getValue(DIYSell.class);
                         int count=0;
-                        if(img.getOwnerUserID().equals(userID)) {
+                        if(img.getUser_id().equals(userID)) {
 //                            img.setProductID(snapshot.getKey());
                             diyList.add(img);
 //                          count = String.valueOf(String.valueOf(snapshot.getChildrenCount()).equals(userID));
@@ -233,10 +234,9 @@ public class Sold_Activity extends AppCompatActivity {
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            ProductInfo itemRef = adapter.getItem(position);
-                            Toast toast = Toast.makeText(Sold_Activity.this, itemRef.title
-                                    + "\n" + itemRef.ownerUserID + "\n" + itemRef.price + "\n" + itemRef.desc + "\n"
-                                    + itemRef.getProductPictureURLs().toString() + "\n" + count, Toast.LENGTH_SHORT);
+                            DIYSell itemRef = adapter.getItem(position);
+                            Toast toast = Toast.makeText(Sold_Activity.this, itemRef.diyName
+                                    + "\n" + itemRef.user_id + "\n" + itemRef.getDiyUrl().toString() + "\n" + count, Toast.LENGTH_SHORT);
                             toast.show();
                         }
                     });

@@ -4,12 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/gen_scheme1"
     tools:context="cabiso.daphny.com.g_companion.Sold_Activity">
 
     <ListView
         android:id="@+id/lvView"
         android:layout_width="wrap_content"
         android:layout_height="535dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp"
         android:layout_below="@+id/textView11"
@@ -20,12 +25,15 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Pending Items"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/backgroundColor"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:text="Pending Items"
-        tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="0dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        tools:layout_editor_absoluteY="0dp" />
 
 </RelativeLayout>

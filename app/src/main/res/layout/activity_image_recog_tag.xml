@@ -57,8 +57,9 @@
                 <ImageView
                     android:id="@+id/imgPhotoSaver"
                     android:layout_width="match_parent"
-                    android:layout_height="260dp"
+                    android:layout_height="200dp"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="50dp"
                     android:scaleType="centerInside"
                     app:srcCompat="@android:drawable/gallery_thumb"
                     tools:layout_editor_absoluteX="14dp"
@@ -98,11 +99,6 @@
 
                     </LinearLayout>
 
-                    <ListView
-                        android:id="@+id/lvTags"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
                 </LinearLayout>
 
 
@@ -113,14 +109,26 @@
                 style="@style/LoginStyle"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"
                 android:backgroundTint="@color/gen_scheme1"
                 android:onClick="onClick"
-                android:text="DIY" />
+                android:text="DIY"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true" />
+
+            <ListView
+                android:id="@+id/lvTags"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="80dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"/>
 
 
         </RelativeLayout>

@@ -68,7 +68,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         setContentView(R.layout.activity_login);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0); // 0 - for private mode

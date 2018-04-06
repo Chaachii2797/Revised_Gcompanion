@@ -59,8 +59,8 @@
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/diyImagesViewPagers_sell"
-                android:layout_width="350dp"
-                android:layout_height="190dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/appBarLayout"
@@ -181,42 +181,61 @@
 
         <TextView
             android:id="@+id/textView33"
-            android:layout_width="60dp"
+            android:layout_width="40dp"
             android:layout_height="50dp"
-            android:layout_alignLeft="@+id/cardView2"
-            android:layout_alignStart="@+id/cardView2"
-            android:layout_below="@+id/cardView2"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp"
             android:gravity="center"
-            android:text="Php:"
-            android:textSize="24sp"
+            android:text="₱:"
+            android:textSize="26sp"
             android:textStyle="bold"
-            android:layout_marginBottom="15dp"/>
+            android:layout_below="@+id/cardView2"
+            android:layout_alignLeft="@+id/cardView2"
+            android:layout_alignStart="@+id/cardView2" />
 
         <TextView
             android:id="@+id/sell_details"
-            android:layout_width="60dp"
+            android:layout_width="150dp"
             android:layout_height="50dp"
-            android:layout_below="@+id/cardView2"
-            android:layout_marginBottom="15dp"
-            android:layout_toEndOf="@+id/textView33"
-            android:layout_toRightOf="@+id/textView33"
-            android:gravity="center"
             android:text="Price"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_below="@+id/cardView2"
+            android:layout_toRightOf="@+id/textView33"
+            android:layout_toEndOf="@+id/textView33" />
 
         <Button
             android:id="@+id/btn_sell_diy"
             style="@style/LoginStyle"
-            android:layout_width="250dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/sell_details"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="15dp"
             android:backgroundTint="@color/gen_scheme1"
             android:text="BUY DIY"
             android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/sell_details"
+            android:layout_alignRight="@+id/cardView2"
+            android:layout_alignEnd="@+id/cardView2"
+            android:layout_marginBottom="15dp"/>
+
+        <Button
+            android:id="@+id/btn_contact_diy_owner"
+            style="@style/LoginStyle"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/gen_scheme1"
+            android:text="Contact Seller"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_alignBaseline="@+id/btn_sell_diy"
+            android:layout_alignBottom="@+id/btn_sell_diy"
+            android:layout_alignLeft="@+id/cardView2"
+            android:layout_alignStart="@+id/cardView2" />
 
     </RelativeLayout>
 </ScrollView>

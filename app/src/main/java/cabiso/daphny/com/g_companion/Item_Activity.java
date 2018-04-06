@@ -22,9 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
+import cabiso.daphny.com.g_companion.Model.DIYSell;
 
 /**
  * Created by Lenovo on 7/31/2017.
@@ -32,7 +32,7 @@ import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 
 public class Item_Activity extends AppCompatActivity {
 
-    private ArrayList<ProductInfo> diyList = new ArrayList<>();
+    private ArrayList<DIYSell> diyList = new ArrayList<>();
     private ListView lv;
     private Items_Adapter adapter;
     private ProgressDialog progressDialog;
@@ -73,8 +73,8 @@ public class Item_Activity extends AppCompatActivity {
                     progressDialog.dismiss();
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        ProductInfo img = snapshot.getValue(ProductInfo.class);
-                        if (img.getOwnerUserID().toString().equals(userID)) {
+                        DIYSell img = snapshot.getValue(DIYSell.class);
+                        if (img.getUser_id().toString().equals(userID)) {
                             diyList.add(img);
                         }
                     }
@@ -87,12 +87,11 @@ public class Item_Activity extends AppCompatActivity {
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            ProductInfo itemRef = adapter.getItem(position);
+                            DIYSell itemRef = adapter.getItem(position);
 //                            adapter.remove(adapter.getItem(position));
 //                            adapter.notifyDataSetChanged();
-                            Toast toast = Toast.makeText(Item_Activity.this, itemRef.title
-                                    + "\n" + itemRef.ownerUserID + "\n" + itemRef.price + "\n" + itemRef.desc + "\n"
-                                    + itemRef.getProductPictureURLs().get(0) + "\n" , Toast.LENGTH_SHORT);
+                            Toast toast = Toast.makeText(Item_Activity.this, itemRef.diyName
+                                    + "\n" + itemRef.user_id + "\n" + itemRef.getDiyUrl() + "\n" , Toast.LENGTH_SHORT);
                             toast.show();
                         }
                     });
@@ -124,14 +123,18 @@ public class Item_Activity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.sold_item:
                 int listPosition = info.position;
+                Float float_this = Float.valueOf(0);
+
                 final int count =lv.getAdapter().getCount();
                 itemReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items").child(userID);
-                String title = diyList.get(listPosition).title;
-                String description = diyList.get(listPosition).desc;
-                String price = diyList.get(listPosition).price;
-                String negotiable = diyList.get(listPosition).negotiable;
-                List productPictureURLs = diyList.get(listPosition).productPictureURLs;
-                ProductInfo product = new ProductInfo(title, description, price, negotiable,productPictureURLs, userID);
+                String myItem_diyName = diyList.get(listPosition).getDiyName();
+                String myItem_diyUrl = diyList.get(listPosition).getDiyUrl();
+                String myItem_user_id = diyList.get(listPosition).getUser_id();
+                String myItem_productID = diyList.get(listPosition).getProductID();
+                String myItem_status = diyList.get(listPosition).getStatus();
+
+                DIYSell product = new DIYSell(myItem_diyName, myItem_diyUrl, myItem_user_id,
+                        myItem_productID, myItem_status, float_this, float_this);
                 String upload = itemReference.push().getKey();
                 itemReference.child(upload).setValue(product);
 

@@ -27,6 +27,7 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
         this.likes = likes;
     }
 
+
     public int getMaterialMatches() {
         return materialMatches;
     }

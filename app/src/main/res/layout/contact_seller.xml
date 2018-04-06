@@ -4,7 +4,7 @@
     android:id="@+id/dialog"
     android:layout_width="300dp"
     android:layout_height="250dp"
-    android:background="?attr/colorPrimaryDark">
+    android:background="@color/gen_scheme1">
 
     <TextView
         android:id="@+id/contact_prompt_header"

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,8 +51,6 @@ public class ImgRecogTagAdapter extends ArrayAdapter<DBMaterial> {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder holder;
-
-
 
         if(convertView == null){
             convertView = LayoutInflater.from(mContext).inflate(mResource,parent,false);
@@ -99,6 +98,13 @@ public class ImgRecogTagAdapter extends ArrayAdapter<DBMaterial> {
                     }
                 });
             }
+            holder.btnDelete_tag.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dbMaterials.remove(position);
+                    notifyDataSetChanged();
+                }
+            });
         }
 
         return convertView;
@@ -107,10 +113,12 @@ public class ImgRecogTagAdapter extends ArrayAdapter<DBMaterial> {
         TextView tvTag;
         Spinner unitspinner;
         Spinner qtySpinner;
+        Button btnDelete_tag;
         public ViewHolder(View view){
             tvTag = (TextView)view.findViewById(R.id.tvTag);
             unitspinner = (Spinner) view.findViewById(R.id.unitspinner);
             qtySpinner = (Spinner) view.findViewById(R.id.qtySpinner);
+            btnDelete_tag = (Button) view.findViewById(R.id.btn_delete_tag);
         }
     }
 

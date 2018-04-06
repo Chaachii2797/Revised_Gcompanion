@@ -64,7 +64,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
     static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
 
     private ImageView imageView;
-    private Button diyBtn, btnAdd_tag, btnDelete_tag;
+    private Button diyBtn, btnAdd_tag;
     private TextView tvTag, tv_category;
 //    private EditText addMaterial;
 //    private ImageButton btnMaterial;
@@ -108,7 +108,6 @@ public class ImageRecognitionTags extends AppCompatActivity{
         mLvTags = (ListView) findViewById(R.id.lvTags);
         add_tag = (EditText) findViewById(R.id.tv_add_tag);
         btnAdd_tag = (Button) findViewById(R.id.btn_add_tag);
-        btnDelete_tag = (Button) findViewById(R.id.btn_delete_tag);
 
         imgRecogSetQties  = new ArrayList<>();
         ImgRecogSetQty item1 = new ImgRecogSetQty().setName("test11");

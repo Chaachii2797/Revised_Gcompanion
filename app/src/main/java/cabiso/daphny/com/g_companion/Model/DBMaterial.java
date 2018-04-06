@@ -1,16 +1,19 @@
 package cabiso.daphny.com.g_companion.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by cicctuser on 4/2/2018.
  */
 
-public class DBMaterial {
+public class DBMaterial implements Serializable {
     private String name;
     private int quantity;
     private String unit;
 
     public DBMaterial(){
-
+        this.quantity = 0;
+        this.unit = "pieces";
     }
 
     public String getName() {

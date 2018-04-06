@@ -49,7 +49,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private ProgressDialog progressDialog;
     private DatabaseReference databaseReference;
 
-    private TextView diy_name, diy_materials, diy_procedures, diy_sell;
+    private TextView diy_name, diy_materials, diy_procedures, diy_sell, php;
     private Button button_sell;
 
 
@@ -92,6 +92,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         diy_procedures = (TextView) findViewById(R.id.diy_procedure);
         diy_sell = (TextView) findViewById(R.id.sell_details);
         button_sell = (Button) findViewById(R.id.btn_sell_diy);
+        php = (TextView) findViewById(R.id.textView33);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -102,6 +103,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                 if(diyInfo.getStatus().equals("community")){
                     diy_sell.setVisibility(View.INVISIBLE);
                     button_sell.setVisibility(View.INVISIBLE);
+                    php.setVisibility(View.INVISIBLE);
                     diy_name.setText(diyInfo.diyName);
 
                     if (item != null) {
@@ -166,6 +168,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                 }else if(diyInfo.getStatus().equals("selling")){
                     diy_sell.setVisibility(View.VISIBLE);
                     button_sell.setVisibility(View.VISIBLE);
+                    php.setVisibility(View.VISIBLE);
                     diy_name.setText(info.diyName);
 
                     String message_price="";

@@ -30,7 +30,7 @@ import clarifai2.api.ClarifaiClient;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        CommunityFragment.OnListFragmentInteractionListener, CommunityFragment.OnListFragmentInteraction{
+        CommunityFragment.OnListFragmentInteractionListener{
 
 //    private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -225,12 +225,4 @@ public class MainActivity extends AppCompatActivity
         intent_commu.putExtra("Community Ref", ref.toString());
         startActivity(intent_commu);
     }
-
-    @Override
-    public void onListFragmentInteraction(DatabaseReference ref) {
-        Intent intent_sell = new Intent(this, SellDIYDetail.class);
-        intent_sell.putExtra("Market Ref", ref.toString());
-        startActivity(intent_sell);
-    }
-
 }

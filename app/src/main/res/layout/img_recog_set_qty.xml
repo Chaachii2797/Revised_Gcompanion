@@ -7,36 +7,42 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:background="#ffffff"
         android:orientation="horizontal"
-        android:paddingBottom="5dp"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:paddingTop="5dp">
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
 
-        <EditText
+        <TextView
             android:id="@+id/tvTag"
-            style="@style/LoginStyle"
-            android:layout_width="188dp"
-            android:layout_height="40dp"
+            android:layout_width="159dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.19"
             android:backgroundTint="@color/backgroundColor"
-            android:hint="Recognize tag:"
-            android:imeOptions="actionNext"
             android:paddingLeft="10dp"
-            android:singleLine="true"
-            android:textColor="#7f8c8d" />
+            android:text="TextView"
+            android:textSize="18sp" />
+
+
+        <Spinner
+            android:id="@+id/qtySpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.33" />
 
         <Spinner
             android:id="@+id/unitspinner"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_above="@+id/okaybtn"
-            android:layout_weight="2.26" />
+            android:layout_weight="0.78" />
 
-        <Spinner
-            android:id="@+id/qtySpinner"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="2.87" />
+        <Button
+            android:id="@+id/btn_delete_tag"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.04"
+            android:text="x" />
 
     </LinearLayout>
 </LinearLayout>

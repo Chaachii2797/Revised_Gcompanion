@@ -1,76 +1,83 @@
 package cabiso.daphny.com.g_companion.Adapter;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
 
+import cabiso.daphny.com.g_companion.CaptureDIY;
 import cabiso.daphny.com.g_companion.ImageRecognitionTags;
-import cabiso.daphny.com.g_companion.Model.ImgRecogSetQty;
+import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.R;
 
 /**
- * Created by cicctuser on 4/4/2018.
+ * Created by cicctuser on 4/6/2018.
  */
 
-public class ImgRecogSetQtyAdapter extends RecyclerView.Adapter<ImgRecogSetQtyAdapter.ViewHolder>{
+public class ImgRecogTagAdapter extends ArrayAdapter<DBMaterial> {
     private final Context mContext;
-    private final List<ImgRecogSetQty> mItems;
-    String[] quantity;
-    String[] unitOfMeasurement;
-    SpinnerAdapter1 qtyAdapter;
+    private final int mResource;
+    private String[] quantity;
+    private SpinnerAdapter umAdapter;
+    private SpinnerAdapter1 qAdapter;
+    private String[] unitOfMeasurement;
+    private final List<DBMaterial> dbMaterials;
 
-
-    public ImgRecogSetQtyAdapter(Context context, List<ImgRecogSetQty> items){
-//        super(context,resource,items);
+    public ImgRecogTagAdapter(Context context, int resource, List<DBMaterial> items){
+        super(context,resource,items);
         this.mContext = context;
-        mItems = items;
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.img_recog_set_qty, parent, false);
-        // set the view's size, margins, paddings and layout parameters
-        return new ViewHolder(v);
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        quantity = mContext.getResources().getStringArray(R.array.qty);
-        qtyAdapter = new SpinnerAdapter1(mContext);
+        mResource = resource;
+        dbMaterials = items;
 
         unitOfMeasurement = mContext.getResources().getStringArray(R.array.UM);
-        SpinnerAdapter nsAdapter = new SpinnerAdapter(mContext);
+        umAdapter = new SpinnerAdapter(mContext);
 
-        final ImgRecogSetQty imgRecogSetQty = mItems.get(position);
-        if(imgRecogSetQty != null){
-            if(holder.tvTag != null){
-                holder.tvTag.setText(imgRecogSetQty.getName());
+        quantity = mContext.getResources().getStringArray(R.array.qty);
+        qAdapter = new SpinnerAdapter1(mContext);
+    }
+
+    @NonNull
+    @Override
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        ViewHolder holder;
+
+
+
+        if(convertView == null){
+            convertView = LayoutInflater.from(mContext).inflate(mResource,parent,false);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        DBMaterial item = dbMaterials.get(position);
+        if(item != null){
+            holder.qtySpinner.setAdapter(qAdapter);
+            holder.unitspinner.setAdapter(umAdapter);
+            if(holder.tvTag!=null){
+                holder.tvTag.setText(item.getName());
             }
-
-            if(holder.spinner_qty != null){
-                holder.spinner_qty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            if(holder.qtySpinner != null){
+                holder.qtySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position2, long id) {
                         // TODO Auto-generated method stub
-                        mItems.get(position).setQty(Integer.parseInt(quantity[position]));
+                        try{
+//                            Toast.makeText(mContext, "Quantity "+quantity[position2], Toast.LENGTH_SHORT).show();
+                            dbMaterials.get(position).setQuantity(Integer.parseInt(quantity[position2]));
+                        }catch(NumberFormatException e){
+
+                        }
                     }
 
                     @Override
@@ -78,11 +85,12 @@ public class ImgRecogSetQtyAdapter extends RecyclerView.Adapter<ImgRecogSetQtyAd
                         // TODO Auto-generated method stub
                     }
                 });
-                holder.spinner_unit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                holder.unitspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    public void onItemSelected(AdapterView<?> parent, View view, int position3, long id) {
                         // TODO Auto-generated method stub
-                        mItems.get(position).setUnit(unitOfMeasurement[position]);
+//                        Toast.makeText(mContext, "Unit "+unitOfMeasurement[position3], Toast.LENGTH_SHORT).show();
+                        dbMaterials.get(position).setUnit(unitOfMeasurement[position3]);
                     }
 
                     @Override
@@ -92,22 +100,17 @@ public class ImgRecogSetQtyAdapter extends RecyclerView.Adapter<ImgRecogSetQtyAd
                 });
             }
         }
-    }
 
-    @Override
-    public int getItemCount() {
-        return 0;
+        return convertView;
     }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    private static class ViewHolder{
         TextView tvTag;
-        Spinner spinner_qty;
-        Spinner spinner_unit;
-        ViewHolder(View view) {
-            super(view);
-            tvTag = (TextView) view.findViewById(R.id.tvTag);
-            spinner_qty = (Spinner) view.findViewById(R.id.qtySpinner);
-            spinner_unit = (Spinner) view.findViewById(R.id.unitspinner);
+        Spinner unitspinner;
+        Spinner qtySpinner;
+        public ViewHolder(View view){
+            tvTag = (TextView)view.findViewById(R.id.tvTag);
+            unitspinner = (Spinner) view.findViewById(R.id.unitspinner);
+            qtySpinner = (Spinner) view.findViewById(R.id.qtySpinner);
         }
     }
 
@@ -136,17 +139,17 @@ public class ImgRecogSetQtyAdapter extends RecyclerView.Adapter<ImgRecogSetQtyAd
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            final ListContent holder;
+            final ImgRecogSetQtyAdapter.ListContent holder;
             View v = convertView;
             if (v == null) {
                 mInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
                 v = mInflater.inflate(R.layout.row_textview, null);
-                holder = new ListContent();
+                holder = new ImgRecogSetQtyAdapter.ListContent();
                 holder.text = (TextView) v.findViewById(R.id.textView1);
 
                 v.setTag(holder);
             } else {
-                holder = (ListContent) v.getTag();
+                holder = (ImgRecogSetQtyAdapter.ListContent) v.getTag();
             }
             holder.text.setText(unitOfMeasurement[position]);
             return v;
@@ -193,12 +196,5 @@ public class ImgRecogSetQtyAdapter extends RecyclerView.Adapter<ImgRecogSetQtyAd
             holder1.text1.setText(quantity[position]);
             return vi;
         }
-    }
-    static class ListContent {
-        TextView text;
-    }
-
-    public static class ContentQty {
-        TextView text1;
     }
 }

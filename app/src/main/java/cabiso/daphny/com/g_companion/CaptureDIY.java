@@ -67,6 +67,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
+import cabiso.daphny.com.g_companion.Adapter.ImgRecogTagAdapter;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.Constants;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
@@ -194,6 +195,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         qAdapter=new SpinnerAdapter1(getApplicationContext());
 
 
+
+
         material.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -294,7 +297,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         // TODO Auto-generated method stub
                         spinner_item_um = unitOfMeasurement[position];
-
                     }
 
                     @Override

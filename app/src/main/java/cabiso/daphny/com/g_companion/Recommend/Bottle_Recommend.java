@@ -41,6 +41,8 @@ import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.QuantityItem;
 import cabiso.daphny.com.g_companion.R;
 
+import static cabiso.daphny.com.g_companion.R.mipmap.item;
+
 /**
  * Created by Lenovo on 7/31/2017.
  */
@@ -53,6 +55,8 @@ public class Bottle_Recommend extends AppCompatActivity {
     private ArrayList<DIYnames> diyList = new ArrayList<>();
     private ArrayList<QuantityItem> qty_list = new ArrayList<>();
     private ArrayList<CommunityItem> infoList = new ArrayList<>();
+
+    private ArrayList<DBMaterial> dbMaterials;
 
     private ListView lv;
     private ImageView loadview;
@@ -77,6 +81,8 @@ public class Bottle_Recommend extends AppCompatActivity {
     List<String> arrayList_num_qty = new ArrayList<String>();
     List<String> arrayList_qty = new ArrayList<String>();
     List<String> check = new ArrayList<String>();
+
+
     Boolean addDiy;
 
     public Bottle_Recommend() {
@@ -104,73 +110,41 @@ public class Bottle_Recommend extends AppCompatActivity {
 //        lv.setAdapter(adapter);
 
 
-        final String priority = getIntent().getStringExtra("result_priority");
-        Log.e("PRIORITY_next ", "" + priority);
-
-        final String data = getIntent().getStringExtra("result_tag");
-        final String qtu = getIntent().getStringExtra("qty");
-        final String unt = getIntent().getStringExtra("unit");
-        final String[] items = data.split(" ");
-        final String[] qtys = qtu.split(" ");
-        final String[] uni = unt.split(" ");
+//        final String priority = getIntent().getStringExtra("result_priority");
+//        Log.e("PRIORITY_next ", "" + priority);
+//
+//        final String data = getIntent().getStringExtra("result_tag");
+//        final String qtu = getIntent().getStringExtra("qty");
+//        final String unt = getIntent().getStringExtra("unit");
+//        final String[] items = data.split(" ");
+//        final String[] qtys = qtu.split(" ");
+//        final String[] uni = unt.split(" ");
+        final Bundle extra = getIntent().getBundleExtra("dbmaterials");
+        dbMaterials = (ArrayList<DBMaterial>) extra.getSerializable("dbmaterials");
 
         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
-
-        for (String firstLoopitem : items) {
-            final String item = firstLoopitem.toLowerCase();
-            for(final String firstLoopQty : qtys){
-                final String quantity = firstLoopQty;
-                for(String firstLoopUnit : uni) {
-                    final String qty_uni_img_recog = firstLoopUnit;
-                    myRef.addChildEventListener(new ChildEventListener() {
-                        @Override
+            for(int m = 0; m < dbMaterials.size(); m++){
+                final int finalM = m;
+                myRef.addChildEventListener(new ChildEventListener() {
+                    @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            if (item != null) {
-                                Log.e("recogItem", item);
-                                DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
-                                long dbItemCount = dataSnapshot.child("materials").getChildrenCount();
-                                String num = firstLoopQty.substring(0, firstLoopQty.length()).replaceAll("\\}", "").replaceAll("=", "")
-                                        .replaceAll("\\{", "").replaceAll("[A-Z]", "").replaceAll("[a-z]", "").replaceAll("val", "")
-                                        .replaceAll("quantity", "").replaceAll("0", "").trim();
-
-                                Log.e("recogItemValidation", "BEFORE TRY CATCH");
-                                Log.e("recogUnit", qty_uni_img_recog);
-                                try {
-                                    int numberQty = Integer.valueOf(num);
-                                    Log.e("recogItemValidation", "AFTER TRY CATCH");
-                                    Log.e("recogUnit111", qty_uni_img_recog);
-                                    for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-                                        //                                for (int i = 0; i < dbItemCount ;i++){
-                                        DataSnapshot dbMaterialNode = postSnapshot;
-                                        Log.e("recogUnit222", qty_uni_img_recog);
-                                        String dbMaterialName = dbMaterialNode.child("name").getValue(String.class).toLowerCase();
-                                        String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
-                                        long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
-
-                                        Log.e("dbItemName", dbMaterialName + " == " + item);
-                                        Log.e("dbItemUnit", dbMaterialUnit + " == " + qty_uni_img_recog);
-                                        Log.e("dbItemQuantity", dbMaterialQuantity + " == " + numberQty);
-                                        if (dbMaterialName.equals(item)) {
+                            DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
+                                for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
+                                    DataSnapshot dbMaterialNode = postSnapshot;
+                                    String dbMaterialName = dbMaterialNode.child("name").getValue(String.class).toLowerCase();
+                                    String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
+                                    long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
+                                        if (dbMaterialName.equals(dbMaterials.get(finalM).getName())) {
                                             Log.e("dbMaterialNameCheck", dbMaterialName + " == " + item);
-                                            if (numberQty >= dbMaterialQuantity) {
-                                                Log.e("dbMaterialQtyCheck", dbMaterialQuantity + " == " + numberQty);
-
-                                                if (qty_uni_img_recog.equals(dbMaterialUnit)) {
-                                                    Log.e("dbMaterialUnitCheck", dbMaterialUnit + " == " + qty_uni_img_recog);
+                                            if (dbMaterials.get(finalM).getQuantity() >= dbMaterialQuantity) {
+                                                if (dbMaterials.get(finalM).getUnit().equals(dbMaterialUnit)) {
                                                     if (!exists(diYnames)) {
                                                         diyList.add(diYnames);
                                                     }
                                                 }
                                             }
                                         }
-
                                     }
-                                } catch (NumberFormatException e) {
-
-                                } catch (NullPointerException e) {
-
-                                }
-                            }
                         }
 
                         @Override
@@ -194,8 +168,6 @@ public class Bottle_Recommend extends AppCompatActivity {
                         }
                     });
                 }
-            }
-        }
         Collections.sort(diyList);
         Collections.reverse(diyList);
         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
@@ -212,31 +184,6 @@ public class Bottle_Recommend extends AppCompatActivity {
         return flag;
     }
 
-//    private boolean matched(QuantityItem quantityItems){
-//        boolean flag = false;
-//        for(QuantityItem quantityItem :quan)
-//    }
-
-    private int counter(String[] items, String[] materials) {
-        int count = 0;
-        for (String item : items) {
-            for (String mat : materials) {
-                String message = mat.substring(0, mat.length()).replaceAll("\\}", " ").replaceAll("=", " ")
-                        .replaceAll("\\{", " ").replaceAll("DataSnapshot", "").replaceAll("key", "").replaceAll("materials,", "")
-                        .replaceAll("value", "").replaceAll("val", "").replaceAll("[0-9]", "").trim();
-//                int mess_int = Integer.parseInt(message);
-//                Log.e("mess_int", String.valueOf(mess_int));
-
-                if (item.equals(message)) {
-                    count++;
-                    Log.e("damn", message);
-                }
-            }
-        }
-        return count;
-    }
-
-    
 
     @Override
     public void onBackPressed() {

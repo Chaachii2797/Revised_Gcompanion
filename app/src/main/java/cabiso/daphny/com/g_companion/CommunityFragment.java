@@ -58,12 +58,9 @@ public class CommunityFragment extends Fragment{
     private DatabaseReference communityReference;
     private DatabaseReference marketplaceReference;
 
-    private FirebaseDatabase database;
-    private StorageReference storageReference;
     private FirebaseUser mFirebaseUser;
     private String userID;
     private OnListFragmentInteractionListener mListener;
-    private OnListFragmentInteraction mlistener;
 
 
 
@@ -280,107 +277,6 @@ public class CommunityFragment extends Fragment{
                 };
 
         recyclerView.setAdapter(cAdapter);
-
-        //selling DIY
-        Toast.makeText(getActivity(), " Welcome to G-Companion!", Toast.LENGTH_SHORT).show();
-        final FirebaseRecyclerAdapter<DIYSell, ItemHolder> mAdapter =
-                new FirebaseRecyclerAdapter<DIYSell, ItemHolder>(DIYSell.class,
-                        R.layout.diy_item,ItemHolder.class, marketplaceReference) {
-                    public int heartCount=0; //pila ka heart * 0.4
-                    public int starCount=0; //pila ka bookmark * 0.6
-
-                    public double totalBmLike = ((starCount * 0.6) + (heartCount * 0.4));// i plus ang total percent sa bookmark ug like
-                    public int totalDIYs = 0; //pila kabuok diys ang under ana nga tag nya i divide daton nas totaBmLike times 100
-                    @Override
-                    protected void populateViewHolder(final ItemHolder viewHolder, final DIYSell model, final int position) {
-                        viewHolder.mNameViews.setText(model.diyName);
-                        //   viewHolder.mCategory.setText(model.tag);
-
-                        //dec.29,2017
-                        final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Sell DIY");
-
-                        final String key = this.getRef(position).getKey();
-
-                        viewHolder.mStars.setOnClickListener(
-
-                                new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(getContext(), "Bookmark DIY!" + " " + starCount, Toast.LENGTH_SHORT).show();
-                                starCount++;
-                                totalBmLike++;
-
-                                final DatabaseReference db = FirebaseDatabase.getInstance().getReference("bookmarks");
-                                db.child(userID).push().setValue(model);
-
-                                viewHolder.mStars.setColorFilter(ContextCompat.getColor(getContext(), R.color.star_yello));
-
-                                if (viewHolder.starResult.put("bookmarks", starCount * 0.6) != null) {
-                                    reference.child(key).updateChildren(viewHolder.starResult);
-
-                                }
-                            }
-                        });
-
-
-                        viewHolder.mHearts.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(getContext(), "Liked DIY!" + " " + heartCount, Toast.LENGTH_SHORT).show();
-                                heartCount++;
-                                totalBmLike++;
-
-                                viewHolder.mHearts.setColorFilter(Color.RED);
-
-                                if (viewHolder.likeResult.put("likes", heartCount * 0.4) != null) {
-                                    reference.child(key).updateChildren(viewHolder.likeResult);
-                                }
-                            }
-                        });
-
-
-                        try{
-                            String productPictureURL = model.diyUrl;
-                            Log.d("ppURL", productPictureURL);
-                            StorageReference pictureReference = FirebaseStorage.getInstance().getReferenceFromUrl(productPictureURL);
-                            pictureReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    // Got the download URL for 'users/me/profile.png'
-                                    // Pass it to Picasso to download, show in ImageView and caching
-                                    Log.d("Product Picture URI is", uri.toString());
-                                    Glide.with(getContext()).load(uri)
-                                            .fitCenter().centerCrop().crossFade()
-                                            .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                                            .into(viewHolder.mProductImageViews);
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception exception) {
-                                    // Handle any errors
-                                }
-                            });
-
-
-                        }
-                        catch(Exception e){
-                            Log.d("Exception", "Failed to fetch product Picture");
-                        }
-                        viewHolder.mViews.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                if (null != mlistener) {
-                                    // Notify the active callbacks interface (the activity, if the
-                                    // fragment is attached to one) that an item has been selected.
-                                    mlistener.onListFragmentInteraction(getRef(position));
-                                    Toast.makeText(getActivity(), "You clicked on position!" + " " + position, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
-                };
-
-        recyclerView1.setAdapter(mAdapter);
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
@@ -406,37 +302,11 @@ public class CommunityFragment extends Fragment{
         }
     }
 
-    public static class ItemHolder extends RecyclerView.ViewHolder{
-
-        public final View mViews;
-        public final TextView mNameViews;
-        public final ImageView mProductImageViews;
-
-        public ImageButton mStars;
-        public ImageButton mHearts;
-
-        HashMap<String, Object> starResult = new HashMap<>();
-        HashMap<String, Object> likeResult = new HashMap<>();
-
-        public ItemHolder(View view){
-            super(view);
-            mViews = view;
-
-            mNameViews = (TextView) view.findViewById(R.id.item_names);
-            mProductImageViews = (ImageView) view.findViewById(R.id.diy_item_icons);
-            mStars = (ImageButton) view.findViewById(R.id.star);
-            mHearts = (ImageButton) view.findViewById(R.id.heart);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof CommunityFragment.OnListFragmentInteractionListener) {
             mListener = (CommunityFragment.OnListFragmentInteractionListener) context;
-        }
-        if(context instanceof CommunityFragment.OnListFragmentInteraction) {
-            mlistener = (CommunityFragment.OnListFragmentInteraction) context;
         }
         else {
             throw new RuntimeException(context.toString()
@@ -448,15 +318,10 @@ public class CommunityFragment extends Fragment{
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        mlistener = null;
     }
 
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteractionListener(DatabaseReference ref);
-    }
-
-    public interface OnListFragmentInteraction {
-        void onListFragmentInteraction(DatabaseReference ref);
     }
 
 }

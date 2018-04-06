@@ -47,7 +47,6 @@
     <string name="signed_out">Signed out</string>
 
     <string-array name="UM">
-        <item>Choose</item>
         <item>meters</item>
         <item>centimeters</item>
         <item>liters</item>
@@ -64,7 +63,6 @@
     </string-array>
 
     <string-array name="qty">
-        <item>Choose</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>

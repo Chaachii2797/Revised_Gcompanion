@@ -201,6 +201,23 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                     pending_reference.child(upload_info).setValue(info);
                                     pending_reference.child(upload_info).child("DIY Price").setValue(finalMessage_price);
 
+                                    final Dialog dialog = new Dialog(DIYDetailViewActivity.this);
+                                    dialog.setContentView(R.layout.done_dialog);
+                                    TextView text = (TextView) dialog.findViewById(R.id.text);
+                                    text.setText("DIY added to pending list!");
+                                    ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
+                                    image.setImageResource(R.drawable.done);
+
+                                    Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                                    // if button is clicked, close the custom dialog
+                                    dialogButton.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    });
+                                    dialog.show();
 
                                 }
 
@@ -332,6 +349,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                         Toast.makeText(DIYDetailViewActivity.this, diyInfo.diyUrl, Toast.LENGTH_SHORT).show();
                     }
+
                 }
             }
 

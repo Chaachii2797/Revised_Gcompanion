@@ -20,7 +20,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.stepstone.apprating.AppRatingDialog;
 import com.stepstone.apprating.listener.RatingDialogListener;
@@ -33,7 +32,6 @@ import java.util.Arrays;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
-import cabiso.daphny.com.g_companion.Model.ForCounter_Rating;
 import cabiso.daphny.com.g_companion.Recommend.DIYrecommend;
 
 /**
@@ -286,69 +284,69 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
         DatabaseReference myRef = database.getReference("diy_by_tags");
 
 
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                progressDialog.dismiss();
-
-              ///  for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
-              //      Log.e(String.valueOf(snapshot.getRef()), snapshot.getChildrenCount() + "");
-                    DIYSell img = dataSnapshot.getValue(DIYSell.class);
-                    int rate = 0;
-                    if (!exists(img)) {
-                            img.setProductID(dataSnapshot.getKey());
-                        //  pendingList.add(img);
-//                          count = String.valueOf(String.valueOf(snapshot.getChildrenCount()).equals(userID));
-                        //count = diyList.size();
-                        Toast.makeText(Pending_Activity.this, "count: " + rate, Toast.LENGTH_SHORT).show();
-
-                        final DatabaseReference ref = database.getReference("diy_by_tags");
-
-
-//                        DatabaseReference ratings = database.getReference("DIYs_By_Users").child("bottle")
-//                                .child(userID).child("user_ratings");
-                        DIYrecommend recommend = new DIYrecommend();
-
-                        final ForCounter_Rating counter_rating = new ForCounter_Rating();
-                        counter_rating.setRating((int) (curRate * count));
-                        counter_rating.setTransac_rating(rate);
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                progressDialog.dismiss();
+//
+//              ///  for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//              //      Log.e(String.valueOf(snapshot.getRef()), snapshot.getChildrenCount() + "");
+//                    DIYSell img = dataSnapshot.getValue(DIYSell.class);
+//                    int rate = 0;
+//                    if (!exists(img)) {
+//                            img.setProductID(dataSnapshot.getKey());
+//                        //  pendingList.add(img);
+////                          count = String.valueOf(String.valueOf(snapshot.getChildrenCount()).equals(userID));
+//                        //count = diyList.size();
+//                        Toast.makeText(Pending_Activity.this, "count: " + rate, Toast.LENGTH_SHORT).show();
+//
+//                        final DatabaseReference ref = database.getReference("diy_by_tags");
+//
+//
+////                        DatabaseReference ratings = database.getReference("DIYs_By_Users").child("bottle")
+////                                .child(userID).child("user_ratings");
+//                        DIYrecommend recommend = new DIYrecommend();
+//
 //                        final ForCounter_Rating counter_rating = new ForCounter_Rating();
-//                        counter_rating.setSold(rate);
-                        //  counter_rating.setOwnerID(userID);
-                        Query get_rate = ref.orderByChild("user_ratings").equalTo(0);
-                        get_rate.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
-                                    snapshot1.getRef().child("user_ratings").setValue(counter_rating.getRating());
-                                    snapshot1.getRef().child("transac_rating").setValue((counter_rating.getSold() * 0.4)
-                                            + (counter_rating.getRating() * 0.6));
-
-
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
+//                        counter_rating.setRating((int) (curRate * count));
+//                        counter_rating.setTransac_rating(rate);
+////                        final ForCounter_Rating counter_rating = new ForCounter_Rating();
+////                        counter_rating.setSold(rate);
+//                        //  counter_rating.setOwnerID(userID);
+//                        Query get_rate = ref.orderByChild("user_ratings").equalTo(0);
+//                        get_rate.addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(DataSnapshot dataSnapshot) {
+//                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+//                                    snapshot1.getRef().child("user_ratings").setValue(counter_rating.getRating());
+//                                    snapshot1.getRef().child("transac_rating").setValue((counter_rating.getSold() * 0.4)
+//                                            + (counter_rating.getRating() * 0.6));
 //
-//                        String upload = sold.getKey();
-//                        reference.child(upload).setValue(counter_rating);
 //
-//                         ratings.setValue(recommend);
-                        String upload = ref.push().getKey();
-                        ref.child(upload).child("Rating").setValue(counter_rating);
-                    }
-     //           }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(DatabaseError databaseError) {
+//
+//                            }
+//                        });
+////
+////                        String upload = sold.getKey();
+////                        reference.child(upload).setValue(counter_rating);
+////
+////                         ratings.setValue(recommend);
+//                        String upload = ref.push().getKey();
+//                        ref.child(upload).child("Rating").setValue(counter_rating);
+//                    }
+//     //           }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 //        lv.removeViewAt(rate);
 //        adapter.notifyDataSetChanged();
     }

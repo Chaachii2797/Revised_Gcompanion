@@ -57,7 +57,6 @@
         <activity android:name=".SalesReport" />
         <activity android:name=".About" />
         <activity android:name=".CaptureDIY" />
-        <activity android:name=".HomePageActivity" />
         <activity android:name=".AddProductActivity" />
         <activity android:name=".MyProfileActivity" />
         <activity android:name=".MyDiys" />

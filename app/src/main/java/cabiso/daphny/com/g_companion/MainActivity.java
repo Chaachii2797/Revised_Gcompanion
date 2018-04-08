@@ -30,7 +30,7 @@ import clarifai2.api.ClarifaiClient;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        CommunityFragment.OnListFragmentInteractionListener{
+        CommunityFragment.OnListFragmentInteractionListener, YouItemsFragment.OnListFragmentInteractionListener{
 
 //    private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -169,10 +169,6 @@ public class MainActivity extends AppCompatActivity
     public void display(int itemID){
         android.support.v4.app.FragmentTransaction ft;
         switch (itemID){
-            case R.id.nav_bm:
-                Intent bm = new Intent(this,Bookmark_Activity.class);
-                startActivity(bm);
-                break;
             case R.id.nav_profile:
                 Intent intent2=new Intent(this,MyProfileActivity.class);
                 startActivity(intent2);
@@ -180,14 +176,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_chat:
                 Intent chat = new Intent(MainActivity.this,Messaging.class);
                 startActivity(chat);
-                break;
-            case R.id.nav_diy:
-                Intent diy = new Intent(MainActivity.this, MyDiys.class);
-                startActivity(diy);
-                break;
-            case R.id.nav_item:
-                Intent item = new Intent(MainActivity.this,Item_Activity.class);
-                startActivity(item);
                 break;
             case R.id.nav_sold:
                 Intent sold = new Intent(MainActivity.this,Sold_Activity.class);

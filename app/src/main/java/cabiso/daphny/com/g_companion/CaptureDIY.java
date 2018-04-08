@@ -541,6 +541,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
                                 //push data to Firebase Database
                                 dbRef = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
+                                dbRef = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID);
 
                                 String productID_sell = generateString();
                                 dbRef.child(upload).setValue(new DIYSell(name.getText().toString(),

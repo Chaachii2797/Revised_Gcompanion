@@ -16,14 +16,27 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+
+import cabiso.daphny.com.g_companion.Model.DBMaterial;
+import cabiso.daphny.com.g_companion.Model.User_Profile;
 
 public class Signup extends AppCompatActivity implements View.OnClickListener{
 
     private String TAG;
+    private String userID;
     private Button signup;
-    private EditText email, password, username, address;
+    private EditText email, password, lname, fname, contact, address;
     private TextView login;
+
     private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseUser mFirebaseUser;
+    private DatabaseReference databaseReference;
 
     private Integer THRESHOLD = 2;
 
@@ -37,81 +50,78 @@ public class Signup extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.activity_signup);
 
         mAuth = FirebaseAuth.getInstance();
-        email = (EditText) findViewById(R.id.etEmail);
-        password = (EditText) findViewById(R.id.etPassword);
-        username = (EditText) findViewById(R.id.userName);
-        address = (EditText) findViewById(R.id.userAddress);
-        login = (TextView) findViewById(R.id.tvLogin);
-        signup = (Button) findViewById(R.id.btnLogin);
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("userdata");
+
+        fname = (EditText) findViewById(R.id.et_fName);
+        lname = (EditText) findViewById(R.id.et_lName);
+        email = (EditText) findViewById(R.id.et_Email);
+        contact = (EditText) findViewById(R.id.et_Contact);
+        address = (EditText) findViewById(R.id.et_Address);
+        password = (EditText) findViewById(R.id.et_Password);
+
+        signup = (Button) findViewById(R.id.btn_signup);
+        login = (TextView) findViewById(R.id.tv_signup);
 
         signup.setOnClickListener(this);
         login.setOnClickListener(this);
         sharedPreferences = getApplicationContext().getSharedPreferences("Reg", 0);
+
 // get editor to edit in file
         editor = sharedPreferences.edit();
-
         signup.setOnClickListener(new View.OnClickListener() {
 
             public void onClick (View v) {
-                String name = username.getText().toString();
+                String f_name = fname.getText().toString();
+                String l_name = lname.getText().toString();
                 String emails = email.getText().toString();
-                String pass = password.getText().toString();
+                String contct = contact.getText().toString();
                 String add = address.getText().toString();
+                String pass = password.getText().toString();
 
-                if(username.getText().length()<=0){
-                    Toast.makeText(Signup.this, "Enter name", Toast.LENGTH_SHORT).show();
+                if(f_name.isEmpty() && l_name.isEmpty()) {
+                    fname.setError("First Name cannot be empty!");
+                    lname.setError("Last Name cannot be empty!");
+                }else if(emails.isEmpty()){
+                    email.setError("Email Address cannot be empty!");
                 }
-                else if( email.getText().length()<=0){
-                    Toast.makeText(Signup.this, "Enter email", Toast.LENGTH_SHORT).show();
-                }
-                else if( password.getText().length()<=0){
-                    Toast.makeText(Signup.this, "Enter password", Toast.LENGTH_SHORT).show();
-                }
-                else if( address.getText().length()<=0){
-                    Toast.makeText(Signup.this, "Enter Address", Toast.LENGTH_SHORT).show();
-                }
-                else{
+                else if(contct.isEmpty()){
+                    contact.setError("Contact Number cannot be empty!");
+                }else if(add.isEmpty()){
+                    address.setError("Address cannot be empty!");
+                }else if(pass.isEmpty()){
+                    password.setError("Password Number cannot be empty!");
+                }else{
                     // as now we have information in string. Lets stored them with the help of editor
-                    editor.putString("Name", name);
+                    editor.putString("First Name", f_name);
+                    editor.putString("Last Name", l_name);
                     editor.putString("Email",emails);
                     editor.putString("txtPassword",pass);
+                    editor.putString("txtContact",contct);
                     editor.putString("txtAddress",add);
 
-                    editor.commit();}   // commit the values
+                    databaseReference.push().setValue(new User_Profile(add,contct,f_name,l_name,emails,pass,userID));
+                    editor.commit();
 
-                // after saving the value open next activity
-                Intent ob = new Intent(Signup.this, Login.class);
-                startActivity(ob);
+                    // after saving the value open next activity
+                    Intent ob = new Intent(Signup.this, Login.class);
+                    startActivity(ob);
+                }   // commit the values
+
+
 
             }
         });
 
-//        SupportPlaceAutocompleteFragment autocompleteFragment = (SupportPlaceAutocompleteFragment)
-//                getSupportFragmentManager().findFragmentById(R.id.userAddress);
-//        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-//            @Override
-//            public void onPlaceSelected(Place place) {
-//                Log.e(TAG, "Place: " + place.getName());
-//            }
-//
-//            @Override
-//            public void onError(Status status) {
-//                Log.e(TAG, "An error occurred: " + status);
-//            }
-//        });
-
     }
     public void register(){
-        String em = email.getText().toString().trim();
-        String pass = password.getText().toString().trim();
-        String name = username.getText().toString().trim();
-        String add = address.getText().toString().trim();
+        final String em = email.getText().toString().trim();
+        final String pass = password.getText().toString().trim();
 
-        if(TextUtils.isEmpty(em) || TextUtils.isEmpty(pass) || TextUtils.isEmpty(name) || TextUtils.isEmpty(add)){
+        if(TextUtils.isEmpty(em) || TextUtils.isEmpty(pass)){
             Toast.makeText(this,"Please enter valid email and password.", Toast.LENGTH_SHORT).show();
             return;
         }
-
 
         mAuth.createUserWithEmailAndPassword(em, pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

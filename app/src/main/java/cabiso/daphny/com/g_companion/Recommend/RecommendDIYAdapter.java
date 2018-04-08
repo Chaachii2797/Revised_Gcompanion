@@ -69,12 +69,12 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
         ImageView img = (ImageView) v.findViewById(R.id.diy_item_icons);
 
         tvName.setText(listDIY.get(position).getDiyName());
-        tvcategory.setText(listDIY.get(position).getStatus());
-        if(listDIY.get(position).getStatus().equals("selling")){
-            tvcategory.setText("SELLING");
+        tvcategory.setText(listDIY.get(position).getIdentity());
+        if(listDIY.get(position).getIdentity().equals("selling")){
+            tvcategory.setText("Selling");
             tvcategory.setBackgroundColor(Color.RED);
-        }else if(listDIY.get(position).getStatus().equals("community")){
-            tvcategory.setText("COMMUNITY");
+        }else if(listDIY.get(position).getIdentity().equals("community")){
+            tvcategory.setText("Community");
             tvcategory.setBackgroundColor(Color.YELLOW);
         }
 //        star.setTag(getItem(position).getBookmarks());

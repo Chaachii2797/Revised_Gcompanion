@@ -66,7 +66,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
 
                     DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
                     if(get_name.equals(diYnames.getDiyName())){
-                        if(diYnames.getStatus().equals("selling")) {
+                        if(diYnames.getIdentity().equals("selling")) {
                             String messageMat = "";
                             List<String> messageMaterials = new ArrayList<String>();
                             int count = 0;
@@ -83,8 +83,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
                             Log.e("splits", "" + splits);
 
                             tv_matrial.setText(messageMat);
-                            tv_procedures.setText("YOU HAVE TO BUY THE ITEM FIRST" +
-                                    " BEFORE YOU CAN VIEW THE PROCEDURES");
+                            tv_procedures.setText("NOT APPLICABLE! BUY THE ITEM FIRST OR ASK PERMISSION TO THE OWNER!");
                             tv_procedures.setTextColor(Color.BLACK);
 
                             if (diYnames.diyUrl != null) {

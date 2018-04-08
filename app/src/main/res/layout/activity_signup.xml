@@ -5,104 +5,159 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
+
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        app:srcCompat="@drawable/new_logo_green1"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
-        app:srcCompat="@drawable/new_logo_green1" />
+        android:layout_marginTop="14dp" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="22dp"
         android:backgroundTintMode="src_over"
-        app:srcCompat="@drawable/new_logo_word" />
-
-    <EditText
-        android:id="@+id/etEmail"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        style="@style/LoginStyle"
-        android:backgroundTint="@color/gen_scheme3"
-        android:ems="10"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:paddingLeft="20dp"
-        android:layout_below="@+id/imageView3"
-        android:layout_alignLeft="@+id/userName"
-        android:layout_alignStart="@+id/userName"
-        android:layout_marginTop="24dp" />
-
-    <EditText
-        android:id="@+id/etPassword"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        style="@style/LoginStyle"
-        android:backgroundTint="@color/gen_scheme3"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:paddingLeft="20dp"
-        android:layout_below="@+id/etEmail"
-        android:layout_alignLeft="@+id/etEmail"
-        android:layout_alignStart="@+id/etEmail"
-        android:layout_marginTop="20dp" />
-
-    <Button
-        android:id="@+id/btnLogin"
-        style="@style/LoginStyle"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/gen_scheme1"
-        android:text="Signup"
-        android:textColor="@android:color/background_light"
-        android:layout_below="@+id/userAddress"
-        android:layout_alignLeft="@+id/userAddress"
-        android:layout_alignStart="@+id/userAddress"
-        android:layout_marginTop="28dp" />
-
-    <TextView
-        android:id="@+id/tvLogin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="25dp"
-        android:text="Already have an account? Log in here."
-        android:textColor="@android:color/black" />
-
-    <EditText
-        android:id="@+id/userName"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        style="@style/LoginStyle"
-        android:backgroundTint="@color/gen_scheme3"
-        android:ems="10"
-        android:hint="Username"
-        android:inputType="textPersonName"
-        android:paddingLeft="20dp"
-        android:layout_alignBottom="@+id/imageView3"
+        app:srcCompat="@drawable/new_logo_word"
+        android:layout_alignTop="@+id/imageView2"
         android:layout_centerHorizontal="true" />
 
-    <EditText
-        android:id="@+id/userAddress"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        style="@style/LoginStyle"
-        android:backgroundTint="@color/gen_scheme3"
-        android:ems="10"
-        android:hint="Address"
-        android:inputType="textPersonName"
-        android:paddingLeft="20dp"
-        android:layout_below="@+id/etPassword"
-        android:layout_alignLeft="@+id/etPassword"
-        android:layout_alignStart="@+id/etPassword"
-        android:layout_marginTop="25dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:weightSum="1"
+        android:layout_below="@+id/imageView2"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="40dp"
+        android:id="@+id/linearLayout">
 
+        <EditText
+            android:id="@+id/et_fName"
+            style="@style/LoginStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/imageView3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.62"
+            android:backgroundTint="@color/gen_scheme3"
+            android:ems="10"
+            android:hint="First Name"
+            android:inputType="textPersonName"
+            android:paddingLeft="20dp" />
 
+        <EditText
+            android:id="@+id/et_lName"
+            style="@style/LoginStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/imageView3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.62"
+            android:backgroundTint="@color/gen_scheme3"
+            android:ems="10"
+            android:hint="Last Name"
+            android:inputType="textPersonName"
+            android:paddingLeft="20dp" />
+
+        <EditText
+            android:id="@+id/et_Email"
+            style="@style/LoginStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/imageView3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.62"
+            android:backgroundTint="@color/gen_scheme3"
+            android:ems="10"
+            android:hint="Email Address"
+            android:inputType="textPersonName"
+            android:paddingLeft="20dp" />
+
+        <EditText
+            android:id="@+id/et_Contact"
+            style="@style/LoginStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/imageView3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.62"
+            android:backgroundTint="@color/gen_scheme3"
+            android:ems="10"
+            android:hint="Contact Number"
+            android:inputType="number"
+            android:paddingLeft="20dp" />
+
+        <EditText
+            android:id="@+id/et_Address"
+            style="@style/LoginStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/imageView3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.62"
+            android:backgroundTint="@color/gen_scheme3"
+            android:ems="10"
+            android:hint="Address"
+            android:inputType="textPersonName"
+            android:paddingLeft="20dp" />
+
+        <EditText
+            android:id="@+id/et_Password"
+            style="@style/LoginStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/imageView3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.62"
+            android:backgroundTint="@color/gen_scheme3"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPersonName"
+            android:paddingLeft="20dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:weightSum="1"
+        android:layout_below="@+id/linearLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:id="@+id/btn_signup"
+            style="@style/LoginStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_signup"
+            android:layout_centerHorizontal="true"
+            android:backgroundTint="@color/gen_scheme1"
+            android:text="Signup"
+            android:textColor="@android:color/background_light" />
+
+        <TextView
+            android:id="@+id/tv_signup"
+            android:layout_width="357dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="Already have an account? Log in here."
+            android:textColor="@android:color/black" />
+    </LinearLayout>
 </RelativeLayout>

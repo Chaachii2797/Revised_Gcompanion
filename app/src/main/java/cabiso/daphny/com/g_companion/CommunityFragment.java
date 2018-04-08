@@ -35,15 +35,21 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
 /**
@@ -65,7 +71,6 @@ public class CommunityFragment extends Fragment{
 
     private ListView lv;
     private RecyclerView recyclerView;
-    private RecyclerView recyclerView1;
     private RecommendDIYAdapter recommendDIYAdapter;
     private Activity context;
     private int resource;
@@ -100,13 +105,8 @@ public class CommunityFragment extends Fragment{
         userID = mFirebaseUser.getUid();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
         communityReference = databaseReference.child("diy_by_tags");
         marketplaceReference = databaseReference.child("Sell DIY");
-
-//        Collections.sort(diyList);
-//        Collections.reverse(diyList);
-
     }
 
     @Nullable
@@ -117,18 +117,12 @@ public class CommunityFragment extends Fragment{
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
 
-
-
         recyclerView = (RecyclerView) view.findViewById(R.id.communityList);
-
-        recyclerView1 = (RecyclerView) view.findViewById(R.id.marketList);
 
         int numberOfColumns = 1;
         recyclerView.setLayoutManager(new GridLayoutManager(context, numberOfColumns));
-        recyclerView1.setLayoutManager(new GridLayoutManager(context, numberOfColumns));
 
         recyclerView.setNestedScrollingEnabled(false);
-        recyclerView1.setNestedScrollingEnabled(false);
 
         fam = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
         fam.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
@@ -176,7 +170,7 @@ public class CommunityFragment extends Fragment{
     @Override
     public void onStart(){
         super.onStart();
-        Toast.makeText(getActivity(), "Hi! Welcome to G-Companion!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Hi!", Toast.LENGTH_SHORT).show();
         final FirebaseRecyclerAdapter<DIYnames, ItemViewHolder> cAdapter =
                 new FirebaseRecyclerAdapter<DIYnames, ItemViewHolder>(DIYnames.class,
                         R.layout.recycler_item,ItemViewHolder.class, communityReference) {
@@ -189,11 +183,19 @@ public class CommunityFragment extends Fragment{
                     @Override
                     protected void populateViewHolder(final ItemViewHolder viewHolder, final DIYnames model, final int position) {
                         viewHolder.mNameView.setText(model.diyName);
+                        if(model.identity!=null){
+                            if(model.identity.equals("selling")){
+                                viewHolder.mIdentity.setText("Selling");
+                                viewHolder.mIdentity.setBackgroundColor(Color.RED);
+                            }else if(model.identity.equals("community")){
+                                viewHolder.mIdentity.setText("Community");
+                                viewHolder.mIdentity.setBackgroundColor(Color.YELLOW);
+                            }
+                        }
                         //   viewHolder.mCategory.setText(model.tag);
 
                         //dec.29,2017
                         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
-
                         final String key = this.getRef(position).getKey();
 
                         viewHolder.mStar.setOnClickListener(new View.OnClickListener() {
@@ -231,6 +233,40 @@ public class CommunityFragment extends Fragment{
                             }
                         });
 
+                        final DatabaseReference userdata_reference = FirebaseDatabase.getInstance().getReference("userdata");
+                        userdata_reference.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                if(model.getUser_id().equals(user_profile.getUserID())){
+                                    viewHolder.mOwnerName.setText(user_profile.getF_name()+" "+user_profile.getL_name());
+                                    Log.e("OWNERNAME", user_profile.getF_name()+" "+user_profile.getL_name());
+                                }else{
+                                    viewHolder.mOwnerName.setText("NAN");
+                                }
+                            }
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
 
                         try{
                             String productPictureURL = model.diyUrl;
@@ -253,12 +289,11 @@ public class CommunityFragment extends Fragment{
                                     // Handle any errors
                                 }
                             });
-
-
                         }
                         catch(Exception e){
                             Log.d("Exception", "Failed to fetch product Picture");
                         }
+
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -281,6 +316,8 @@ public class CommunityFragment extends Fragment{
 
         public final View mView;
         public final TextView mNameView;
+        public final TextView mIdentity;
+        public final TextView mOwnerName;
         public final ImageView mProductImageView;
 
         public ImageButton mStar;
@@ -297,6 +334,8 @@ public class CommunityFragment extends Fragment{
             mProductImageView = (ImageView) view.findViewById(R.id.diy_item_icon);
             mStar = (ImageButton) view.findViewById(R.id.staru);
             mHeart = (ImageButton) view.findViewById(R.id.heartu);
+            mIdentity = (TextView) view.findViewById(R.id.item_identity);
+            mOwnerName = (TextView) view.findViewById(R.id.item_name_owner);
         }
     }
 

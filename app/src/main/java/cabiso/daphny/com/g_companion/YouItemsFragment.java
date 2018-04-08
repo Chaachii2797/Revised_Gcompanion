@@ -1,55 +1,53 @@
 package cabiso.daphny.com.g_companion;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.graphics.Bitmap;
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
-import android.widget.ListView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-
-import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
-import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by Lenovo on 3/23/2018.
  */
 
 public class YouItemsFragment extends Fragment {
+    FirebaseUser mFirebaseUser;
+    String userID;
+    DatabaseReference by_userReference;
+    DatabaseReference databaseReference;
 
-    private ArrayList<DIYnames> myItems_diyList = new ArrayList<>();
-    private ArrayList<CommunityItem> infoList = new ArrayList<>();
-    private ListView lv;
-    private RecommendDIYAdapter adapter;
-    private ProgressDialog progressDialog;
-    private FirebaseUser mFirebaseUser;
-    private RecyclerView recyclerView;
-    private FirebaseDatabase database;
-    private String userID;
-    private ImageButton heart, star;
+    private OnListFragmentInteractionListener user_Listener;
 
+    private RecyclerView user_recyclerView;
+    private Activity context;
     public YouItemsFragment() {
 
     }
@@ -66,182 +64,129 @@ public class YouItemsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
-
-        database = FirebaseDatabase.getInstance();
-
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        by_userReference = databaseReference.child("diy_by_users").child(userID);
     }
-
-
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.your_items_layout, container, false);
+        View view = inflater.inflate(R.layout.your_items_fragment, container, false);
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        userID = mFirebaseUser.getUid();
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.list);
-        lv = (ListView) view.findViewById(R.id.myItems_lv);
-
-//        progressDialog = new ProgressDialog(getActivity());
-//        progressDialog.setMessage("Please Wait loading DIYs.....");
-//        progressDialog.show();
-
-        heart = (ImageButton) view.findViewById(R.id.heartu);
-        star = (ImageButton) view.findViewById(R.id.staru);
-
+        user_recyclerView = (RecyclerView) view.findViewById(R.id.userList);
+        int numberOfColumns = 1;
+        user_recyclerView.setLayoutManager(new GridLayoutManager(context, numberOfColumns));
+        user_recyclerView.setNestedScrollingEnabled(false);
 
         return view;
     }
 
     @Override
-    public void onStart(){
-       super.onStart();
-
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
-
-        myRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                //for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    //if (snapshot.hasChildren()) {
-//
-//                        Collections.sort(diyList);
-//                        Collections.reverse(diyList);
-
-                       // progressDialog.dismiss();
-
-                        Toast.makeText(getContext(), "MY DIYS!", Toast.LENGTH_SHORT).show();
-
-                        DIYnames img = dataSnapshot.getValue(DIYnames.class);
-                        myItems_diyList.add(img);
-
-//                        CommunityItem mp = dataSnapshot.getValue(CommunityItem.class);
-//                        infoList.add(mp);
-
-                        adapter = new RecommendDIYAdapter(getActivity(), R.layout.pending_layout, myItems_diyList);
-
-                        lv.setAdapter(adapter);
-
-//                        if(snapshot.getChildrenCount() == diyList.size()){
-//                            for(int i=0; i<diyList.size();i++){
-//                                Log.e("get "," "+diyList.get(i).getSold_items());
-//                            }f
-//                        }
-
-
-
-//                        registerForContextMenu(lv);
-                        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Toast.makeText(getApplicationContext(), myItems_diyList.get(position).getDiyName(), Toast.LENGTH_SHORT).show();
-
-                                DIYnames selectedItem = adapter.getItem(position);
-                                if(selectedItem.getUser_id()!=null){
-//                                    star.setOnClickListener(new View.OnClickListener() {
-//                                        @Override
-//                                        public void onClick(View v) {
-//                                            Toast.makeText(getApplicationContext(),"CLIIIIIIIICK!", Toast.LENGTH_SHORT).show();
-//                                            if(star.isPressed()){
-//                                                count+=1;
-//                                                final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags").child(userID);
-//                                                reference.addChildEventListener(new ChildEventListener() {
-//                                                    @Override
-//                                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                                                        for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-//                                                            String key = snapshot.getKey();
-//                                                            String path = "/" + dataSnapshot.getKey() + "/" + key;
-//                                                            HashMap<String, Object> result = new HashMap<>();
-//                                                            result.put("bookmarks",count);
-//                                                            reference.child(path).updateChildren(result);
-                                    star.setColorFilter(ContextCompat.getColor(getActivity(), R.color.star_yello));
-//                                                        }
-//                                                    }
-//
-//                                                    @Override
-//                                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//                                                    }
-//
-//                                                    @Override
-//                                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//                                                    }
-//
-//                                                    @Override
-//                                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//                                                    }
-//
-//                                                    @Override
-//                                                    public void onCancelled(DatabaseError databaseError) {
-//
-//                                                    }
-//                                                });
-//                                            }
-//                                        }
-//                                    });
-
-
-                                }
-                                //To-DO get you data from the ItemDetails Getter
-                                // selectedItem.getImage() or selectedItem.getName() .. etc
-                                // the  send the data using intent when opening another activity
-                                Intent intent = new Intent(getActivity(), DIYDetailViewActivity.class);
-//                                String items = infoList.get(position).getVal();
-
-                                CommunityItem mat = (CommunityItem) parent.getItemAtPosition(position);
-
-
-                                adapter.notifyDataSetChanged();
-//                                Toast toast = Toast.makeText(MyDiys.this, items, Toast.LENGTH_SHORT);
-//                                toast.show();
-                                intent.putExtra("image", selectedItem.getDiyUrl().toString());
-                                intent.putExtra("name", selectedItem.getDiyName());
-                                // intent.putExtra("procedures", infoList.get(position));
-                                // intent.putExtra("materials", selectedItem.getDiymaterial());
-
-
-                                view.buildDrawingCache();
-                                Bitmap image = view.getDrawingCache();
-                                Bundle extras = new Bundle();
-                                extras.putParcelable("imagebitmap", image);
-
-                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                                image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                                byte[] byteArray = stream.toByteArray();
-                                intent.putExtra("image", byteArray);
-                                startActivity(intent);
-                            }
-                        });
-                  //  }
-            //    }
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+    public void onResume() {
+        super.onResume();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        final FirebaseRecyclerAdapter<DIYnames, YouItemsFragment.ItemViewHolder> user_Adapter =
+                new FirebaseRecyclerAdapter<DIYnames, YouItemsFragment.ItemViewHolder>(DIYnames.class,
+                        R.layout.recycler_by_user, ItemViewHolder.class, by_userReference) {
+                    @Override
+                    protected void populateViewHolder(final ItemViewHolder viewHolder, DIYnames model, final int position) {
+                        viewHolder.user_NameView.setText(model.diyName);
+                        if(model.identity!=null){
+                            if(model.identity.equals("selling")){
+                                viewHolder.user_Identity.setText("Selling");
+                                viewHolder.user_Identity.setBackgroundColor(Color.RED);
+                            }else{
+                                viewHolder.user_Identity.setText("Community");
+                                viewHolder.user_Identity.setBackgroundColor(Color.YELLOW);
+                            }
+
+                            try{
+                                String productPictureURL = model.diyUrl;
+                                Log.d("ppURL", productPictureURL);
+                                StorageReference pictureReference = FirebaseStorage.getInstance().getReferenceFromUrl(productPictureURL);
+                                pictureReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        // Got the download URL for 'users/me/profile.png'
+                                        // Pass it to Picasso to download, show in ImageView and caching
+                                        Log.d("Product Picture URI is", uri.toString());
+                                        Glide.with(getContext()).load(uri)
+                                                .fitCenter().centerCrop()
+                                                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                                                .into(viewHolder.user_ProductImageView);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception exception) {
+                                        // Handle any errors
+                                    }
+                                });
+                            }
+                            catch(Exception e){
+                                Log.d("Exception", "Failed to fetch product Picture");
+                            }
+                            viewHolder.user_View.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (null != user_Listener) {
+                                        // Notify the active callbacks interface (the activity, if the
+                                        // fragment is attached to one) that an item has been selected.
+                                        user_Listener.onListFragmentInteractionListener(getRef(position));
+                                        Toast.makeText(getActivity(), "You clicked on position!" + " " + position, Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+                };
+        user_recyclerView.setAdapter(user_Adapter);
+    }
+
+    public static class ItemViewHolder extends RecyclerView.ViewHolder{
+
+        public final View user_View;
+        public final TextView user_NameView;
+        public final TextView user_Identity;
+        public final ImageView user_ProductImageView;
+
+        public ItemViewHolder(View view){
+            super(view);
+            user_View = view;
+
+            user_NameView = (TextView) view.findViewById(R.id.user_item_name);
+            user_ProductImageView = (ImageView) view.findViewById(R.id.user_diy_item_icon);
+            user_Identity = (TextView) view.findViewById(R.id.user_item_identity);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnListFragmentInteractionListener) {
+            user_Listener = (OnListFragmentInteractionListener) context;
+        }
+        else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        user_Listener = null;
+    }
+
+    public interface OnListFragmentInteractionListener {
+        void onListFragmentInteractionListener(DatabaseReference ref);
+    }
 }

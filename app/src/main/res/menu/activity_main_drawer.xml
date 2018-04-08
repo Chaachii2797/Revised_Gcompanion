@@ -3,12 +3,7 @@
 
     <group android:checkableBehavior="single">
 
-        <item
-            android:id="@+id/nav_bm"
-            android:icon="@drawable/ic_profile"
-            android:title="Bookmark" />
-
-        <item
+       <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_profile"
             android:title="Profile" />
@@ -22,16 +17,6 @@
             android:id="@+id/nav_chat"
             android:icon="@drawable/chat_icon"
             android:title="Chat" />
-
-        <item
-            android:id="@+id/nav_diy"
-            android:icon="@mipmap/diy_logo"
-            android:title="My DIY/s" />
-
-        <item
-            android:id="@+id/nav_item"
-            android:icon="@mipmap/item"
-            android:title="My Item/s" />
 
         <item
             android:id="@+id/nav_sold"

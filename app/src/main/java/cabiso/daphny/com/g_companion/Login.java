@@ -105,7 +105,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         email = (EditText) findViewById(R.id.etEmail);
         password = (EditText) findViewById(R.id.etPassword);
         signup = (TextView) findViewById(R.id.tvSignup);
-        login = (Button) findViewById(R.id.btnLogin);
+        login = (Button) findViewById(R.id.btn_signup);
         withGoogle = (Button) findViewById(R.id.btnWithGoogle);
         withGoogle.setOnClickListener(this);
         login.setOnClickListener(this);
@@ -145,6 +145,21 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
             }
         });
         login.setEnabled(false); // default state should be disabled mBtnLogin.setOnClickListener(this);
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
     }
 
     private void validatePassword(String text) {
@@ -306,6 +321,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
     @Override
     protected void onStart() {
         super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
         if (opr.isDone()) {
             // If the user's cached credentials are valid, the OptionalPendingResult will be "done"
@@ -325,6 +341,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                     handleSignInResult(googleSignInResult);
                 }
             });
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
         }
     }
 }

@@ -113,7 +113,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                 DIYnames diyInfo = dataSnapshot.getValue(DIYnames.class);
                 DIYSell info = dataSnapshot.getValue(DIYSell.class);
                 SellingDIY info_selling = dataSnapshot.getValue(SellingDIY.class);
-                if(diyInfo.getStatus().equals("community")){
+                if(diyInfo.getIdentity().equals("community")){
                     diy_sell.setVisibility(View.INVISIBLE);
                     button_sell.setVisibility(View.INVISIBLE);
                     contact_seller.setVisibility(View.INVISIBLE);
@@ -162,7 +162,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                         Toast.makeText(DIYDetailViewActivity.this, diyInfo.diyUrl, Toast.LENGTH_SHORT).show();
                     }
-                }else if(diyInfo.getStatus().equals("selling")){
+                }else if(diyInfo.getIdentity().equals("selling")){
                     diy_sell.setVisibility(View.VISIBLE);
                     button_sell.setVisibility(View.VISIBLE);
                     contact_seller.setVisibility(View.VISIBLE);
@@ -332,7 +332,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         Log.d("MessageProcedure", messageProcedure.toString());
 
                         diy_materials.setText(messageMat);
-                        diy_procedures.setText(messageProd);
+//                        diy_procedures.setText(messageProd);
+                        diy_procedures.setText("ASK PERMISSION TO THE OWNER OR BUY THE ITEM!");
                         diy_sell.setText(message_price);
 
                         Log.d("SnapItem", "not null");

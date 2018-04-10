@@ -208,7 +208,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                     String diyUrl = productInfo.getDiyUrl();
                                     String user_id = productInfo.getUser_id();
                                     String productID = productInfo.getProductID();
-                                    String status = productInfo.getStatus();
+                                    String status = productInfo.getIdentity();
 
                                     DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this, float_this);
                                     String upload_info = pending_reference.push().getKey();

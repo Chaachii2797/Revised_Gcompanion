@@ -257,15 +257,13 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
                 String pending_diyUrl = pendingList.get(listPosition).getDiyUrl();
                 String pending_user_id = pendingList.get(listPosition).getUser_id();
                 String pending_productID = pendingList.get(listPosition).getProductID();
-                String pending_status = pendingList.get(listPosition).getStatus();
+                String pending_status = pendingList.get(listPosition).getIdentity();
 
                 DIYSell product = new DIYSell(pending_diyName, pending_diyUrl, pending_user_id,
                         pending_productID, pending_status, float_this, float_this);
 
                 String upload = itemReference.push().getKey();
                 itemReference.child(upload).setValue(product);
-
-
         }
         return super.onContextItemSelected(item);
     }

@@ -131,7 +131,7 @@ public class Item_Activity extends AppCompatActivity {
                 String myItem_diyUrl = diyList.get(listPosition).getDiyUrl();
                 String myItem_user_id = diyList.get(listPosition).getUser_id();
                 String myItem_productID = diyList.get(listPosition).getProductID();
-                String myItem_status = diyList.get(listPosition).getStatus();
+                String myItem_status = diyList.get(listPosition).getIdentity();
 
                 DIYSell product = new DIYSell(myItem_diyName, myItem_diyUrl, myItem_user_id,
                         myItem_productID, myItem_status, float_this, float_this);

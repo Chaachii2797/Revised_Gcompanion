@@ -87,7 +87,7 @@ import clarifai2.api.ClarifaiClient;
 public class CaptureDIY extends AppCompatActivity implements View.OnClickListener{
 
     private DatabaseReference databaseReference;
-    private DatabaseReference dbRef;
+    private DatabaseReference byuser_Reference;
     private Task<Void> materialsReference;
     private Task<Void> proceduresReference;
     private FirebaseDatabase database;
@@ -118,7 +118,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     private static final int SELECT_PHOTO = 100;
     private static final int MAX_LENGTH = 100;
-    private Button submitButton, sellButton;
+    private Button diy_Button, sellButton;
     private ImageButton btnAddMaterial, btnAddProcedure;
     private TagView tagGroup;
     private EditText name, material, procedure;
@@ -158,8 +158,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         userID = mFirebaseUser.getUid();
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
+        byuser_Reference = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID);
 
-        dbRef = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
         mStorage = FirebaseStorage.getInstance();
         storageReference = mStorage.getReferenceFromUrl("gs://g-companion.appspot.com/").child("diy_by_tags");
@@ -388,9 +388,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             }
         });
 
-        submitButton = (Button) findViewById(R.id.communityDiy);
+        diy_Button = (Button) findViewById(R.id.communityDiy);
         database = FirebaseDatabase.getInstance();
-        submitButton.setOnClickListener(new View.OnClickListener() {
+        diy_Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
 
@@ -432,17 +432,21 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         String upload = databaseReference.push().getKey();
                         String productID = generateString();
 
-                        //push data to Firebase Database
-                        databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
-
+                        //push data to Firebase Database - diy_by_tags node
                         databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
                                 taskSnapshot.getDownloadUrl().toString(), userID, productID, "community",
                                 float_this, float_this));
-
-//                        databaseReference.child(upload).child("materials").setValue(itemMat);
                         databaseReference.child(upload).child("materials").setValue(dbMaterials);
                         databaseReference.child(upload).child("procedures").setValue(itemProcedure);
                         databaseReference.child(upload).child("status").setValue("community");
+
+                        //push data to Firebase Database - diy_by_user node
+                        byuser_Reference.child(upload).setValue(new DIYnames(name.getText().toString(),
+                                taskSnapshot.getDownloadUrl().toString(), userID, productID, "community",
+                                float_this, float_this));
+                        byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
+                        byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
+                        byuser_Reference.child(upload).child("status").setValue("community");
 
                         Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
@@ -532,32 +536,37 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                 Float float_this = Float.valueOf(0);
 
-                                String upload = dbRef.push().getKey();
+                                String upload = databaseReference.push().getKey();
 
                                 Random random = new Random();
                                 String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 //                                dbMaterials.add(new DBMaterial().setName(materials).setQuantity(quantity).setUnit(unit_material));
                                 dbSelling.add(new SellingDIY().setSelling_price(price).setSelling_qty(qty).setSelling_descr(for_descr));
 
-                                //push data to Firebase Database
-                                dbRef = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
-                                dbRef = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID);
-
+                                //push data to Firebase Database - diy_by_tags node
                                 String productID_sell = generateString();
-                                dbRef.child(upload).setValue(new DIYSell(name.getText().toString(),
+                                databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
                                         float_this, float_this));
-
-                                dbRef.child(upload).child("materials").setValue(dbMaterials);
-                                dbRef.child(upload).child("procedures").setValue(itemProcedure);
+                                databaseReference.child(upload).child("materials").setValue(dbMaterials);
+                                databaseReference.child(upload).child("procedures").setValue(itemProcedure);
 //                                dbRef.child(upload).child("DIY Price").setValue(etPrice.getText().toString());
-                                dbRef.child(upload).child("DIY Price").setValue(dbSelling);
-                                dbRef.child(upload).child("status").setValue("selling");
+                                databaseReference.child(upload).child("DIY Price").setValue(dbSelling);
+                                databaseReference.child(upload).child("status").setValue("selling");
+                                databaseReference.child(upload).child("Item Quantity").setValue(etQuantity.getText().toString());
+                                databaseReference.child(upload).child("Item Description").setValue(etDescription.getText().toString());
 
-                                dbRef.child(upload).child("Item Quantity").setValue(etQuantity.getText().toString());
-
-                                dbRef.child(upload).child("Item Description").setValue(etDescription.getText().toString());
-
+                                //push data to Firebase Database - diy_by_user node
+                                byuser_Reference.child(upload).setValue(new DIYSell(name.getText().toString(),
+                                        taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
+                                        float_this, float_this));
+                                byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
+                                byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
+//                                dbRef.child(upload).child("DIY Price").setValue(etPrice.getText().toString());
+                                byuser_Reference.child(upload).child("DIY Price").setValue(dbSelling);
+                                byuser_Reference.child(upload).child("status").setValue("selling");
+                                byuser_Reference.child(upload).child("Item Quantity").setValue(etQuantity.getText().toString());
+                                byuser_Reference.child(upload).child("Item Description").setValue(etDescription.getText().toString());
                                 Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
                                 // Alert Dialog for finished uploaing DIYs
@@ -776,9 +785,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        if(v==submitButton){
-            registerForContextMenu(submitButton);
-            openContextMenu(submitButton);
+        if(v==diy_Button){
+            registerForContextMenu(diy_Button);
+            openContextMenu(diy_Button);
         }
     }
 

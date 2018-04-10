@@ -140,11 +140,10 @@
             android:id="@+id/cardView2"
             android:layout_width="330dp"
             android:layout_height="130dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="17dp"
             app:cardBackgroundColor="@android:color/white"
             app:cardCornerRadius="5dp"
             app:elevation="5dp"
-            android:layout_marginBottom="15dp"
             android:layout_below="@+id/cardView"
             android:layout_alignLeft="@+id/cardView"
             android:layout_alignStart="@+id/cardView">
@@ -179,32 +178,136 @@
 
         </android.support.v7.widget.CardView>
 
-        <TextView
-            android:id="@+id/textView33"
-            android:layout_width="40dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="18dp"
-            android:layout_marginStart="18dp"
-            android:gravity="center"
-            android:text="₱:"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:layout_below="@+id/cardView2"
-            android:layout_alignLeft="@+id/cardView2"
-            android:layout_alignStart="@+id/cardView2" />
 
-        <TextView
-            android:id="@+id/sell_details"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:text="Price"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cardView3"
+            android:layout_width="330dp"
+            android:layout_height="55dp"
+            android:layout_alignLeft="@+id/cardView"
+            android:layout_alignStart="@+id/cardView"
             android:layout_below="@+id/cardView2"
-            android:layout_toRightOf="@+id/textView33"
-            android:layout_toEndOf="@+id/textView33" />
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="15dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="5dp"
+            app:elevation="5dp">
+
+            <TextView
+                android:id="@+id/textView33"
+                android:layout_width="40dp"
+                android:layout_height="50dp"
+                android:layout_alignLeft="@+id/cardView2"
+                android:layout_alignStart="@+id/cardView2"
+                android:layout_below="@+id/cardView2"
+                android:layout_marginLeft="18dp"
+                android:layout_marginStart="18dp"
+                android:gravity="center"
+                android:text="₱:"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sell_details"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_below="@+id/cardView2"
+                android:layout_marginLeft="60dp"
+                android:layout_toEndOf="@+id/textView33"
+                android:layout_toRightOf="@+id/textView33"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:text="Price"
+                android:textSize="26sp"
+                android:textStyle="bold" />
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cardView4"
+            android:layout_width="330dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="10dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="5dp"
+            app:elevation="5dp"
+            android:layout_below="@+id/cardView3"
+            android:layout_alignLeft="@+id/cardView3"
+            android:layout_alignStart="@+id/cardView3">
+
+            <TextView
+                android:id="@+id/textView313"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textView29"
+                android:layout_alignStart="@+id/textView29"
+                android:layout_below="@+id/diy_material"
+                android:background="@color/gen_scheme1"
+                android:paddingLeft="10dp"
+                android:text="Seller Information:"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/diy_owner_cn"
+                android:layout_width="180dp"
+                android:layout_height="30dp"
+                android:layout_alignLeft="@+id/diy_material"
+                android:layout_alignStart="@+id/diy_material"
+                android:layout_below="@+id/textView31"
+                android:layout_marginLeft="135dp"
+                android:layout_marginTop="40dp"
+                android:scrollbars="vertical"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/addTV"
+                android:layout_width="80dp"
+                android:layout_height="30dp"
+                android:layout_alignLeft="@+id/diy_material"
+                android:layout_alignStart="@+id/diy_material"
+                android:layout_below="@+id/diy_owner_cn"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="75dp"
+                android:hint="Address."
+                android:scrollbars="vertical"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/diy_owner_add"
+                android:layout_width="220dp"
+                android:layout_height="30dp"
+                android:layout_alignLeft="@+id/diy_material"
+                android:layout_alignStart="@+id/diy_material"
+                android:layout_below="@+id/diy_owner_cn"
+                android:layout_marginLeft="95dp"
+                android:layout_marginTop="75dp"
+                android:scrollbars="vertical"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/cnTV"
+                android:layout_width="130dp"
+                android:layout_height="30dp"
+                android:layout_alignLeft="@+id/diy_material"
+                android:layout_alignStart="@+id/diy_material"
+                android:layout_below="@+id/textView31"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="40dp"
+                android:hint="Contact Number."
+                android:scrollbars="vertical"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </android.support.v7.widget.CardView>
 
         <Button
             android:id="@+id/btn_sell_diy"
@@ -216,7 +319,7 @@
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:layout_marginTop="15dp"
-            android:layout_below="@+id/sell_details"
+            android:layout_below="@+id/cardView4"
             android:layout_alignRight="@+id/cardView2"
             android:layout_alignEnd="@+id/cardView2"
             android:layout_marginBottom="5dp"/>

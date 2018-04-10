@@ -40,14 +40,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
@@ -167,7 +165,7 @@ public class CommunityFragment extends Fragment{
     @Override
     public void onStart(){
         super.onStart();
-        Toast.makeText(getActivity(), "Hi!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Hi! Welcome to G-Companion", Toast.LENGTH_SHORT).show();
         final FirebaseRecyclerAdapter<DIYnames, ItemViewHolder> cAdapter =
                 new FirebaseRecyclerAdapter<DIYnames, ItemViewHolder>(DIYnames.class,
                         R.layout.recycler_item,ItemViewHolder.class, communityReference) {

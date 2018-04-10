@@ -145,6 +145,8 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
 
                                 dialog.dismiss();
 
+
+
          //                       if(itemRef.getProductID()!=null){
 //                                if(!exists(itemRef)){
 //                                    get_ref = FirebaseDatabase.getInstance().getReference("diy_by_tags");

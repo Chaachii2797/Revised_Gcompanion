@@ -1,6 +1,5 @@
 package cabiso.daphny.com.g_companion;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -13,6 +12,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -32,6 +32,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,15 +41,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.SellingDIY;
+import cabiso.daphny.com.g_companion.Model.User_Profile;
 
 /**
  * Created by Lenovo on 11/2/2017.
@@ -59,7 +61,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private ProgressDialog progressDialog;
     private DatabaseReference databaseReference;
 
-    private TextView diy_name, diy_materials, diy_procedures, diy_sell, php;
+    private TextView diy_name, diy_materials, diy_procedures, diy_sell, php, owner_add, owner_cn;
     private Button button_sell, contact_seller, create_promo;
 
 
@@ -73,6 +75,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private FirebaseUser mFirebaseUser;
     private String userID;
     private SimpleDateFormat dateFormatter;
+    private CardView selling_price, seller_info;
 
     private int start_year, start_month, start_day;
     private int end_year, end_month, end_day;
@@ -118,6 +121,10 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         php = (TextView) findViewById(R.id.textView33);
         contact_seller = (Button) findViewById(R.id.btn_contact_diy_owner);
         create_promo = (Button) findViewById(R.id.btn_create_promo);
+        owner_add = (TextView) findViewById(R.id.diy_owner_add);
+        owner_cn = (TextView) findViewById(R.id.diy_owner_cn);
+        selling_price = (CardView) findViewById(R.id.cardView3);
+        seller_info = (CardView) findViewById(R.id.cardView4);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -131,6 +138,10 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     contact_seller.setVisibility(View.INVISIBLE);
                     create_promo.setVisibility(View.INVISIBLE);
                     php.setVisibility(View.INVISIBLE);
+                    owner_add.setVisibility(View.INVISIBLE);
+                    owner_cn.setVisibility(View.INVISIBLE);
+                    selling_price.setVisibility(View.INVISIBLE);
+                    seller_info.setVisibility(View.INVISIBLE);
                     diy_name.setText(diyInfo.diyName);
 
                         String messageMat = "";
@@ -181,6 +192,10 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     contact_seller.setVisibility(View.VISIBLE);
                     create_promo.setVisibility(View.VISIBLE);
                     php.setVisibility(View.VISIBLE);
+                    owner_add.setVisibility(View.VISIBLE);
+                    owner_cn.setVisibility(View.VISIBLE);
+                    selling_price.setVisibility(View.VISIBLE);
+                    seller_info.setVisibility(View.VISIBLE);
                     diy_name.setText(info.diyName);
 
                     String message_price="";
@@ -191,6 +206,37 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         message_Price.add(message_price);
 
                     }
+
+                    final DatabaseReference seller_reference = FirebaseDatabase.getInstance().getReference("userdata");
+                    seller_reference.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            User_Profile seller_profile = dataSnapshot.getValue(User_Profile.class);
+                            owner_cn.setText(seller_profile.getContact_no());
+                            owner_add.setText(seller_profile.getAddress());
+                            Log.e("USERS", seller_profile.getAddress()+ "\n" +seller_profile.getContact_no());
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                     final String finalMessage_price = message_price;
                     button_sell.setOnClickListener(new View.OnClickListener() {
@@ -269,11 +315,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                 public void onClick(View v) {
                                     Toast.makeText(DIYDetailViewActivity.this, "Call button clicked!", Toast.LENGTH_SHORT).show();
 
-//                                    String phone = productOwnerPhoneTextView.getText().toString();
-//                                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
-//                                            "tel", phone, null));
-//                                    startActivity(phoneIntent);
-                                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
+                                    String phone = owner_cn.getText().toString();
+                                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
+                                            "tel", phone, null));
                                     startActivity(phoneIntent);
                                 }
                             });
@@ -282,10 +326,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                 public void onClick(View v) {
                                     Toast.makeText(DIYDetailViewActivity.this, "SMS button clicked!", Toast.LENGTH_SHORT).show();
 
-//                                    String phone = productOwnerPhoneTextView.getText().toString();
+                                    String phone = owner_cn.getText().toString();
                                     Intent smsMsgAppVar = new Intent(Intent.ACTION_VIEW);
-//                                    smsMsgAppVar.setData(Uri.parse("sms:" +  phone));
-                                    smsMsgAppVar.setData(Uri.parse("sms:"));
+                                    smsMsgAppVar.setData(Uri.parse("sms:" +  phone));
                                     smsMsgAppVar.putExtra("sms_body", "Hi, Good Day! ");
                                     startActivity(smsMsgAppVar);;
                                 }

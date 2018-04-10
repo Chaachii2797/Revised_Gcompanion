@@ -24,13 +24,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        CommunityFragment.OnListFragmentInteractionListener, YouItemsFragment.OnListFragmentInteractionListener{
+        CommunityFragment.OnListFragmentInteractionListener, OnListFragmentInteractionListener{
 
 //    private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -213,4 +214,5 @@ public class MainActivity extends AppCompatActivity
         intent_commu.putExtra("Community Ref", ref.toString());
         startActivity(intent_commu);
     }
+
 }

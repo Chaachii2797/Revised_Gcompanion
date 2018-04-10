@@ -80,7 +80,6 @@ public class YouItemsFragment extends Fragment {
         user_recyclerView = (RecyclerView) view.findViewById(R.id.userList);
         int numberOfColumns = 1;
         user_recyclerView.setLayoutManager(new GridLayoutManager(context, numberOfColumns));
-        user_recyclerView.setNestedScrollingEnabled(false);
 
         return view;
     }

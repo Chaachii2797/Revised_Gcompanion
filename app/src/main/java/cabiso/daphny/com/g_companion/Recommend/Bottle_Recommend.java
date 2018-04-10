@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -162,6 +164,22 @@ public class Bottle_Recommend extends AppCompatActivity {
         Collections.reverse(diyList);
         adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
         lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DIYnames selected_diy = (DIYnames) parent.getAdapter().getItem(position);
+                String name = (String) selected_diy.diyName;
+
+                Log.d("name:",selected_diy.diyName);
+                Intent intent = new Intent(Bottle_Recommend.this,Activity_View_Recommend.class);
+                intent.putExtra("name",name);
+
+                Bundle extra = new Bundle();
+                extra.putSerializable("dbmaterials", dbMaterials);
+                intent.putExtra("dbmaterials", extra);
+                startActivity(intent);
+            }
+        });
     }
 
     private boolean exists(DIYnames diYnames) {

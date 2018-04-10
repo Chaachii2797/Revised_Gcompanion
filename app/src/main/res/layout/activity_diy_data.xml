@@ -219,23 +219,39 @@
             android:layout_below="@+id/sell_details"
             android:layout_alignRight="@+id/cardView2"
             android:layout_alignEnd="@+id/cardView2"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="5dp"/>
 
         <Button
             android:id="@+id/btn_contact_diy_owner"
             style="@style/LoginStyle"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/gen_scheme1"
-            android:text="Contact Seller"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
             android:layout_alignBaseline="@+id/btn_sell_diy"
             android:layout_alignBottom="@+id/btn_sell_diy"
             android:layout_alignLeft="@+id/cardView2"
-            android:layout_alignStart="@+id/cardView2" />
+            android:layout_alignStart="@+id/cardView2"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="15dp"
+            android:backgroundTint="@color/gen_scheme1"
+            android:text="Contact Seller"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/btn_create_promo"
+            style="@style/LoginStyle"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/gen_scheme1"
+            android:text="Create Promo"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_below="@+id/btn_sell_diy"
+            android:layout_alignLeft="@+id/btn_contact_diy_owner"
+            android:layout_alignStart="@+id/btn_contact_diy_owner"
+            android:layout_alignRight="@+id/btn_sell_diy"
+            android:layout_alignEnd="@+id/btn_sell_diy"
+            android:layout_marginTop="5dp"/>
 
     </RelativeLayout>
 </ScrollView>

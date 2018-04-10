@@ -1,5 +1,7 @@
 package cabiso.daphny.com.g_companion;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -7,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,8 +40,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Calendar;
 
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
@@ -52,7 +60,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private DatabaseReference databaseReference;
 
     private TextView diy_name, diy_materials, diy_procedures, diy_sell, php;
-    private Button button_sell, contact_seller;
+    private Button button_sell, contact_seller, create_promo;
 
 
     final Context context = this;
@@ -64,6 +72,11 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private DatabaseReference productReference;
     private FirebaseUser mFirebaseUser;
     private String userID;
+    private SimpleDateFormat dateFormatter;
+
+    private int start_year, start_month, start_day;
+    private int end_year, end_month, end_day;
+    static final int DATE_ID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +91,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
         databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceString);
 
-//        String productReferenceString = getIntent().getStringExtra("Product reference");
-//        productReference = FirebaseDatabase.getInstance().getReferenceFromUrl(productReferenceString);
         pending_reference = FirebaseDatabase.getInstance().getReference("DIY Pending Items").child(userID);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDetails);
@@ -106,6 +117,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         button_sell = (Button) findViewById(R.id.btn_sell_diy);
         php = (TextView) findViewById(R.id.textView33);
         contact_seller = (Button) findViewById(R.id.btn_contact_diy_owner);
+        create_promo = (Button) findViewById(R.id.btn_create_promo);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -117,6 +129,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     diy_sell.setVisibility(View.INVISIBLE);
                     button_sell.setVisibility(View.INVISIBLE);
                     contact_seller.setVisibility(View.INVISIBLE);
+                    create_promo.setVisibility(View.INVISIBLE);
                     php.setVisibility(View.INVISIBLE);
                     diy_name.setText(diyInfo.diyName);
 
@@ -166,6 +179,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     diy_sell.setVisibility(View.VISIBLE);
                     button_sell.setVisibility(View.VISIBLE);
                     contact_seller.setVisibility(View.VISIBLE);
+                    create_promo.setVisibility(View.VISIBLE);
                     php.setVisibility(View.VISIBLE);
                     diy_name.setText(info.diyName);
 
@@ -297,6 +311,40 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         }
                     });
 
+                    create_promo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final Dialog myDialog = new Dialog(context);
+                            myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            myDialog.setContentView(R.layout.dialog_promo);
+                            myDialog.show();
+
+                            final EditText startDate = (EditText) myDialog.findViewById(R.id.et_start_date);
+                            startDate.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // Initialize a new date picker dialog fragment
+                                    Bundle bundle = new Bundle();
+                                    DatePickerFragment newFragment = new DatePickerFragment();
+                                    newFragment.setArguments(bundle);
+                                    newFragment.show(getSupportFragmentManager(), "datePicker");
+
+                                }
+                            });
+
+                            EditText endDate = (EditText) myDialog.findViewById(R.id.et_end_date);
+                            Button ok = (Button) myDialog.findViewById(R.id.btn_ok);
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    myDialog.cancel();
+                                }
+                            });
+//                            showDatePickerDialog(v);
+                            Toast.makeText(context, "CREATE PROMO BUTTON CLICKED", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
 
                     if (item != null) {
                         String[] splitsMat = dataSnapshot.child("materials").getValue().toString().split(",");
@@ -361,6 +409,11 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         });
     }
 
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
     /**
      * Called when a view has been clicked.
      *
@@ -418,6 +471,40 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         public boolean isViewFromObject(View view, Object object) {
             return view.equals(object);
         }
+    }
+
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+        private EditText text;
+
+        public DatePickerFragment(){
+
+        }
+
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState){
+            final Calendar calendar = Calendar.getInstance();
+            int start_year = calendar.get(Calendar.YEAR);
+            int start_month = calendar.get(Calendar.MONTH);
+            int start_day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog dpd = new DatePickerDialog(getActivity(),this,start_year,start_month,start_day);
+            return  dpd;
+        }
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//            EditText startDate = (EditText) view.findViewById(R.id.et_start_date);
+            SimpleDateFormat dateFormatter;
+            dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+            Calendar newDate = Calendar.getInstance();
+            newDate.set(year, month, dayOfMonth);
+            EditText text = (EditText) this.getArguments().getSerializable("editText");
+            text.setText(dateFormatter.format(newDate.getTime()));
+//            startDate.setText(dateFormatter.format(newDate.getTime()));
+
+        }
+
     }
 
 }

@@ -59,15 +59,12 @@ import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 public class CommunityFragment extends Fragment{
 
     private DatabaseReference databaseReference;
-
+    DatabaseReference userdata_reference;
     private DatabaseReference communityReference;
-    private DatabaseReference marketplaceReference;
 
     private FirebaseUser mFirebaseUser;
     private String userID;
     private OnListFragmentInteractionListener mListener;
-
-
 
     private ListView lv;
     private RecyclerView recyclerView;
@@ -75,7 +72,7 @@ public class CommunityFragment extends Fragment{
     private Activity context;
     private int resource;
     private ArrayList<DIYnames> diyList = new ArrayList<>();
-
+    String username;
     private RecommendDIYAdapter adapter;
 
 
@@ -106,7 +103,7 @@ public class CommunityFragment extends Fragment{
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         communityReference = databaseReference.child("diy_by_tags");
-        marketplaceReference = databaseReference.child("Sell DIY");
+        userdata_reference = databaseReference.child("userdata");
     }
 
     @Nullable
@@ -183,6 +180,47 @@ public class CommunityFragment extends Fragment{
                     @Override
                     protected void populateViewHolder(final ItemViewHolder viewHolder, final DIYnames model, final int position) {
                         viewHolder.mNameView.setText(model.diyName);
+                        userdata_reference.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                if(model.getUser_id().equals(user_profile.getUserID())){
+                                    username = user_profile.getF_name()+" "+user_profile.getL_name();
+//                                    viewHolder.mOwnerName.setText(username);
+                                    Log.e("OWNERNAME", user_profile.getF_name()+" "+user_profile.getL_name());
+                                    Log.e("userID", model.getUser_id());
+                                    Log.e("userID22", model.user_id);
+                                    Log.e("username", username);
+                                    Log.e("OWNERNAMEview", viewHolder.mOwnerName.getText().toString());
+                                }else{
+//                                    viewHolder.mOwnerName.setText("NAN");
+                                    viewHolder.mOwnerName.setText("NAN");
+                                }
+                                viewHolder.mOwnerName.setText(username);
+                            }
+
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
                         if(model.identity!=null){
                             if(model.identity.equals("selling")){
                                 viewHolder.mIdentity.setText("Selling");
@@ -232,41 +270,6 @@ public class CommunityFragment extends Fragment{
                                 }
                             }
                         });
-
-                        final DatabaseReference userdata_reference = FirebaseDatabase.getInstance().getReference("userdata");
-                        userdata_reference.addChildEventListener(new ChildEventListener() {
-                            @Override
-                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                                if(model.getUser_id().equals(user_profile.getUserID())){
-                                    viewHolder.mOwnerName.setText(user_profile.getF_name()+" "+user_profile.getL_name());
-                                    Log.e("OWNERNAME", user_profile.getF_name()+" "+user_profile.getL_name());
-                                }else{
-                                    viewHolder.mOwnerName.setText("NAN");
-                                }
-                            }
-
-                            @Override
-                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                            }
-
-                            @Override
-                            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                            }
-
-                            @Override
-                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
 
                         try{
                             String productPictureURL = model.diyUrl;

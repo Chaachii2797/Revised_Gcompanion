@@ -2,6 +2,7 @@ package cabiso.daphny.com.g_companion;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -19,11 +20,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
@@ -38,7 +48,8 @@ public class MainActivity extends AppCompatActivity
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
-    private DatabaseReference mDatabaseReference;
+    private DatabaseReference user_reference;
+    private DatabaseReference databaseReference;
     private FirebaseDatabase mDatabase;
     private String mUsername;
     private String mPhotoUrl;
@@ -64,6 +75,7 @@ public class MainActivity extends AppCompatActivity
         // Initialize Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        userID = mFirebaseUser.getUid();
 
         image = (ImageView) findViewById(R.id.diy_item_icons);
 
@@ -84,8 +96,44 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        TextView txtProfileName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.mUser);
-        txtProfileName.setText("Daphny Cabiso");
+        final TextView txtAddress = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_Address);
+        final TextView txtProfileName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_userName);
+
+//        txtProfileName.setText("Daphny Cabiso");
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        user_reference = databaseReference.child("userdata");
+        user_reference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                if(userID.equals(user_profile.getUserID())){
+                    mUsername = user_profile.getF_name()+" "+user_profile.getL_name();
+                    txtProfileName.setText(mUsername);
+                    txtAddress.setText(user_profile.getAddress());
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 

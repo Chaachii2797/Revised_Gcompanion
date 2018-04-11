@@ -1,6 +1,7 @@
 package cabiso.daphny.com.g_companion.Recommend;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,9 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -132,6 +136,48 @@ public class Bottle_Recommend extends AppCompatActivity {
                                                 if (dbMaterials.get(finalM).getUnit().equals(dbMaterialUnit)) {
                                                     if (!exists(diYnames)) {
                                                         diyList.add(diYnames);
+
+                                                        Collections.sort(diyList);
+                                                        Collections.reverse(diyList);
+
+                                                        adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
+                                                        lv.setAdapter(adapter);
+                                                        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                            @Override
+                                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                                DIYnames selected_diy = (DIYnames) parent.getAdapter().getItem(position);
+                                                                String name = (String) selected_diy.diyName;
+
+                                                                Log.d("name:",selected_diy.diyName);
+                                                                Intent intent = new Intent(Bottle_Recommend.this,Activity_View_Recommend.class);
+                                                                intent.putExtra("name",name);
+
+                                                                Bundle extra = new Bundle();
+                                                                extra.putSerializable("dbmaterials", dbMaterials);
+                                                                intent.putExtra("dbmaterials", extra);
+                                                                startActivity(intent);
+                                                            }
+                                                        });
+                                                    }else{
+                                                        Toast.makeText(Bottle_Recommend.this, "WALAY NA MATCH!", Toast.LENGTH_SHORT).show();
+
+                                                        final Dialog dialog = new Dialog(Bottle_Recommend.this);
+                                                        dialog.setContentView(R.layout.new_alert_dialog);
+                                                        TextView text = (TextView) dialog.findViewById(R.id.text);
+                                                        text.setText("No DIY matched!");
+                                                        ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
+                                                        image.setImageResource(R.drawable.no_item_match_dialog);
+
+                                                        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                                                        // if button is clicked, close the custom dialog
+                                                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View v) {
+                                                                Intent intent = new Intent(Bottle_Recommend.this, MainActivity.class);
+                                                                startActivity(intent);
+                                                            }
+                                                        });
+                                                        dialog.show();
                                                     }
                                                 }
                                             }
@@ -160,26 +206,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                         }
                     });
                 }
-        Collections.sort(diyList);
-        Collections.reverse(diyList);
-        adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
-        lv.setAdapter(adapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DIYnames selected_diy = (DIYnames) parent.getAdapter().getItem(position);
-                String name = (String) selected_diy.diyName;
 
-                Log.d("name:",selected_diy.diyName);
-                Intent intent = new Intent(Bottle_Recommend.this,Activity_View_Recommend.class);
-                intent.putExtra("name",name);
-
-                Bundle extra = new Bundle();
-                extra.putSerializable("dbmaterials", dbMaterials);
-                intent.putExtra("dbmaterials", extra);
-                startActivity(intent);
-            }
-        });
     }
 
     private boolean exists(DIYnames diYnames) {

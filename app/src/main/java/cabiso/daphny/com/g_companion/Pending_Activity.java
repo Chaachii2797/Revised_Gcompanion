@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -281,8 +282,23 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
 
         Toast.makeText(Pending_Activity.this,"Rate : " + rate + "\n Comment : " + comment,Toast.LENGTH_SHORT).show();
 
-        DatabaseReference myRef = database.getReference("diy_by_tags");
+        DatabaseReference myRefs = database.getReference("diy_by_tags");
 
+        myRefs.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DIYSell img = dataSnapshot.getValue(DIYSell.class);
+                if (userID.equals(img.getUser_id())) {
+                    Log.e("ratingID_same", String.valueOf("" + userID.equals(img.getUser_id())));
+                    Log.e("userid", String.valueOf("" + userID));
+                    Log.e("rate_userid", String.valueOf("" + img.getUser_id()));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
 
 //        myRef.addValueEventListener(new ValueEventListener() {
 //            @Override

@@ -12,6 +12,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -41,8 +42,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
@@ -57,9 +60,11 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private ProgressDialog progressDialog;
     private DatabaseReference databaseReference;
 
-    private TextView diy_name, diy_materials, diy_procedures, diy_sell, php, user_owner_name,txtBy;
+    private TextView diy_name, diy_materials, diy_procedures, diy_sell, php, user_owner_name,txtBy,
+                     owner_add, owner_cn;
     private Button button_sell, contact_seller, create_promo;
     private String user_name;
+    private CardView selling_price, seller_info;
 
     final Context context = this;
     List<String> item = new ArrayList<>();
@@ -115,17 +120,20 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         diy_sell = (TextView) findViewById(R.id.sell_details);
         user_owner_name = (TextView) findViewById(R.id.txt_user_owner_name);
         txtBy = (TextView) findViewById(R.id.txt_by);
-
         button_sell = (Button) findViewById(R.id.btn_sell_diy);
         php = (TextView) findViewById(R.id.textView33);
         contact_seller = (Button) findViewById(R.id.btn_contact_diy_owner);
         create_promo = (Button) findViewById(R.id.btn_create_promo);
+        owner_add = (TextView) findViewById(R.id.diy_owner_add);
+        owner_cn = (TextView) findViewById(R.id.diy_owner_cn);
+        selling_price = (CardView) findViewById(R.id.cardView3);
+        seller_info = (CardView) findViewById(R.id.cardView4);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final DIYnames diyInfo = dataSnapshot.getValue(DIYnames.class);
-                DIYSell info = dataSnapshot.getValue(DIYSell.class);
+                final DIYSell info = dataSnapshot.getValue(DIYSell.class);
                 if(diyInfo.getIdentity().equals("community")){
                     diy_sell.setVisibility(View.INVISIBLE);
                     user_owner_name.setVisibility(View.INVISIBLE);
@@ -134,6 +142,10 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     contact_seller.setVisibility(View.INVISIBLE);
                     create_promo.setVisibility(View.INVISIBLE);
                     php.setVisibility(View.INVISIBLE);
+                    owner_add.setVisibility(View.INVISIBLE);
+                    owner_cn.setVisibility(View.INVISIBLE);
+                    selling_price.setVisibility(View.INVISIBLE);
+                    seller_info.setVisibility(View.INVISIBLE);
                     diy_name.setText(diyInfo.diyName);
 
                     user_data.addChildEventListener(new ChildEventListener() {
@@ -220,6 +232,10 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     contact_seller.setVisibility(View.VISIBLE);
                     create_promo.setVisibility(View.VISIBLE);
                     php.setVisibility(View.VISIBLE);
+                    owner_add.setVisibility(View.VISIBLE);
+                    owner_cn.setVisibility(View.VISIBLE);
+                    selling_price.setVisibility(View.VISIBLE);
+                    seller_info.setVisibility(View.VISIBLE);
                     diy_name.setText(info.diyName);
 
                     user_data.addChildEventListener(new ChildEventListener() {
@@ -229,10 +245,15 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                             if(userID.equals(user_profile.getUserID())){
                                 user_name = user_profile.getF_name()+" "+user_profile.getL_name();
                                 user_owner_name.setText(user_name);
+                                owner_cn.setText(user_profile.getContact_no());
+                                owner_add.setText(user_profile.getAddress());
+                                Log.e("USER", user_profile.getAddress()+ "\n" +user_profile.getContact_no());
                                 Log.e("user_name", "" + user_name);
                             }else if(diyInfo.user_id.equals(user_profile.getUserID())){
                                 user_name = user_profile.getF_name()+" "+user_profile.getL_name();
                                 user_owner_name.setText(user_name);
+                                owner_cn.setText(user_profile.getContact_no());
+                                owner_add.setText(user_profile.getAddress());
                             }
                         }
 
@@ -266,6 +287,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                     }
 
+
                     final String finalMessage_price = message_price;
                     button_sell.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -278,35 +300,94 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                                     DIYSell productInfo =  dataSnapshot.getValue(DIYSell.class);
 
-                                    String diyName = productInfo.getDiyName();
-                                    String diyUrl = productInfo.getDiyUrl();
-                                    String user_id = productInfo.getUser_id();
-                                    String productID = productInfo.getProductID();
-                                    String status = productInfo.getIdentity();
+                                        String diyName = productInfo.getDiyName();
+                                        String diyUrl = productInfo.getDiyUrl();
+                                        String user_id = productInfo.getUser_id();
+                                        String productID = productInfo.getProductID();
+                                        String status = productInfo.getIdentity();
 
-                                    DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this, float_this);
-                                    String upload_info = pending_reference.push().getKey();
-                                    pending_reference.child(upload_info).setValue(info);
-                                    pending_reference.child(upload_info).child("DIY Price").setValue(finalMessage_price);
+                                    if(userID != diyInfo.getUser_id()){
+                                        Toast.makeText(DIYDetailViewActivity.this, "Not same prod_id", Toast.LENGTH_SHORT).show();
 
-                                    final Dialog dialog = new Dialog(DIYDetailViewActivity.this);
-                                    dialog.setContentView(R.layout.done_dialog);
-                                    TextView text = (TextView) dialog.findViewById(R.id.text);
-                                    text.setText("DIY added to pending list!");
-                                    ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
-                                    image.setImageResource(R.drawable.done);
+                                        DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this, float_this);
+                                        String upload_info = pending_reference.push().getKey();
+                                        pending_reference.child(upload_info).setValue(info);
+                                        pending_reference.child(upload_info).child("DIY Price").setValue(finalMessage_price);
 
-                                    Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-                                    // if button is clicked, close the custom dialog
-                                    dialogButton.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    });
-                                    dialog.show();
+                                        final Dialog dialog = new Dialog(DIYDetailViewActivity.this);
+                                        dialog.setContentView(R.layout.done_dialog);
+                                        TextView text = (TextView) dialog.findViewById(R.id.text);
+                                        text.setText("DIY added to pending list!");
+                                        ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
+                                        image.setImageResource(R.drawable.done);
 
+                                        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                        dialog.show();
+                                    } else if(userID.equals(diyInfo.getUser_id())) {
+                                        Toast.makeText(DIYDetailViewActivity.this, "Same prod_ID!", Toast.LENGTH_SHORT).show();
+
+//                                        DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this, float_this);
+//                                        String upload_info = pending_reference.push().getKey();
+//                                        pending_reference.child(upload_info).setValue(info);
+//                                        pending_reference.child(upload_info).child("DIY Price").setValue(finalMessage_price);
+
+                                        final Dialog dialog = new Dialog(DIYDetailViewActivity.this);
+                                        dialog.setContentView(R.layout.done_dialog);
+                                        TextView text = (TextView) dialog.findViewById(R.id.text);
+                                        text.setText("DIY already added to pending list!");
+                                        ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
+                                        image.setImageResource(R.drawable.done);
+
+                                        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                        dialog.show();
+                                    } else {
+                                        Toast.makeText(DIYDetailViewActivity.this, "PUTA", Toast.LENGTH_SHORT).show();
+
+                                    }
+
+//                                    else if(info.user_id.equals(productInfo.getUser_id())) {
+//                                        String diyName = productInfo.getDiyName();
+//                                        String diyUrl = productInfo.getDiyUrl();
+//                                        String user_id = productInfo.getUser_id();
+//                                        String productID = productInfo.getProductID();
+//                                        String status = productInfo.getIdentity();
+//
+//                                        DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this, float_this);
+//                                        String upload_info = pending_reference.push().getKey();
+//                                        pending_reference.child(upload_info).setValue(info);
+//                                        pending_reference.child(upload_info).child("DIY Price").setValue(finalMessage_price);
+//
+//                                        final Dialog dialog = new Dialog(DIYDetailViewActivity.this);
+//                                        dialog.setContentView(R.layout.done_dialog);
+//                                        TextView text = (TextView) dialog.findViewById(R.id.text);
+//                                        text.setText("DIY added to pending list!");
+//                                        ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
+//                                        image.setImageResource(R.drawable.done);
+//
+//                                        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+//                                        dialogButton.setOnClickListener(new View.OnClickListener() {
+//                                            @Override
+//                                            public void onClick(View v) {
+//                                                Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
+//                                                startActivity(intent);
+//                                            }
+//                                        });
+//                                        dialog.show();
+//                                    }
                                 }
 
                                 @Override
@@ -343,11 +424,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                 public void onClick(View v) {
                                     Toast.makeText(DIYDetailViewActivity.this, "Call button clicked!", Toast.LENGTH_SHORT).show();
 
-//                                    String phone = productOwnerPhoneTextView.getText().toString();
-//                                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
-//                                            "tel", phone, null));
-//                                    startActivity(phoneIntent);
-                                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
+                                    String phone = owner_cn.getText().toString();
+                                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
+                                            "tel", phone, null));
                                     startActivity(phoneIntent);
                                 }
                             });
@@ -356,12 +435,11 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                 public void onClick(View v) {
                                     Toast.makeText(DIYDetailViewActivity.this, "SMS button clicked!", Toast.LENGTH_SHORT).show();
 
-//                                    String phone = productOwnerPhoneTextView.getText().toString();
+                                    String phone = owner_cn.getText().toString();
                                     Intent smsMsgAppVar = new Intent(Intent.ACTION_VIEW);
-//                                    smsMsgAppVar.setData(Uri.parse("sms:" +  phone));
-                                    smsMsgAppVar.setData(Uri.parse("sms:"));
+                                    smsMsgAppVar.setData(Uri.parse("sms:" +  phone));
                                     smsMsgAppVar.putExtra("sms_body", "Hi, Good Day! ");
-                                    startActivity(smsMsgAppVar);;
+                                    startActivity(smsMsgAppVar);
                                 }
                             });
                             cancel.setOnClickListener(new View.OnClickListener() {

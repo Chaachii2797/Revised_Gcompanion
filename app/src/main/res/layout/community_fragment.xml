@@ -25,23 +25,25 @@
                 android:id="@+id/communityList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="11dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 tools:context="cabiso.daphny.com.g_companion.CommunityFragment"
                 tools:listitem="@layout/recycler_item"
                 android:layout_alignParentTop="true"
                 android:layout_alignLeft="@+id/marketList"
                 android:layout_alignStart="@+id/marketList" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/marketList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/communityList"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginLeft="5dp"
-                tools:context="cabiso.daphny.com.g_companion.CommunityFragment"
-                tools:listitem="@layout/diy_item" />
+            <!--<android.support.v7.widget.RecyclerView-->
+                <!--android:id="@+id/marketList"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/communityList"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginRight="5dp"-->
+                <!--android:layout_marginLeft="5dp"-->
+                <!--tools:context="cabiso.daphny.com.g_companion.CommunityFragment"-->
+                <!--tools:listitem="@layout/diy_item" />-->
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>

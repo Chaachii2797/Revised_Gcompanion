@@ -78,7 +78,6 @@ public class Bottle_Recommend extends AppCompatActivity {
     List<String> arrayList_qty = new ArrayList<String>();
     List<String> check = new ArrayList<String>();
 
-
     Boolean addDiy;
 
     public Bottle_Recommend() {
@@ -100,21 +99,7 @@ public class Bottle_Recommend extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Processing...");
         progressDialog.setMessage("Please wait loading DIYs...");
-//        progressDialog.show();
-//
-//        adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
-//        lv.setAdapter(adapter);
 
-
-//        final String priority = getIntent().getStringExtra("result_priority");
-//        Log.e("PRIORITY_next ", "" + priority);
-//
-//        final String data = getIntent().getStringExtra("result_tag");
-//        final String qtu = getIntent().getStringExtra("qty");
-//        final String unt = getIntent().getStringExtra("unit");
-//        final String[] items = data.split(" ");
-//        final String[] qtys = qtu.split(" ");
-//        final String[] uni = unt.split(" ");
         final Bundle extra = getIntent().getBundleExtra("dbmaterials");
         dbMaterials = (ArrayList<DBMaterial>) extra.getSerializable("dbmaterials");
 
@@ -125,65 +110,67 @@ public class Bottle_Recommend extends AppCompatActivity {
                     @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
-                                for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-                                    DataSnapshot dbMaterialNode = postSnapshot;
-                                    String dbMaterialName = dbMaterialNode.child("name").getValue(String.class).toLowerCase();
-                                    String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
-                                    long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
-                                        if (dbMaterialName.equals(dbMaterials.get(finalM).getName())) {
-                                            Log.e("dbMaterialNameCheck", dbMaterialName + " == " + item);
-                                            if (dbMaterials.get(finalM).getQuantity() >= dbMaterialQuantity) {
-                                                if (dbMaterials.get(finalM).getUnit().equals(dbMaterialUnit)) {
-                                                    if (!exists(diYnames)) {
-                                                        diyList.add(diYnames);
+                        if(!userID.equals(diYnames.getUser_id())){
+                            for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
+                                DataSnapshot dbMaterialNode = postSnapshot;
+                                String dbMaterialName = dbMaterialNode.child("name").getValue(String.class).toLowerCase();
+                                String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
+                                long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
+                                if (dbMaterialName.equals(dbMaterials.get(finalM).getName())) {
+                                    Log.e("dbMaterialNameCheck", dbMaterialName + " == " + item);
+                                    if (dbMaterials.get(finalM).getQuantity() >= dbMaterialQuantity) {
+                                        if (dbMaterials.get(finalM).getUnit().equals(dbMaterialUnit)) {
+                                            if (!exists(diYnames)) {
+                                                diyList.add(diYnames);
 
-                                                        Collections.sort(diyList);
-                                                        Collections.reverse(diyList);
+                                                Collections.sort(diyList);
+                                                Collections.reverse(diyList);
+                                            }else{
+                                                final Dialog dialog = new Dialog(Bottle_Recommend.this);
+                                                dialog.setContentView(R.layout.new_alert_dialog);
+                                                TextView text = (TextView) dialog.findViewById(R.id.text);
+                                                text.setText("No DIY matched!");
+                                                ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
+                                                image.setImageResource(R.drawable.no_item_match_dialog);
 
-                                                        adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
-                                                        lv.setAdapter(adapter);
-                                                        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                            @Override
-                                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                                DIYnames selected_diy = (DIYnames) parent.getAdapter().getItem(position);
-                                                                String name = (String) selected_diy.diyName;
-
-                                                                Log.d("name:",selected_diy.diyName);
-                                                                Intent intent = new Intent(Bottle_Recommend.this,Activity_View_Recommend.class);
-                                                                intent.putExtra("name",name);
-
-                                                                Bundle extra = new Bundle();
-                                                                extra.putSerializable("dbmaterials", dbMaterials);
-                                                                intent.putExtra("dbmaterials", extra);
-                                                                startActivity(intent);
-                                                            }
-                                                        });
-                                                    }else{
-                                                        Toast.makeText(Bottle_Recommend.this, "WALAY NA MATCH!", Toast.LENGTH_SHORT).show();
-
-                                                        final Dialog dialog = new Dialog(Bottle_Recommend.this);
-                                                        dialog.setContentView(R.layout.new_alert_dialog);
-                                                        TextView text = (TextView) dialog.findViewById(R.id.text);
-                                                        text.setText("No DIY matched!");
-                                                        ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
-                                                        image.setImageResource(R.drawable.no_item_match_dialog);
-
-                                                        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-                                                        // if button is clicked, close the custom dialog
-                                                        dialogButton.setOnClickListener(new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View v) {
-                                                                Intent intent = new Intent(Bottle_Recommend.this, MainActivity.class);
-                                                                startActivity(intent);
-                                                            }
-                                                        });
-                                                        dialog.show();
+                                                Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                                                // if button is clicked, close the custom dialog
+                                                dialogButton.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        Intent intent = new Intent(Bottle_Recommend.this, MainActivity.class);
+                                                        startActivity(intent);
                                                     }
-                                                }
+                                                });
+                                                dialog.show();
                                             }
                                         }
                                     }
+                                }
+                            }
+                        }else{
+                            Toast.makeText(Bottle_Recommend.this, "YOUR MAKING YOUR OWN ITEM!", Toast.LENGTH_SHORT).show();
                         }
+                        adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
+                        lv.setAdapter(adapter);
+                        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                DIYnames selected_diy = (DIYnames) parent.getAdapter().getItem(position);
+                                String name = (String) selected_diy.diyName;
+
+                                Log.d("name:",selected_diy.diyName);
+                                Intent intent = new Intent(Bottle_Recommend.this,Activity_View_Recommend.class);
+                                intent.putExtra("name",name);
+
+                                Bundle extra = new Bundle();
+                                extra.putSerializable("dbmaterials", dbMaterials);
+                                intent.putExtra("dbmaterials", extra);
+                                startActivity(intent);
+                            }
+                        });
+                        }
+
 
                         @Override
                         public void onChildChanged(DataSnapshot dataSnapshot, String s) {

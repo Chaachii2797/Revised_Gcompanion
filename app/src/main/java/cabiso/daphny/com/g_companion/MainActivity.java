@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -50,11 +51,11 @@ public class MainActivity extends AppCompatActivity
     private FirebaseUser mFirebaseUser;
     private DatabaseReference user_reference;
     private DatabaseReference databaseReference;
-    private FirebaseDatabase mDatabase;
     private String mUsername;
     private String mPhotoUrl;
     private TextView name;
     private String userID;
+    private String txt_logout;
 
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
@@ -77,6 +78,9 @@ public class MainActivity extends AppCompatActivity
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         userID = mFirebaseUser.getUid();
 
+        final String name = mFirebaseUser.getDisplayName();
+        final String uid = mFirebaseUser.getUid();
+
         image = (ImageView) findViewById(R.id.diy_item_icons);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -89,7 +93,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-
 
         toggle.syncState();
         drawer.setDrawerListener(toggle);
@@ -110,6 +113,10 @@ public class MainActivity extends AppCompatActivity
                     mUsername = user_profile.getF_name()+" "+user_profile.getL_name();
                     txtProfileName.setText(mUsername);
                     txtAddress.setText(user_profile.getAddress());
+                }else if(uid.equals(user_profile.getUserID())){
+                    Log.e("UID",uid);
+                    Log.e("GOOGLENAME",name);
+                    txtProfileName.setText(name);
                 }
             }
 
@@ -133,9 +140,17 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
-
     }
+
+//    private void getCurrentUser(){
+//        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+//        if(mFirebaseUser!=null){
+//            String name = mFirebaseUser.getDisplayName();
+//            String email = mFirebaseUser.getEmail();
+//            Uri photoUrl = mFirebaseUser.getPhotoUrl();
+//            String uid = mFirebaseUser.getUid();
+//        }
+//    }
 
     private void setViewPager() {
 
@@ -167,6 +182,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
     }
+
 
 
     @Override
@@ -222,6 +238,10 @@ public class MainActivity extends AppCompatActivity
                 Intent intent2=new Intent(this,MyProfileActivity.class);
                 startActivity(intent2);
                 break;
+            case R.id.nav_wishlist:
+                Intent wishlist = new Intent(MainActivity.this,Wishlists.class);
+                startActivity(wishlist);
+                break;
             case R.id.nav_chat:
                 Intent chat = new Intent(MainActivity.this,Messaging.class);
                 startActivity(chat);
@@ -238,10 +258,6 @@ public class MainActivity extends AppCompatActivity
                 Intent calendar = new Intent(MainActivity.this,Calendar.class);
                 startActivity(calendar);
                 break;
-            case R.id.nav_wishlist:
-                Intent wishlist = new Intent(MainActivity.this,Wishlists.class);
-                startActivity(wishlist);
-                break;
             case R.id.nav_report:
                 Intent sales = new Intent(MainActivity.this,SalesReport.class);
                 startActivity(sales);
@@ -249,6 +265,18 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_about:
                 Intent about = new Intent(MainActivity.this,About.class);
                 startActivity(about);
+                break;
+            case R.id.nav_logout:
+                if(mFirebaseUser!=null){
+                    FirebaseAuth.getInstance().signOut();
+                    Intent logout = new Intent(MainActivity.this,Login.class);
+                    startActivity(logout);
+                }else{
+                    Toast.makeText(MainActivity.this, "Already signed out", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MainActivity.this, Login.class);
+                    startActivity(intent);
+                    finish();
+                }
                 break;
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

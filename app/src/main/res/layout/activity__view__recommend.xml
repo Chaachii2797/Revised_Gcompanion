@@ -58,9 +58,9 @@
                 app:cardBackgroundColor="?attr/colorPrimary">
 
                 <android.support.v4.view.ViewPager
-                    android:id="@+id/diyImagesViewPagers_sell"
-                    android:layout_width="372dp"
-                    android:layout_height="206dp"
+                    android:id="@+id/diyImagesViewPagers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/appBarLayout"
@@ -77,24 +77,25 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/cardView_sell"
                 android:layout_width="330dp"
-                android:layout_height="130dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/diy_name_sell"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="30dp"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardCornerRadius="5dp"
-                app:elevation="5dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_below="@+id/diy_name_sell"
-                android:layout_centerHorizontal="true">
+                app:elevation="5dp">
 
                 <TextView
                     android:id="@+id/diy_material_sell"
-                    android:layout_width="300dp"
-                    android:layout_height="80dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_below="@+id/textView29"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="20dp"
                     android:hint="1. Glue
                               2. Scissors
                               3. Pencil"
@@ -105,9 +106,9 @@
                     android:id="@+id/textView29_sell"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/diy_procedure"
-                    android:layout_alignStart="@+id/diy_procedure"
-                    android:layout_below="@+id/diyImagesViewPagers_sell"
+                    android:layout_alignLeft="@+id/diy_procedure_pView"
+                    android:layout_alignStart="@+id/diy_procedure_pView"
+                    android:layout_below="@+id/diyImagesViewPagers"
                     android:background="@color/gen_scheme1"
                     android:paddingLeft="10dp"
                     android:text="Materials:"
@@ -124,15 +125,15 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/cardView2"
                 android:layout_width="330dp"
-                android:layout_height="130dp"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/cardView_sell"
+                android:layout_alignStart="@+id/cardView_sell"
+                android:layout_below="@+id/cardView_sell"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="10dp"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardCornerRadius="5dp"
-                app:elevation="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="15dp"
-                android:layout_below="@+id/cardView_sell"
-                android:layout_alignLeft="@+id/cardView_sell"
-                android:layout_alignStart="@+id/cardView_sell">
+                app:elevation="5dp">
 
                 <TextView
                     android:id="@+id/textView31_sell"
@@ -140,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/textView29"
                     android:layout_alignStart="@+id/textView29"
-                    android:layout_below="@+id/diy_material"
+                    android:layout_below="@+id/diy_material_pView"
                     android:background="@color/gen_scheme1"
                     android:paddingLeft="10dp"
                     android:text="Procedures:"
@@ -150,13 +151,14 @@
 
                 <TextView
                     android:id="@+id/diy_procedure_sell"
-                    android:layout_width="300dp"
-                    android:layout_height="80dp"
-                    android:layout_alignLeft="@+id/diy_material"
-                    android:layout_alignStart="@+id/diy_material"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/diy_material_pView"
+                    android:layout_alignStart="@+id/diy_material_pView"
                     android:layout_below="@+id/textView31"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="20dp"
                     android:hint="1. Make the materials clean. \n 2. Use scissors to cut it. Be careful. \n 3. Use glue."
                     android:scrollbars="vertical"
                     android:textColor="@android:color/black"
@@ -166,8 +168,13 @@
 
             <TextView
                 android:id="@+id/diy_name_sell"
-                android:layout_width="383dp"
-                android:layout_height="55dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/cardView1_sell"
                 android:background="@color/gen_scheme1"
                 android:capitalize="words"
                 android:paddingBottom="10dp"
@@ -177,12 +184,29 @@
                 android:textColor="@android:color/black"
                 android:textSize="26sp"
                 android:textStyle="bold"
-                android:typeface="serif"
-                android:layout_below="@+id/cardView1_sell"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:typeface="serif" />
+
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/cardView_sell"
+                android:layout_alignStart="@+id/cardView_sell"
+                android:layout_below="@+id/diy_name_sell"
+                android:text="by : "
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_ownername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/diy_name_sell"
+                android:layout_toEndOf="@+id/textView30"
+                android:layout_toRightOf="@+id/textView30"
+                android:text="TextView"
+                android:textSize="15sp"
+                android:textStyle="bold" />
         </RelativeLayout>
     </ScrollView>
 

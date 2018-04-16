@@ -55,7 +55,7 @@
                 app:cardBackgroundColor="?attr/colorPrimary">
 
                 <ImageView
-                    android:id="@+id/diyImagesViewPagers_sell"
+                    android:id="@+id/diyImagesViewPagers"
                     android:layout_width="350dp"
                     android:layout_height="190dp"
                     android:layout_alignParentLeft="true"
@@ -119,7 +119,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/recommend_diy_procedure"
                     android:layout_alignStart="@+id/recommend_diy_procedure"
-                    android:layout_below="@+id/diyImagesViewPagers_sell"
+                    android:layout_below="@+id/diyImagesViewPagers"
                     android:background="@color/gen_scheme1"
                     android:paddingLeft="10dp"
                     android:text="Materials:"

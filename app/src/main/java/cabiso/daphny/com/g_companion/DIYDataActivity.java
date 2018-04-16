@@ -74,8 +74,8 @@ public class DIYDataActivity extends AppCompatActivity {
 
         //  diy_name = (TextView) findViewById(R.id.diy_name);
         diy_image = (ImageView) findViewById(R.id.diy_image);
-        diy_materials = (TextView) findViewById(R.id.diy_material);
-        diy_procedures = (TextView) findViewById(R.id.diy_procedure);
+        diy_materials = (TextView) findViewById(R.id.diy_material_pView);
+        diy_procedures = (TextView) findViewById(R.id.diy_procedure_pView);
 
         diy_procedures.setMovementMethod(new ScrollingMovementMethod());
         diy_materials.setMovementMethod(new ScrollingMovementMethod());

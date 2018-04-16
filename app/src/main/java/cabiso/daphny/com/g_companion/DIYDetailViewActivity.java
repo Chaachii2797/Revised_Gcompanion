@@ -61,7 +61,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private DatabaseReference databaseReference;
 
     private TextView diy_name, diy_materials, diy_procedures, diy_sell, php, user_owner_name,txtBy,
-                     owner_add, owner_cn;
+            owner_add, owner_cn;
     private Button button_sell, contact_seller, create_promo;
     private String user_name;
     private CardView selling_price, seller_info;

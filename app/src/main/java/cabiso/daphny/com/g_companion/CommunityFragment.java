@@ -57,7 +57,7 @@ import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 public class CommunityFragment extends Fragment{
 
     private DatabaseReference databaseReference;
-    DatabaseReference userdata_reference;
+    private DatabaseReference userdata_reference;
     private DatabaseReference communityReference;
 
     private FirebaseUser mFirebaseUser;
@@ -70,7 +70,7 @@ public class CommunityFragment extends Fragment{
     private Activity context;
     private int resource;
     private ArrayList<DIYnames> diyList = new ArrayList<>();
-    String username;
+    private String username;
     private RecommendDIYAdapter adapter;
 
 

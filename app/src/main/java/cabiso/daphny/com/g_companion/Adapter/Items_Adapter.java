@@ -16,19 +16,20 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.Model.DIYSell;
+import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.R;
 
 /**
  * Created by cicctuser on 9/29/2017.
  */
 
-public class Items_Adapter extends ArrayAdapter<DIYSell> {
+public class Items_Adapter extends ArrayAdapter<DIYnames> {
 
     private Activity context;
     private int resource;
-    private List<DIYSell> listDIY;
+    private List<DIYnames> listDIY;
 
-    public Items_Adapter(@NonNull Activity context, @LayoutRes int resource, @NonNull List<DIYSell> objects) {
+    public Items_Adapter(@NonNull Activity context, @LayoutRes int resource, @NonNull List<DIYnames> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;

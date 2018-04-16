@@ -70,7 +70,7 @@ public class RecommendDIYViewDetails extends AppCompatActivity {
         recommend_diy_name = (TextView) findViewById(R.id.recommend_diy_name);
         recommend_diy_materials = (TextView) findViewById(R.id.recommend_diy_material);
         recommend_diy_procedures = (TextView) findViewById(R.id.recommend_diy_procedure);
-        recommend_diy_image = (ImageView) findViewById(R.id.diyImagesViewPagers_sell);
+        recommend_diy_image = (ImageView) findViewById(R.id.diyImagesViewPagers);
 
         Intent intent = getIntent();
         if (null != intent) {
@@ -93,7 +93,7 @@ public class RecommendDIYViewDetails extends AppCompatActivity {
                 DIYnames recom_diy_info = dataSnapshot.getValue(DIYnames.class);
 
                 if (recom_diy_info.diyUrl != null) {
-                    diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
+                    diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers);
                     diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), recom_diy_info.diyUrl);
                     diyImagesViewPager.setAdapter(diyImagesViewPagerAdapter);
                     Log.e("imagePls", recom_diy_info.diyUrl);

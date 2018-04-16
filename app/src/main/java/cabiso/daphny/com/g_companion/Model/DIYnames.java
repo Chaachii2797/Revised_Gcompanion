@@ -15,7 +15,6 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
     public Float likes;
     public int materialMatches;
 
-    public DIYnames(){}
     public DIYnames(String diyName, String diyUrl, String user_id, String productID, String identity,
                     Float bookmarks, Float likes){
         this.diyName = diyName;
@@ -27,69 +26,81 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
         this.likes = likes;
     }
 
+    public DIYnames() {
+
+    }
+
 
     public int getMaterialMatches() {
         return materialMatches;
     }
 
-    public void setMaterialMatches(int materialMatches) {
+    public DIYnames setMaterialMatches(int materialMatches) {
         this.materialMatches = materialMatches;
+        return this;
     }
 
     public String getDiyName() {
         return diyName;
     }
 
-    public void setDiyName(String diyName) {
+    public DIYnames setDiyName(String diyName) {
         this.diyName = diyName;
+        return this;
     }
 
     public String getDiyUrl() {
         return diyUrl;
     }
 
-    public void setDiyUrl(String diyUrl) {
+    public DIYnames setDiyUrl(String diyUrl) {
         this.diyUrl = diyUrl;
+        return this;
     }
 
     public String getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(String user_id) {
+    public DIYnames setUser_id(String user_id) {
         this.user_id = user_id;
+        return this;
     }
 
     public String getProductID() {
         return productID;
     }
 
-    public void setProductID(String productID) {
+    public DIYnames setProductID(String productID) {
         this.productID = productID;
+        return this;
     }
 
     public String getIdentity() {
         return identity;
     }
 
-    public void setIdentity(String identity) {
+    public DIYnames setIdentity(String identity) {
         this.identity = identity;
+        return this;
     }
 
     public Float getBookmarks() {
         return bookmarks;
     }
 
-    public void setBookmarks(Float bookmarks) {
+    public DIYnames setBookmarks(Float bookmarks) {
         this.bookmarks = bookmarks;
+        return this;
     }
 
     public Float getLikes() {
         return likes;
     }
 
-    public void setLikes(Float likes) {
+    public DIYnames setLikes(Float likes) {
         this.likes = likes;
+        return this;
     }
 
     @Override

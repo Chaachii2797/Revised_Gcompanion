@@ -8,12 +8,14 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -39,7 +41,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Login extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener {
+public class Login extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener{
 
     private Button login;
     private Button withGoogle;
@@ -53,7 +55,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
     private static final int RC_SIGN_IN = 007;
     private GoogleApiClient mGoogleApiClient;
     private ProgressDialog mProgressDialog;
-    private FirebaseUser user;
+    private FirebaseUser mFirebaseUser;
+    private String userID;
 
     private boolean isEmailValid;
     private boolean isPasswordValid;
@@ -68,6 +71,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
+
+//        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+//        userID = mFirebaseUser.getUid();
 
 //        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0); // 0 - for private mode
 //        SharedPreferences.Editor editor = settings.edit();
@@ -151,10 +157,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    Intent intent = new Intent(Login.this, MainActivity.class);
+                    Log.e("USERID", userID+"");
+                    startActivity(intent);
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
+                    Toast.makeText(Login.this,"Login Error!", Toast.LENGTH_SHORT).show();
                 }
                 // ...
             }
@@ -261,16 +271,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         return (networkInfo != null && networkInfo.isConnected());
-    }
-
-    private void getCurrentUser(){
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user!=null){
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            Uri photoUrl = user.getPhotoUrl();
-            String uid = user.getUid();
-        }
     }
 
 

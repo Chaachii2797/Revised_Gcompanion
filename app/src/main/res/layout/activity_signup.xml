@@ -129,7 +129,7 @@
             android:backgroundTint="@color/gen_scheme3"
             android:ems="10"
             android:hint="Password"
-            android:inputType="textPersonName"
+            android:inputType="textVisiblePassword"
             android:paddingLeft="20dp"
             android:textColor="@color/bodyTextColor" />
     </LinearLayout>

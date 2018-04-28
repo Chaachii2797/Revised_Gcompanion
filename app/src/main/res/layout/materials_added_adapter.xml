@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:layout_marginBottom="2dp"
         android:layout_weight="10.25"
         android:background="#ffffff"
@@ -16,7 +16,7 @@
         android:paddingTop="10dp">
 
         <TextView
-            android:id="@+id/tvTag"
+            android:id="@+id/tvAddedMat"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.19"
@@ -25,19 +25,6 @@
             android:text="TextView"
             android:textSize="18sp" />
 
-
-        <Spinner
-            android:id="@+id/qtySpinner"
-            android:layout_width="70dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.33" />
-
-        <Spinner
-            android:id="@+id/unitspinner"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/okaybtn"
-            android:layout_weight="0.78" />
 
         <Button
             android:id="@+id/btn_delete_tag"

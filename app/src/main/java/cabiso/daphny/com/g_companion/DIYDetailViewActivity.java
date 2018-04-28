@@ -319,13 +319,13 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                                     Log.e("same_data", "" + dataSnapshot);
 
                                                     final Dialog dialog = new Dialog(DIYDetailViewActivity.this);
-                                                    dialog.setContentView(R.layout.done_dialog);
-                                                    TextView text = (TextView) dialog.findViewById(R.id.text);
+                                                    dialog.setContentView(R.layout.exist_dialog);
+                                                    TextView text = (TextView) dialog.findViewById(R.id.e_text);
                                                     text.setText("DIY already added to pending list!");
-                                                    ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
-                                                    image.setImageResource(R.drawable.done);
+                                                    ImageView image = (ImageView) dialog.findViewById(R.id.exist_dialog_imageview);
+                                                    image.setImageResource(R.drawable.exist);
 
-                                                    Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                                                    Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOKI);
                                                     dialogButton.setOnClickListener(new View.OnClickListener() {
                                                         @Override
                                                         public void onClick(View v) {

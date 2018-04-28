@@ -146,7 +146,7 @@ public class CommunityFragment extends Fragment{
         fab3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent in = new Intent(getActivity(), ImageRecognitionTags.class);
+                Intent in = new Intent(getActivity(), ImageRecognitionForMaterials.class);
                 Snackbar.make(view, "Please wait.......", Snackbar.LENGTH_SHORT)
                         .setAction("Action", null).show();
                 startActivity(in);

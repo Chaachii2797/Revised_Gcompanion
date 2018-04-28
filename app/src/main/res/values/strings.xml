@@ -47,18 +47,18 @@
     <string name="signed_out">Signed out</string>
 
     <string-array name="UM">
-        <item>meters</item>
-        <item>centimeters</item>
-        <item>liters</item>
+        <item>meter/s</item>
+        <item>centimeter/s</item>
+        <item>liter/s</item>
         <item>gallon</item>
         <item>ounce</item>
-        <item>grams</item>
-        <item>milligrams</item>
-        <item>kilograms</item>
-        <item>inches</item>
+        <item>gram/s</item>
+        <item>milligram/s</item>
+        <item>kilogram/s</item>
+        <item>inche/s</item>
         <item>feet</item>
         <item>square inches</item>
-        <item>pieces</item>
+        <item>piece/s</item>
         <item>dozen</item>
     </string-array>
 
@@ -78,6 +78,11 @@
         <item>13</item>
         <item>14</item>
         <item>15</item>
+        <item>50</item>
+        <item>100</item>
+        <item>250</item>
+        <item>500</item>
+
 
     </string-array>
 

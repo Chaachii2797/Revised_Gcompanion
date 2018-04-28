@@ -67,7 +67,6 @@ import java.util.Random;
 import java.util.UUID;
 
 import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
-import cabiso.daphny.com.g_companion.Adapter.ImgRecogTagAdapter;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.Constants;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
@@ -475,7 +474,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         sellButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(CaptureDIY.this, R.style.MyAlertDialogStyle);
+                final Dialog dialog = new Dialog(CaptureDIY.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.sell_diy_option);
                 dialog.setCancelable(true);

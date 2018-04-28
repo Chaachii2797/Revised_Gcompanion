@@ -12,11 +12,9 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
-import cabiso.daphny.com.g_companion.CaptureDIY;
 import cabiso.daphny.com.g_companion.ImageRecognitionTags;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.R;
@@ -32,7 +30,8 @@ public class ImgRecogTagAdapter extends ArrayAdapter<DBMaterial> {
     private SpinnerAdapter umAdapter;
     private SpinnerAdapter1 qAdapter;
     private String[] unitOfMeasurement;
-    private final List<DBMaterial> dbMaterials;
+    private List<DBMaterial> dbMaterials;
+    private String[] values;
 
     public ImgRecogTagAdapter(Context context, int resource, List<DBMaterial> items){
         super(context,resource,items);
@@ -47,18 +46,28 @@ public class ImgRecogTagAdapter extends ArrayAdapter<DBMaterial> {
         qAdapter = new SpinnerAdapter1(mContext);
     }
 
+
+
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        ViewHolder holder;
+        ViewHolder holder = null;
+        ViewHolder1 another_holder;
 
         if(convertView == null){
             convertView = LayoutInflater.from(mContext).inflate(mResource,parent,false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-        } else {
+        }
+//        if (convertView == null){
+//            convertView = LayoutInflater.from(mContext).inflate(mResource,parent,false);
+//            another_holder = new ViewHolder1(convertView);
+//            convertView.setTag(another_holder);
+//        }
+        else {
             holder = (ViewHolder) convertView.getTag();
         }
+
         DBMaterial item = dbMaterials.get(position);
         if(item != null){
             holder.qtySpinner.setAdapter(qAdapter);
@@ -205,4 +214,14 @@ public class ImgRecogTagAdapter extends ArrayAdapter<DBMaterial> {
             return vi;
         }
     }
+
+    private static class ViewHolder1{
+        TextView tvTag;
+        Button btnDelete_tag;
+        public ViewHolder1(View view){
+            tvTag = (TextView)view.findViewById(R.id.tvAddedMat);
+            btnDelete_tag = (Button) view.findViewById(R.id.btn_delete_tag);
+        }
+    }
+
 }

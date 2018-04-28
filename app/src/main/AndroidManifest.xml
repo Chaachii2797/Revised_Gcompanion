@@ -99,6 +99,8 @@
         <activity android:name=".Bookmark_Activity" />
         <activity android:name=".Recommend.Activity_View_Recommend" />
         <activity android:name=".Recommend.PendingView_Activity"></activity>
+        <activity android:name=".ImageRecognitionForMaterials"></activity>
+
     </application>
 
 </manifest>

@@ -144,8 +144,8 @@ public class ImageRecognitionForMaterials extends AppCompatActivity {
                     newAddMatAdapter.notifyDataSetChanged();
 
                     etAddMaterial.setText("");
-                    qtySpinner.setTag(1);
-                    umSpinner.setTag("meter/s");
+                    qtySpinner.setSelection(0);
+                    umSpinner.setSelection(0);
                 }else{
                     Toast.makeText(ImageRecognitionForMaterials.this, "Add material cannot be empty!", Toast.LENGTH_SHORT).show();
                 }

@@ -1,43 +1,27 @@
 {
   "project_info": {
-    "project_number": "796163187954",
-    "firebase_url": "https://g-companion.firebaseio.com",
-    "project_id": "g-companion",
-    "storage_bucket": "g-companion.appspot.com"
+    "project_number": "550107918781",
+    "firebase_url": "https://gcompanion-itproject.firebaseio.com",
+    "project_id": "gcompanion-itproject",
+    "storage_bucket": "gcompanion-itproject.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:796163187954:android:fa72ddf52d49e736",
+        "mobilesdk_app_id": "1:550107918781:android:fa72ddf52d49e736",
         "android_client_info": {
           "package_name": "cabiso.daphny.com.g_companion"
         }
       },
       "oauth_client": [
         {
-          "client_id": "796163187954-unqatuungcob3pdata95bl37goirag3k.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "cabiso.daphny.com.g_companion",
-            "certificate_hash": "2b8fd0d000450d006769e05d5d3db292aec60211"
-          }
-        },
-        {
-          "client_id": "796163187954-117tb1n2k47ogcioui9d24eclip2a217.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "cabiso.daphny.com.g_companion",
-            "certificate_hash": "7ae439705189c9a1e112dd3dc1aa05c2c9f3807e"
-          }
-        },
-        {
-          "client_id": "796163187954-2sjkjdak27p8t3a84ticfcnism3hfeko.apps.googleusercontent.com",
+          "client_id": "550107918781-a2kf72v6j0sn6f1lii9mlhlodv57hdg5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDtG3Wdmaa6btg8whkAQULGjYnvLgjy0Cw"
+          "current_key": "AIzaSyA-tU34riDVY3lJooKX97sCCEKNK-9kzss"
         }
       ],
       "services": {
@@ -45,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "796163187954-2sjkjdak27p8t3a84ticfcnism3hfeko.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2

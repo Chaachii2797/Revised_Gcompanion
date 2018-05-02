@@ -188,11 +188,11 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     List<String> messageMaterials = new ArrayList<String>();
                     int count = 1;
                     for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-                        String material_name = count + ". " + postSnapshot.child("name").getValue(String.class).toUpperCase();
+                        String material_name = postSnapshot.child("name").getValue(String.class).toUpperCase();
                         Long material_qty = postSnapshot.child("quantity").getValue(Long.class);
                         String material_unit = postSnapshot.child("unit").getValue(String.class);
                         Log.e("message", "" + material_name);
-                        messageMat += "\n" + material_name + " = " + material_qty + " " + material_unit;
+                        messageMat += "\n" +  material_qty + " " + material_unit+ " = " + material_name ;
                         messageMaterials.add(material_name);
                         count++;
                     }
@@ -483,11 +483,11 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         List<String> messageMaterials = new ArrayList<String>();
                         int count = 1;
                         for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-                            String material_name = count + ". " + postSnapshot.child("name").getValue(String.class).toUpperCase();
+                            String material_name = postSnapshot.child("name").getValue(String.class).toUpperCase();
                             Long material_qty = postSnapshot.child("quantity").getValue(Long.class);
                             String material_unit = postSnapshot.child("unit").getValue(String.class);
                             Log.e("message", "" + material_name);
-                            messageMat += "\n" + material_name + " = " + material_qty + " " + material_unit;
+                            messageMat += "\n" + material_qty + " " + material_unit + " = " + material_name;
                             messageMaterials.add(material_name);
                             count++;
                         }

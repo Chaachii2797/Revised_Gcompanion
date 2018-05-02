@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
@@ -55,6 +57,7 @@ public class NewAddedMaterial extends ArrayAdapter<DBMaterial> {
         if(holder.tvTag!=null){
             holder.tvTag.setText(item.getName());
         }
+        holder.tvQtyUnity.setText(item.getQuantity()+" "+item.getUnit());
 
         holder.btnDelete_tag.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,8 +73,10 @@ public class NewAddedMaterial extends ArrayAdapter<DBMaterial> {
 
     private static class ViewHolder{
         TextView tvTag;
+        TextView tvQtyUnity;
         Button btnDelete_tag;
         public ViewHolder(View view){
+            tvQtyUnity = (TextView) view.findViewById(R.id.tvQtyUnity);
             tvTag = (TextView)view.findViewById(R.id.tvAddedMat);
             btnDelete_tag = (Button) view.findViewById(R.id.btn_delete_tag);
         }

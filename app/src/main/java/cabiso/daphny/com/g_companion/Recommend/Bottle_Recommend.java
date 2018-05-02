@@ -99,6 +99,7 @@ public class Bottle_Recommend extends AppCompatActivity {
 
         final Bundle extra = getIntent().getBundleExtra("dbmaterials");
         dbMaterials = (ArrayList<DBMaterial>) extra.getSerializable("dbmaterials");
+        Log.e("FROMIMAGE", String.valueOf(dbMaterials));
 
         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
         for(int m = 0; m < dbMaterials.size(); m++){
@@ -111,8 +112,11 @@ public class Bottle_Recommend extends AppCompatActivity {
                         for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
                             DataSnapshot dbMaterialNode = postSnapshot;
                             String dbMaterialName = dbMaterialNode.child("name").getValue(String.class).toLowerCase();
+                            Log.e("FROMIMAGE2", dbMaterialName);
                             String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
                             long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
+                            diYnames.addDbMaterial(new DBMaterial().setName(dbMaterialName).setUnit(dbMaterialUnit).setQuantity((int) dbMaterialQuantity));
+
                             if (dbMaterialName.equals(dbMaterials.get(finalM).getName())) {
                                 Log.e("dbMaterialNameCheck", dbMaterialName + " == " + item);
                                 if (dbMaterials.get(finalM).getQuantity() >= dbMaterialQuantity) {
@@ -149,6 +153,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                     }else{
                         Toast.makeText(Bottle_Recommend.this, "YOUR MAKING YOUR OWN ITEM!", Toast.LENGTH_SHORT).show();
                     }
+                    Log.e("DIYMaterialCount",diYnames.getDbMaterialCount()+"");
                     adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
                     lv.setAdapter(adapter);
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

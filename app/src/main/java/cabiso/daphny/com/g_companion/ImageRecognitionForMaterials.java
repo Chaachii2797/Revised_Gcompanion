@@ -140,7 +140,8 @@ public class ImageRecognitionForMaterials extends AppCompatActivity {
                 String added_um = umSpinner.getSelectedItem().toString();
 
                 if(!added_tag.isEmpty()){
-                    dbMaterials.add(new DBMaterial().setName(added_qty + " " + added_um + " " + added_tag));
+//                    dbMaterials.add(new DBMaterial().setName(added_qty + " " + added_um + " " + added_tag));
+                    dbMaterials.add(new DBMaterial().setName(added_tag).setUnit(added_um).setQuantity(Integer.parseInt(added_qty)));
                     newAddMatAdapter.notifyDataSetChanged();
 
                     etAddMaterial.setText("");

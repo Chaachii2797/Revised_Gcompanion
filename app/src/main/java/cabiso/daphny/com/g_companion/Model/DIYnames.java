@@ -3,6 +3,7 @@ package cabiso.daphny.com.g_companion.Model;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class DIYnames implements Comparable<DIYnames>, Serializable{
 
@@ -14,6 +15,7 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
     public Float bookmarks;
     public Float likes;
     public int materialMatches;
+    private ArrayList<DBMaterial> dbMaterials = new ArrayList<>();
 
     public DIYnames(String diyName, String diyUrl, String user_id, String productID, String identity,
                     Float bookmarks, Float likes){
@@ -24,6 +26,7 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
         this.identity = identity;
         this.bookmarks = bookmarks;
         this.likes = likes;
+        this.dbMaterials = new ArrayList<>();
     }
 
     public DIYnames() {
@@ -101,6 +104,15 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
     public DIYnames setLikes(Float likes) {
         this.likes = likes;
         return this;
+    }
+
+    public DIYnames addDbMaterial(DBMaterial dbMaterial){
+        this.dbMaterials.add(dbMaterial);
+        return this;
+    }
+
+    public int getDbMaterialCount(){
+        return this.dbMaterials.size();
     }
 
     @Override

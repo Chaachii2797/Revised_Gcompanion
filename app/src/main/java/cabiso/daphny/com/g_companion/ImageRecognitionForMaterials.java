@@ -114,6 +114,11 @@ public class ImageRecognitionForMaterials extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        dbMaterials = new ArrayList<>();
+        newAddMatAdapter = new NewAddedMaterial(ImageRecognitionForMaterials.this,
+                R.layout.materials_added_adapter, dbMaterials);
+        materialsAddedLv.setAdapter(newAddMatAdapter);
+
         imageMaterial.setClickable(true);
         imageMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,10 +181,7 @@ public class ImageRecognitionForMaterials extends AppCompatActivity {
             }
         });
 
-        dbMaterials = new ArrayList<>();
-        newAddMatAdapter = new NewAddedMaterial(ImageRecognitionForMaterials.this,
-                R.layout.materials_added_adapter, dbMaterials);
-        materialsAddedLv.setAdapter(newAddMatAdapter);
+
 
     }
 

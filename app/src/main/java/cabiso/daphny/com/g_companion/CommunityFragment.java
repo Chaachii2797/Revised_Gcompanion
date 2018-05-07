@@ -303,6 +303,8 @@ public class CommunityFragment extends Fragment{
                                     // fragment is attached to one) that an item has been selected.
                                     mListener.onListFragmentInteractionListener(getRef(position));
 
+                                    Log.e("DIY position" + " " + position, String.valueOf(getRef(position)));
+
                                     Toast.makeText(getActivity(), "You clicked on position!" + " " + position, Toast.LENGTH_SHORT).show();
                                 }
                             }

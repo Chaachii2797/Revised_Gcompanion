@@ -108,16 +108,17 @@ public class Activity_View_Recommend extends AppCompatActivity {
 
                                 }
                             });
+
                             String messageMat = "";
                             List<String> messageMaterials = new ArrayList<String>();
-                            int count = 1;
+                            //int count = 1;
                             for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-                                String dbMaterialName =count + ". "+ postSnapshot.child("name").getValue(String.class).toLowerCase();
+                                String dbMaterialName = postSnapshot.child("name").getValue(String.class).toLowerCase();
                                 String dbMaterialUnit = postSnapshot.child("unit").getValue(String.class);
                                 Long dbMaterialQuantity = postSnapshot.child("quantity").getValue(Long.class);
                                 messageMat += "\n" + dbMaterialName + " = " + dbMaterialQuantity + " " + dbMaterialUnit;
                                 messageMaterials.add(messageMat);
-                                count++;
+                                //count++;
                             }
 
                             String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
@@ -143,22 +144,73 @@ public class Activity_View_Recommend extends AppCompatActivity {
                                 diyImagesViewPagerAdapter = new ViewImagesRecommendationPagerAdapter(getBaseContext(), diYnames.diyUrl);
                                 imgview.setAdapter(diyImagesViewPagerAdapter);
                             }
-                        }else{
+                        }
+                        else if(diYnames.getIdentity().equals("community")) {
+                            user_data.addChildEventListener(new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                    if(diYnames.getUser_id().equals(user_profile.getUserID())){
+                                        username = user_profile.getF_name()+" "+user_profile.getL_name();
+                                        tv_owner_name.setText(username);
+                                        Log.e("user_name", "" + username);
+                                    }else if(diYnames.user_id.equals(user_profile.getUserID())){
+                                        username = user_profile.getF_name()+" "+user_profile.getL_name();
+                                        tv_owner_name.setText(username);
+                                    }
+                                }
+
+                                @Override
+                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
                             String messageMat = "";
                             List<String> messageMaterials = new ArrayList<String>();
-                            int count = 1;
+                            //int count = 1;
                             for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-                                DataSnapshot dbMaterialNode = postSnapshot;
-                                String dbMaterialName = dbMaterialNode.child("name").getValue(String.class).toLowerCase();
-                                String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
-                                long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
-                                messageMat = dbMaterialQuantity + " " + dbMaterialUnit + " " + dbMaterialName;
+                                String dbMaterialName = postSnapshot.child("name").getValue(String.class).toLowerCase();
+                                String dbMaterialUnit = postSnapshot.child("unit").getValue(String.class);
+                                Long dbMaterialQuantity = postSnapshot.child("quantity").getValue(Long.class);
+                                messageMat += "\n" + dbMaterialName + " = " + dbMaterialQuantity + " " + dbMaterialUnit;
                                 messageMaterials.add(messageMat);
-                                count++;
+                                //count++;
                             }
 
                             String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
                             Log.e("splits", "" + splits);
+
+//                            String messageMat = "";
+//                            List<String> messageMaterials = new ArrayList<String>();
+//                            int count = 1;
+//                            for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
+//                                DataSnapshot dbMaterialNode = postSnapshot;
+//                                String dbMaterialName = dbMaterialNode.child("name").getValue(String.class).toLowerCase();
+//                                String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
+//                                long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
+//                                messageMat = dbMaterialQuantity + " " + dbMaterialUnit + " " + dbMaterialName;
+//                                messageMaterials.add(messageMat);
+//                                count++;
+//                            }
+//
+//                            String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
+//                            Log.e("splits", "" + splits);
 
                             String messageProd = "";
                             List<String> messageProcedure = new ArrayList<String>();

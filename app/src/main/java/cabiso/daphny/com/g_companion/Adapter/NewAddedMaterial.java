@@ -1,6 +1,7 @@
 package cabiso.daphny.com.g_companion.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -8,12 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
+import cabiso.daphny.com.g_companion.ImageRecognitionForMaterials;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.R;
 
@@ -59,6 +60,18 @@ public class NewAddedMaterial extends ArrayAdapter<DBMaterial> {
         }
         holder.tvQtyUnity.setText(item.getQuantity()+" "+item.getUnit());
 
+//        Bitmap _mBitmap= ((Activity) mContext).getIntent().getParcelableExtra("Bitmap");
+//        Drawable _mDrawable=new BitmapDrawable(Resources.getSystem(),_mBitmap);
+//        Log.e("mat_drawable", String.valueOf(_mDrawable));
+//        holder.mat_img.setImageDrawable(_mDrawable);
+
+        Bitmap bm = ImageRecognitionForMaterials.constan.photoMap;
+        holder.mat_img.setImageBitmap(item.getMat_image());
+
+//        holder.mat_img.setImageDrawable(new BitmapDrawable(Resources.getSystem(),
+//                ImageRecognitionForMaterials.getBitmap_transfer()));
+
+
         holder.btnDelete_tag.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,10 +88,12 @@ public class NewAddedMaterial extends ArrayAdapter<DBMaterial> {
         TextView tvTag;
         TextView tvQtyUnity;
         Button btnDelete_tag;
+        ImageView mat_img;
         public ViewHolder(View view){
             tvQtyUnity = (TextView) view.findViewById(R.id.tvQtyUnity);
             tvTag = (TextView)view.findViewById(R.id.tvAddedMat);
             btnDelete_tag = (Button) view.findViewById(R.id.btn_delete_tag);
+            mat_img = (ImageView) view.findViewById(R.id.addedMat_image);
         }
     }
 

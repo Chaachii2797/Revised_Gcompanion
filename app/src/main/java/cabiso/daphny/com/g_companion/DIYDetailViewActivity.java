@@ -137,8 +137,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                 final DIYSell info = dataSnapshot.getValue(DIYSell.class);
                 if(diyInfo.getIdentity().equals("community")){
                     diy_sell.setVisibility(View.INVISIBLE);
-                    user_owner_name.setVisibility(View.INVISIBLE);
-                    txtBy.setVisibility(View.INVISIBLE);
                     button_sell.setVisibility(View.INVISIBLE);
                     contact_seller.setVisibility(View.INVISIBLE);
                     create_promo.setVisibility(View.INVISIBLE);
@@ -147,20 +145,27 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     owner_cn.setVisibility(View.INVISIBLE);
                     selling_price.setVisibility(View.INVISIBLE);
                     seller_info.setVisibility(View.INVISIBLE);
+                    user_owner_name.setVisibility(View.VISIBLE);
+                    txtBy.setVisibility(View.VISIBLE);
                     diy_name.setText(diyInfo.diyName);
 
                     user_data.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                            if(userID.equals(user_profile.getUserID())){
-                                user_name = user_profile.getF_name()+" "+user_profile.getL_name();
-                                user_owner_name.setText(user_name);
-                                Log.e("user_name", "" + user_name);
-                            }else if(diyInfo.user_id.equals(user_profile.getUserID())){
+//                            if(userID.equals(user_profile.getUserID())){
+//                                user_name = user_profile.getF_name()+" "+user_profile.getL_name();
+//                                user_owner_name.setText(user_name);
+//                                Log.e("user_name", "" + user_name);
+//                            }else if(diyInfo.user_id.equals(user_profile.getUserID())){
+//                                user_name = user_profile.getF_name()+" "+user_profile.getL_name();
+//                                user_owner_name.setText(user_name);
+//                            }
+                            if(diyInfo.user_id.equals(user_profile.getUserID())){
                                 user_name = user_profile.getF_name()+" "+user_profile.getL_name();
                                 user_owner_name.setText(user_name);
                             }
+
                         }
 
                         @Override
@@ -226,7 +231,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                         Toast.makeText(DIYDetailViewActivity.this, diyInfo.diyUrl, Toast.LENGTH_SHORT).show();
                     }
-                }else if(diyInfo.getIdentity().equals("selling")){
+                }
+
+                else if(diyInfo.getIdentity().equals("selling")){
                     diy_sell.setVisibility(View.VISIBLE);
                     user_owner_name.setVisibility(View.VISIBLE);
                     button_sell.setVisibility(View.VISIBLE);
@@ -509,8 +516,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         Log.d("MessageProcedure", messageProcedure.toString());
 
                         diy_materials.setText(messageMat);
-//                        diy_procedures.setText(messageProd);
-                        diy_procedures.setText("ASK PERMISSION TO THE OWNER OR BUY THE ITEM!");
+                        diy_procedures.setText(messageProd);
+                        //diy_procedures.setText("ASK PERMISSION TO THE OWNER OR BUY THE ITEM!");
                         diy_sell.setText(message_price);
 
                         Log.d("SnapItem", "not null");

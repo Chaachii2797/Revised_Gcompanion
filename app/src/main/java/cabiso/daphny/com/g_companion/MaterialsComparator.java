@@ -29,16 +29,16 @@ public class MaterialsComparator implements Comparator<DIYnames> {
         }
 
         int flag = 0;
-        if(o1.getMaterialMatches() > o2.getMaterialMatches()){
-            Log.d("01material"+o1.getMaterialMatches(), "02"+o2.getMaterialMatches());
-            flag = -1;
-        }else if (o1.getMaterialMatches() < o2.getMaterialMatches()){
-            Log.d("01material"+o1.getMaterialMatches(), "02"+o2.getMaterialMatches());
-            flag = 1;
-        }else{
-            Log.d("01material"+o1.getMaterialMatches(), "02"+o2.getMaterialMatches());
-            flag =0;
-        }
+//        if(o1.getMaterialMatches() > o2.getMaterialMatches()){
+//            Log.d("01material"+o1.getMaterialMatches(), "02"+o2.getMaterialMatches());
+//            flag = -1;
+//        }else if (o1.getMaterialMatches() < o2.getMaterialMatches()){
+//            Log.d("01material"+o1.getMaterialMatches(), "02"+o2.getMaterialMatches());
+//            flag = 1;
+//        }else{
+//            Log.d("01material"+o1.getMaterialMatches(), "02"+o2.getMaterialMatches());
+//            flag =0;
+//        }
         return flag;
     }
 }

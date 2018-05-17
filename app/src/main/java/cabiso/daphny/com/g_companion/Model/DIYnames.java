@@ -14,6 +14,8 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
     public String identity;
     public Float bookmarks;
     public Float likes;
+    public int matchScore;
+    public int matchScoreRate;
     public int materialMatches;
     private ArrayList<DBMaterial> dbMaterials = new ArrayList<>();
 
@@ -27,15 +29,24 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
         this.bookmarks = bookmarks;
         this.likes = likes;
         this.dbMaterials = new ArrayList<>();
+        this.matchScore = 0;
+        this.matchScoreRate = 0;
     }
 
     public DIYnames() {
 
     }
 
+    public void setMatchScoreRate(int rate){
+        this.matchScoreRate = rate;
+    }
 
-    public int getMaterialMatches() {
-        return materialMatches;
+    public int getMatchScoreRate(){
+        return this.matchScoreRate;
+    }
+
+    public ArrayList<DBMaterial> getMaterialMatches() {
+        return dbMaterials;
     }
 
     public DIYnames setMaterialMatches(int materialMatches) {
@@ -59,6 +70,13 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
     public DIYnames setDiyUrl(String diyUrl) {
         this.diyUrl = diyUrl;
         return this;
+    }
+    public void incrementScore(){
+        this.matchScore++;
+    }
+
+    public int getMatchScore() {
+        return matchScore;
     }
 
     public String getUser_id() {

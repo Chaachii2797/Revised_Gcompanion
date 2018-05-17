@@ -212,11 +212,15 @@ public class ImageRecognitionForMaterials extends AppCompatActivity {
                 String added_tag = etAddMaterial.getText().toString().toLowerCase();
                 String added_qty = qtySpinner.getSelectedItem().toString();
                 String added_um = umSpinner.getSelectedItem().toString();
-                String mat_image = imageMaterial.getDrawable().toString();
+
+                imageMaterial.buildDrawingCache();
+                Bitmap mat_image = imageMaterial.getDrawingCache();
+
+                Log.e("mat_image", String.valueOf(mat_image));
 
                 if(!added_tag.isEmpty()){
                     dbMaterials.add(new DBMaterial().setName(added_tag).setUnit(added_um)
-                            .setQuantity(Integer.parseInt(added_qty)));
+                            .setQuantity(Integer.parseInt(added_qty)).setMat_image(mat_image));
                     newAddMatAdapter.notifyDataSetChanged();
 
                     etAddMaterial.setText("");

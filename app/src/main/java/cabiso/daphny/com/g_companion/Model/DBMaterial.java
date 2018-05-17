@@ -49,12 +49,14 @@ public class DBMaterial implements Serializable {
     }
 
     public Bitmap getMat_image() {
+        return mat_image;
+    }
+
+    public DBMaterial setMat_image(Bitmap mat_image) {
         Bitmap bm = ImageRecognitionForMaterials.constan.photoMap;
+        this.mat_image = bm;
 
-        return bm;
+        return this;
     }
 
-    public void setMat_image(Bitmap mat_image) {
-        this.mat_image = mat_image;
-    }
 }

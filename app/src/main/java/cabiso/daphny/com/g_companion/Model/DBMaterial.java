@@ -14,7 +14,7 @@ public class DBMaterial implements Serializable {
     private String name;
     private int quantity;
     private String unit;
-    Bitmap mat_image;
+    private transient Bitmap mat_image;
 
     public DBMaterial(){
         this.quantity = 0;

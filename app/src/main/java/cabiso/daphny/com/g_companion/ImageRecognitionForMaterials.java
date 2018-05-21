@@ -300,7 +300,7 @@ public class ImageRecognitionForMaterials extends AppCompatActivity {
     public void printTags() {
         String results = "";
 
-        dbMaterials.clear();
+//        dbMaterials.clear();
         for (int in = 0; in < 2; in++) {
             for (int ci = 0; ci < validWords.size(); ci++) {
                 if (tags.get(in).contains(validWords.get(ci))) {
@@ -410,7 +410,7 @@ public class ImageRecognitionForMaterials extends AppCompatActivity {
 //                                imgRecogSetQty.setName(predictedTags.get(i).name());
 //                                anotherMaterialSetQties.add(imgRecogSetQty);
                             }
-                            //printTags();
+                            printTags();
 
                         }catch (ClarifaiException ex){
                             ex.getMessage();

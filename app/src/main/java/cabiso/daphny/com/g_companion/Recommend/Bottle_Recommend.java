@@ -35,6 +35,7 @@ import cabiso.daphny.com.g_companion.Model.QuantityItem;
 import cabiso.daphny.com.g_companion.R;
 
 import static cabiso.daphny.com.g_companion.R.mipmap.item;
+import static cabiso.daphny.com.g_companion.R.mipmap.logo_new;
 
 /**
  * Created by Lenovo on 7/31/2017.
@@ -100,75 +101,48 @@ public class Bottle_Recommend extends AppCompatActivity {
         final Bundle extra = getIntent().getBundleExtra("dbmaterials");
         dbMaterials = (ArrayList<DBMaterial>) extra.getSerializable("dbmaterials");
         Log.e("FROMIMAGE", String.valueOf(dbMaterials));
-        final ArrayList<Integer> scoresList = new ArrayList<>();
         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
 
             myRef.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
-                    int scoreCounter = 0;
-                    if(!userID.equals(diYnames.getUser_id())){
-                        for(int m = 0; m < dbMaterials.size(); m++) {
-                            final int finalM = m;
-                            for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-                                DataSnapshot dbMaterialNode = postSnapshot;
-                                String dbMaterialName = dbMaterialNode.child("name").getValue(String.class).toLowerCase();
-                                Log.e("FROMIMAGE2", dbMaterialName);
-                                String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
-                                long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
-                                diYnames.addDbMaterial(new DBMaterial().setName(dbMaterialName).setUnit(dbMaterialUnit).setQuantity((int) dbMaterialQuantity));
-//                            if(diYnames.getDbMaterialCount() > 5){
-                                //
-                                if (dbMaterialName.equals(dbMaterials.get(finalM).getName())) {
-                                    Log.e("dbMaterialNameCheck", dbMaterialName + " == " + item);
-                                    if (dbMaterials.get(finalM).getQuantity() >= dbMaterialQuantity) {
-                                        if (dbMaterials.get(finalM).getUnit().equals(dbMaterialUnit)) {
-                                            if (!exists(diYnames)) {
-//                                                if(diYnames.getMatchScore() >= 4){
-                                                    diyList.add(diYnames);
-                                                    scoreCounter++;
-                                                    Collections.sort(diyList);
-                                                    sortDiyList(diyList);
-                                                    Collections.reverse(diyList);
-                                                    adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
-                                                    lv.setAdapter(adapter);
-                                                    Log.e("FIRSTLOOPYES", diYnames.getDiyName());
 
-//                                                }
+                    if(!userID.equals(diYnames.getUser_id())){
+                        for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
+
+                            DataSnapshot dbMaterialNode = postSnapshot;
+                            String dbMaterialName = dbMaterialNode.child("name").getValue(String.class).toLowerCase();
+                            Log.e("dataSnapshotMaterial",dbMaterialName+" --- "+diYnames.getDiyName());
+                            String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
+                            long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
+                            diYnames.addDbMaterial(new DBMaterial().setName(dbMaterialName).setUnit(dbMaterialUnit).setQuantity((int) dbMaterialQuantity));
+                            diYnames.incrementTotalMaterial(dataSnapshot.child("materials").getChildrenCount());
+                            for(int m = 0; m < dbMaterials.size(); m++) {
+                                String dbMaterialsItem = dbMaterials.get(m).getName()+" ("+dbMaterials.get(m).getQuantity()+" "+dbMaterials.get(m).getUnit()+")";
+                                Log.e("scanedMaterial",dbMaterialsItem+" --- "+dbMaterialName+" ("+dbMaterialQuantity+" "+dbMaterialUnit+")"+" = "+diYnames.getDiyName());
+                                if (dbMaterialName.equals(dbMaterials.get(m).getName())) {
+                                    diYnames.incrementScore();
+                                    if (dbMaterials.get(m).getQuantity() >= dbMaterialQuantity) {
+                                        if (dbMaterials.get(m).getUnit().equals(dbMaterialUnit)) {
+//                                            diYnames.incrementScore();
+                                            if (!exists(diYnames)) {
+                                                Log.e("dbMaterialNameCheck3", dbMaterialName + " == " + dbMaterials.get(m).getName()+" ~ "+ diYnames.getMatchScore()
+                                                        +" "+diYnames.getDiyName());
+                                                diyList.add(diYnames);
+                                                sortDiyList(diyList);
+                                                adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
+                                                lv.setAdapter(adapter);
                                             }
-                                            Log.e("incrementScore", diYnames.getMatchScoreRate() + "");
-//                                        else{
-//                                            final Dialog dialog = new Dialog(Bottle_Recommend.this);
-//                                            dialog.setContentView(R.layout.new_alert_dialog);
-//                                            TextView text = (TextView) dialog.findViewById(R.id.text);
-//                                            text.setText("No DIY matched!");
-//                                            ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
-//                                            image.setImageResource(R.drawable.no_item_match_dialog);
-//
-//                                            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-//                                            // if button is clicked, close the custom dialog
-//                                            dialogButton.setOnClickListener(new View.OnClickListener() {
-//                                                @Override
-//                                                public void onClick(View v) {
-//                                                    Intent intent = new Intent(Bottle_Recommend.this, MainActivity.class);
-//                                                    startActivity(intent);
-//                                                }
-//                                            });
-//                                            dialog.show();
-//                                        }
                                         }
                                     }
                                 }
-//                            }
                             }
                         }
                     }else{
                         Toast.makeText(Bottle_Recommend.this, "YOUR MAKING YOUR OWN ITEM!", Toast.LENGTH_SHORT).show();
                     }
-                    Log.e("DIYMaterialCount",diYnames.getDbMaterialCount()+"");
-                    scoresList.add(scoreCounter);
-
+                    Log.e("DIYMatchScore",diYnames.getMatchScore()+" === "+diYnames.getDiyName());
                 }
 
 
@@ -193,31 +167,6 @@ public class Bottle_Recommend extends AppCompatActivity {
                 }
             });
 
-//        // removing matching percentage
-//        for (int matchIndex = 0; matchIndex < scoresList.size(); matchIndex++){
-//            //getting percentage of matched materials
-//            float matchRate = (scoresList.get(matchIndex)/dbMaterials.size())*100;
-//            if(matchRate < 60){
-//                Log.e("DIYremovalLOOP",diyList.get(matchIndex).getDiyName());
-//                scoresList.remove(matchIndex);
-//                diyList.remove(matchIndex);
-//
-//            }
-//        }
-//        Log.e("SCORELISTS", String.valueOf(scoresList));
-//
-//
-//        // sorting loop
-//        for(int x = 0; x < diyList.size(); x++){
-//            for(int y = 0; y < (diyList.size()-x)-1; y++){
-//                if(scoresList.get(y) > scoresList.get(y+1)){
-//                    DIYnames holder = diyList.get(y);
-//                    diyList.set(y,diyList.get(y+1));
-//                    diyList.set(y+1,holder);
-//                    Log.e("DIYLISTLOOP",diyList.get(y).getDiyName());
-//                }
-//            }
-//        }
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -235,29 +184,45 @@ public class Bottle_Recommend extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 
     private void sortDiyList(ArrayList<DIYnames> diyList){
-        int totalDbMaterial = dbMaterials.size();
-        int matchScoreRate = 0;
+        float matchScoreRate;
+        for(int b = 0 ; b < diyList.size(); b++){
+            matchScoreRate = ((float)diyList.get(b).getMatchScore()/(float)diyList.get(b).getTotalMaterial())*100;
+            Log.e("AAAAformula","("+diyList.get(b).getMatchScore()+"/"+diyList.get(b).getTotalMaterial()+ ") *100 = "+matchScoreRate + " "
+                    +diyList.get(b).getDiyName());
+            diyList.get(b).setMatchScoreRate((int) matchScoreRate);
+            if(matchScoreRate < 60){
+                diyList.remove(b);
+//                Log.e("matchScoreRateB",diyList.get(x).getMatchScoreRate()+" "+ diyList.get(x).getDiyName());
+            }
+        }
         for(int x = 0; x < diyList.size(); x++){
-            matchScoreRate = ((diyList.get(x).getDbMaterialCount()/totalDbMaterial)*100);
 
-            if(matchScoreRate >= 60){
-                diyList.get(x).setMatchScoreRate(matchScoreRate);
+            matchScoreRate = ((float)diyList.get(x).getMatchScore()/(float)diyList.get(x).getTotalMaterial())*100;
+            Log.e("BBBformula","("+diyList.get(x).getMatchScore()+"/"+diyList.get(x).getTotalMaterial()+ ") *100 = "+diyList.get(x).getMatchScore() + " "
+                    +diyList.get(x).getDiyName());
+//
                 for(int y = 0; y < (diyList.size()-x)-1; y++){
-                    if(diyList.get(y).getMatchScoreRate() > diyList.get(y+1).getMatchScoreRate()){
+//                    diyList.get(y).setMatchScoreRate((int) matchScoreRate);
+//                    float matchScoreRateA = ((float)diyList.get(y).getMatchScore()/(float)diyList.get(y).getTotalMaterial())*100;
+//                    Log.e("Aformula","("+diyList.get(y).getMatchScore()+"/"+diyList.get(y).getTotalMaterial()+ ") *100 = "+matchScoreRateA);
+//                    float matchScoreRateB = ((float)diyList.get(y+1).getMatchScore()/(float)diyList.get(y+1).getTotalMaterial())*100;
+//                    Log.e("Bformula","("+diyList.get(y+1).getMatchScore()+"/"+diyList.get(y+1).getTotalMaterial()+ ") *100 = "+matchScoreRateB);
+//                    diyList.get(y).setMatchScoreRate((int) matchScoreRateA);
+//                    diyList.get(y+1).setMatchScoreRate((int) matchScoreRateB);
+                    if(diyList.get(y).getMatchScoreRate() < diyList.get(y+1).getMatchScoreRate()){
                         DIYnames holder = diyList.get(y);
                         diyList.set(y,diyList.get(y+1));
                         diyList.set(y+1,holder);
                         Log.e("DIYLISTLOOP",diyList.get(y).getDiyName());
+//                        Log.e("removedUP",diyList.remove(x).getDiyName());
                     }
                 }
-            } else {
-                diyList.remove(x);
-            }
         }
+        //getting 60% match rate items only
+
     }
 
 //    private ArrayList<DIYnames> materialMatching(ArrayList<DIYnames> diyNames, ArrayList<DBMaterial> dbMaterials){
@@ -284,7 +249,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                 flag = true;
             }
         }
-        diYnames.incrementScore();
+
         return flag;
     }
 

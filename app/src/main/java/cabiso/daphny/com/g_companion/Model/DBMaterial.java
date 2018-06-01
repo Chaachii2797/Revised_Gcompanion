@@ -21,6 +21,8 @@ public class DBMaterial implements Serializable {
         this.unit = "pieces";
     }
 
+
+
     public String getName() {
         return name;
     }

@@ -143,6 +143,7 @@ public class ImageRecognitionForMaterials extends AppCompatActivity {
                 etAddMaterial.setText(tag.text);
                 etAddMaterial.setSelection(tag.text.length());//to set cursor position
 
+
             }
         });
         tagGroup.setOnTagDeleteListener(new TagView.OnTagDeleteListener() {

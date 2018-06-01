@@ -119,11 +119,10 @@
                 android:gravity="center"
                 android:onClick="onClick"
                 android:text="End"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:layout_below="@+id/lvMaterialList"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_below="@+id/lVscrollView"
+                android:layout_alignLeft="@+id/tags_layout"
+                android:layout_alignStart="@+id/tags_layout"
+                android:layout_marginTop="16dp" />
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -136,28 +135,29 @@
                 android:layout_alignParentStart="true" />
 
 
-            <!--<ScrollView-->
-                <!--android:id="@+id/lVscrollView"-->
-                <!--android:layout_height="170dp"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_below="@+id/textView34"-->
-                <!--android:layout_alignParentStart="true"-->
-                <!--android:layout_alignParentLeft="true">-->
+            <ScrollView
+                android:id="@+id/lVscrollView"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/textView34"
+
+                android:fillViewport="true">
 
                 <ListView
                     android:id="@+id/lvMaterialList"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/textView34"
-                    android:layout_marginTop="14dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_gravity="top"
                     android:paddingBottom="3dp"
                     android:paddingLeft="3dp"
                     android:paddingRight="3dp"
-                    android:paddingTop="3dp" />
+                    android:paddingTop="3dp"
+                    />
 
-            <!--</ScrollView>-->
+            </ScrollView>
 
             <TextView
                 android:id="@+id/textView34"

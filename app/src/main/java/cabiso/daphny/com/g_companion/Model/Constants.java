@@ -131,7 +131,7 @@ public class Constants {
             "{\"name\": \"Zipper\", \"code\": \"ZI\"}, \n" +
             "{\"name\": \"Wood Frame\", \"code\": \"WF\"}, \n" +
             "{\"name\": \"Wrapping Paper\", \"code\": \"WR\"}, \n" +
-            "{\"name\": \"Yoghurt Pots\", \"code\": \"YO\"} \n" +
+            "{\"name\": \"Yogurt Pots\", \"code\": \"YO\"} \n" +
 
 
             "]";

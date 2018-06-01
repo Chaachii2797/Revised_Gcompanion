@@ -23,7 +23,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.DIYDetailViewActivity;
@@ -33,9 +32,6 @@ import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.QuantityItem;
 import cabiso.daphny.com.g_companion.R;
-
-import static cabiso.daphny.com.g_companion.R.mipmap.item;
-import static cabiso.daphny.com.g_companion.R.mipmap.logo_new;
 
 /**
  * Created by Lenovo on 7/31/2017.
@@ -181,7 +177,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                 Bundle extra = new Bundle();
                 extra.putSerializable("dbmaterials", dbMaterials);
                 intent.putExtra("dbmaterials", extra);
-                startActivity(intent);
+                startActivity(intent);    
             }
         });
     }

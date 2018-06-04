@@ -62,14 +62,30 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
     @Override
     public View getView(final int position, @Nullable final View convertView, @NonNull final ViewGroup parent) {
         final LayoutInflater inflater = context.getLayoutInflater();
+       // View row = super.getView(position, convertView, parent);
 
         View v = inflater.inflate(resource, null);
         TextView tvName = (TextView) v.findViewById(R.id.get_diyName);
         TextView tvcategory = (TextView) v.findViewById(R.id.tv_category);
         ImageView img = (ImageView) v.findViewById(R.id.diy_item_icons);
+        TextView tvPercentage = (TextView) v.findViewById(R.id.tvPercentage);
 
         tvName.setText(listDIY.get(position).getDiyName());
         tvcategory.setText(listDIY.get(position).getIdentity());
+        tvPercentage.setText(listDIY.get(position).getMatchScoreRate() + "" + "%");
+        if (listDIY.get(position).getMatchScoreRate() == 100) {
+            v.setBackgroundColor (Color.parseColor("#ff1919")); // some color
+        }
+        else if(listDIY.get(position).getMatchScoreRate() >= 90){
+            v.setBackgroundColor (Color.parseColor("#ff4c4c")); // default color
+        }else if(listDIY.get(position).getMatchScoreRate() >= 80){
+            v.setBackgroundColor (Color.parseColor("#ff7f7f")); // default color
+        }else if(listDIY.get(position).getMatchScoreRate() >= 70){
+            v.setBackgroundColor (Color.parseColor("#ff9999")); // default color
+        }else if(listDIY.get(position).getMatchScoreRate() >= 60){
+            v.setBackgroundColor (Color.parseColor("#ffcccc")); // default color
+        }
+
         if(listDIY.get(position).getIdentity().equals("selling")){
             tvcategory.setText("Selling");
             tvcategory.setBackgroundColor(Color.RED);

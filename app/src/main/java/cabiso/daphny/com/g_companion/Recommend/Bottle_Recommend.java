@@ -102,7 +102,7 @@ public class Bottle_Recommend extends AppCompatActivity {
             myRef.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
+                    final DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
 
                     if(!userID.equals(diYnames.getUser_id())){
                         for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
@@ -188,6 +188,8 @@ public class Bottle_Recommend extends AppCompatActivity {
             matchScoreRate = ((float)diyList.get(b).getMatchScore()/(float)diyList.get(b).getTotalMaterial())*100;
             Log.e("AAAAformula","("+diyList.get(b).getMatchScore()+"/"+diyList.get(b).getTotalMaterial()+ ") *100 = "+matchScoreRate + " "
                     +diyList.get(b).getDiyName());
+//            TextView tvPercent = (TextView) findViewById(R.id.tvPercentage);
+//            tvPercent.setText((int) matchScoreRate);
             diyList.get(b).setMatchScoreRate((int) matchScoreRate);
             if(matchScoreRate < 60){
                 diyList.remove(b);

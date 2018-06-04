@@ -52,5 +52,14 @@
     <color name="for_star">#55000000</color>
     <color name="star_yello">#efd63d</color>
 
+    <color name="percent_first">#ff1919</color>
+    <color name="percent_second">#ff4c4c</color>
+    <color name="percent_third">#ff7f7f</color>
+    <color name="percent_fourth">#ff9999</color>
+    <color name="percent_last">#ffcccc</color>
+
+
+
+
 
 </resources>

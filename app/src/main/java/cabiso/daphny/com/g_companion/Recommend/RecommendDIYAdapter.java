@@ -74,16 +74,16 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
         tvcategory.setText(listDIY.get(position).getIdentity());
         tvPercentage.setText(listDIY.get(position).getMatchScoreRate() + "" + "%");
         if (listDIY.get(position).getMatchScoreRate() == 100) {
-            v.setBackgroundColor (Color.parseColor("#ff1919")); // some color
+            v.setBackgroundColor (Color.parseColor("#ffffff")); // some color
         }
         else if(listDIY.get(position).getMatchScoreRate() >= 90){
-            v.setBackgroundColor (Color.parseColor("#ff4c4c")); // default color
+            v.setBackgroundColor (Color.parseColor("#e5e5e5")); // default color
         }else if(listDIY.get(position).getMatchScoreRate() >= 80){
-            v.setBackgroundColor (Color.parseColor("#ff7f7f")); // default color
+            v.setBackgroundColor (Color.parseColor("#00C78C")); // default color
         }else if(listDIY.get(position).getMatchScoreRate() >= 70){
-            v.setBackgroundColor (Color.parseColor("#ff9999")); // default color
+            v.setBackgroundColor (Color.parseColor("#1abc9c")); // default color
         }else if(listDIY.get(position).getMatchScoreRate() >= 60){
-            v.setBackgroundColor (Color.parseColor("#ffcccc")); // default color
+            v.setBackgroundColor (Color.parseColor("#16a085")); // default color
         }
 
         if(listDIY.get(position).getIdentity().equals("selling")){

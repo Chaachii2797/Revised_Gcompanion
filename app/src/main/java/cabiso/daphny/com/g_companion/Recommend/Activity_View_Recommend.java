@@ -75,7 +75,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
         diy_sell = (TextView) findViewById(R.id.sell_details);
         user_owner_name = (TextView) findViewById(R.id.txt_user_owner_name);
         txtBy = (TextView) findViewById(R.id.txt_by);
-        button_sell = (Button) findViewById(R.id.btn_sell_diy);
+        button_sell = (Button) findViewById(R.id.btn_buy_diy);
         php = (TextView) findViewById(R.id.textView33);
         contact_seller = (Button) findViewById(R.id.btn_contact_diy_owner);
         //create_promo = (Button) findViewById(R.id.btn_create_promo);
@@ -327,7 +327,8 @@ public class Activity_View_Recommend extends AppCompatActivity {
                                 String dbMaterialName = postSnapshot.child("name").getValue(String.class).toLowerCase();
                                 String dbMaterialUnit = postSnapshot.child("unit").getValue(String.class);
                                 Long dbMaterialQuantity = postSnapshot.child("quantity").getValue(Long.class);
-                                messageMat += "\n" + dbMaterialName + " = " + dbMaterialQuantity + " " + dbMaterialUnit;
+//                                messageMat += "\n" + dbMaterialName + " = " + dbMaterialQuantity + " " + dbMaterialUnit;
+                                messageMat += "\n" + dbMaterialQuantity + " " + dbMaterialUnit+ " " +dbMaterialName;
                                 messageMaterials.add(messageMat);
                                 //count++;
                             }
@@ -417,7 +418,8 @@ public class Activity_View_Recommend extends AppCompatActivity {
                                 String dbMaterialName = postSnapshot.child("name").getValue(String.class).toLowerCase();
                                 String dbMaterialUnit = postSnapshot.child("unit").getValue(String.class);
                                 Long dbMaterialQuantity = postSnapshot.child("quantity").getValue(Long.class);
-                                messageMat += "\n" + dbMaterialName + " = " + dbMaterialQuantity + " " + dbMaterialUnit;
+//                                messageMat += "\n" + dbMaterialName + " = " + dbMaterialQuantity + " " + dbMaterialUnit;
+                                messageMat += "\n" + dbMaterialQuantity + " " + dbMaterialUnit+ " "+ dbMaterialName;
                                 messageMaterials.add(messageMat);
                                 //count++;
                             }

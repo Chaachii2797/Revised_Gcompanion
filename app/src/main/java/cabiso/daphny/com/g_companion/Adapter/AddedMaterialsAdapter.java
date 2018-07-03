@@ -27,16 +27,6 @@ public class AddedMaterialsAdapter extends ArrayAdapter<String> {
     }
 
 
-
-//    public AddedMaterialsAdapter(Context applicationContext, String[] values, String[] vals) {
-//        super(applicationContext,R.layout.materials_added_adapter, values);
-//        this.mContext = applicationContext;
-//        this.values = values;
-//        this.vals = vals;
-//    }
-
-
-
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -48,18 +38,5 @@ public class AddedMaterialsAdapter extends ArrayAdapter<String> {
         textView.setText(values[position]);
 
         return rowView;
-
-        //ViewHolder holder;
-
-//         class ViewHolder {
-//            TextView tvTag;
-//            Button btnDelete_tag;
-//
-//            public ViewHolder(View view) {
-//                tvTag = (TextView) view.findViewById(R.id.tvAddedMat);
-//                btnDelete_tag = (Button) view.findViewById(R.id.btn_delete_tag);
-//            }
-//        }
-
     }
 }

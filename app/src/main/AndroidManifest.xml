@@ -29,12 +29,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".SplashActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
             android:label="@string/app_name"
             android:noHistory="true"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize"
             android:screenOrientation="locked"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -101,9 +101,10 @@
         <activity android:name=".Admin" />
         <activity android:name=".Bookmark_Activity" />
         <activity android:name=".Recommend.Activity_View_Recommend" />
-        <activity android:name=".Recommend.PendingView_Activity"></activity>
-        <activity android:name=".ImageRecognitionForMaterials"></activity>
-
+        <activity android:name=".Recommend.PendingView_Activity" />
+        <activity android:name=".ImageRecognitionForMaterials" />
+        <activity android:name=".Bidding" />
+        <activity android:name=".ToBidProduct"></activity>
     </application>
 
 </manifest>

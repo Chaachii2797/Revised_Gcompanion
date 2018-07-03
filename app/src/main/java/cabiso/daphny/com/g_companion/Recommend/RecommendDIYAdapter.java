@@ -40,7 +40,6 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
     public int heartCount=0;
     public int starCount=0;
 
-
     private FirebaseUser mFirebaseUser;
     private String userID;
 
@@ -55,8 +54,6 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
         listDIY = objects;
     }
 
-
-
     @NonNull
 
     @Override
@@ -67,23 +64,25 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
         View v = inflater.inflate(resource, null);
         TextView tvName = (TextView) v.findViewById(R.id.get_diyName);
         TextView tvcategory = (TextView) v.findViewById(R.id.tv_category);
+
         ImageView img = (ImageView) v.findViewById(R.id.diy_item_icons);
         TextView tvPercentage = (TextView) v.findViewById(R.id.tvPercentage);
 
         tvName.setText(listDIY.get(position).getDiyName());
         tvcategory.setText(listDIY.get(position).getIdentity());
+
         tvPercentage.setText(listDIY.get(position).getMatchScoreRate() + "" + "%");
         if (listDIY.get(position).getMatchScoreRate() == 100) {
-            v.setBackgroundColor (Color.parseColor("#ff1919")); // some color
-        }
-        else if(listDIY.get(position).getMatchScoreRate() >= 90){
-            v.setBackgroundColor (Color.parseColor("#ff4c4c")); // default color
+            v.setBackgroundColor (Color.parseColor("#FFFFFF")); // some color
+        }else if(listDIY.get(position).getMatchScoreRate() >= 90){
+            v.setBackgroundColor (Color.parseColor("#23FFD4")); // default color
         }else if(listDIY.get(position).getMatchScoreRate() >= 80){
-            v.setBackgroundColor (Color.parseColor("#ff7f7f")); // default color
+            v.setBackgroundColor (Color.parseColor("#20ECC4")); // default color
         }else if(listDIY.get(position).getMatchScoreRate() >= 70){
-            v.setBackgroundColor (Color.parseColor("#ff9999")); // default color
+            v.setBackgroundColor (Color.parseColor("#1EDCB7")); // default color
         }else if(listDIY.get(position).getMatchScoreRate() >= 60){
-            v.setBackgroundColor (Color.parseColor("#ffcccc")); // default color
+            v.setBackgroundColor (Color.parseColor("#1abc9c")); // default color
+//            v.setBackgroundColor (Color.parseColor("#239B56")); // default color
         }
 
         if(listDIY.get(position).getIdentity().equals("selling")){

@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,6 +22,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +57,6 @@ public class Bottle_Recommend extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
     private ProgressBar mprogressBar;
-
-
     // ImageButton star;
 
     private FirebaseDatabase database;
@@ -222,24 +223,6 @@ public class Bottle_Recommend extends AppCompatActivity {
         //getting 60% match rate items only
 
     }
-
-//    private ArrayList<DIYnames> materialMatching(ArrayList<DIYnames> diyNames, ArrayList<DBMaterial> dbMaterials){
-//        ArrayList<Integer> scores = new ArrayList<>();
-//        for(int x = 0; x < diyNames.size(); x++){
-//            ArrayList<DBMaterial> diyNameMaterialHolder = diyNames.get(x).getMaterialMatches();
-//            for(int diyNameMaterialIndex = 0; diyNameMaterialIndex < diyNameMaterialHolder.size(); diyNameMaterialIndex++){
-//                for(int materialRef = 0; materialRef < dbMaterials; materialRef++){
-//                    if(diyNameMaterialHolder.get(diyNameMaterialIndex).get)
-//                }
-//            }
-//            try {
-//                scores.get( x );
-//            } catch ( IndexOutOfBoundsException e ) {
-//            }
-//        }
-//        return diyNames;
-//    }
-
     private boolean exists(DIYnames diYnames) {
         boolean flag = false;
         for (DIYnames diyName : diyList) {

@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -27,7 +28,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,9 +53,12 @@ import java.util.List;
 import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Adapter.BiddersAdapter;
+import cabiso.daphny.com.g_companion.Adapter.RecyclerViewDataAdapter;
+import cabiso.daphny.com.g_companion.Adapter.RelatedDIYAdapter;
 import cabiso.daphny.com.g_companion.Model.DIYBidding;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.Model.SectionDataModel;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 
 /**
@@ -69,7 +73,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
             owner_add, owner_cn, owner_bid_date, owner_bid_price, owner_comment;
     private Button button_buy, contact_seller, create_promo, bid_item;
     private String user_name;
-    private CardView selling_price, seller_info, bid_info;
+    private CardView selling_price, seller_info, bid_info, cardview0, cardview00, cardview000;
     private RecyclerView recyclerView;
 
 
@@ -85,7 +89,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private DatabaseReference itemReference;
     private FirebaseUser mFirebaseUser;
 
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference, newDatabaseRef;
 
     private String userID;
     private SimpleDateFormat dateFormatter;
@@ -93,12 +97,19 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private int end_year, end_month, end_day;
     static final int DATE_ID = 0;
 
+    private FloatingActionButton fab_template;
+    private RelatedDIYAdapter relatedDIYadapter;
+//    private ArrayList<DIYnames> relatedDiyList = new ArrayList<>();
+
+    //private ArrayList<DIYnames> relatedDiyList;
+    ArrayList<SectionDataModel> allSampleData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diy_data);
         String diyReferenceString = getIntent().getStringExtra("Community Ref");
-        Toast.makeText(this, "COMMUNITY_REF"+diyReferenceString, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "COMMUNITY_REF"+diyReferenceString, Toast.LENGTH_SHORT).show();
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
@@ -108,6 +119,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         pending_reference = FirebaseDatabase.getInstance().getReference("DIY Pending Items").child(userID);
         user_data = FirebaseDatabase.getInstance().getReference().child("userdata");
         itemReference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
+        newDatabaseRef = FirebaseDatabase.getInstance().getReference().child("same_diy_product");
 
         /* Toolbar Configurations */
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDetails);
@@ -123,6 +135,15 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        //FAB for adding finish product template
+        fab_template = (FloatingActionButton) findViewById(R.id.fab_add_product);
+        fab_template.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(DIYDetailViewActivity.this, AddSameDIYTemplate.class);
+                startActivity(in);
+            }
+        });
 
         /* User Interface Initializations */
         recyclerView = (RecyclerView) findViewById(R.id.lv_bidders);
@@ -134,7 +155,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         diy_sell = (TextView) findViewById(R.id.sell_details);
         user_owner_name = (TextView) findViewById(R.id.txt_user_owner_name);
         txtBy = (TextView) findViewById(R.id.txt_by);
-        button_buy = (Button) findViewById(R.id.btn_buy_diy);
+        button_buy = (Button) findViewById(R.id.btn_sell_diy);
         php = (TextView) findViewById(R.id.textView33);
         contact_seller = (Button) findViewById(R.id.btn_contact_diy_owner);
         create_promo = (Button) findViewById(R.id.btn_create_promo);
@@ -143,8 +164,10 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         owner_cn = (TextView) findViewById(R.id.diy_owner_cn);
         selling_price = (CardView) findViewById(R.id.cardView3);
         seller_info = (CardView) findViewById(R.id.cardView4);
-        bid_info = (CardView) findViewById(R.id.cardView5);
-
+        bid_info = (CardView) findViewById(R.id.cardView6);
+        cardview0 = (CardView) findViewById(R.id.cardView);
+        cardview00 = (CardView) findViewById(R.id.cardView2);
+        cardview000 = (CardView) findViewById(R.id.cardView5);
 
         /* Bidding Lists */
         biddersAdapter = new BiddersAdapter(DIYDetailViewActivity.this,diyBiddings);
@@ -152,6 +175,19 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(biddersAdapter);
+
+        allSampleData = new ArrayList<SectionDataModel>();
+
+        //createDummyData();
+
+        final RecyclerView relatedDIYrecyclerView = (RecyclerView) findViewById(R.id.relatedDIYrecyclerView);
+
+        relatedDIYrecyclerView.setHasFixedSize(true);
+
+        RecyclerViewDataAdapter adapter = new RecyclerViewDataAdapter(this, allSampleData);
+        relatedDIYrecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+        relatedDIYrecyclerView.setAdapter(adapter);
 
 
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -174,6 +210,16 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     bid_item.setVisibility(View.INVISIBLE);
                     diy_name.setText(diyInfo.diyName);
                     bid_info.setVisibility(View.INVISIBLE);
+                    cardview000.setVisibility(View.VISIBLE);
+                    relatedDIYrecyclerView.setVisibility(View.VISIBLE);
+
+                    RelativeLayout.LayoutParams nlp = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    nlp.topMargin = 1200;
+                    nlp.bottomMargin = 15;
+                    nlp.leftMargin = 20;
+                    nlp.rightMargin = 20;
+                    cardview000.setLayoutParams(nlp);
 
                     user_data.addChildEventListener(new ChildEventListener() {
                         @Override
@@ -185,6 +231,80 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                             }
 
                         }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    newDatabaseRef.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();
+                            DIYnames diys =  dataSnapshot.getValue(DIYnames.class);
+
+                            DIYnames dataDIys = new DIYnames();
+
+//                            String diy_price = dataSnapshot.child("DIY Price").getValue().toString();
+//                            Log.e("diy_price", diy_price);
+
+                            String diy_name = diys.getDiyName();
+                            String diy_url = diys.getDiyUrl();
+
+
+                            dataDIys.setDiyName(diy_name);
+                            dataDIys.setDiyUrl(diy_url);
+
+                            //GET DIY RELATED PRICE FROM DB
+
+//                            String message_price="";
+//                            List<String> message_Price = new ArrayList<String>();
+//                            for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
+//                                double price= postSnapshot.child("selling_price").getValue(double.class);
+//                                message_price += price;
+//                                message_Price.add(message_price);
+//                            }
+//
+//                            final String finalMessage_price = message_price;
+//
+//                            diy_sell.setText(message_price);
+//
+
+                            SectionDataModel dm = new SectionDataModel();
+                            dm.setHeaderTitle("Related DIYs:" );
+
+                            ArrayList<DIYnames> singleItem = new ArrayList<DIYnames>();
+
+                            for (int j = 0; j <= 3; j++) {
+                                dm.setAllItemsInSection(singleItem);
+                                singleItem.add(dataDIys);
+
+                            }
+
+                            allSampleData.add(dm);
+
+                            Log.e("singleItem", String.valueOf(singleItem));
+                            Log.e("dataDIys", String.valueOf(dataDIys));
+                            Log.e("diys", String.valueOf(diys));
+
+                        }
+
 
                         @Override
                         public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -248,7 +368,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), diyInfo.diyUrl);
                         diyImagesViewPager.setAdapter(diyImagesViewPagerAdapter);
 
-                        Toast.makeText(DIYDetailViewActivity.this, diyInfo.diyUrl, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(DIYDetailViewActivity.this, diyInfo.diyUrl, Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -262,29 +382,31 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     selling_price.setVisibility(View.VISIBLE);
                     seller_info.setVisibility(View.VISIBLE);
                     diy_name.setText(info.diyName);
-                    button_buy.setVisibility(View.VISIBLE);
+//                    button_buy.setVisibility(View.VISIBLE);
                     contact_seller.setVisibility(View.VISIBLE);
                     bid_item.setVisibility(View.VISIBLE);
                     bid_info.setVisibility(View.VISIBLE);
+                    cardview0.setVisibility(View.INVISIBLE);
+                    cardview00.setVisibility(View.INVISIBLE);
+                    fab_template.setVisibility(View.INVISIBLE);
+                    cardview000.setVisibility(View.INVISIBLE);
+                    relatedDIYrecyclerView.setVisibility(View.INVISIBLE);
+
+                    RelativeLayout.LayoutParams blp = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    blp.topMargin = 710;
+                    blp.bottomMargin = 15;
+                    blp.leftMargin = 20;
+                    blp.rightMargin = 20;
+                    selling_price.setLayoutParams(blp);
 
                     user_data.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-//                            if(userID.equals(user_profile.getUserID())){
-//                                user_name = user_profile.getF_name()+" "+user_profile.getL_name();
-//                                user_owner_name.setText(user_name);
-//                                owner_cn.setText(user_profile.getContact_no());
-//                                owner_add.setText(user_profile.getAddress());
-//                                Log.e("USER", user_profile.getAddress()+ "\n" +user_profile.getContact_no());
-//                                Log.e("user_name", "" + user_name);
-//                            }
                             if(diyInfo.user_id.equals(user_profile.getUserID())){
                                 user_name = user_profile.getF_name()+" "+user_profile.getL_name();
                                 user_owner_name.setText(user_name);
-
-//                                button_buy.setVisibility(View.INVISIBLE);
-//                                contact_seller.setVisibility(View.INVISIBLE);
                                 owner_cn.setText(user_profile.getContact_no());
                                 owner_add.setText(user_profile.getAddress());
                             }
@@ -324,36 +446,16 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     });
 
 
-
                     for (DataSnapshot insideDataSnapshot: dataSnapshot.child("bidding").getChildren()) {
                         DIYBidding biddingItem = insideDataSnapshot.getValue(DIYBidding.class);
                         diyBiddings.add(biddingItem);
                         biddersAdapter.notifyDataSetChanged();
                     }
-//                    itemReference.child(dataSnapshot.getKey()).child("bidding").addValueEventListener(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot dataSnapshot) {
-//                            for (DataSnapshot insideDataSnapshot: dataSnapshot.getChildren()) {
-//                                String msg_price="";
-//                                Log.e("diyBiddingItem",insideDataSnapshot.toString());
-//                                DIYBidding biddingItem = insideDataSnapshot.getValue(DIYBidding.class);
-//                                diybidding.add(biddingItem);
-//                                Log.e("diyBiddingClass",biddingItem.getMessage());
-//                            }
-//                        }
-//                        @Override
-//                        public void onCancelled(DatabaseError databaseError) {
-//
-//                        }
-//                    });
-
-
-
 
                     String message_price="";
                     List<String> message_Price = new ArrayList<String>();
                     for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
-                        int price= postSnapshot.child("selling_price").getValue(int.class);
+                        double price= postSnapshot.child("selling_price").getValue(double.class);
                         message_price += price;
                         message_Price.add(message_price);
 
@@ -554,59 +656,59 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     });
 
 
-                    if (item != null) {
-                        String[] splitsMat = dataSnapshot.child("materials").getValue().toString().split(",");
-                        Log.e("messageProd", "" + splitsMat);
-
-                        String messageMat = "";
-                        List<String> messageMaterials = new ArrayList<String>();
-                        int count = 1;
-                        for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-                            String material_name = postSnapshot.child("name").getValue(String.class).toUpperCase();
-                            Long material_qty = postSnapshot.child("quantity").getValue(Long.class);
-                            String material_unit = postSnapshot.child("unit").getValue(String.class);
-                            Log.e("message", "" + material_name);
-                            messageMat += "\n" + material_qty + " " + material_unit + " " + material_name;
-                            messageMaterials.add(material_name);
-                            count++;
-                        }
-
-                        String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
-                        Log.e("splits", "" + splits);
-
-                        String messageProd = "";
-                        List<String> messageProcedure = new ArrayList<String>();
-                        for (int i = 0; i < splits.length; i++) {
-                            Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
-                            String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
-                            messageProd += "\n" + message;
-                            messageProcedure.add(message);
-
-                            Log.d("messageProd", messageProd);
-                        }
-
-                        Log.d("MessageProcedure", messageProcedure.toString());
-
-                        diy_materials.setText(messageMat);
-                        diy_procedures.setText(messageProd);
-                        //diy_procedures.setText("ASK PERMISSION TO THE OWNER OR BUY THE ITEM!");
+//                    if (item != null) {
+//                        String[] splitsMat = dataSnapshot.child("materials").getValue().toString().split(",");
+//                        Log.e("messageProd", "" + splitsMat);
+//
+//                        String messageMat = "";
+//                        List<String> messageMaterials = new ArrayList<String>();
+//                        int count = 1;
+//                        for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
+//                            String material_name = postSnapshot.child("name").getValue(String.class).toUpperCase();
+//                            Long material_qty = postSnapshot.child("quantity").getValue(Long.class);
+//                            String material_unit = postSnapshot.child("unit").getValue(String.class);
+//                            Log.e("message", "" + material_name);
+//                            messageMat += "\n" + material_qty + " " + material_unit + " " + material_name;
+//                            messageMaterials.add(material_name);
+//                            count++;
+//                        }
+//
+//                        String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
+//                        Log.e("splits", "" + splits);
+//
+//                        String messageProd = "";
+//                        List<String> messageProcedure = new ArrayList<String>();
+//                        for (int i = 0; i < splits.length; i++) {
+//                            Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
+//                            String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
+//                            messageProd += "\n" + message;
+//                            messageProcedure.add(message);
+//
+//                            Log.d("messageProd", messageProd);
+//                        }
+//
+//                        Log.d("MessageProcedure", messageProcedure.toString());
+//
+//                        diy_materials.setText(messageMat);
+//                        diy_procedures.setText(messageProd);
+//                        //diy_procedures.setText("ASK PERMISSION TO THE OWNER OR BUY THE ITEM!");
                         diy_sell.setText(message_price);
-
-                        Log.d("SnapItem", "not null");
-                        Log.d("SnapMaterial", "" + item);
-                        Log.d("SnapDataSnap", "" + dataSnapshot.child("materials").getValue());
-                    } else {
-                        Log.d("SnapItem", "null");
-                    }
+//
+//                        Log.d("SnapItem", "not null");
+//                        Log.d("SnapMaterial", "" + item);
+//                        Log.d("SnapDataSnap", "" + dataSnapshot.child("materials").getValue());
+//                    } else {
+//                        Log.d("SnapItem", "null");
+//                    }
 
                     if (diyInfo.diyUrl != null) {
                         diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
                         diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), diyInfo.diyUrl);
                         diyImagesViewPager.setAdapter(diyImagesViewPagerAdapter);
 
-                        Toast.makeText(DIYDetailViewActivity.this, diyInfo.diyUrl, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(DIYDetailViewActivity.this, diyInfo.diyUrl, Toast.LENGTH_SHORT).show();
                     }
-//////////////////////////////////
+
                 }
             }
 
@@ -617,16 +719,29 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         });
     }
 
+    //    public void createDummyData() {
+//       // for (int i = 1; i <= 5; i++) {
+//
+//            SectionDataModel dm = new SectionDataModel();
+//
+//            dm.setHeaderTitle("Here: " );
+//
+//            ArrayList<DIYnames> singleItem = new ArrayList<DIYnames>();
+//            for (int j = 0; j <= 15; j++) {
+//                singleItem.add(new DIYnames("Item " + j, "URL " + j));
+//            }
+//
+//            dm.setAllItemsInSection(singleItem);
+//
+//            allSampleData.add(dm);
+//
+//       // }
+//    }
+
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
-
-    /**
-     * Called when a view has been clicked.
-     *
-     */
-
 
 
     private class DIYImagesViewPagerAdapter extends PagerAdapter {

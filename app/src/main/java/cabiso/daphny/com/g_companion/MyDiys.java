@@ -50,7 +50,6 @@ public class MyDiys extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private RecyclerView recyclerView;
 
-    //  RecyclerView recyclerView;
     private FirebaseDatabase database;
     private String userID;
     private FirebaseUser mFirebaseUser;
@@ -69,9 +68,6 @@ public class MyDiys extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_diys);
-//
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
 
         recyclerView = (RecyclerView) findViewById(R.id.list);
 

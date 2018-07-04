@@ -39,6 +39,9 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
 
     }
 
+    public DIYnames(String s, String s1) {
+    }
+
     public void setMatchScoreRate(int rate){
         this.matchScoreRate = rate;
     }

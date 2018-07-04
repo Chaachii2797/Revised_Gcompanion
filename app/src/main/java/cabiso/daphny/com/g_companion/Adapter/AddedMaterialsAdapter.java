@@ -21,7 +21,7 @@ public class AddedMaterialsAdapter extends ArrayAdapter<String> {
     //DBMaterial[] values;
 
     public AddedMaterialsAdapter(Context context, String[] values){
-        super(context,R.layout.materials_added_adapter, values);
+        super(context, R.layout.materials_added_adapter, values);
         this.mContext = context;
         this.values = values;
     }

@@ -87,7 +87,9 @@ public class Constants {
             "{\"name\": \"Folder\", \"code\": \"FI\"}, \n" +
             "{\"name\": \"Fork\", \"code\": \"FR\"}, \n" +
             "{\"name\": \"Plastic Fork\", \"code\": \"PF\"}, \n" +
+            "{\"name\": \"Wood Fork\", \"code\": \"WF\"}, \n" +
             "{\"name\": \"Plastic Spoon\", \"code\": \"PS\"}, \n" +
+            "{\"name\": \"Wood Spoon\", \"code\": \"WS\"}, \n" +
             "{\"name\": \"Plastic Cup\", \"code\": \"PC\"}, \n" +
             "{\"name\": \"Frame\", \"code\": \"FR\"}, \n" +
             "{\"name\": \"Furniture\", \"code\": \"FU\"}, \n" +

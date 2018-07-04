@@ -9,11 +9,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -57,7 +57,6 @@ import com.google.firebase.storage.UploadTask;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -97,7 +96,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     private StorageReference storageReference, imageRef;
 
     private StorageReference storageRef, imgRef;
-
 
     private FirebaseUser mFirebaseUser;
     private String userID;
@@ -149,6 +147,10 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     SpinnerAdapter umAdapter;
     SpinnerAdapter1 qAdapter;
 
+    public String photoFileName = "diy_by_tags";
+    File photoFile;
+    public final String APP_TAG = "diy_by_tags";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,8 +195,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
         quantity = getResources().getStringArray(R.array.qty);
         qAdapter=new SpinnerAdapter1(getApplicationContext());
-
-
 
 
         material.addTextChangedListener(new TextWatcher() {
@@ -247,7 +247,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
             }
         });
-
 
         procedure = (EditText) findViewById(R.id.etProcedures);
         imgView = (ImageView) findViewById(R.id.add_product_image_plus_icon);
@@ -394,7 +393,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onClick(final View v) {
 
-                imageRef = storageReference.child(diyPictureUri.getLastPathSegment());
+                //imageRef = storageReference.child(photoFile.getAbsolutePath());
+                imageRef = storageReference.child(String.valueOf(name.getText()));
 
                 //creating and showing progress dialog
                 progressDialog = new ProgressDialog(CaptureDIY.this);
@@ -405,7 +405,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 progressDialog.setCancelable(false);
 
                 //starting upload
-                uploadTask = imageRef.putFile(diyPictureUri);
+                uploadTask = imageRef.putFile(Uri.fromFile(photoFile));
                 // Observe state change events such as progress, pause, and resume
                 uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -494,7 +494,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         Toast.makeText(CaptureDIY.this, etPrice.getText() + "," + etQuantity.getText() + "," + etDescription.getText(),
                                 Toast.LENGTH_SHORT).show();
 
-                        imgRef = storageRef.child(diyPictureUri.getLastPathSegment());
+                       // imgRef = storageRef.child(photoFile.getAbsolutePath());
+                        imgRef = storageRef.child(String.valueOf(name.getText()));
 
                         //creating and showing progress dialog
                         progressDialog = new ProgressDialog(CaptureDIY.this);
@@ -505,7 +506,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         progressDialog.setCancelable(false);
 
                         //starting upload
-                        uploadTask = imgRef.putFile(diyPictureUri);
+                        uploadTask = imgRef.putFile(Uri.fromFile(photoFile));
                         // Observe state change events such as progress, pause, and resume
                         uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -530,7 +531,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 String for_price = etPrice.getText().toString();
                                 String for_qty = etQuantity.getText().toString();
                                 final String for_descr = etDescription.getText().toString();
-                                final int price = Integer.parseInt(for_price);
+                                final float price = Float.parseFloat((for_price));
                                 final int qty = Integer.parseInt(for_qty);
 
                                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
@@ -739,50 +740,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     }
 
 
-
-    //Quantity Chooser
-    private void AlertDialogView() {
-        final CharSequence[] items = { "1pc", "2pcs", "3pcs", "4pcs", "5pcs", "6pcs", "7pcs",
-                "8pcs", "9pcs", "10pcs"};
-
-//        final CharSequence[] unitOfMeasurement = { "meters", "centimeters", "liters", "milligrams ", "grams", "kilograms", "inches ",
-//                "feet", "square inches", "gallon"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(CaptureDIY.this);
-        builder.setTitle("Quantity of material: ");
-        builder.setSingleChoiceItems(unitOfMeasurement, -1,
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        String quantityMaterial = unitOfMeasurement[item] + " " + material.getText().toString();
-
-                        CommunityItem qm = new CommunityItem(quantityMaterial);
-                        itemMaterial.add(qm);
-                        mAdapter.notifyDataSetChanged();
-                        material.setText(" ");
-
-                        Toast.makeText(getApplicationContext(), items[item] + " " + material.getText().toString(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                Toast.makeText(CaptureDIY.this, "Material added.", Toast.LENGTH_SHORT)
-                        .show();
-            }
-        });
-
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                Toast.makeText(CaptureDIY.this, "Fail", Toast.LENGTH_SHORT)
-                        .show();
-            }
-        });
-
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
     @Override
     public void onClick(View v) {
         if(v==diy_Button){
@@ -803,13 +760,33 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            // You can use here an API which was added in Lollipop.
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-            }
+
+        photoFile = getPhotoFileUri(photoFileName);
+
+        Uri fileProvider = FileProvider.getUriForFile(CaptureDIY.this, "cabiso.daphny.com.g_companion", photoFile);
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+        }
+    }
+
+    // Returns the File for a photo stored on disk given the fileName
+    public File getPhotoFileUri(String fileName) {
+        // Get safe storage directory for photos
+        // Use `getExternalFilesDir` on Context to access package-specific directories.
+        // This way, we don't need to request external read/write runtime permissions.
+        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+            Log.e(APP_TAG, "failed to create directory");
         }
 
+        // Return the file target for the photo based on filename
+        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+
+        return file;
     }
 
 
@@ -848,31 +825,46 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Toast.makeText(CaptureDIY.this, "Capture DIY!", Toast.LENGTH_SHORT).show();
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == MainActivity.RESULT_OK) {
+        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            //if (resultCode == MainActivity.RESULT_OK) {
 
-                diyPictureUri = data.getData();
-                if(diyPictureUri==null){
-                    imgView.setImageURI(diyPictureUri);
-                    Toast.makeText(this, "NULL PICTURE", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(this, "NOT NULL BESH ", Toast.LENGTH_SHORT).show();
-                }
+            Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
 
+            imgView = (ImageView) findViewById(R.id.add_product_image_plus_icon);
+            imgView.setImageBitmap(takenImage);
 
-                Bitmap bmp = (Bitmap) data.getExtras().get("data");
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            if(takenImage == null){
+                Toast.makeText(this, "NULL IMAGE", Toast.LENGTH_SHORT).show();
 
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-
-                // convert byte array to Bitmap
-                Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0,
-                        byteArray.length);
-                imgView.setImageBitmap(bitmap);
-
+            }else{
+                Toast.makeText(this, "NOT NULL IMAGE", Toast.LENGTH_SHORT).show();
             }
+
+
+        } else { // Result was a failure
+            Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+
+//                diyPictureUri = data.getData();
+//                if(diyPictureUri==null){
+//                    imgView.setImageURI(diyPictureUri);
+//                    Toast.makeText(this, "NULL IMAGE", Toast.LENGTH_SHORT).show();
+//                }else{
+//                    Toast.makeText(this, "NOT NULL IMAGE ", Toast.LENGTH_SHORT).show();
+//                }
+//
+//
+//                Bitmap bmp = (Bitmap) data.getExtras().get("data");
+//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//
+//                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                byte[] byteArray = stream.toByteArray();
+//
+//                // convert byte array to Bitmap
+//                Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0,
+//                        byteArray.length);
+//                imgView.setImageBitmap(bitmap);
+
+          //  }
 
         }
     }

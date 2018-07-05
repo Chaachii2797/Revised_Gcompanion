@@ -27,7 +27,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +51,7 @@ import java.util.List;
 import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Adapter.BiddersAdapter;
+import cabiso.daphny.com.g_companion.Model.Bidders;
 import cabiso.daphny.com.g_companion.Model.DIYBidding;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
@@ -67,7 +67,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
     private TextView diy_name, diy_materials, diy_procedures, diy_sell, php, user_owner_name,txtBy,
             owner_add, owner_cn, owner_bid_date, owner_bid_price, owner_comment;
-    private Button button_buy, contact_seller, create_promo, bid_item;
+    private Button button_buy, contact_seller, create_promo, bid_item, want_to_bid;
     private String user_name;
     private CardView selling_price, seller_info, bid_info;
     private RecyclerView recyclerView;
@@ -75,7 +75,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
     final Context context = this;
     List<String> item = new ArrayList<>();
-    private List<DIYBidding> diyBiddings = new ArrayList<DIYBidding>();
+//    private List<DIYBidding> diyBiddings = new ArrayList<DIYBidding>();
+    private List<Bidders> diyBiddings = new ArrayList<Bidders>();
     private BiddersAdapter biddersAdapter;
 
     private DIYImagesViewPagerAdapter diyImagesViewPagerAdapter;
@@ -83,6 +84,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private DatabaseReference pending_reference;
     private DatabaseReference user_data;
     private DatabaseReference itemReference;
+    private DatabaseReference biddersReference;
     private FirebaseUser mFirebaseUser;
 
     private DatabaseReference databaseReference;
@@ -102,6 +104,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
+
 
         /* Database References */
         databaseReference = FirebaseDatabase.getInstance().getReferenceFromUrl(diyReferenceString);
@@ -135,6 +138,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         user_owner_name = (TextView) findViewById(R.id.txt_user_owner_name);
         txtBy = (TextView) findViewById(R.id.txt_by);
         button_buy = (Button) findViewById(R.id.btn_buy_diy);
+        want_to_bid = (Button) findViewById(R.id.btn_bidders_bid);
         php = (TextView) findViewById(R.id.textView33);
         contact_seller = (Button) findViewById(R.id.btn_contact_diy_owner);
         create_promo = (Button) findViewById(R.id.btn_create_promo);
@@ -144,6 +148,10 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         selling_price = (CardView) findViewById(R.id.cardView3);
         seller_info = (CardView) findViewById(R.id.cardView4);
         bid_info = (CardView) findViewById(R.id.cardView5);
+
+        owner_bid_date = (TextView) findViewById(R.id.et_bidding_expiration);
+        owner_bid_price = (TextView) findViewById(R.id.et_bidding_price);
+        owner_comment = (TextView) findViewById(R.id.et_bidding_commnt);
 
 
         /* Bidding Lists */
@@ -323,10 +331,16 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         }
                     });
 
-
-
                     for (DataSnapshot insideDataSnapshot: dataSnapshot.child("bidding").getChildren()) {
                         DIYBidding biddingItem = insideDataSnapshot.getValue(DIYBidding.class);
+                        owner_bid_date.setText(biddingItem.getDate());
+                        owner_bid_price.setText(biddingItem.getPrice_min()+" "+"to"+" "+biddingItem.getPrice_max());
+                        owner_comment.setText(biddingItem.getMessage());
+                    }
+
+
+                    for (DataSnapshot insideDataSnapshot: dataSnapshot.child("bidders").getChildren()) {
+                        Bidders biddingItem = insideDataSnapshot.getValue(Bidders.class);
                         diyBiddings.add(biddingItem);
                         biddersAdapter.notifyDataSetChanged();
                     }
@@ -348,8 +362,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 //                    });
 
 
-
-
                     String message_price="";
                     List<String> message_Price = new ArrayList<String>();
                     for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
@@ -358,6 +370,42 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         message_Price.add(message_price);
 
                     }
+                    final Bidders bidders = new Bidders();
+                    final User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                    want_to_bid.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            biddersReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(dataSnapshot.getKey())
+                                    .child("bidders");
+                            final Dialog dialog = new Dialog(DIYDetailViewActivity.this);
+                            dialog.setContentView(R.layout.bidders);
+
+                            Button bidders_dialog = (Button) dialog.findViewById(R.id.btn_bidders_dialog);
+                            bidders_dialog.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    EditText bidders_value = (EditText) dialog.findViewById(R.id.et_bidders_price);
+                                    Log.e("value_price",bidders_value.getText().toString());
+                                    Log.e("value_datasnapshot",dataSnapshot.getKey());
+                                    Log.e("database_value",bidders_value.getText().toString()+ " "+user_name);
+//                                    if(bidders.getId().equals(user_profile.getUserID())){
+//                                        String owner_name = user_profile.getF_name()+" "+user_profile.getL_name();
+//                                        biddersReference.push().setValue(bidders.setBid_price(bidders_value.getText().toString())
+//                                                ,bidders.setId(owner_name));
+//                                    }
+
+//                                    biddersReference.push().setValue(bidders.setBid_price(bidders_value.getText().toString()), bidders.setId(name));
+                                    biddersReference.push().setValue(new Bidders(bidders_value.getText().toString(),user_name));
+
+
+                                    Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                }
+                            });
+
+                            dialog.show();
+                        }
+                    });
 
 
                     final String finalMessage_price = message_price;
@@ -390,7 +438,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                                                     final Dialog dialog = new Dialog(DIYDetailViewActivity.this);
                                                     dialog.setContentView(R.layout.exist_dialog);
-                                                    TextView text = (TextView) dialog.findViewById(R.id.e_text);
+                                                    TextView text = (TextView) dialog.findViewById(R.id.et_email);
                                                     text.setText("DIY already added to pending list!");
                                                     ImageView image = (ImageView) dialog.findViewById(R.id.exist_dialog_imageview);
                                                     image.setImageResource(R.drawable.exist);

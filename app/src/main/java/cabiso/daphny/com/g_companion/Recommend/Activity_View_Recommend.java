@@ -199,7 +199,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
 
                                                             final Dialog dialog = new Dialog(Activity_View_Recommend.this);
                                                             dialog.setContentView(R.layout.exist_dialog);
-                                                            TextView text = (TextView) dialog.findViewById(R.id.e_text);
+                                                            TextView text = (TextView) dialog.findViewById(R.id.et_email);
                                                             text.setText("DIY already added to pending list!");
                                                             ImageView image = (ImageView) dialog.findViewById(R.id.exist_dialog_imageview);
                                                             image.setImageResource(R.drawable.exist);

@@ -51,8 +51,6 @@ public class ToBidProduct extends Activity {
 
 
         itemReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.itemId);
-
-
         mBtnAddBid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -6,7 +6,7 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
     android:layout_marginTop="5dp"
-    app:cardBackgroundColor="@color/backgroundColor"
+    app:cardBackgroundColor="@color/bg_screen1"
     app:cardCornerRadius="10dp"
     app:elevation="5dp">
 
@@ -18,7 +18,7 @@
         android:layout_alignStart="@+id/diy_material"
         android:layout_below="@+id/textView31"
         android:layout_marginLeft="160dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:scrollbars="vertical"
         android:textColor="@android:color/black"
         android:textSize="16sp" />
@@ -31,9 +31,9 @@
         android:layout_alignStart="@+id/diy_material"
         android:layout_below="@+id/diy_owner_cn"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="50dp"
         android:scrollbars="vertical"
-        android:text="Proposal Statement"
+        android:text="Proposal Statement :"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -45,13 +45,13 @@
         android:layout_alignLeft="@+id/diy_material"
         android:layout_alignStart="@+id/diy_material"
         android:layout_below="@+id/owner_cmmnt"
-        android:layout_marginTop="75dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="165dp"
+        android:layout_marginTop="50dp"
         android:hint="Comment :"
         android:scrollbars="vertical"
-        android:textAlignment="center"
         android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/priceTV"
@@ -61,9 +61,10 @@
         android:layout_alignStart="@+id/diy_material"
         android:layout_below="@+id/diy_owner_cn"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:hint="Bid Initial Price :"
         android:scrollbars="vertical"
+        android:text="Bid Date :"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -76,7 +77,7 @@
         android:layout_alignStart="@+id/diy_material"
         android:layout_below="@+id/diy_owner_cn"
         android:layout_marginLeft="160dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="30dp"
         android:scrollbars="vertical"
         android:textColor="@android:color/black"
         android:textSize="16sp" />
@@ -89,9 +90,10 @@
         android:layout_alignStart="@+id/diy_material"
         android:layout_below="@+id/textView31"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="30dp"
         android:hint="Bid Date :"
         android:scrollbars="vertical"
+        android:text="Bid Price :"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold" />

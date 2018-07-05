@@ -103,7 +103,6 @@
         <activity android:name=".Recommend.Activity_View_Recommend" />
         <activity android:name=".Recommend.PendingView_Activity" />
         <activity android:name=".ImageRecognitionForMaterials" />
-        <activity android:name=".Bidding" />
         <activity android:name=".ToBidProduct"></activity>
     </application>
 

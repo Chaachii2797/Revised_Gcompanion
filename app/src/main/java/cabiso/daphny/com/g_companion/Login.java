@@ -5,17 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -107,7 +104,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
 
         mAuth = FirebaseAuth.getInstance();
 
-        email = (EditText) findViewById(R.id.etEmail);
+        email = (EditText) findViewById(R.id.et_email);
         password = (EditText) findViewById(R.id.etPassword);
         signup = (TextView) findViewById(R.id.tvSignup);
         login = (Button) findViewById(R.id.btn_signup);

@@ -94,6 +94,7 @@
         <activity android:name=".SellDIYDetail" />
         <activity android:name=".RecommendDIYViewDetails" />
         <activity android:name=".AddSameDIYTemplate" />
+        <activity android:name=".ViewRelatedDIYS" />
         <activity android:name=".WelcomeActivity" />
 
         <intent-filter>

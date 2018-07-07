@@ -43,7 +43,8 @@
             android:gravity="center"
             android:text="Computer Desk"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:textSize="16sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/related_diy_owner"

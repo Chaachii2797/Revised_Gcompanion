@@ -178,7 +178,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
         allSampleData = new ArrayList<SectionDataModel>();
 
-        //createDummyData();
+        createDummyData();
 
         final RecyclerView relatedDIYrecyclerView = (RecyclerView) findViewById(R.id.relatedDIYrecyclerView);
 
@@ -253,79 +253,61 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         }
                     });
 
-                    newDatabaseRef.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();
-                            DIYnames diys =  dataSnapshot.getValue(DIYnames.class);
-
-                            DIYnames dataDIys = new DIYnames();
-
-//                            String diy_price = dataSnapshot.child("DIY Price").getValue().toString();
-//                            Log.e("diy_price", diy_price);
-
-                            String diy_name = diys.getDiyName();
-                            String diy_url = diys.getDiyUrl();
-
-
-                            dataDIys.setDiyName(diy_name);
-                            dataDIys.setDiyUrl(diy_url);
-
-                            //GET DIY RELATED PRICE FROM DB
-
-//                            String message_price="";
-//                            List<String> message_Price = new ArrayList<String>();
-//                            for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
-//                                double price= postSnapshot.child("selling_price").getValue(double.class);
-//                                message_price += price;
-//                                message_Price.add(message_price);
+//                    newDatabaseRef.addChildEventListener(new ChildEventListener() {
+//                        @Override
+//                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                            Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();
+//                            DIYnames diys =  dataSnapshot.getValue(DIYnames.class);
+//
+//                            DIYnames dataDIys = new DIYnames();
+//
+//                            String diy_name = diys.getDiyName();
+//                            String diy_url = diys.getDiyUrl();
+//
+//                            dataDIys.setDiyName(diy_name);
+//                            dataDIys.setDiyUrl(diy_url);
+//
+//                            SectionDataModel dm = new SectionDataModel();
+//                            dm.setHeaderTitle("Related DIYs:" );
+//
+//                            ArrayList<DIYnames> singleItem = new ArrayList<>();
+//
+//                            for (int j = 0; j <= 1; j++) {
+//                                dm.setAllItemsInSection(singleItem);
+//                                singleItem.add(dataDIys);
+//                                Log.e("j ", String.valueOf(j));
+//
 //                            }
 //
-//                            final String finalMessage_price = message_price;
+//                            allSampleData.add(dm);
 //
-//                            diy_sell.setText(message_price);
+//                            Log.e("singleItem", String.valueOf(singleItem));
+//                            Log.e("dataDIys", String.valueOf(dataDIys));
+//                            Log.e("diys", String.valueOf(diys));
 //
-
-                            SectionDataModel dm = new SectionDataModel();
-                            dm.setHeaderTitle("Related DIYs:" );
-
-                            ArrayList<DIYnames> singleItem = new ArrayList<DIYnames>();
-
-                            for (int j = 0; j <= 3; j++) {
-                                dm.setAllItemsInSection(singleItem);
-                                singleItem.add(dataDIys);
-
-                            }
-
-                            allSampleData.add(dm);
-
-                            Log.e("singleItem", String.valueOf(singleItem));
-                            Log.e("dataDIys", String.valueOf(dataDIys));
-                            Log.e("diys", String.valueOf(diys));
-
-                        }
-
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+//                        }
+//
+//
+//                        @Override
+//                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError databaseError) {
+//
+//                        }
+//                    });
 
 
                     String messageMat = "";
@@ -719,24 +701,24 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         });
     }
 
-    //    public void createDummyData() {
-//       // for (int i = 1; i <= 5; i++) {
-//
-//            SectionDataModel dm = new SectionDataModel();
-//
-//            dm.setHeaderTitle("Here: " );
-//
-//            ArrayList<DIYnames> singleItem = new ArrayList<DIYnames>();
-//            for (int j = 0; j <= 15; j++) {
-//                singleItem.add(new DIYnames("Item " + j, "URL " + j));
-//            }
-//
-//            dm.setAllItemsInSection(singleItem);
-//
-//            allSampleData.add(dm);
-//
-//       // }
-//    }
+        public void createDummyData() {
+            Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();
+            SectionDataModel dm = new SectionDataModel();
+
+            dm.setHeaderTitle("Related DIYS: " );
+
+            ArrayList<DIYnames> singleItem = new ArrayList<DIYnames>();
+
+            for (int j = 0; j <= 5; j++) {
+                singleItem.add(new DIYnames("Item " , "URL " ));
+            }
+            dm.setAllItemsInSection(singleItem);
+            allSampleData.add(dm);
+
+            Log.e("singleItem", String.valueOf(singleItem));
+
+
+    }
 
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerFragment();

@@ -88,97 +88,97 @@
                 android:textStyle="bold"
                 android:typeface="serif" />
 
-            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/cardView"
-                android:layout_width="330dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/diy_name"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="40dp"
-                app:cardBackgroundColor="@android:color/white"
-                app:cardCornerRadius="5dp"
-                app:elevation="5dp">
+            <!--<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                <!--android:id="@+id/cardView"-->
+                <!--android:layout_width="330dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/diy_name"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_marginTop="40dp"-->
+                <!--app:cardBackgroundColor="@android:color/white"-->
+                <!--app:cardCornerRadius="5dp"-->
+                <!--app:elevation="5dp">-->
 
-                <TextView
-                    android:id="@+id/diy_material"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/textView29"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:hint="1. Glue
-                              2. Scissors
-                              3. Pencil"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
+                <!--<TextView-->
+                    <!--android:id="@+id/diy_material"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@+id/textView29"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:layout_marginTop="20dp"-->
+                    <!--android:layout_marginBottom="20dp"-->
+                    <!--android:hint="1. Glue-->
+                              <!--2. Scissors-->
+                              <!--3. Pencil"-->
+                    <!--android:textColor="@android:color/black"-->
+                    <!--android:textSize="16sp" />-->
 
-                <TextView
-                    android:id="@+id/textView29"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/diy_procedure"
-                    android:layout_alignStart="@+id/diy_procedure"
-                    android:layout_below="@+id/diyImagesViewPagers_sell"
-                    android:background="@color/gen_scheme1"
-                    android:paddingLeft="10dp"
-                    android:text="Materials:"
-                    android:textColor="@android:color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                <!--<TextView-->
+                    <!--android:id="@+id/textView29"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignLeft="@+id/diy_procedure"-->
+                    <!--android:layout_alignStart="@+id/diy_procedure"-->
+                    <!--android:layout_below="@+id/diyImagesViewPagers_sell"-->
+                    <!--android:background="@color/gen_scheme1"-->
+                    <!--android:paddingLeft="10dp"-->
+                    <!--android:text="Materials:"-->
+                    <!--android:textColor="@android:color/black"-->
+                    <!--android:textSize="20sp"-->
+                    <!--android:textStyle="bold" />-->
 
-            </android.support.v7.widget.CardView>
+            <!--</android.support.v7.widget.CardView>-->
 
 
             <!--KARON NI-->
 
-            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/cardView2"
-                android:layout_width="330dp"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/cardView"
-                android:layout_alignStart="@+id/cardView"
-                android:layout_below="@+id/cardView"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="15dp"
-                app:cardBackgroundColor="@android:color/white"
-                app:cardCornerRadius="5dp"
-                app:elevation="5dp">
+            <!--<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+                <!--android:id="@+id/cardView2"-->
+                <!--android:layout_width="330dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignLeft="@+id/cardView"-->
+                <!--android:layout_alignStart="@+id/cardView"-->
+                <!--android:layout_below="@+id/cardView"-->
+                <!--android:layout_marginBottom="10dp"-->
+                <!--android:layout_marginTop="15dp"-->
+                <!--app:cardBackgroundColor="@android:color/white"-->
+                <!--app:cardCornerRadius="5dp"-->
+                <!--app:elevation="5dp">-->
 
-                <TextView
-                    android:id="@+id/textView31"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/textView29"
-                    android:layout_alignStart="@+id/textView29"
-                    android:layout_below="@+id/diy_material"
-                    android:background="@color/gen_scheme1"
-                    android:paddingLeft="10dp"
-                    android:text="Procedures:"
-                    android:textColor="@android:color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                <!--<TextView-->
+                    <!--android:id="@+id/textView31"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignLeft="@+id/textView29"-->
+                    <!--android:layout_alignStart="@+id/textView29"-->
+                    <!--android:layout_below="@+id/diy_material"-->
+                    <!--android:background="@color/gen_scheme1"-->
+                    <!--android:paddingLeft="10dp"-->
+                    <!--android:text="Procedures:"-->
+                    <!--android:textColor="@android:color/black"-->
+                    <!--android:textSize="20sp"-->
+                    <!--android:textStyle="bold" />-->
 
-                <TextView
-                    android:id="@+id/diy_procedure"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignLeft="@+id/diy_material"
-                    android:layout_alignStart="@+id/diy_material"
-                    android:layout_below="@+id/textView31"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginTop="30dp"
-                    android:hint="1. Make the materials clean. \n 2. Use scissors to cut it. Be careful. \n 3. Use glue."
-                    android:scrollbars="vertical"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp" />
+                <!--<TextView-->
+                    <!--android:id="@+id/diy_procedure"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_alignLeft="@+id/diy_material"-->
+                    <!--android:layout_alignStart="@+id/diy_material"-->
+                    <!--android:layout_below="@+id/textView31"-->
+                    <!--android:layout_marginBottom="20dp"-->
+                    <!--android:layout_marginLeft="15dp"-->
+                    <!--android:layout_marginTop="30dp"-->
+                    <!--android:hint="1. Make the materials clean. \n 2. Use scissors to cut it. Be careful. \n 3. Use glue."-->
+                    <!--android:scrollbars="vertical"-->
+                    <!--android:textColor="@android:color/black"-->
+                    <!--android:textSize="16sp" />-->
 
-            </android.support.v7.widget.CardView>
+            <!--</android.support.v7.widget.CardView>-->
 
             <TextView
                 android:id="@+id/txt_user_owner_name"
@@ -216,11 +216,10 @@
                 android:id="@+id/cardView3"
                 android:layout_width="330dp"
                 android:layout_height="55dp"
-                android:layout_alignLeft="@+id/cardView"
-                android:layout_alignStart="@+id/cardView"
-                android:layout_below="@+id/cardView2"
+                android:layout_below="@+id/diy_name"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="45dp"
+                android:layout_marginLeft="15dp"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardCornerRadius="5dp"
                 app:elevation="5dp">
@@ -351,10 +350,10 @@
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
                 android:layout_below="@+id/cardView4"
-                android:layout_alignRight="@+id/cardView2"
-                android:layout_alignEnd="@+id/cardView2"/>
+                android:layout_toRightOf="@+id/btn_contact_diy_owner" />
 
             <Button
                 android:id="@+id/btn_contact_diy_owner"
@@ -363,10 +362,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/btn_buy_diy"
                 android:layout_alignBottom="@+id/btn_buy_diy"
-                android:layout_alignLeft="@+id/cardView2"
-                android:layout_alignStart="@+id/cardView2"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
                 android:backgroundTint="@color/gen_scheme1"
                 android:text="Contact Seller"
                 android:textColor="@android:color/white"

@@ -91,15 +91,15 @@
         style="@style/LoginStyle"
         android:layout_width="270dp"
         android:layout_height="45dp"
-        android:layout_alignLeft="@+id/textView35"
-        android:layout_alignStart="@+id/textView35"
-        android:layout_below="@+id/textView35"
         android:backgroundTint="@color/backgroundColor"
         android:imeOptions="actionNext"
         android:numeric="integer|decimal"
         android:paddingLeft="40dp"
         android:textColor="@color/gen_scheme4"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_below="@+id/textView35"
+        android:layout_alignLeft="@+id/textView35"
+        android:layout_alignStart="@+id/textView35" />
 
 
         <Button

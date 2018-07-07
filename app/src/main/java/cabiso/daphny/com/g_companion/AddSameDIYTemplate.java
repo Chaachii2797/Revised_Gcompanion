@@ -166,7 +166,7 @@ public class AddSameDIYTemplate extends AppCompatActivity{
                                 taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
                                 float_this, float_this));
                         databaseReference.child(upload).child("status").setValue("selling");
-                        databaseReference.child(upload).child("DIY Price").setValue(price.getText().toString());
+                        databaseReference.child(upload).child("DIY Price").setValue(price.getText());
                         databaseReference.child(upload).child("Item Quantity").setValue(quantity.getText().toString());
 
                         //push data to Firebase Database - diy_by_users

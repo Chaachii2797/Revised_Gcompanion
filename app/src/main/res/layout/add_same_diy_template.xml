@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gen_scheme3"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarDetails"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="Add DIY Product"
+            android:background="?attr/colorPrimary">
+
+            <ImageView
+                android:src="@drawable/new_logo_white"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center" />
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <ImageView
+        android:id="@+id/add_product_image"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="64dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/add" />
+
+    <TextView
+        android:id="@+id/textView30"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+        android:text="DIY Name:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/add_product_image"
+        android:layout_alignStart="@+id/add_product_image" />
+
+    <EditText
+        android:id="@+id/add_diy_product_name"
+        style="@style/LoginStyle"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/textView30"
+        android:layout_alignStart="@+id/textView30"
+        android:layout_below="@+id/textView30"
+        android:backgroundTint="@color/backgroundColor"
+        android:imeOptions="actionNext"
+        android:paddingLeft="20dp"
+        android:textColor="@color/gen_scheme4"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textView35"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="DIY Price:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/add_diy_product_name"
+        android:layout_alignLeft="@+id/add_diy_product_name"
+        android:layout_alignStart="@+id/add_diy_product_name" />
+
+    <EditText
+        android:id="@+id/add_diy_product_price"
+        style="@style/LoginStyle"
+        android:layout_width="270dp"
+        android:layout_height="45dp"
+        android:backgroundTint="@color/backgroundColor"
+        android:imeOptions="actionNext"
+        android:numeric="integer|decimal"
+        android:paddingLeft="40dp"
+        android:textColor="@color/gen_scheme4"
+        android:textSize="18sp"
+        android:layout_below="@+id/textView35"
+        android:layout_alignLeft="@+id/textView35"
+        android:layout_alignStart="@+id/textView35" />
+
+
+        <Button
+            android:id="@+id/addDIYProduct"
+            style="@style/LoginStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/gen_scheme1"
+            android:onClick="onClick"
+            android:text="ADD DIY PRODUCT"
+            android:textColor="@android:color/background_light"
+            android:layout_marginBottom="21dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/textView39"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/add_diy_product_price"
+        android:layout_alignLeft="@+id/add_diy_product_price"
+        android:layout_alignStart="@+id/add_diy_product_price"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="12dp"
+        android:text="₱ : "
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/textView36"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="DIY Qauntity:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_below="@+id/add_diy_product_price"
+        android:layout_alignLeft="@+id/add_diy_product_quantity"
+        android:layout_alignStart="@+id/add_diy_product_quantity" />
+
+    <EditText
+        android:id="@+id/add_diy_product_quantity"
+        style="@style/LoginStyle"
+        android:layout_width="270dp"
+        android:layout_height="45dp"
+        android:layout_alignLeft="@+id/textView35"
+        android:layout_alignStart="@+id/textView35"
+        android:layout_below="@+id/textView36"
+        android:backgroundTint="@color/backgroundColor"
+        android:imeOptions="actionNext"
+        android:numeric="integer|decimal"
+        android:paddingLeft="40dp"
+        android:textColor="@color/gen_scheme4"
+        android:textSize="18sp" />
+
+
+
+</RelativeLayout>

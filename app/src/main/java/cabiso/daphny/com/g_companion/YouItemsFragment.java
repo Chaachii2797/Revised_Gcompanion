@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -160,7 +159,8 @@ public class YouItemsFragment extends Fragment {
                                 try{
                                     String productPictureURL = model.diyUrl;
                                     Log.d("ppURL", productPictureURL);
-                                    StorageReference pictureReference = FirebaseStorage.getInstance().getReferenceFromUrl(productPictureURL);
+                                    StorageReference pictureReference = FirebaseStorage.getInstance()
+                                            .getReferenceFromUrl(productPictureURL);
                                     pictureReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
                                         public void onSuccess(Uri uri) {

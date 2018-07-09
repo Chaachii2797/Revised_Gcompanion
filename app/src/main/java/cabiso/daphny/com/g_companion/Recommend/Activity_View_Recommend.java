@@ -75,7 +75,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
         diy_sell = (TextView) findViewById(R.id.sell_details);
         user_owner_name = (TextView) findViewById(R.id.txt_user_owner_name);
         txtBy = (TextView) findViewById(R.id.txt_by);
-        button_sell = (Button) findViewById(R.id.btn_buy_diy);
+        button_sell = (Button) findViewById(R.id.btn_sell_diy);
         php = (TextView) findViewById(R.id.textView33);
         contact_seller = (Button) findViewById(R.id.btn_contact_diy_owner);
         //create_promo = (Button) findViewById(R.id.btn_create_promo);

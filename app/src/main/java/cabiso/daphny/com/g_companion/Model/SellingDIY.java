@@ -5,15 +5,15 @@ package cabiso.daphny.com.g_companion.Model;
  */
 
 public class SellingDIY {
-    int selling_price;
+    double selling_price;
     int selling_qty;
     String selling_descr;
 
-    public int getSelling_price() {
+    public double getSelling_price() {
         return selling_price;
     }
 
-    public SellingDIY setSelling_price(int selling_price) {
+    public SellingDIY setSelling_price(double selling_price) {
         this.selling_price = selling_price;
         return this;
     }

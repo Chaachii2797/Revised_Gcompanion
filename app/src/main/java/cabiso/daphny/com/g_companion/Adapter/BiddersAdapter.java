@@ -10,7 +10,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.Model.Bidders;
-import cabiso.daphny.com.g_companion.Model.DIYBidding;
 import cabiso.daphny.com.g_companion.R;
 
 /**
@@ -41,7 +40,6 @@ public class BiddersAdapter extends RecyclerView.Adapter<BiddersAdapter.MyViewHo
         holder.mItemPriceBidded.setText(biddingItem.getBid_price());
         holder.mItemPropStmt.setText(biddingItem.getUser_id());
 //        if(biddingItem != null){
-//
 //        }
     }
 
@@ -52,13 +50,11 @@ public class BiddersAdapter extends RecyclerView.Adapter<BiddersAdapter.MyViewHo
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-//        private final TextView mItemDateBidded;
         private final TextView mItemPriceBidded;
         private final TextView mItemPropStmt;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-//            mItemDateBidded = (TextView) itemView.findViewById(R.id.item_date_bidded);
             mItemPriceBidded = (TextView) itemView.findViewById(R.id.tv_bidders_price);
             mItemPropStmt = (TextView) itemView.findViewById(R.id.tv_bidders_name);
         }

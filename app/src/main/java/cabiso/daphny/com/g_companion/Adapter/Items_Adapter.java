@@ -15,7 +15,6 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.R;
 

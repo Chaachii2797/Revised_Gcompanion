@@ -11,7 +11,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 class ViewPagerAdapter extends FragmentStatePagerAdapter{
 
     private static int TAB_COUNT = 2;
-    private static String PAGE_TITLE = "Recommended";
+    private static String PAGE_TITLE = "LIST OF DIYS";
     private static String MY_DIY_TITLE = "My Items";
 
 

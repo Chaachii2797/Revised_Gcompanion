@@ -80,7 +80,7 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
         userdataReference = mDatabaseReference.child("userdata");
 
         mStorage = FirebaseStorage.getInstance();
-        storageReference = mStorage.getReferenceFromUrl("gs://g-companion.appspot.com/" +
+        storageReference = mStorage.getReferenceFromUrl("gs://gcompanion-itproject.appspot.com/" +
                 "file_upload UPLOAD FILE");
         userStorageReference = storageReference.child("UserStorage"+"/"+userID);
 

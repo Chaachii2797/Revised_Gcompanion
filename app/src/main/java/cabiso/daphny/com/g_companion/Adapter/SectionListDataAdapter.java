@@ -36,7 +36,7 @@ import cabiso.daphny.com.g_companion.ViewRelatedDIYS;
 
 public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListDataAdapter.SingleItemRowHolder> {
 
-    private ArrayList<DIYnames> itemsList;
+    private ArrayList<DIYnames> itemsList = new ArrayList<>();
     private Context mContext;
     private DatabaseReference relatedDIYReference, user_data;
 
@@ -66,22 +66,31 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     final DIYnames related_diys = postSnapshot.getValue(DIYnames.class);
-//                    DIYnames dataDIys = new DIYnames();
+                    Log.e("related_diys", String.valueOf(related_diys));
+
+                    // pas pas mo fetch sa data pero mag double double
+                    itemsList.add(related_diys);
+                    Log.e("itemsList", String.valueOf(itemsList.add(related_diys)));
+
+                    //ma kuha tanan db (same_diy) pero ma daghan
+                    DIYnames singleItem = itemsList.get(i);
+                    holder.diyName.setText(singleItem.getDiyName());
+                    Log.e("singleItem", String.valueOf(singleItem));
 
                     String diy_name = related_diys.getDiyName();
                     String diy_price = postSnapshot.child("DIY Price").getValue().toString();
-
                     Log.e("postSnapshot", String.valueOf(postSnapshot));
-                    holder.diyName.setText(diy_name);
+//                    holder.diyName.setText(diy_name);
                     Log.e("diy_name",diy_name);
+                    Log.e("diy_price",diy_price);
                     holder.diyPrice.setText("₱: " + diy_price);
 
                     Glide.with(mContext)
-                        .load(related_diys.getDiyUrl())
+                        .load(singleItem.getDiyUrl())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .centerCrop()
                         .into(holder.itemImage);
-//                dataDIys.setDiyName(diy_name);
+
 
                     user_data.addChildEventListener(new ChildEventListener() {
                         @Override
@@ -124,107 +133,6 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
             }
         });
-
-//        relatedDIYReference.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                for (DataSnapshot postSnapshot : dataSnapshot.child("diyName").getChildren()) {
-//                final DIYnames related_diys = postSnapshot.getValue(DIYnames.class);
-//
-//                DIYnames dataDIys = new DIYnames();
-//
-//                String diy_name = related_diys.getDiyName();
-//                String diy_price = postSnapshot.child("DIY Price").getValue().toString();
-//                Log.e("diy_price", diy_price);
-//                Log.e("diy_name", diy_name);
-//                    Log.e("postSnapshot", String.valueOf(postSnapshot));
-//
-//                holder.diyPrice.setText("₱: " + diy_price);
-//                holder.diyName.setText(diy_name);
-//
-//                Glide.with(mContext)
-//                        .load(related_diys.getDiyUrl())
-//                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                        .centerCrop()
-//                        .into(holder.itemImage);
-//                dataDIys.setDiyName(diy_name);
-//
-//
-//                user_data.addChildEventListener(new ChildEventListener() {
-//                    @Override
-//                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//
-//                        User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-//                        if (related_diys.user_id.equals(user_profile.getUserID())) {
-//                            String user_name;
-//                            user_name = user_profile.getF_name() + " " + user_profile.getL_name();
-//                            holder.diyOwner.setText("by: " + user_name);
-//
-//                            Log.e("diyOwner", user_name);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//
-//                    }
-//                });
-//            }
-//
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
-//        DIYnames singleItem = itemsList.get(i);
-
-//        float price = selling_price.getSelling_price();
-//
-//        holder.diyName.setText(singleItem.getDiyName());
-//        holder.diyOwner.setText(singleItem.getUser_id());
-//
-//        holder.diyPrice.setText((int) price);
-
-//        Glide.with(mContext)
-//                .load(singleItem.getDiyUrl())
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .centerCrop()
-//                .into(holder.itemImage);
-
 
     }
 

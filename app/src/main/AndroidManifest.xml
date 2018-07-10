@@ -4,8 +4,9 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18"/>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -97,6 +98,21 @@
         <activity android:name=".ViewRelatedDIYS" />
         <activity android:name=".WelcomeActivity" />
 
+        <service
+            android:name=".FirebaseIDService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".MyService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
         <intent-filter>
             <action android:name="android.intent.action.SEARCH" />
         </intent-filter>
@@ -106,7 +122,12 @@
         <activity android:name=".Recommend.Activity_View_Recommend" />
         <activity android:name=".Recommend.PendingView_Activity" />
         <activity android:name=".ImageRecognitionForMaterials" />
-        <activity android:name=".ToBidProduct"></activity>
+        <activity android:name=".ToBidProduct" />
+
+        <!--<service-->
+            <!--android:name=".MyService"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true"></service>-->
     </application>
 
 </manifest>

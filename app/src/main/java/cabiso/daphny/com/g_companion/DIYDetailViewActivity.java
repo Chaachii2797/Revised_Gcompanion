@@ -2,6 +2,9 @@ package cabiso.daphny.com.g_companion;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -53,8 +57,9 @@ import java.util.List;
 import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Adapter.BiddersAdapter;
-import cabiso.daphny.com.g_companion.Model.Bidders;
+import cabiso.daphny.com.g_companion.Adapter.RecyclerViewDataAdapter;
 import cabiso.daphny.com.g_companion.Adapter.RelatedDIYAdapter;
+import cabiso.daphny.com.g_companion.Model.Bidders;
 import cabiso.daphny.com.g_companion.Model.DIYBidding;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
@@ -73,9 +78,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
             owner_add, owner_cn, owner_bid_date, owner_bid_price, owner_comment;
     private Button button_buy, contact_seller, create_promo, bid_item, want_to_bid;
     private String user_name;
-    private CardView selling_price, seller_info, bid_info, cardview0, cardview00, cardview000;
+    private CardView selling_price, seller_info, bid_info, cardview0, cardview00, cardview05, cardview06, cardview07;
     private RecyclerView recyclerView;
-
+    private int currentNotificationID = 0;
 
     final Context context = this;
     List<String> item = new ArrayList<>();
@@ -134,6 +139,15 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        fab_template = (FloatingActionButton) findViewById(R.id.fab_add_product);
+        fab_template.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent in = new Intent(DIYDetailViewActivity.this, AddSameDIYTemplate.class);
+                startActivity(in);
+            }
+        });
+
         /* User Interface Initializations */
         recyclerView = (RecyclerView) findViewById(R.id.lv_bidders);
         recyclerView.setHasFixedSize(true);
@@ -164,7 +178,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         bid_info = (CardView) findViewById(R.id.cardView6);
         cardview0 = (CardView) findViewById(R.id.cardView);
         cardview00 = (CardView) findViewById(R.id.cardView2);
-        cardview000 = (CardView) findViewById(R.id.cardView5);
+        cardview05 = (CardView) findViewById(R.id.cardView5); //bidders
+        cardview06 = (CardView) findViewById(R.id.cardView6); //seller bid info
+        cardview07 = (CardView) findViewById(R.id.cardView7); //related DIYS
 
         /* Bidding Lists */
         biddersAdapter = new BiddersAdapter(DIYDetailViewActivity.this,diyBiddings);
@@ -172,6 +188,19 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(biddersAdapter);
+
+        //for related DIYS
+        allSampleData = new ArrayList<SectionDataModel>();
+
+        createDummyData();
+        final RecyclerView relatedDIYrecyclerView = (RecyclerView) findViewById(R.id.relatedDIYrecyclerView);
+
+        relatedDIYrecyclerView.setHasFixedSize(true);
+
+        RecyclerViewDataAdapter adapter = new RecyclerViewDataAdapter(this, allSampleData);
+        relatedDIYrecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+        relatedDIYrecyclerView.setAdapter(adapter);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -192,6 +221,18 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     txtBy.setVisibility(View.VISIBLE);
                     bid_item.setVisibility(View.INVISIBLE);
                     diy_name.setText(diyInfo.diyName);
+                    cardview07.setVisibility(View.VISIBLE);
+                    relatedDIYrecyclerView.setVisibility(View.VISIBLE);
+                    cardview05.setVisibility(View.INVISIBLE);
+                    cardview06.setVisibility(View.INVISIBLE);
+
+                    RelativeLayout.LayoutParams nlp = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    nlp.topMargin = 1200;
+                    nlp.bottomMargin = 15;
+                    nlp.leftMargin = 20;
+                    nlp.rightMargin = 20;
+                    cardview07.setLayoutParams(nlp);
 
                     user_data.addChildEventListener(new ChildEventListener() {
                         @Override
@@ -337,6 +378,20 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 //                    button_buy.setVisibility(View.VISIBLE);
                     contact_seller.setVisibility(View.VISIBLE);
                     bid_item.setVisibility(View.VISIBLE);
+                    fab_template.setVisibility(View.INVISIBLE);
+                    cardview07.setVisibility(View.INVISIBLE);
+                    relatedDIYrecyclerView.setVisibility(View.INVISIBLE);
+                    cardview05.setVisibility(View.VISIBLE);
+                    cardview06.setVisibility(View.VISIBLE);
+
+//                    RelativeLayout.LayoutParams blp = new RelativeLayout.LayoutParams(
+//                            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+//                    blp.topMargin = 710;
+//                    blp.bottomMargin = 15;
+//                    blp.leftMargin = 20;
+//                    blp.rightMargin = 20;
+//                    selling_price.setLayoutParams(blp);
+
 
                     user_data.addChildEventListener(new ChildEventListener() {
                         @Override
@@ -540,6 +595,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                 @Override
                                 public void onClick(View v) {
                                     Toast.makeText(DIYDetailViewActivity.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
+                                    sendNotification();
                                 }
                             });
                             call.setOnClickListener(new View.OnClickListener() {
@@ -693,22 +749,68 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         });
     }
 
+
+//        public void createDummyData() {
+//            SectionDataModel dm = new SectionDataModel();
+//
+//            dm.setHeaderTitle("Here: " );
+//
+//            ArrayList<DIYnames> singleItem = new ArrayList<DIYnames>();
+//            for (int j = 0; j <= 15; j++) {
+//                singleItem.add(new DIYnames("Item " + j, "URL " + j));
+//            }
+//            dm.setAllItemsInSection(singleItem);
+//            allSampleData.add(dm);
+//
+//    }
+
     public void createDummyData() {
         Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();
-        SectionDataModel dm = new SectionDataModel();
 
+        SectionDataModel dm = new SectionDataModel();
+        DIYnames dataDIys = new DIYnames();
+        Log.e("dataDIysss", String.valueOf(dataDIys));
         dm.setHeaderTitle("Related DIYS: " );
 
         ArrayList<DIYnames> singleItem = new ArrayList<DIYnames>();
 
-        for (int j = 0; j <= 5; j++) {
-            singleItem.add(new DIYnames("Item " , "URL " ));
-        }
+//            for (int j = 0; j <= 3; j++) {
+//                singleItem.add(new DIYnames("Item ", "URL "));
+        singleItem.add(dataDIys);
+//            }
         dm.setAllItemsInSection(singleItem);
         allSampleData.add(dm);
 
         Log.e("singleItem", String.valueOf(singleItem));
 
+
+    }
+
+    public void sendNotification() {
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.new_logo_green2)
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setContentTitle("Notification")
+                        .setContentText("Chat Seller!");
+
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(pendingIntent);
+
+        Notification notification = mBuilder.build();
+        notification.defaults |= Notification.DEFAULT_SOUND;
+        currentNotificationID++;
+        int notificationId = currentNotificationID;
+        if (notificationId == Integer.MAX_VALUE - 1)
+            notificationId = 0;
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        //ma  display sa notification bar
+        mNotificationManager.notify(notificationId, notification);
+
+        currentNotificationID = 500;
 
     }
 

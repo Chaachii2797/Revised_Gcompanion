@@ -11,31 +11,6 @@
     app:elevation="5dp">
 
     <TextView
-        android:id="@+id/bidders_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="35dp"
-        android:scrollbars="vertical"
-        android:text="Owner :"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tv_bidders_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="95dp"
-        android:layout_marginTop="35dp"
-        android:hint="Comment :"
-        android:scrollbars="vertical"
-        android:text="Owner"
-        android:textColor="@android:color/black"
-        android:textSize="16sp" />
-
-    <TextView
         android:id="@+id/bidders_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,7 +18,7 @@
         android:layout_marginTop="10dp"
         android:hint="Bid Initial Price :"
         android:scrollbars="vertical"
-        android:text="Bidded Price :"
+        android:text="Bidders"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold" />
@@ -54,6 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="160dp"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:scrollbars="vertical"
         android:text="Bidded Price"
         android:textColor="@android:color/black"

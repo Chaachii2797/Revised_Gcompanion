@@ -220,12 +220,18 @@ public class CommunityFragment extends Fragment{
                         });
 
                         if(model.identity!=null){
-                            if(model.identity.equals("selling")){
+                            if(model.identity.equalsIgnoreCase("selling")){
                                 viewHolder.mIdentity.setText("Selling");
                                 viewHolder.mIdentity.setBackgroundColor(Color.RED);
-                            }else if(model.identity.equals("community")){
+                            }else if(model.identity.equalsIgnoreCase("community")){
                                 viewHolder.mIdentity.setText("Community");
                                 viewHolder.mIdentity.setBackgroundColor(Color.YELLOW);
+                            }else if(model.identity.equalsIgnoreCase("on bid")){
+                                viewHolder.mIdentity.setText("On BID!");
+                                viewHolder.mIdentity.setBackgroundColor(Color.GREEN);
+                            }else if(model.identity.equalsIgnoreCase("sold")){
+                                viewHolder.mIdentity.setText("SOLD");
+                                viewHolder.mIdentity.setBackgroundColor(Color.CYAN);
                             }
                         }
                         //   viewHolder.mCategory.setText(model.tag);

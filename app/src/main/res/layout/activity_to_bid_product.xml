@@ -98,11 +98,20 @@
             </LinearLayout>
 
             <EditText
+                android:id="@+id/et_xpiry_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Bid Expiration"
+                android:inputType="date" />
+
+            <EditText
                 android:id="@+id/etMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.68"
                 android:ems="10"
+                android:hint="Comment"
                 android:inputType="textMultiLine" />
 
             <Button

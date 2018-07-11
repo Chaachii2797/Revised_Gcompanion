@@ -219,12 +219,13 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
         createDummyData();
         final RecyclerView relatedDIYrecyclerView = (RecyclerView) findViewById(R.id.relatedDIYrecyclerView);
-
         relatedDIYrecyclerView.setHasFixedSize(true);
 
         RecyclerViewDataAdapter adapter = new RecyclerViewDataAdapter(this, allSampleData);
+
         relatedDIYrecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         relatedDIYrecyclerView.setAdapter(adapter);
+
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -296,54 +297,29 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         }
                     });
 
-//                    newDatabaseRef.addChildEventListener(new ChildEventListener() {
+//                    newDatabaseRef.addValueEventListener(new ValueEventListener() {
 //                        @Override
-//                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                            Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();
-//                            DIYnames diys =  dataSnapshot.getValue(DIYnames.class);
+//                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                                Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();
 //
-//                            DIYnames dataDIys = new DIYnames();
+//                                SectionDataModel dm = new SectionDataModel();
 //
-//                            String diy_name = diys.getDiyName();
-//                            String diy_url = diys.getDiyUrl();
+//                                Log.e("snapshot", String.valueOf(snapshot));
+//                                dm.setHeaderTitle("Related DIYS: ");
 //
-//                            dataDIys.setDiyName(diy_name);
-//                            dataDIys.setDiyUrl(diy_url);
-//
-//                            SectionDataModel dm = new SectionDataModel();
-//                            dm.setHeaderTitle("Related DIYs:" );
-//
-//                            ArrayList<DIYnames> singleItem = new ArrayList<>();
-//
-//                            for (int j = 0; j <= 1; j++) {
-//                                dm.setAllItemsInSection(singleItem);
+//                                ArrayList<DIYnames> singleItem = new ArrayList<>();
+//                                DIYnames dataDIys = snapshot.getValue(DIYnames.class);
+//                                Log.e("dataDIysss", String.valueOf(dataDIys));
+////            for (int j = 0; j <= 3; j++) {
+////                singleItem.add(new DIYnames("Item ", "URL "));
 //                                singleItem.add(dataDIys);
-//                                Log.e("j ", String.valueOf(j));
+////            }
+//                                dm.setAllItemsInSection(singleItem);
+//                                allSampleData.add(dm);
 //
+//                                Log.e("singleItem", String.valueOf(singleItem));
 //                            }
-//
-//                            allSampleData.add(dm);
-//
-//                            Log.e("singleItem", String.valueOf(singleItem));
-//                            Log.e("dataDIys", String.valueOf(dataDIys));
-//                            Log.e("diys", String.valueOf(diys));
-//
-//                        }
-//
-//
-//                        @Override
-//                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
 //                        }
 //
 //                        @Override
@@ -351,7 +327,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 //
 //                        }
 //                    });
-
+//
 
                     String messageMat = "";
                     List<String> messageMaterials = new ArrayList<String>();
@@ -782,6 +758,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     diy_name.setText(info.diyName);
                     contact_seller.setVisibility(View.VISIBLE);
                     bid_item.setVisibility(View.VISIBLE);
+                    fab_template.setVisibility(View.INVISIBLE);
+                    cardview07.setVisibility(View.INVISIBLE);
+                    relatedDIYrecyclerView.setVisibility(View.INVISIBLE);
 
                     //owners statement
                     ownr_txt.setVisibility(View.VISIBLE);
@@ -1171,12 +1150,12 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
 //            for (int j = 0; j <= 3; j++) {
 //                singleItem.add(new DIYnames("Item ", "URL "));
-        singleItem.add(dataDIys);
+            singleItem.add(dataDIys);
 //            }
         dm.setAllItemsInSection(singleItem);
         allSampleData.add(dm);
 
-        Log.e("singleItem", String.valueOf(singleItem));
+        Log.e("single", String.valueOf(singleItem));
 
 
     }

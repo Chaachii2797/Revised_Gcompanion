@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class SectionDataModel {
 
+
+
     private String headerTitle;
     private ArrayList<DIYnames> allItemsInSection;
 
@@ -28,7 +30,6 @@ public class SectionDataModel {
 
     public void setHeaderTitle(String headerTitle) {
         this.headerTitle = headerTitle;
-
     }
 
     public ArrayList<DIYnames> getAllItemsInSection() {
@@ -38,4 +39,6 @@ public class SectionDataModel {
     public void setAllItemsInSection(ArrayList<DIYnames> allItemsInSection) {
         this.allItemsInSection = allItemsInSection;
     }
+
+
 }

@@ -164,9 +164,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
 
         mStorage = FirebaseStorage.getInstance();
-        storageReference = mStorage.getReferenceFromUrl("gs://gcompanion-itproject.appspot.com/").child("diy_by_tags");
+        storageReference = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("diy_by_tags");
 
-        storageRef = mStorage.getReferenceFromUrl("gs://gcompanion-itproject.appspot.com/").child("diy_by_tags");
+        storageRef = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("diy_by_tags");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarAddDIY);
         setSupportActionBar(toolbar);

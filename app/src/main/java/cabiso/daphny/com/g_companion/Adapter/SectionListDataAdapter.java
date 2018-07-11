@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
@@ -36,7 +37,7 @@ import cabiso.daphny.com.g_companion.ViewRelatedDIYS;
 
 public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListDataAdapter.SingleItemRowHolder> {
 
-    private ArrayList<DIYnames> itemsList = new ArrayList<>();
+    private ArrayList<DIYnames> itemsList;
     private Context mContext;
     private DatabaseReference relatedDIYReference, user_data;
 
@@ -56,9 +57,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     @Override
     public void onBindViewHolder(final SingleItemRowHolder holder, final int i) {
 
-
         user_data = FirebaseDatabase.getInstance().getReference().child("userdata");
-
         relatedDIYReference = FirebaseDatabase.getInstance().getReference().child("same_diy_product");
 
         relatedDIYReference.addValueEventListener(new ValueEventListener() {
@@ -67,29 +66,87 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     final DIYnames related_diys = postSnapshot.getValue(DIYnames.class);
                     Log.e("related_diys", String.valueOf(related_diys));
+                    Log.e("postSnapshot", String.valueOf(postSnapshot));
+
+                    holder.getAdapterPosition();
+                    Log.e("holder", String.valueOf(holder.getAdapterPosition()));
+
+                    itemsList.get(i);
+                    Log.e("listSize", String.valueOf(itemsList.get(i)));
 
                     // pas pas mo fetch sa data pero mag double double
                     itemsList.add(related_diys);
                     Log.e("itemsList", String.valueOf(itemsList.add(related_diys)));
+                    Log.e("item", String.valueOf(itemsList));
+                    holder.diyName.setText(related_diys.getDiyName());
 
-                    //ma kuha tanan db (same_diy) pero ma daghan
-                    DIYnames singleItem = itemsList.get(i);
-                    holder.diyName.setText(singleItem.getDiyName());
-                    Log.e("singleItem", String.valueOf(singleItem));
+//                    //ma kuha tanan db (same_diy) pero ma daghan
+//                    DIYnames singleItem = itemsList.get(i);
+//                    holder.diyName.setText(singleItem.diyName);
+//                    Log.e("singleItem", String.valueOf(singleItem));
+
 
                     String diy_name = related_diys.getDiyName();
-                    String diy_price = postSnapshot.child("DIY Price").getValue().toString();
-                    Log.e("postSnapshot", String.valueOf(postSnapshot));
-//                    holder.diyName.setText(diy_name);
-                    Log.e("diy_name",diy_name);
+//                    String diy_price = postSnapshot.child("DIY Price").getValue().toString();
+                    String diy_price="";
+                    List<String> message_Price = new ArrayList<String>();
+                    for (DataSnapshot snapshot : dataSnapshot.child("DIY Price").getChildren()) {
+                        double price= snapshot.child("selling_price").getValue(double.class);
+                        diy_price += price;
+                        message_Price.add(diy_price);
+                    }
                     Log.e("diy_price",diy_price);
+
+                    Log.e("diy_name",diy_name);
                     holder.diyPrice.setText("₱: " + diy_price);
 
                     Glide.with(mContext)
-                        .load(singleItem.getDiyUrl())
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .centerCrop()
-                        .into(holder.itemImage);
+                            .load(related_diys.getDiyUrl())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .centerCrop()
+                            .into(holder.itemImage);
+
+
+//                    //ang singleItem kay null, null, notebook and clothes ang makuha, walay stick-o
+//                    DIYnames singleItem = itemsList.get(i);
+//                    holder.diyName.setText(singleItem.getDiyName());
+//                    Log.e("singleItem", String.valueOf(singleItem));
+//
+//                    //naay sud ang itemList
+//                    itemsList.add(singleItem);
+//                    Log.e("itemsList", String.valueOf(itemsList.add(singleItem)));
+//
+//                    //makuha sad tanan
+//                    String diy_name = related_diys.getDiyName();
+//                    //makuha ang name
+//                    singleItem.setDiyName(diy_name);
+//                    Log.e("name", String.valueOf(singleItem.setDiyName(diy_name)));
+//
+//                    //makuha sad tanan price
+////                    String diy_price = postSnapshot.child("DIY Price").getValue().toString();
+////                    String diy_price="";
+////                    List<String> message_Price = new ArrayList<String>();
+////                    for (DataSnapshot snapshot : dataSnapshot.child("DIY Price").getChildren()) {
+////                        double price= snapshot.child("selling_price").getValue(double.class);
+////                        diy_price += price;
+////                        message_Price.add(diy_price);
+////
+////                        Log.e("diy_price",diy_price);
+////                    }
+//
+//
+//                    //makuha sad tanan
+//                    Log.e("postSnapshot", String.valueOf(postSnapshot));
+////                    holder.diyName.setText(diy_name);
+//                    Log.e("diy_name",diy_name);
+//
+//
+//
+//                    Glide.with(mContext)
+//                            .load(singleItem.getDiyUrl())
+//                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                            .centerCrop()
+//                            .into(holder.itemImage);
 
 
                     user_data.addChildEventListener(new ChildEventListener() {
@@ -161,6 +218,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
                     DIYnames diys = new DIYnames();
 //                    String name = diys.diyName;
+
 
                     Intent intent = new Intent(v.getContext(), ViewRelatedDIYS.class);
                     intent.putExtra("name",diys.getDiyName());

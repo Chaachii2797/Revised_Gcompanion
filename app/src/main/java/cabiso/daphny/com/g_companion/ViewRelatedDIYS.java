@@ -37,6 +37,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
@@ -180,20 +181,20 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                             }
                         });
 
+                        String diy_price="";
+                        List<String> message_Price = new ArrayList<String>();
+                        for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
+                            double price= postSnapshot.child("selling_price").getValue(double.class);
+                            diy_price += price;
+                            message_Price.add(diy_price);
 
-//                        String message_price="";
-//                        List<String> message_Price = new ArrayList<String>();
-//                        for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
-//                            double price= postSnapshot.child("DIY Price").getValue(double.class);
-//                            message_price += price;
-//                            message_Price.add(message_price);
-//                        }
+                        }
 
-                        final String diy_price = dataSnapshot.child("DIY Price").getValue().toString();
-                        Log.e("diy_price", diy_price);
+//                        final String diy_price = dataSnapshot.child("DIY Price").getValue().toString();
+//                        Log.e("diy_price", diy_price);
                         diy_sell.setText(diy_price);
 
-//                        final String finalMessage_price = message_price;
+                        final String finalMessage_price = diy_price;
                         button_sell.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -242,7 +243,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                                         DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this, float_this);
                                                         String upload_info = pending_reference.push().getKey();
                                                         pending_reference.child(upload_info).setValue(info);
-                                                        pending_reference.child(upload_info).child("DIY Price").setValue(diy_price);
+                                                        pending_reference.child(upload_info).child("DIY Price").setValue(finalMessage_price);
 
                                                         final Dialog dialog = new Dialog(ViewRelatedDIYS.this);
                                                         dialog.setContentView(R.layout.done_dialog);

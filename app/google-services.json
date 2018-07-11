@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "550107918781",
-    "firebase_url": "https://gcompanion-itproject.firebaseio.com",
-    "project_id": "gcompanion-itproject",
-    "storage_bucket": "gcompanion-itproject.appspot.com"
+    "project_number": "389033839703",
+    "firebase_url": "https://g-companion-v2.firebaseio.com",
+    "project_id": "g-companion-v2",
+    "storage_bucket": "g-companion-v2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:550107918781:android:fa72ddf52d49e736",
+        "mobilesdk_app_id": "1:389033839703:android:fa72ddf52d49e736",
         "android_client_info": {
           "package_name": "cabiso.daphny.com.g_companion"
         }
       },
       "oauth_client": [
         {
-          "client_id": "550107918781-a2kf72v6j0sn6f1lii9mlhlodv57hdg5.apps.googleusercontent.com",
+          "client_id": "389033839703-sgap87t287j0dvno0vb25es6r0jmn2gl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA-tU34riDVY3lJooKX97sCCEKNK-9kzss"
+          "current_key": "AIzaSyC3iknXFbJFyjK4tEHOHYYBpMF8wqqO6Y4"
         }
       ],
       "services": {

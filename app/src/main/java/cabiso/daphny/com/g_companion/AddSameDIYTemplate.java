@@ -78,7 +78,7 @@ public class AddSameDIYTemplate extends AppCompatActivity{
         related_diy_by_user = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID);
 
         mStorage = FirebaseStorage.getInstance();
-        storageReference = mStorage.getReferenceFromUrl("gs://gcompanion-itproject.appspot.com/").child("same_diy_product_storage");
+        storageReference = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("same_diy_product_storage");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDetails);
         setSupportActionBar(toolbar);
@@ -161,15 +161,6 @@ public class AddSameDIYTemplate extends AppCompatActivity{
                         String upload = databaseReference.push().getKey();
                         String productID_sell = generateString();
 
-                        //push data to Firebase Database - same_diy_product node
-                        databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
-                                taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
-                                float_this, float_this));
-                        databaseReference.child(upload).child("status").setValue("selling");
-                        databaseReference.child(upload).child("DIY Price").setValue(price.getText());
-                        databaseReference.child(upload).child("Item Quantity").setValue(quantity.getText().toString());
-
-                        //push data to Firebase Database - diy_by_users
                         String for_price = price.getText().toString();
                         String for_qty = quantity.getText().toString();
 //                        final String for_descr = etDescription.getText().toString();
@@ -177,6 +168,15 @@ public class AddSameDIYTemplate extends AppCompatActivity{
                         final int qty = Integer.parseInt(for_qty);
 
                         dbSelling.add(new SellingDIY().setSelling_price(price).setSelling_qty(qty));
+
+                        //push data to Firebase Database - same_diy_product node
+                        databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
+                                taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
+                                float_this, float_this));
+                        databaseReference.child(upload).child("status").setValue("selling");
+                        databaseReference.child(upload).child("DIY Price").setValue(dbSelling);
+                        databaseReference.child(upload).child("Item Quantity").setValue(quantity.getText().toString());
+
 
                         related_diy_by_user.child(upload).setValue(new DIYSell(name.getText().toString(),
                                 taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",

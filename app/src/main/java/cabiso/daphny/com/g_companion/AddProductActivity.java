@@ -83,7 +83,7 @@ public class AddProductActivity extends AppCompatActivity{
         currentProductReference=marketplaceReference.push();
         currentKey=currentProductReference.getKey();
 
-        storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://g-companion.appspot.com/");
+        storageReference = FirebaseStorage.getInstance().getReferenceFromUrl("gs://g-companion-v2.appspot.com/");
         productImagesStorageReference = storageReference.child("ProductImages"+"/"+currentKey);
 
         final EditText title = (EditText)findViewById(R.id.add_product_title);

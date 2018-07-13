@@ -46,7 +46,7 @@ public class YouItemsFragment extends Fragment {
     String userID;
     private DatabaseReference by_userReference;
     private DatabaseReference databaseReference;
-    private DatabaseReference userdata_reference;
+    private DatabaseReference userdata_ref;
     private String username;
 
     private OnListFragmentInteractionListener user_Listener;
@@ -71,10 +71,10 @@ public class YouItemsFragment extends Fragment {
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
+
         databaseReference = FirebaseDatabase.getInstance().getReference();
-//        by_userReference = databaseReference.child("diy_by_users").child(userID);
         by_userReference = databaseReference.child("diy_by_users").child(userID);
-        userdata_reference = databaseReference.child("userdata");
+        userdata_ref = databaseReference.child("userdata");
     }
 
     @Nullable
@@ -105,7 +105,50 @@ public class YouItemsFragment extends Fragment {
                     @Override
                     protected void populateViewHolder(final ItemViewHolder viewHolder, final DIYnames model, final int position) {
 //                        if(userID.equals(model.getUser_id())){
-                            viewHolder.setIsRecyclable(true);
+//                            viewHolder.setIsRecyclable(true);
+                        viewHolder.user_NameView.setText(model.getDiyName());
+                        userdata_ref.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                if(model.getUser_id().equals(user_profile.getUserID())){
+                                    username = user_profile.getF_name()+" "+user_profile.getL_name();
+//                                    viewHolder.mOwnerName.setText(username);
+                                    Log.e("ownerName", user_profile.getF_name()+" "+user_profile.getL_name());
+                                    Log.e("owmnerID", model.getUser_id());
+                                    Log.e("owmnerID2", model.user_id);
+                                    Log.e("ownerUsername", username);
+                                    Log.e("ownerNameView", viewHolder.usr_OwnerName.getText().toString());
+                                }else{
+//                                    viewHolder.mOwnerName.setText("NAN");
+                                    viewHolder.usr_OwnerName.setText("NAN");
+                                    Log.e("view", String.valueOf(viewHolder.usr_OwnerName));
+                                }
+                                viewHolder.usr_OwnerName.setText(username);
+                                Log.e("view0", String.valueOf(viewHolder.usr_OwnerName));
+                            }
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
                             if(model.identity!=null){
                                 if(model.identity.equals("selling")){
                                     viewHolder.user_Identity.setText("Selling");
@@ -114,47 +157,8 @@ public class YouItemsFragment extends Fragment {
                                     viewHolder.user_Identity.setText("Community");
                                     viewHolder.user_Identity.setBackgroundColor(Color.YELLOW);
                                 }
-                                viewHolder.user_NameView.setText(model.getDiyName());
 
-                                userdata_reference.addChildEventListener(new ChildEventListener() {
-                                    @Override
-                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                        User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                                        if(model.getUser_id().equals(user_profile.getUserID())){
-                                            username = user_profile.getF_name()+" "+user_profile.getL_name();
-//                                    viewHolder.mOwnerName.setText(username);
-                                            Log.e("OWNERNAME", user_profile.getF_name()+" "+user_profile.getL_name());
-                                            Log.e("userID", model.getUser_id());
-                                            Log.e("userID22", model.user_id);
-                                            Log.e("username", username);
-                                            Log.e("OWNERNAMEview", viewHolder.usr_OwnerName.getText().toString());
-                                        }else{
-//                                    viewHolder.mOwnerName.setText("NAN");
-                                            viewHolder.usr_OwnerName.setText("NAN");
-                                        }
-                                        viewHolder.usr_OwnerName.setText(username);
-                                    }
 
-                                    @Override
-                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
 
                                 try{
                                     String productPictureURL = model.diyUrl;

@@ -120,7 +120,6 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
             this.recycler_view_list = (RecyclerView) view.findViewById(R.id.recycler_view_list);
             //this.btnMore= (Button) view.findViewById(R.id.btnMore);
 
-
         }
 
     }

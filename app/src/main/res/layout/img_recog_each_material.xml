@@ -75,7 +75,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="Add material here:"
-                android:inputType="textPersonName" />
+                android:inputType="textMultiLine|textLongMessage" />
 
             <ScrollView
                 android:id="@+id/tags_layout"

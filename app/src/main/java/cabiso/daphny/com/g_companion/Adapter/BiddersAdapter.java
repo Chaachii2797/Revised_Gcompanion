@@ -10,7 +10,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.Model.Bidders;
-import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
 
 /**

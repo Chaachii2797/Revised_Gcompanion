@@ -11,15 +11,20 @@ public class SectionDataModel {
 
 
     private String headerTitle;
-    private ArrayList<DIYnames> allItemsInSection;
+    private ArrayList<String> allItemsInSection;
+    private ArrayList<User_Profile> allProfileInSection;
+    private ArrayList<DIYnames> allPicturesInSection;
 
 
     public SectionDataModel() {
 
     }
-    public SectionDataModel(String headerTitle, ArrayList<DIYnames> allItemsInSection) {
+    public SectionDataModel(String headerTitle, ArrayList<String> allItemsInSection, ArrayList<User_Profile> allProfileInSection,
+                            ArrayList<DIYnames> allPicturesInSection) {
         this.headerTitle = headerTitle;
         this.allItemsInSection = allItemsInSection;
+        this.allProfileInSection = allProfileInSection;
+        this.allPicturesInSection = allPicturesInSection;
     }
 
 
@@ -32,13 +37,27 @@ public class SectionDataModel {
         this.headerTitle = headerTitle;
     }
 
-    public ArrayList<DIYnames> getAllItemsInSection() {
+    public ArrayList<String> getAllItemsInSection() {
         return allItemsInSection;
     }
 
-    public void setAllItemsInSection(ArrayList<DIYnames> allItemsInSection) {
+    public void setAllItemsInSection(ArrayList<String> allItemsInSection) {
         this.allItemsInSection = allItemsInSection;
     }
 
+    public ArrayList<User_Profile> getAllProfileInSection() {
+        return allProfileInSection;
+    }
 
+    public void setAllProfileInSection(ArrayList<User_Profile> allProfileInSection) {
+        this.allProfileInSection = allProfileInSection;
+    }
+
+    public ArrayList<DIYnames> getAllPicturesInSection() {
+        return allPicturesInSection;
+    }
+
+    public void setAllPicturesInSection(ArrayList<DIYnames> allPicturesInSection) {
+        this.allPicturesInSection = allPicturesInSection;
+    }
 }

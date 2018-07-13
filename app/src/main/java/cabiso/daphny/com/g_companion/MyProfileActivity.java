@@ -43,6 +43,8 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
+import cabiso.daphny.com.g_companion.Model.User_Profile;
+
 import static cabiso.daphny.com.g_companion.R.id.user_ratings;
 
 /**
@@ -55,7 +57,7 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
     private DatabaseReference mDatabaseReference;
     private DatabaseReference userdataReference;
     private String userID;
-    private UserProfileInfo userProfileInfo;
+    private User_Profile userProfileInfo;
     private FirebaseStorage mStorage;
     private StorageReference storageReference;
     private StorageReference userStorageReference;
@@ -148,18 +150,18 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
         userdataReference.child(userID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                userProfileInfo = dataSnapshot.getValue(UserProfileInfo.class);
+                userProfileInfo = dataSnapshot.getValue(User_Profile.class);
                 if(userProfileInfo!=null){
                   //  Log.d("username", userProfileInfo.username);
-                    profile_username.setText(userProfileInfo.username);
+                    profile_username.setText(userProfileInfo.getF_name() + " " + userProfileInfo.getL_name());
                    // Log.d("username", userProfileInfo.username);
-                    profile_email.setText(userProfileInfo.email);
+                    profile_email.setText(userProfileInfo.getEmail());
                     //Log.d("email", userProfileInfo.email);
-                    profile_phone.setText(userProfileInfo.phone);
+                    profile_phone.setText(userProfileInfo.getContact_no());
                     //Log.d("profile", userProfileInfo.phone);
-                    profile_address.setText(userProfileInfo.address);
+                    profile_address.setText(userProfileInfo.getAddress());
                     //Log.d("address", userProfileInfo.address);
-                    rate.setText(Integer.toString(userProfileInfo.userRating));
+//                    rate.setText(Integer.toString(userProfileInfo.userRating));
                 }
             }
 

@@ -51,14 +51,14 @@
         android:id="@+id/textView30"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/add_product_image"
+        android:layout_alignStart="@+id/add_product_image"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="40dp"
         android:layout_marginStart="40dp"
-        android:text="DIY Name:"
+        android:text="Owner Name:"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/add_product_image"
-        android:layout_alignStart="@+id/add_product_image" />
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/add_diy_product_name"
@@ -70,6 +70,7 @@
         android:layout_below="@+id/textView30"
         android:backgroundTint="@color/backgroundColor"
         android:imeOptions="actionNext"
+        android:inputType="text"
         android:paddingLeft="20dp"
         android:textColor="@color/gen_scheme4"
         android:textSize="18sp" />
@@ -91,15 +92,16 @@
         style="@style/LoginStyle"
         android:layout_width="270dp"
         android:layout_height="45dp"
+        android:layout_alignLeft="@+id/textView35"
+        android:layout_alignStart="@+id/textView35"
+        android:layout_below="@+id/textView35"
         android:backgroundTint="@color/backgroundColor"
         android:imeOptions="actionNext"
+        android:inputType="number|numberDecimal"
         android:numeric="integer|decimal"
         android:paddingLeft="40dp"
         android:textColor="@color/gen_scheme4"
-        android:textSize="18sp"
-        android:layout_below="@+id/textView35"
-        android:layout_alignLeft="@+id/textView35"
-        android:layout_alignStart="@+id/textView35" />
+        android:textSize="18sp" />
 
 
         <Button
@@ -150,6 +152,7 @@
         android:layout_below="@+id/textView36"
         android:backgroundTint="@color/backgroundColor"
         android:imeOptions="actionNext"
+        android:inputType="number"
         android:numeric="integer|decimal"
         android:paddingLeft="40dp"
         android:textColor="@color/gen_scheme4"

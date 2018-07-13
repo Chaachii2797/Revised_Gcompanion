@@ -164,6 +164,7 @@ public class AddSameDIYTemplate extends AppCompatActivity{
                         String for_price = price.getText().toString();
                         String for_qty = quantity.getText().toString();
 //                        final String for_descr = etDescription.getText().toString();
+
                         final double price = Double.parseDouble(for_price);
                         final int qty = Integer.parseInt(for_qty);
 
@@ -174,8 +175,8 @@ public class AddSameDIYTemplate extends AppCompatActivity{
                                 taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
                                 float_this, float_this));
                         databaseReference.child(upload).child("status").setValue("selling");
-                        databaseReference.child(upload).child("DIY Price").setValue(dbSelling);
-                        databaseReference.child(upload).child("Item Quantity").setValue(quantity.getText().toString());
+                        databaseReference.child(upload).child("DIY Price").setValue(price);
+                        databaseReference.child(upload).child("Item Quantity").setValue(qty);
 
 
                         related_diy_by_user.child(upload).setValue(new DIYSell(name.getText().toString(),

@@ -67,7 +67,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="number" />
+                        android:inputType="number|numberDecimal" />
 
                 </LinearLayout>
 
@@ -92,7 +92,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="number" />
+                        android:inputType="number|numberDecimal" />
 
                 </LinearLayout>
             </LinearLayout>
@@ -112,7 +112,7 @@
                 android:layout_weight="0.68"
                 android:ems="10"
                 android:hint="Comment"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine|textLongMessage" />
 
             <Button
                 android:id="@+id/btnAddBid"

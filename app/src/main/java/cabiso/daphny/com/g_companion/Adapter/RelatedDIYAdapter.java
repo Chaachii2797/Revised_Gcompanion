@@ -125,8 +125,7 @@ public class RelatedDIYAdapter extends RecyclerView.Adapter<RelatedDIYAdapter.It
             super(view);
 
             this.relatedDIYimg = (ImageView) view.findViewById(R.id.retaled_diy_img);
-            this.relatedDIYname = (TextView) view.findViewById(R.id.related_diy_name);
-            this.relatedDIYowner = (TextView) view.findViewById(R.id.related_diy_owner);
+            this.relatedDIYname = (TextView) view.findViewById(R.id.related_diy_owner);
             this.relatedDIYprice = (TextView) view.findViewById(R.id.related_diy_price);
 
 

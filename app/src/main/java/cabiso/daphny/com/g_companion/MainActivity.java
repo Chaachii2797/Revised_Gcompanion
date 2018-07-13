@@ -21,9 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -31,8 +28,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
@@ -113,7 +108,8 @@ public class MainActivity extends AppCompatActivity
                     mUsername = user_profile.getF_name()+" "+user_profile.getL_name();
                     txtProfileName.setText(mUsername);
                     txtAddress.setText(user_profile.getAddress());
-                }else if(uid.equals(user_profile.getUserID())){
+                }
+                else if(uid.equals(user_profile.getUserID())){
                     Log.e("UID",uid);
                     Log.e("GOOGLENAME",name);
                     txtProfileName.setText(name);
@@ -142,15 +138,15 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-//    private void getCurrentUser(){
-//        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        if(mFirebaseUser!=null){
-//            String name = mFirebaseUser.getDisplayName();
-//            String email = mFirebaseUser.getEmail();
-//            Uri photoUrl = mFirebaseUser.getPhotoUrl();
-//            String uid = mFirebaseUser.getUid();
-//        }
-//    }
+    private void getCurrentUser(){
+        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(mFirebaseUser!=null){
+            String name = mFirebaseUser.getDisplayName();
+            String email = mFirebaseUser.getEmail();
+            Uri photoUrl = mFirebaseUser.getPhotoUrl();
+            String uid = mFirebaseUser.getUid();
+        }
+    }
 
     private void setViewPager() {
 

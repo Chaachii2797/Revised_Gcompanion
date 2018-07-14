@@ -121,6 +121,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
     //private ArrayList<DIYnames> relatedDiyList;
     ArrayList<SectionDataModel> allSampleData;
+    private ArrayList<DIYnames> ePics = new ArrayList<>();
+    private ArrayList<User_Profile> eOwner = new ArrayList<>();
+    private ArrayList<String> ePrice = new ArrayList<>();
 
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
@@ -216,6 +219,10 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
         //for related DIYS
         allSampleData = new ArrayList<SectionDataModel>();
+        allSampleData = new ArrayList<SectionDataModel>();
+        ePics = new ArrayList<>();
+        ePrice = new ArrayList<>();
+        eOwner = new ArrayList<>();
 
         //bidders
         tv_bidders = (TextView) findViewById(R.id.tv_bidders);
@@ -493,6 +500,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                         Log.e("pending_not_same", String.valueOf("" + userID != info.getUser_id()));
                                         Log.e("userid", String.valueOf("" + userID));
                                         Log.e("info_userid", String.valueOf("" + info.getUser_id()));
+
+                                        sendNotification();
 
                                         pending_reference.orderByChild("productID").equalTo(info.productID).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
@@ -875,7 +884,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                         biddersReference.push().setValue(new Bidders(bidders_value.getText().toString()
                                                 ,userID, loggedInUserName, sdate));
 
-                                        Intent intent = new Intent(DIYDetailViewActivity.this, DIYDetailViewActivity.class);
+                                        Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
                                         startActivity(intent);
                                     }
                                 });
@@ -905,6 +914,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                         Log.e("pending_not_same", String.valueOf("" + userID != info.getUser_id()));
                                         Log.e("userid", String.valueOf("" + userID));
                                         Log.e("info_userid", String.valueOf("" + info.getUser_id()));
+
+                                        sendNotification();
 
                                         pending_reference.orderByChild("productID").equalTo(info.productID).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
@@ -989,6 +1000,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                 @Override
                                 public void onClick(View v) {
                                     Toast.makeText(DIYDetailViewActivity.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
+
+                                    sendNotification();
+
                                 }
                             });
                             call.setOnClickListener(new View.OnClickListener() {
@@ -1150,21 +1164,72 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     public void createDummyData() {
         Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();
 
-        SectionDataModel dm = new SectionDataModel();
-        DIYnames dataDIys = new DIYnames();
-        Log.e("dataDIysss", String.valueOf(dataDIys));
-        dm.setHeaderTitle("Related DIYS: " );
+        newDatabaseRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                DIYnames diynem = dataSnapshot.getValue(DIYnames.class);
+                User_Profile owner =dataSnapshot.getValue(User_Profile.class);
 
-        ArrayList<DIYnames> singleItem = new ArrayList<DIYnames>();
+                SectionDataModel dm = new SectionDataModel();
+                dm.setHeaderTitle("Related DIYS: ");
 
-//            for (int j = 0; j <= 3; j++) {
-//                singleItem.add(new DIYnames("Item ", "URL "));
-            singleItem.add(dataDIys);
-//            }
+
+                ePrice.add(dataSnapshot.child("DIY Price").getValue().toString());
+                eOwner.add(dataSnapshot.getValue(User_Profile.class));
+                ePics.add(dataSnapshot.getValue(DIYnames.class));
+
+                dm.setAllItemsInSection(ePrice);
+                dm.setAllProfileInSection(eOwner);
+                dm.setAllPicturesInSection(ePics);
+
+                allSampleData.add(dm);
+                Log.e("dm", String.valueOf(dm));
+                Log.e("allSampleData", String.valueOf(allSampleData));
+
+                Log.e("allPrice", String.valueOf(ePrice));
+                Log.e("allOwner", String.valueOf(eOwner));
+                Log.e("allPics", String.valueOf(ePics));
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+//        SectionDataModel dm = new SectionDataModel();
+//        DIYnames dataDIys = new DIYnames();
+//        Log.e("dataDIysss", String.valueOf(dataDIys));
+//        dm.setHeaderTitle("Related DIYS: " );
+//
+//        ArrayList<DIYnames> singleItem = new ArrayList<DIYnames>();
+//
+////            for (int j = 0; j <= 3; j++) {
+////                singleItem.add(new DIYnames("Item " + j, "URL " + j));
+//            singleItem.add(dataDIys);
+////            }
+//
 //        dm.setAllItemsInSection(singleItem);
-        allSampleData.add(dm);
-
-        Log.e("single", String.valueOf(singleItem));
+//        allSampleData.add(dm);
+//
+//        Log.e("single", String.valueOf(singleItem));
 
 
     }
@@ -1176,7 +1241,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         .setSmallIcon(R.drawable.new_logo_green2)
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setContentTitle("Notification")
-                        .setContentText("Chat Seller!");
+                        .setContentText("Buyer notify you!");
 
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

@@ -104,19 +104,19 @@
         android:textSize="18sp" />
 
 
-        <Button
-            android:id="@+id/addDIYProduct"
-            style="@style/LoginStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/gen_scheme1"
-            android:onClick="onClick"
-            android:text="ADD DIY PRODUCT"
-            android:textColor="@android:color/background_light"
-            android:layout_marginBottom="21dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+    <Button
+        android:id="@+id/addDIYProduct"
+        style="@style/LoginStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/gen_scheme1"
+        android:onClick="onClick"
+        android:text="ADD DIY PRODUCT"
+        android:textColor="@android:color/background_light"
+        android:layout_marginBottom="21dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:id="@+id/textView39"

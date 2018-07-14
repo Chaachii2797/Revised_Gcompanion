@@ -8,6 +8,7 @@ public class DIYBidding {
     private int price_max;
     private int price_min;
     private String date;
+    private String xpire_date;
     private String bidder;
     private String message;
 
@@ -39,6 +40,15 @@ public class DIYBidding {
 
     public DIYBidding setDate(String date) {
         this.date = date;
+        return this;
+    }
+
+    public String getXpire_date() {
+        return xpire_date;
+    }
+
+    public DIYBidding setXpire_date(String xpire_date) {
+        this.xpire_date = xpire_date;
         return this;
     }
 

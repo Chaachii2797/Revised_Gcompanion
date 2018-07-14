@@ -25,7 +25,7 @@ import java.util.Calendar;
 import cabiso.daphny.com.g_companion.Adapter.BiddersAdapter;
 import cabiso.daphny.com.g_companion.Model.DIYBidding;
 
-public class ToBidProduct extends Activity{
+public class ToBidProduct extends Activity implements View.OnClickListener {
 
     private EditText mEtPriceMin;
     private EditText mEtPriceMax;
@@ -37,6 +37,7 @@ public class ToBidProduct extends Activity{
     private Button mBtnAddBid;
     private DatabaseReference itemReference;
     private DatabaseReference identityReference;
+    String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class ToBidProduct extends Activity{
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
 
-
+        mEtExpiryDate.setOnClickListener(this);
 
         itemReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.itemId);
         identityReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.itemId);
@@ -76,30 +77,38 @@ public class ToBidProduct extends Activity{
     }
 
     private DIYBidding getFormInput(){
-
-//        String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        mEtExpiryDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                java.util.Calendar calendar = Calendar.getInstance();
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int date = calendar.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(getApplication(), new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        String set_expiry = month + "/" + (dayOfMonth) + "/" + year;
-                        mEtExpiryDate.setText(set_expiry);
-                    }
-                },year,month,date);
-                datePickerDialog.show();
-            }
-        });
         return new DIYBidding()
                 .setBidder(this.userID)
                 .setMessage(this.mEtPriceMessage.getText()+"")
                 .setPrice_min(Integer.parseInt(this.mEtPriceMin.getText()+""))
                 .setPrice_max(Integer.parseInt(this.mEtPriceMax.getText()+""))
-                .setDate(mEtExpiryDate.getText().toString());
+                .setDate(sdate)
+                .setXpire_date(mEtExpiryDate.getText().toString());
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == mEtExpiryDate) {
+            final Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int date = calendar.get(Calendar.DAY_OF_MONTH);
+
+            final DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    String set_expiry = year + "-" + String.valueOf(month + 1) + "-" + (dayOfMonth);
+//                    datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
+//                    String set_expiry = String.valueOf(month + 1) + "/" + (dayOfMonth) + "/" + year;
+                    if (calendar.before(set_expiry)) {
+                        Toast.makeText(getApplication(), "YOU CANNOT PICK PASSED WEEKS!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        mEtExpiryDate.setText(set_expiry);
+                    }
+                }
+            }, year, month, date);
+            datePickerDialog.show();
+//        }
+        }
     }
 }

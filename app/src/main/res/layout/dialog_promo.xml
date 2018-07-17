@@ -8,22 +8,12 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:srcCompat="@drawable/new_logo_green1"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
         android:layout_height="200dp"
-        android:layout_marginTop="21dp"
-        android:backgroundTintMode="src_over"
-        app:srcCompat="@drawable/new_logo_word"
-        android:layout_alignTop="@+id/imageView2"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="10dp"
+        app:srcCompat="@drawable/promo_sale" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,64 +21,36 @@
         android:orientation="vertical"
         android:weightSum="1"
         android:gravity="center"
-        android:layout_marginTop="39dp"
         android:paddingLeft="35dp"
         android:paddingRight="35dp"
         android:id="@+id/linearLayout"
-        android:layout_below="@+id/imageView2"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
-
-        <Button
-            android:id="@+id/btn_start"
-            style="@style/LoginStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:backgroundTint="@color/gen_scheme3"
-            android:paddingLeft="20dp"
-            android:text="Start Date"
-            android:textAlignment="viewStart"
-            android:textColor="#7f8c8d" />
-
-        <EditText
-            android:id="@+id/et_start_date"
-            style="@style/LoginStyle"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@+id/imageView3"
-            android:layout_marginTop="10dp"
-            android:layout_weight="0.30"
-            android:backgroundTint="@color/gen_scheme3"
-            android:clickable="true"
-            android:editable="false"
-            android:ems="10"
-            android:hint="Start Date"
-            android:inputType="textPersonName"
-            android:paddingLeft="20dp" />
-
-        <EditText
-            android:id="@+id/et_end_date"
-            style="@style/LoginStyle"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_below="@+id/imageView3"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:layout_weight="0.30"
-            android:backgroundTint="@color/gen_scheme3"
-            android:clickable="true"
-            android:editable="false"
-            android:ems="10"
-            android:hint="End Date"
-            android:inputType="textPersonName"
-            android:paddingLeft="20dp" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageView2">
 
         <EditText
             android:id="@+id/et_promo_prce"
             style="@style/LoginStyle"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.30"
+            android:backgroundTint="@color/gen_scheme3"
+            android:clickable="true"
+            android:editable="false"
+            android:ems="10"
+            android:gravity="center"
+            android:hint="Promo Price"
+            android:inputType="textPersonName"
+            android:paddingLeft="20dp" />
+
+        <EditText
+            android:id="@+id/et_promo_end_date"
+            style="@style/LoginStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
             android:layout_below="@+id/imageView3"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
@@ -97,7 +59,8 @@
             android:clickable="true"
             android:editable="false"
             android:ems="10"
-            android:hint="Promo Price"
+            android:gravity="center"
+            android:hint="Promo End Date"
             android:inputType="textPersonName"
             android:paddingLeft="20dp" />
     </LinearLayout>
@@ -121,6 +84,7 @@
             android:layout_centerHorizontal="true"
             android:backgroundTint="@color/gen_scheme1"
             android:text="OK"
+            android:layout_marginBottom="10dp"
             android:textColor="@android:color/background_light" />
     </LinearLayout>
 </RelativeLayout>

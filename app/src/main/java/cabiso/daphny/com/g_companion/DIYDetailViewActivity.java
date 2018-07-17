@@ -119,7 +119,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private FloatingActionButton fab_template;
     private RelatedDIYAdapter relatedDIYadapter;
 
-    //private ArrayList<DIYnames> relatedDiyList;
+    //related DIYs Arraylist
     ArrayList<SectionDataModel> allSampleData;
     private ArrayList<DIYnames> ePics = new ArrayList<>();
     private ArrayList<User_Profile> eOwner = new ArrayList<>();
@@ -142,6 +142,11 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         user_data = FirebaseDatabase.getInstance().getReference().child("userdata");
         itemReference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
         newDatabaseRef = FirebaseDatabase.getInstance().getReference().child("same_diy_product");
+
+        allSampleData = new ArrayList<SectionDataModel>();
+        ePics = new ArrayList<>();
+        ePrice = new ArrayList<>();
+        eOwner = new ArrayList<>();
 
         /* Toolbar Configurations */
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDetails);
@@ -219,10 +224,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
         //for related DIYS
         allSampleData = new ArrayList<SectionDataModel>();
-        allSampleData = new ArrayList<SectionDataModel>();
-        ePics = new ArrayList<>();
-        ePrice = new ArrayList<>();
-        eOwner = new ArrayList<>();
 
         //bidders
         tv_bidders = (TextView) findViewById(R.id.tv_bidders);
@@ -463,7 +464,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         tv_bid_price.setText(biddingItem.getPrice_min()+" "+"to"+" "+biddingItem.getPrice_max());
                         tv_ownr_cmmnt.setText(biddingItem.getMessage());
                     }
-//                    Log.e("letse",""+dataSnapshot.child("bidders").getValue());
 
                     for (DataSnapshot inside_DataSnapshot: dataSnapshot.child("bidders").getChildren()) {
                         Bidders biddersItem = inside_DataSnapshot.getValue(Bidders.class);
@@ -479,203 +479,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         message_Price.add(message_price);
 
                     }
-
-                    final String finalMessage_price = message_price;
-                    button_buy.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            databaseReference.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    final Float float_this = Float.valueOf(0);
-
-                                    DIYSell productInfo = dataSnapshot.getValue(DIYSell.class);
-                                    final String diyName = productInfo.getDiyName();
-                                    final String diyUrl = productInfo.getDiyUrl();
-                                    final String user_id = productInfo.getUser_id();
-                                    final String productID = productInfo.getProductID();
-                                    final String status = productInfo.getIdentity();
-
-                                    if (!userID.equals(info.getUser_id())) {
-                                        Log.e("pending_not_same", String.valueOf("" + userID != info.getUser_id()));
-                                        Log.e("userid", String.valueOf("" + userID));
-                                        Log.e("info_userid", String.valueOf("" + info.getUser_id()));
-
-                                        sendNotification();
-
-                                        pending_reference.orderByChild("productID").equalTo(info.productID).addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                if (dataSnapshot.exists()) {
-                                                    Log.e("same_prodID", "" + dataSnapshot.exists());
-                                                    Log.e("same_data", "" + dataSnapshot);
-
-                                                    final Dialog dialog = new Dialog(DIYDetailViewActivity.this);
-                                                    dialog.setContentView(R.layout.exist_dialog);
-                                                    TextView text = (TextView) dialog.findViewById(R.id.et_email);
-                                                    text.setText("DIY already added to pending list!");
-                                                    ImageView image = (ImageView) dialog.findViewById(R.id.exist_dialog_imageview);
-                                                    image.setImageResource(R.drawable.exist);
-
-                                                    Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOKI);
-                                                    dialogButton.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-                                                            Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
-                                                            startActivity(intent);
-                                                        }
-                                                    });
-                                                    dialog.show();
-                                                } else {
-
-                                                    DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this, float_this);
-                                                    String upload_info = pending_reference.push().getKey();
-                                                    pending_reference.child(upload_info).setValue(info);
-                                                    pending_reference.child(upload_info).child("DIY Price").setValue(finalMessage_price);
-
-                                                    final Dialog dialog = new Dialog(DIYDetailViewActivity.this);
-                                                    dialog.setContentView(R.layout.done_dialog);
-                                                    TextView text = (TextView) dialog.findViewById(R.id.text);
-                                                    text.setText("DIY added to pending list!");
-                                                    ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
-                                                    image.setImageResource(R.drawable.done);
-
-                                                    Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-                                                    dialogButton.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-                                                            Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
-                                                            startActivity(intent);
-                                                        }
-                                                    });
-                                                    dialog.show();
-                                                }
-                                            }
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-                                            }
-                                        });
-                                    }else if(userID.equals(info.getUser_id())) {
-                                        Log.e("pending_same", String.valueOf("" + userID.equals(info.getUser_id())));
-                                        Toast.makeText(DIYDetailViewActivity.this, "It's your own product!", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                }
-                            });
-                        }
-                    });
-
-                    contact_seller.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(DIYDetailViewActivity.this, "Contact Seller button clicked!", Toast.LENGTH_SHORT).show();
-
-                            final Dialog myDialog = new Dialog(context);
-                            myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            myDialog.setContentView(R.layout.contact_seller);
-                            myDialog.setCancelable(false);
-                            Button chat = (Button) myDialog.findViewById(R.id.chat);
-                            Button call = (Button) myDialog.findViewById(R.id.call);
-                            Button sms = (Button) myDialog.findViewById(R.id.sms);
-                            TextView cancel = (TextView) myDialog.findViewById(R.id.cancel);
-
-                            chat.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(DIYDetailViewActivity.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
-                                    sendNotification();
-                                }
-                            });
-                            call.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(DIYDetailViewActivity.this, "Call button clicked!", Toast.LENGTH_SHORT).show();
-
-                                    String phone = sellers_contact_no.getText().toString();
-                                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
-                                            "tel", phone, null));
-                                    startActivity(phoneIntent);
-                                }
-                            });
-                            sms.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(DIYDetailViewActivity.this, "SMS button clicked!", Toast.LENGTH_SHORT).show();
-
-                                    String phone = sellers_contact_no.getText().toString();
-                                    Intent smsMsgAppVar = new Intent(Intent.ACTION_VIEW);
-                                    smsMsgAppVar.setData(Uri.parse("sms:" +  phone));
-                                    smsMsgAppVar.putExtra("sms_body", "Hi, Good Day! ");
-                                    startActivity(smsMsgAppVar);
-                                }
-                            });
-                            cancel.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    myDialog.cancel();
-                                }
-                            });
-
-                            myDialog.show();
-                            myDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                @Override
-                                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                        dialog.cancel();
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                            });
-                        }
-                    });
-
-                    create_promo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final Dialog myDialog = new Dialog(context);
-                            myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            myDialog.setContentView(R.layout.dialog_promo);
-                            myDialog.show();
-
-                            final EditText startDate = (EditText) myDialog.findViewById(R.id.et_start_date);
-                            startDate.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    // Initialize a new date picker dialog fragment
-                                    Bundle bundle = new Bundle();
-                                    DatePickerFragment newFragment = new DatePickerFragment();
-                                    newFragment.setArguments(bundle);
-                                    newFragment.show(getSupportFragmentManager(), "datePicker");
-
-                                }
-                            });
-
-                            EditText endDate = (EditText) myDialog.findViewById(R.id.et_end_date);
-                            Button ok = (Button) myDialog.findViewById(R.id.btn_ok);
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    myDialog.cancel();
-                                }
-                            });
-//                            showDatePickerDialog(v);
-                            Toast.makeText(context, "CREATE PROMO BUTTON CLICKED", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-                    bid_item.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent item = new Intent(DIYDetailViewActivity.this,ToBidProduct.class);
-                            item.putExtra("itemId", dataSnapshot.getKey());
-                            startActivity(item);
-                        }
-                    });
-
 
                     if (item != null) {
                         String[] splitsMat = dataSnapshot.child("materials").getValue().toString().split(",");
@@ -707,28 +510,71 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                             Log.d("messageProd", messageProd);
                         }
-//
-//                        Log.d("MessageProcedure", messageProcedure.toString());
-//
+
                         diy_materials.setText(messageMat);
                         diy_procedures.setText(messageProd);
-//                        //diy_procedures.setText("ASK PERMISSION TO THE OWNER OR BUY THE ITEM!");
-                         diy_sell.setText(message_price);
-//
-//                        Log.d("SnapItem", "not null");
-//                        Log.d("SnapMaterial", "" + item);
-//                        Log.d("SnapDataSnap", "" + dataSnapshot.child("materials").getValue());
-//                    } else {
-//                        Log.d("SnapItem", "null");
+                        diy_sell.setText(message_price);
                     }
 
                     if (diyInfo.diyUrl != null) {
                         diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
                         diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), diyInfo.diyUrl);
                         diyImagesViewPager.setAdapter(diyImagesViewPagerAdapter);
-
-//                        Toast.makeText(DIYDetailViewActivity.this, diyInfo.diyUrl, Toast.LENGTH_SHORT).show();
                     }
+
+                    create_promo.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final Dialog myDialog = new Dialog(context);
+                            myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            myDialog.setContentView(R.layout.dialog_promo);
+                            myDialog.show();
+
+                            final EditText promo_end_date = (EditText) myDialog.findViewById(R.id.et_promo_end_date);
+                            final EditText promo_price = (EditText) myDialog.findViewById(R.id.et_promo_prce);
+                            final Calendar calendar = Calendar.getInstance();
+                            final int year = calendar.get(Calendar.YEAR);
+                            final int month = calendar.get(Calendar.MONTH);
+                            final int date = calendar.get(Calendar.DAY_OF_MONTH);
+                            promo_end_date.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    final DatePickerDialog datePickerDialog = new DatePickerDialog(DIYDetailViewActivity.this, new DatePickerDialog.OnDateSetListener() {
+                                        @Override
+                                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                            String set_end_date = year + "-" + String.valueOf(month + 1) + "-" + (dayOfMonth);
+                                            String set_promo_price = promo_price.getText().toString();
+                                            if (calendar.after(set_end_date)) {
+                                                Toast.makeText(getApplication(), "YOU CANNOT PICK PASSED WEEKS!", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                promo_price.setText(set_promo_price);
+                                                promo_end_date.setText(set_end_date);
+                                            }
+                                        }
+                                    }, year, month, date);
+                                    datePickerDialog.show();
+                                }
+                            });
+                            Button ok = (Button) myDialog.findViewById(R.id.btn_ok);
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    myDialog.cancel();
+                                }
+                            });
+//                            showDatePickerDialog(v);
+                            Toast.makeText(context, "CREATE PROMO BUTTON CLICKED", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    bid_item.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent item = new Intent(DIYDetailViewActivity.this,ToBidProduct.class);
+                            item.putExtra("itemId", dataSnapshot.getKey());
+                            startActivity(item);
+                        }
+                    });
 
                 }else if(diyInfo.getIdentity().equalsIgnoreCase("on bid")){
                     diy_sell.setVisibility(View.VISIBLE);
@@ -884,202 +730,12 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                         biddersReference.push().setValue(new Bidders(bidders_value.getText().toString()
                                                 ,userID, loggedInUserName, sdate));
 
-                                        Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
+                                        Intent intent = new Intent(DIYDetailViewActivity.this, DIYDetailViewActivity.class);
                                         startActivity(intent);
                                     }
                                 });
                                 dialog.show();
                             }
-                        }
-                    });
-
-
-                    final String finalMessage_price = message_price;
-                    button_buy.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            databaseReference.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    final Float float_this = Float.valueOf(0);
-
-                                    DIYSell productInfo = dataSnapshot.getValue(DIYSell.class);
-                                    final String diyName = productInfo.getDiyName();
-                                    final String diyUrl = productInfo.getDiyUrl();
-                                    final String user_id = productInfo.getUser_id();
-                                    final String productID = productInfo.getProductID();
-                                    final String status = productInfo.getIdentity();
-
-                                    if (!userID.equals(info.getUser_id())) {
-                                        Log.e("pending_not_same", String.valueOf("" + userID != info.getUser_id()));
-                                        Log.e("userid", String.valueOf("" + userID));
-                                        Log.e("info_userid", String.valueOf("" + info.getUser_id()));
-
-                                        sendNotification();
-
-                                        pending_reference.orderByChild("productID").equalTo(info.productID).addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                if (dataSnapshot.exists()) {
-                                                    Log.e("same_prodID", "" + dataSnapshot.exists());
-                                                    Log.e("same_data", "" + dataSnapshot);
-
-                                                    final Dialog dialog = new Dialog(DIYDetailViewActivity.this);
-                                                    dialog.setContentView(R.layout.exist_dialog);
-                                                    TextView text = (TextView) dialog.findViewById(R.id.et_email);
-                                                    text.setText("DIY already added to pending list!");
-                                                    ImageView image = (ImageView) dialog.findViewById(R.id.exist_dialog_imageview);
-                                                    image.setImageResource(R.drawable.exist);
-
-                                                    Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOKI);
-                                                    dialogButton.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-                                                            Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
-                                                            startActivity(intent);
-                                                        }
-                                                    });
-                                                    dialog.show();
-                                                } else {
-
-                                                    DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this, float_this);
-                                                    String upload_info = pending_reference.push().getKey();
-                                                    pending_reference.child(upload_info).setValue(info);
-                                                    pending_reference.child(upload_info).child("DIY Price").setValue(finalMessage_price);
-
-                                                    final Dialog dialog = new Dialog(DIYDetailViewActivity.this);
-                                                    dialog.setContentView(R.layout.done_dialog);
-                                                    TextView text = (TextView) dialog.findViewById(R.id.text);
-                                                    text.setText("DIY added to pending list!");
-                                                    ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
-                                                    image.setImageResource(R.drawable.done);
-
-                                                    Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-                                                    dialogButton.setOnClickListener(new View.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(View v) {
-                                                            Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
-                                                            startActivity(intent);
-                                                        }
-                                                    });
-                                                    dialog.show();
-                                                }
-                                            }
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-                                            }
-                                        });
-                                    }else if(userID.equals(info.getUser_id())) {
-                                        Log.e("pending_same", String.valueOf("" + userID.equals(info.getUser_id())));
-                                        Toast.makeText(DIYDetailViewActivity.this, "It's your own product!", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                }
-                            });
-                        }
-                    });
-
-                    contact_seller.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(DIYDetailViewActivity.this, "Contact Seller button clicked!", Toast.LENGTH_SHORT).show();
-
-                            final Dialog myDialog = new Dialog(context);
-                            myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            myDialog.setContentView(R.layout.contact_seller);
-                            myDialog.setCancelable(false);
-                            Button chat = (Button) myDialog.findViewById(R.id.chat);
-                            Button call = (Button) myDialog.findViewById(R.id.call);
-                            Button sms = (Button) myDialog.findViewById(R.id.sms);
-                            TextView cancel = (TextView) myDialog.findViewById(R.id.cancel);
-
-                            chat.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(DIYDetailViewActivity.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
-
-                                    sendNotification();
-
-                                }
-                            });
-                            call.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(DIYDetailViewActivity.this, "Call button clicked!", Toast.LENGTH_SHORT).show();
-
-                                    String phone = sellers_contact_no.getText().toString();
-                                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
-                                            "tel", phone, null));
-                                    startActivity(phoneIntent);
-                                }
-                            });
-                            sms.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(DIYDetailViewActivity.this, "SMS button clicked!", Toast.LENGTH_SHORT).show();
-
-                                    String phone = sellers_contact_no.getText().toString();
-                                    Intent smsMsgAppVar = new Intent(Intent.ACTION_VIEW);
-                                    smsMsgAppVar.setData(Uri.parse("sms:" +  phone));
-                                    smsMsgAppVar.putExtra("sms_body", "Hi, Good Day! ");
-                                    startActivity(smsMsgAppVar);
-                                }
-                            });
-                            cancel.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    myDialog.cancel();
-                                }
-                            });
-
-                            myDialog.show();
-                            myDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                @Override
-                                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                    if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                        dialog.cancel();
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                            });
-                        }
-                    });
-
-                    create_promo.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            final Dialog myDialog = new Dialog(context);
-                            myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            myDialog.setContentView(R.layout.dialog_promo);
-                            myDialog.show();
-
-                            final EditText startDate = (EditText) myDialog.findViewById(R.id.et_start_date);
-                            startDate.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    // Initialize a new date picker dialog fragment
-                                    Bundle bundle = new Bundle();
-                                    DatePickerFragment newFragment = new DatePickerFragment();
-                                    newFragment.setArguments(bundle);
-                                    newFragment.show(getSupportFragmentManager(), "datePicker");
-
-                                }
-                            });
-
-                            EditText endDate = (EditText) myDialog.findViewById(R.id.et_end_date);
-                            Button ok = (Button) myDialog.findViewById(R.id.btn_ok);
-                            ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    myDialog.cancel();
-                                }
-                            });
-//                            showDatePickerDialog(v);
-                            Toast.makeText(context, "CREATE PROMO BUTTON CLICKED", Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -1145,21 +801,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
             }
         });
     }
-
-
-//        public void createDummyData() {
-//            SectionDataModel dm = new SectionDataModel();
-//
-//            dm.setHeaderTitle("Here: " );
-//
-//            ArrayList<DIYnames> singleItem = new ArrayList<DIYnames>();
-//            for (int j = 0; j <= 15; j++) {
-//                singleItem.add(new DIYnames("Item " + j, "URL " + j));
-//            }
-//            dm.setAllItemsInSection(singleItem);
-//            allSampleData.add(dm);
-//
-//    }
 
     public void createDummyData() {
         Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();
@@ -1241,7 +882,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         .setSmallIcon(R.drawable.new_logo_green2)
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
                         .setContentTitle("Notification")
-                        .setContentText("Buyer notify you!");
+                        .setContentText("Chat Seller!");
 
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

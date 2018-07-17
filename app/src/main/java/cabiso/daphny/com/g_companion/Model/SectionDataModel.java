@@ -7,9 +7,6 @@ import java.util.ArrayList;
  */
 
 public class SectionDataModel {
-
-
-
     private String headerTitle;
     private ArrayList<String> allItemsInSection;
     private ArrayList<User_Profile> allProfileInSection;

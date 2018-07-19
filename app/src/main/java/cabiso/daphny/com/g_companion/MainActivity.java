@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_logout:
                 if(mFirebaseUser!=null){
-                    FirebaseAuth.getInstance().signOut();
+                    mFirebaseAuth.getInstance().signOut();
                     Intent logout = new Intent(MainActivity.this,Login.class);
                     startActivity(logout);
                 }else{

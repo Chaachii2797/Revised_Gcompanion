@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -132,7 +133,6 @@ public class CommunityFragment extends Fragment{
             }
         });
 
-
         fab2 = (FloatingActionButton) view.findViewById(R.id.community_fab);
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,14 +222,19 @@ public class CommunityFragment extends Fragment{
                         if(model.identity!=null){
                             if(model.identity.equalsIgnoreCase("selling")){
                                 viewHolder.mIdentity.setText("Selling");
-                                viewHolder.mIdentity.setBackgroundColor(Color.RED);
+                                viewHolder.mIdentity.setBackgroundColor(Color.MAGENTA);
                             }else if(model.identity.equalsIgnoreCase("community")){
                                 viewHolder.mIdentity.setText("Community");
                                 viewHolder.mIdentity.setBackgroundColor(Color.YELLOW);
-                            }else if(model.identity.equalsIgnoreCase("on bid")){
+                            }else if(model.identity.equalsIgnoreCase("on bid!")){
                                 viewHolder.mIdentity.setText("On BID!");
                                 viewHolder.mIdentity.setBackgroundColor(Color.GREEN);
-                            }else if(model.identity.equalsIgnoreCase("sold")){
+                            }else if(model.identity.equalsIgnoreCase("ON SALE!")){
+                                viewHolder.mIdentity.setText("On SALE!");
+                                viewHolder.mIdentity.setBackgroundColor(Color.RED);
+                                viewHolder.mIdentityImageView.setImageResource(R.drawable.sale_badge);
+                                viewHolder.mIdentityImageView.setRotation((float) 15.0);
+                            }else if(model.identity.equalsIgnoreCase("sold")) {
                                 viewHolder.mIdentity.setText("SOLD");
                                 viewHolder.mIdentity.setBackgroundColor(Color.CYAN);
                             }
@@ -328,6 +333,7 @@ public class CommunityFragment extends Fragment{
         public final TextView mIdentity;
         public final TextView mOwnerName;
         public final ImageView mProductImageView;
+        public final ImageView mIdentityImageView;
 
         public ImageButton mStar;
         public ImageButton mHeart;
@@ -341,6 +347,7 @@ public class CommunityFragment extends Fragment{
 
             mNameView = (TextView) view.findViewById(R.id.item_name);
             mProductImageView = (ImageView) view.findViewById(R.id.diy_item_icon);
+            mIdentityImageView = (ImageView) view.findViewById(R.id.outside_imageview);
             mStar = (ImageButton) view.findViewById(R.id.staru);
             mHeart = (ImageButton) view.findViewById(R.id.heartu);
             mIdentity = (TextView) view.findViewById(R.id.item_identity);

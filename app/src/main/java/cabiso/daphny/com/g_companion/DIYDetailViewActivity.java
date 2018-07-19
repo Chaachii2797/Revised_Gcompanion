@@ -9,7 +9,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,7 +16,6 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -111,14 +109,13 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private ViewPager diyImagesViewPager;
     private DatabaseReference user_data;
     private DatabaseReference loggedInName;
-    private DatabaseReference itemReference;
     private DatabaseReference identityReference;
     private DatabaseReference promoReference;
     private DatabaseReference pending_reference;
     private DatabaseReference biddersReference;
     private FirebaseUser mFirebaseUser;
 
-    private DatabaseReference databaseReference, newDatabaseRef;
+    private DatabaseReference databaseReference, itemReference;
 
     private String userID;
     private String loggedInUserName;
@@ -149,7 +146,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         user_data = FirebaseDatabase.getInstance().getReference().child("userdata");
         loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
         itemReference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
-        newDatabaseRef = FirebaseDatabase.getInstance().getReference().child("same_diy_product");
         promoReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
         allSampleData = new ArrayList<SectionDataModel>();
@@ -172,13 +168,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         fab_template = (FloatingActionButton) findViewById(R.id.fab_add_product);
-        fab_template.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent in = new Intent(DIYDetailViewActivity.this, AddSameDIYTemplate.class);
-                startActivity(in);
-            }
-        });
 
         /* User Interface Initializations */
         recyclerView = (RecyclerView) findViewById(R.id.lv_bidders);
@@ -244,11 +233,11 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         lv_bidders = (RecyclerView) findViewById(R.id.lv_bidders);
         btn_bidders = (Button) findViewById(R.id.btn_bidders_bid);
 
-        createDummyData();
+//        createDummyData();
         final RecyclerView relatedDIYrecyclerView = (RecyclerView) findViewById(R.id.relatedDIYrecyclerView);
         relatedDIYrecyclerView.setHasFixedSize(true);
 
-        RecyclerViewDataAdapter adapter = new RecyclerViewDataAdapter(this, allSampleData);
+        final RecyclerViewDataAdapter adapter = new RecyclerViewDataAdapter(this, allSampleData);
 
         relatedDIYrecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         relatedDIYrecyclerView.setAdapter(adapter);
@@ -290,11 +279,45 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                     RelativeLayout.LayoutParams nlp = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                    nlp.topMargin = 1700;
+                    nlp.topMargin = 1200;
                     nlp.bottomMargin = 15;
                     nlp.leftMargin = 20;
                     nlp.rightMargin = 20;
                     cardview07.setLayoutParams(nlp);
+
+                    //Display related DIYS
+                    SectionDataModel dm = new SectionDataModel();
+                    dm.setHeaderTitle("Related DIYS: ");
+                    dm.setAllItemsInSection(ePrice);
+                    dm.setAllProfileInSection(eOwner);
+                    dm.setAllPicturesInSection(ePics);
+
+                    for (DataSnapshot postDataSnapshot: itemSnapshot.child("related_diys").getChildren()) {
+                        DIYnames diynem = postDataSnapshot.getValue(DIYnames.class);
+                        Log.e("diynem", String.valueOf(diynem));
+                        if(diyInfo.diyName.equals(diynem.getDiyName())){
+                            Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();
+
+//                            ePrice.add(postDataSnapshot.child("DIY Price").getValue().toString());
+//                            eOwner.add(postDataSnapshot.getValue(User_Profile.class));
+//                            ePics.add(postDataSnapshot.getValue(DIYnames.class));
+//
+
+                            dm.addItemInSection(postDataSnapshot.child("DIY Price").getValue().toString());
+                            dm.addProfileInSection(postDataSnapshot.getValue(User_Profile.class));
+                            dm.addPictureInSection(postDataSnapshot.getValue(DIYnames.class));
+
+                            Log.e("dm", String.valueOf(dm));
+                            Log.e("allSampleData", String.valueOf(allSampleData));
+                            Log.e("allPrice", String.valueOf(ePrice));
+                            Log.e("allOwner", String.valueOf(eOwner));
+                            Log.e("allPics", String.valueOf(ePics));
+
+                        }
+                    }
+                    allSampleData.add(dm);
+                    adapter.notifyDataSetChanged();
+
 
                     user_data.addChildEventListener(new ChildEventListener() {
                         @Override
@@ -327,6 +350,26 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                         }
                     });
+
+                    fab_template.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(diyInfo.user_id.equals(userID)){
+                                Toast.makeText(DIYDetailViewActivity.this,"This is your item!", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(DIYDetailViewActivity.this, "Please complete this.", Toast.LENGTH_SHORT).show();
+                                Intent in = new Intent(DIYDetailViewActivity.this, AddSameDIYTemplate.class);
+                                in.putExtra("sameItemId", itemSnapshot.getKey());
+                                Log.e("sameItemId",itemSnapshot.getKey());
+
+                                in.putExtra("itemProdName", diyInfo.diyName);
+                                Log.e("itemProdName", diyInfo.diyName);
+                                startActivity(in);
+                            }
+                        }
+                    });
+
 
                     String messageMat = "";
                     List<String> messageMaterials = new ArrayList<String>();
@@ -392,14 +435,33 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     //promo
                     promo_price.setVisibility(View.INVISIBLE);
                     promo_textview.setVisibility(View.INVISIBLE);
+                    cardview0.setVisibility(View.INVISIBLE);//materials
+                    cardview00.setVisibility(View.INVISIBLE);//procedures
+
 
                     RelativeLayout.LayoutParams nlp = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                    nlp.topMargin = 1700;
-                    nlp.bottomMargin = (int) 0.05;
+                    nlp.topMargin = 700;
+                    nlp.bottomMargin = 15;
                     nlp.leftMargin = 20;
                     nlp.rightMargin = 20;
-                    cardview07.setLayoutParams(nlp);
+                    selling_price.setLayoutParams(nlp);
+
+                    RelativeLayout.LayoutParams adjs = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    adjs.topMargin = 1100;
+                    adjs.bottomMargin = 15;
+                    adjs.leftMargin = 20;
+                    adjs.rightMargin = 20;
+                    contact_seller.setLayoutParams(adjs);
+
+                    RelativeLayout.LayoutParams adjust = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    adjust.topMargin = 1210;
+                    adjust.bottomMargin = 20;
+                    adjust.leftMargin = 20;
+                    adjust.rightMargin = 20;
+                    button_buy.setLayoutParams(adjust);
 
                     Log.e("userDataID",userID);
                     loggedInName.child(userID).addValueEventListener(new ValueEventListener() {
@@ -473,6 +535,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                 @Override
                                 public void onClick(View v) {
                                     Toast.makeText(DIYDetailViewActivity.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
+                                    sendNotification();
                                 }
                             });
                             call.setOnClickListener(new View.OnClickListener() {
@@ -541,41 +604,43 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                     }
 
-                    if (item != null) {
-                        String[] splitsMat = itemSnapshot.child("materials").getValue().toString().split(",");
-                        Log.e("messageProd", "" + splitsMat);
+                    diy_sell.setText(message_price);
 
-                        String messageMat = "";
-                        List<String> messageMaterials = new ArrayList<String>();
-                        int count = 1;
-                        for (DataSnapshot postSnapshot : itemSnapshot.child("materials").getChildren()) {
-                            String material_name = postSnapshot.child("name").getValue(String.class).toUpperCase();
-                            Long material_qty = postSnapshot.child("quantity").getValue(Long.class);
-                            String material_unit = postSnapshot.child("unit").getValue(String.class);
-                            Log.e("message", "" + material_name);
-                            messageMat += "\n" + material_qty + " " + material_unit + " " + material_name;
-                            messageMaterials.add(material_name);
-                            count++;
-                        }
 
-                        String[] splits = itemSnapshot.child("procedures").getValue().toString().split(",");
-                        Log.e("splits", "" + splits);
-
-                        String messageProd = "";
-                        List<String> messageProcedure = new ArrayList<String>();
-                        for (int i = 0; i < splits.length; i++) {
-                            Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
-                            String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
-                            messageProd += "\n" + message;
-                            messageProcedure.add(message);
-
-                            Log.d("messageProd", messageProd);
-                        }
-
-                        diy_materials.setText(messageMat);
-                        diy_procedures.setText(messageProd);
-                        diy_sell.setText(message_price);
-                    }
+//                    if (item != null) {
+//                        String[] splitsMat = itemSnapshot.child("materials").getValue().toString().split(",");
+//                        Log.e("messageProd", "" + splitsMat);
+//
+//                        String messageMat = "";
+//                        List<String> messageMaterials = new ArrayList<String>();
+//                        int count = 1;
+//                        for (DataSnapshot postSnapshot : itemSnapshot.child("materials").getChildren()) {
+//                            String material_name = postSnapshot.child("name").getValue(String.class).toUpperCase();
+//                            Long material_qty = postSnapshot.child("quantity").getValue(Long.class);
+//                            String material_unit = postSnapshot.child("unit").getValue(String.class);
+//                            Log.e("message", "" + material_name);
+//                            messageMat += "\n" + material_qty + " " + material_unit + " " + material_name;
+//                            messageMaterials.add(material_name);
+//                            count++;
+//                        }
+//
+//                        String[] splits = itemSnapshot.child("procedures").getValue().toString().split(",");
+//                        Log.e("splits", "" + splits);
+//
+//                        String messageProd = "";
+//                        List<String> messageProcedure = new ArrayList<String>();
+//                        for (int i = 0; i < splits.length; i++) {
+//                            Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
+//                            String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
+//                            messageProd += "\n" + message;
+//                            messageProcedure.add(message);
+//
+//                            Log.d("messageProd", messageProd);
+//                        }
+//
+//                        diy_materials.setText(messageMat);
+//                        diy_procedures.setText(messageProd);
+//                    }
 
                     if (diyInfo.diyUrl != null) {
                         diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
@@ -658,14 +723,48 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     cardview05.setVisibility(View.INVISIBLE);
                     cardview06.setVisibility(View.INVISIBLE);
                     recyclerView.setVisibility(View.INVISIBLE);
+                    cardview0.setVisibility(View.INVISIBLE);//materials
+                    cardview00.setVisibility(View.INVISIBLE);//procedures
 
                     RelativeLayout.LayoutParams nlp = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                    nlp.topMargin = 1700;
+                    nlp.topMargin = 700;
                     nlp.bottomMargin = 15;
-                    nlp.leftMargin = 20;
-                    nlp.rightMargin = 20;
-                    cardview07.setLayoutParams(nlp);
+                    nlp.leftMargin = 25;
+                    nlp.rightMargin = 25;
+                    selling_price.setLayoutParams(nlp);
+
+                    RelativeLayout.LayoutParams ad = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    ad.topMargin = 1100;
+                    ad.bottomMargin = 15;
+                    ad.leftMargin = 20;
+                    ad.rightMargin = 20;
+                    contact_seller.setLayoutParams(ad);
+
+                    RelativeLayout.LayoutParams adj = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    adj.topMargin = 1210;
+                    adj.bottomMargin = 20;
+                    adj.leftMargin = 20;
+                    adj.rightMargin = 20;
+                    button_buy.setLayoutParams(adj);
+
+                    RelativeLayout.LayoutParams adju = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    adju.topMargin = 1320;
+                    adju.bottomMargin = 20;
+                    adju.leftMargin = 20;
+                    adju.rightMargin = 20;
+                    create_promo.setLayoutParams(adju);
+
+                    RelativeLayout.LayoutParams adjus = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    adjus.topMargin = 1430;
+                    adjus.bottomMargin = 20;
+                    adjus.leftMargin = 20;
+                    adjus.rightMargin = 20;
+                    bid_item.setLayoutParams(adjus);
 
                     user_data.addChildEventListener(new ChildEventListener() {
                         @Override
@@ -674,8 +773,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                             if(diyInfo.user_id.equals(user_profile.getUserID())){
                                 user_name = user_profile.getF_name()+" "+user_profile.getL_name();
                                 user_owner_name.setText(user_name);
-                                sellers_address.setText(user_profile.getContact_no());
-                                sellers_contact_no.setText(user_profile.getAddress());
+                                sellers_address.setText(user_profile.getAddress());
+                                sellers_contact_no.setText(user_profile.getContact_no());
+
                             }
                             if(diyInfo.user_id.equals(userID)){
                                 button_buy.setVisibility(View.VISIBLE);
@@ -706,6 +806,71 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         }
                     });
 
+                    contact_seller.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(DIYDetailViewActivity.this, "Contact Seller button clicked!", Toast.LENGTH_SHORT).show();
+
+                            final Dialog myDialog = new Dialog(context);
+                            myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            myDialog.setContentView(R.layout.contact_seller);
+                            myDialog.setCancelable(false);
+                            Button chat = (Button) myDialog.findViewById(R.id.chat);
+                            Button call = (Button) myDialog.findViewById(R.id.call);
+                            Button sms = (Button) myDialog.findViewById(R.id.sms);
+                            TextView cancel = (TextView) myDialog.findViewById(R.id.cancel);
+
+                            chat.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(DIYDetailViewActivity.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
+                                    sendNotification();
+                                }
+                            });
+                            call.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(DIYDetailViewActivity.this, "Call button clicked!", Toast.LENGTH_SHORT).show();
+
+                                    String phone = sellers_contact_no.getText().toString();
+                                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
+                                            "tel", phone, null));
+                                    startActivity(phoneIntent);
+                                }
+                            });
+                            sms.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(DIYDetailViewActivity.this, "SMS button clicked!", Toast.LENGTH_SHORT).show();
+
+                                    String phone = sellers_contact_no.getText().toString();
+                                    Intent smsMsgAppVar = new Intent(Intent.ACTION_VIEW);
+                                    smsMsgAppVar.setData(Uri.parse("sms:" +  phone));
+                                    smsMsgAppVar.putExtra("sms_body", "Hi, Good Day! ");
+                                    startActivity(smsMsgAppVar);
+                                }
+                            });
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    myDialog.cancel();
+                                }
+                            });
+
+                            myDialog.show();
+                            myDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                @Override
+                                public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                    if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                        dialog.cancel();
+                                        return true;
+                                    }
+                                    return false;
+                                }
+                            });
+                        }
+                    });
+
                     for(DataSnapshot insideDataSnapshot: itemSnapshot.child("itemPromo").getChildren()){
                         CreatePromo createPromo = insideDataSnapshot.getValue(CreatePromo.class);
                         promo_price.setText(createPromo.getPromo_price());
@@ -720,41 +885,44 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         message_Price.add(message_price);
                     }
 
-                    if (item != null) {
-                        String[] splitsMat = itemSnapshot.child("materials").getValue().toString().split(",");
-                        Log.e("messageProd", "" + splitsMat);
+                    diy_sell.setText(message_price);
 
-                        String messageMat = "";
-                        List<String> messageMaterials = new ArrayList<String>();
-                        int count = 1;
-                        for (DataSnapshot postSnapshot : itemSnapshot.child("materials").getChildren()) {
-                            String material_name = postSnapshot.child("name").getValue(String.class).toUpperCase();
-                            Long material_qty = postSnapshot.child("quantity").getValue(Long.class);
-                            String material_unit = postSnapshot.child("unit").getValue(String.class);
-                            Log.e("message", "" + material_name);
-                            messageMat += "\n" + material_qty + " " + material_unit + " " + material_name;
-                            messageMaterials.add(material_name);
-                            count++;
-                        }
 
-                        String[] splits = itemSnapshot.child("procedures").getValue().toString().split(",");
-                        Log.e("splits", "" + splits);
 
-                        String messageProd = "";
-                        List<String> messageProcedure = new ArrayList<String>();
-                        for (int i = 0; i < splits.length; i++) {
-                            Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
-                            String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
-                            messageProd += "\n" + message;
-                            messageProcedure.add(message);
-
-                            Log.d("messageProd", messageProd);
-                        }
-
-                        diy_materials.setText(messageMat);
-                        diy_procedures.setText(messageProd);
-                        diy_sell.setText(message_price);
-                    }
+//                    if (item != null) {
+//                        String[] splitsMat = itemSnapshot.child("materials").getValue().toString().split(",");
+//                        Log.e("messageProd", "" + splitsMat);
+//
+//                        String messageMat = "";
+//                        List<String> messageMaterials = new ArrayList<String>();
+//                        int count = 1;
+//                        for (DataSnapshot postSnapshot : itemSnapshot.child("materials").getChildren()) {
+//                            String material_name = postSnapshot.child("name").getValue(String.class).toUpperCase();
+//                            Long material_qty = postSnapshot.child("quantity").getValue(Long.class);
+//                            String material_unit = postSnapshot.child("unit").getValue(String.class);
+//                            Log.e("message", "" + material_name);
+//                            messageMat += "\n" + material_qty + " " + material_unit + " " + material_name;
+//                            messageMaterials.add(material_name);
+//                            count++;
+//                        }
+//
+//                        String[] splits = itemSnapshot.child("procedures").getValue().toString().split(",");
+//                        Log.e("splits", "" + splits);
+//
+//                        String messageProd = "";
+//                        List<String> messageProcedure = new ArrayList<String>();
+//                        for (int i = 0; i < splits.length; i++) {
+//                            Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
+//                            String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
+//                            messageProd += "\n" + message;
+//                            messageProcedure.add(message);
+//
+//                            Log.d("messageProd", messageProd);
+//                        }
+//
+//                        diy_materials.setText(messageMat);
+//                        diy_procedures.setText(messageProd);
+//                    }
 
                     if (diyInfo.diyUrl != null) {
                         diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
@@ -779,6 +947,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     fab_template.setVisibility(View.INVISIBLE);
                     cardview07.setVisibility(View.INVISIBLE);
                     relatedDIYrecyclerView.setVisibility(View.INVISIBLE);
+                    cardview0.setVisibility(View.INVISIBLE);//materials
+                    cardview00.setVisibility(View.INVISIBLE);//procedures
 
                     //owners statement
                     ownr_txt.setVisibility(View.VISIBLE);
@@ -805,10 +975,11 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                     RelativeLayout.LayoutParams nlp = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                    nlp.topMargin = 1700;
+                    nlp.topMargin = 700;
+                    nlp.bottomMargin = 15;
                     nlp.leftMargin = 20;
                     nlp.rightMargin = 20;
-                    cardview07.setLayoutParams(nlp);
+                    selling_price.setLayoutParams(nlp);
 
                     boolean isExpired = false;
 
@@ -948,43 +1119,43 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         }
                     });
 
+                    diy_sell.setText(message_price);
 
-                    if (item != null) {
-                        String[] splitsMat = itemSnapshot.child("materials").getValue().toString().split(",");
-                        Log.e("messageProd", "" + splitsMat);
-
-                        String messageMat = "";
-                        List<String> messageMaterials = new ArrayList<String>();
-                        int count = 1;
-                        for (DataSnapshot postSnapshot : itemSnapshot.child("materials").getChildren()) {
-                            String material_name = postSnapshot.child("name").getValue(String.class).toUpperCase();
-                            Long material_qty = postSnapshot.child("quantity").getValue(Long.class);
-                            String material_unit = postSnapshot.child("unit").getValue(String.class);
-                            Log.e("message", "" + material_name);
-                            messageMat += "\n" + material_qty + " " + material_unit + " " + material_name;
-                            messageMaterials.add(material_name);
-                            count++;
-                        }
-
-                        String[] splits = itemSnapshot.child("procedures").getValue().toString().split(",");
-                        Log.e("splits", "" + splits);
-
-                        String messageProd = "";
-                        List<String> messageProcedure = new ArrayList<String>();
-                        for (int i = 0; i < splits.length; i++) {
-                            Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
-                            String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
-                            messageProd += "\n" + message;
-                            messageProcedure.add(message);
-
-                            Log.d("messageProd", messageProd);
-                        }
-
-                        diy_materials.setText(messageMat);
-                        diy_procedures.setText(messageProd);
+//                    if (item != null) {
+//                        String[] splitsMat = itemSnapshot.child("materials").getValue().toString().split(",");
+//                        Log.e("messageProd", "" + splitsMat);
+//
+//                        String messageMat = "";
+//                        List<String> messageMaterials = new ArrayList<String>();
+//                        int count = 1;
+//                        for (DataSnapshot postSnapshot : itemSnapshot.child("materials").getChildren()) {
+//                            String material_name = postSnapshot.child("name").getValue(String.class).toUpperCase();
+//                            Long material_qty = postSnapshot.child("quantity").getValue(Long.class);
+//                            String material_unit = postSnapshot.child("unit").getValue(String.class);
+//                            Log.e("message", "" + material_name);
+//                            messageMat += "\n" + material_qty + " " + material_unit + " " + material_name;
+//                            messageMaterials.add(material_name);
+//                            count++;
+//                        }
+//
+//                        String[] splits = itemSnapshot.child("procedures").getValue().toString().split(",");
+//                        Log.e("splits", "" + splits);
+//
+//                        String messageProd = "";
+//                        List<String> messageProcedure = new ArrayList<String>();
+//                        for (int i = 0; i < splits.length; i++) {
+//                            Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
+//                            String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
+//                            messageProd += "\n" + message;
+//                            messageProcedure.add(message);
+//
+//                            Log.d("messageProd", messageProd);
+//                        }
+//
+//                        diy_materials.setText(messageMat);
+//                        diy_procedures.setText(messageProd);
 //                        //diy_procedures.setText("ASK PERMISSION TO THE OWNER OR BUY THE ITEM!");
-                        diy_sell.setText(message_price);
-                    }
+//                    }
 
                     if (diyInfo.diyUrl != null) {
                         diyImagesViewPager = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
@@ -1002,78 +1173,59 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         });
     }
 
-    public void createDummyData() {
-        Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();
-
-        newDatabaseRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                DIYnames diynem = dataSnapshot.getValue(DIYnames.class);
-                User_Profile owner =dataSnapshot.getValue(User_Profile.class);
-
-                SectionDataModel dm = new SectionDataModel();
-                dm.setHeaderTitle("Related DIYS: ");
-
-
-                ePrice.add(dataSnapshot.child("DIY Price").getValue().toString());
-                eOwner.add(dataSnapshot.getValue(User_Profile.class));
-                ePics.add(dataSnapshot.getValue(DIYnames.class));
-
-                dm.setAllItemsInSection(ePrice);
-                dm.setAllProfileInSection(eOwner);
-                dm.setAllPicturesInSection(ePics);
-
-                allSampleData.add(dm);
-                Log.e("dm", String.valueOf(dm));
-                Log.e("allSampleData", String.valueOf(allSampleData));
-
-                Log.e("allPrice", String.valueOf(ePrice));
-                Log.e("allOwner", String.valueOf(eOwner));
-                Log.e("allPics", String.valueOf(ePics));
-
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-//        SectionDataModel dm = new SectionDataModel();
-//        DIYnames dataDIys = new DIYnames();
-//        Log.e("dataDIysss", String.valueOf(dataDIys));
-//        dm.setHeaderTitle("Related DIYS: " );
+//    public void createDummyData() {
+//        Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();
 //
-//        ArrayList<DIYnames> singleItem = new ArrayList<DIYnames>();
+//        itemReference.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                DIYnames diynem = dataSnapshot.getValue(DIYnames.class);
+//                User_Profile owner =dataSnapshot.getValue(User_Profile.class);
 //
-////            for (int j = 0; j <= 3; j++) {
-////                singleItem.add(new DIYnames("Item " + j, "URL " + j));
-//            singleItem.add(dataDIys);
-////            }
+//                SectionDataModel dm = new SectionDataModel();
+//                dm.setHeaderTitle("Related DIYS: ");
 //
-//        dm.setAllItemsInSection(singleItem);
-//        allSampleData.add(dm);
 //
-//        Log.e("single", String.valueOf(singleItem));
-
-
-    }
+//                ePrice.add(dataSnapshot.child("DIY Price").getValue().toString());
+//                eOwner.add(dataSnapshot.getValue(User_Profile.class));
+//                ePics.add(dataSnapshot.getValue(DIYnames.class));
+//
+//                dm.setAllItemsInSection(ePrice);
+//                dm.setAllProfileInSection(eOwner);
+//                dm.setAllPicturesInSection(ePics);
+//
+//                allSampleData.add(dm);
+//                Log.e("dm", String.valueOf(dm));
+//                Log.e("allSampleData", String.valueOf(allSampleData));
+//
+//                Log.e("allPrice", String.valueOf(ePrice));
+//                Log.e("allOwner", String.valueOf(eOwner));
+//                Log.e("allPics", String.valueOf(ePics));
+//
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//    }
 
     public void sendNotification() {
 

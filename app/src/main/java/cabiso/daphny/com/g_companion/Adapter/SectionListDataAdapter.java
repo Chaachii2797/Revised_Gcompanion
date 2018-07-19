@@ -37,7 +37,7 @@ import cabiso.daphny.com.g_companion.ViewRelatedDIYS;
 public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListDataAdapter.SingleItemRowHolder> {
 
     private Context mContext;
-    private DatabaseReference relatedDIYReference, diy_owner;
+    private DatabaseReference diy_owner, diyByTags;
     private ArrayList<String> ePrice = new ArrayList<>();
     private ArrayList<User_Profile> eOwner = new ArrayList<>();
     private ArrayList<DIYnames> ePics = new ArrayList<>();
@@ -61,85 +61,83 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
     @Override
     public void onBindViewHolder(final SingleItemRowHolder holder, final int position) {
-        relatedDIYReference = FirebaseDatabase.getInstance().getReference().child("same_diy_product");
         diy_owner = FirebaseDatabase.getInstance().getReference().child("userdata");
-
+        diyByTags = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
         //get related DIY owner
+//        final String get_name = getIntent().getStringExtra("pprice");
+//        holder.diyPrice.setText(get_name);
 
 
-
-        relatedDIYReference.addChildEventListener(new ChildEventListener() {
+        diyByTags.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                final DIYnames diyInfos = dataSnapshot.getValue(DIYnames.class);
+                for (DataSnapshot postDataSnapshot : dataSnapshot.child("related_diys").getChildren()) {
+                    final DIYnames diyInfos = postDataSnapshot.getValue(DIYnames.class);
 
-                String sell_price = dataSnapshot.child("DIY Price").getValue().toString();
-                String quantity = dataSnapshot.child("Item Quantity").getValue().toString();
+                    Log.e("diyInfos", String.valueOf(diyInfos));
+                    String sell_price = postDataSnapshot.child("DIY Price").getValue().toString();
+                    String quantity = postDataSnapshot.child("Item Quantity").getValue().toString();
 
-                Log.e("diy_prices", sell_price);
-                Log.e("quantity",quantity);
-                final double price = Double.parseDouble(sell_price);
-                final int qty = Integer.parseInt(quantity);
+                    Log.e("diy_prices", sell_price);
+                    Log.e("quantity",quantity);
+                    final double price = Double.parseDouble(sell_price);
+                    final int qty = Integer.parseInt(quantity);
 
-                Log.e("prices", String.valueOf(price));
-                ePrice.add(dataSnapshot.child("DIY Price").getValue().toString());
-                Log.e("ePrice", String.valueOf(ePrice));
+                    Log.e("prices", String.valueOf(price));
+                    ePrice.add(postDataSnapshot.child("DIY Price").getValue().toString());
+                    Log.e("ePrice", String.valueOf(ePrice));
 //                holder.diyPrice.setText(sell_price);
 //                holder.diyQty.setText(qty + " " + "piece/s");
 
-                //Nakuha na siya boshet
-                holder.diyPrice.setText("₱:" + " " + ePrice.get(position));
+                    //Nakuha na siya boshet
+                    holder.diyPrice.setText("₱:" + " " + ePrice.get(position));
 
-                ePics.add(dataSnapshot.getValue(DIYnames.class));
-                Log.e("ePics", String.valueOf(ePics));
+                    ePics.add(postDataSnapshot.getValue(DIYnames.class));
+                    Log.e("ePics", String.valueOf(ePics));
 
-                Glide.with(mContext)
-                .load(ePics.get(position).getDiyUrl())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .centerCrop()
-                .into(holder.itemImage);
+                    Glide.with(mContext)
+                            .load(ePics.get(position).diyUrl)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .centerCrop()
+                            .into(holder.itemImage);
 
-                Log.e("diyItemURL", ePics.get(position).getDiyUrl());
+                    Log.e("diyItemURL", ePics.get(position).getDiyUrl());
 
-                diy_owner.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        User_Profile owner_profile = dataSnapshot.getValue(User_Profile.class);
 
-                        if(diyInfos.user_id.equals(owner_profile.getUserID())){
-                            String user;
-                            user = owner_profile.getF_name()+" "+owner_profile.getL_name();
+                    diy_owner.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            User_Profile owner_profile = dataSnapshot.getValue(User_Profile.class);
+                            if (diyInfos.user_id.equals(owner_profile.getUserID())) {
+                                String user;
+                                user = owner_profile.getF_name() + " " + owner_profile.getL_name();
 //                            holder.diyOwner.setText(user);
-                            Log.e("user",user);
-
-                            eOwner.add(dataSnapshot.getValue(User_Profile.class));
-                            Log.e("eOwner", String.valueOf(eOwner));
-                            holder.diyOwner.setText("by:" + " " + eOwner.get(position).getF_name() + " " + eOwner.get(position).getL_name());
-                            Log.e("fName", eOwner.get(position).getF_name() + " " + eOwner.get(position).getL_name());
+                                Log.e("user", user);
+                                eOwner.add(dataSnapshot.getValue(User_Profile.class));
+                                Log.e("eOwner", String.valueOf(eOwner));
+                                holder.diyOwner.setText("by:" + " " + eOwner.get(position).getF_name() + " " + eOwner.get(position).getL_name());
+                                Log.e("fName", eOwner.get(position).getF_name() + " " + eOwner.get(position).getL_name());
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        }
 
-                    }
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        }
 
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                        }
 
-                    }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
+                        }
+                    });
+                }
             }
 
             @Override
@@ -162,6 +160,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
             }
         });
+
 
 //        holder.diyPrice.setText((int) sellItem.getSelling_price());
 //        Log.e("price", String.valueOf(sellItem.getSelling_price()));
@@ -289,7 +288,8 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                     intent.putExtra("image", byteArray);
                     v.getContext().startActivity(intent);
 
-                    Toast.makeText(v.getContext(), diyOwner.getText() + "\n" + diyPrice.getText().toString(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), diyOwner.getText() + "\n" + diyPrice.getText().toString()
+                            + "\n" + itemImage.getDrawable(), Toast.LENGTH_SHORT).show();
                 }
             });
         }

@@ -4,6 +4,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
@@ -37,7 +39,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
@@ -98,9 +99,10 @@ public class ViewRelatedDIYS extends AppCompatActivity {
         final  String get_quantity = getIntent().getStringExtra("Qqty");
 //        qty.setText(get_quantity);
 
+
         userdata = FirebaseDatabase.getInstance().getReference().child("userdata");
         pending_reference = FirebaseDatabase.getInstance().getReference("DIY Pending Items").child(userID);
-        databaseRefViewRelated = FirebaseDatabase.getInstance().getReference("same_diy_product");
+        databaseRefViewRelated = FirebaseDatabase.getInstance().getReference("diy_by_tags");
 
 
         /* Toolbar Configurations */
@@ -119,345 +121,236 @@ public class ViewRelatedDIYS extends AppCompatActivity {
 
 
 
-        final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("same_diy_product");
+        final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                final DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
-                final DIYSell info = dataSnapshot.getValue(DIYSell.class);
-
-
-                String diy_qty="";
-                List<String> message_quantity = new ArrayList<String>();
-
-                String quant = dataSnapshot.child("Item Quantity").getValue().toString();
-                diy_qty += quant;
-                message_quantity.add(diy_qty);
-                Log.e("diy_qty",diy_qty);
-                Log.e("quant", String.valueOf(quant));
-                Log.e("message_quantity", String.valueOf(message_quantity));
-                qty.setText(quant + " " + "piece/s");
-//                        }
-
-//                //makuha siya tanan pero same ra ang qty nga ma display
-//                String quantity = dataSnapshot.child("Item Quantity").getValue().toString();
-//                Log.e("quantities", quantity);
-//                final double qtyParse = Double.parseDouble(quantity);
-//                Log.e("qtyParse", String.valueOf(qtyParse));
-//                qty.setText(quantity);
+                for (DataSnapshot postDataSnapshot : dataSnapshot.child("related_diys").getChildren()) {
+                    final DIYnames diYnames = postDataSnapshot.getValue(DIYnames.class);
+                    final DIYSell info = postDataSnapshot.getValue(DIYSell.class);
+                    Log.e("diYnames", String.valueOf(diYnames));
+                    Log.e("info", String.valueOf(info));
 
 
-                //nganung dli musulod ari? pero dli ma display ang owner if wala ning first condition boshet
-                if(get_name.equals(diYnames.getDiyName())){
-                    Toast.makeText(context, "Condition", Toast.LENGTH_SHORT).show();
-                    if(diYnames.getIdentity().equals("selling")) {
+                    String quant = postDataSnapshot.child("Item Quantity").getValue().toString();
+                    Log.e("quant", String.valueOf(quant));
+                    qty.setText(quant + " " + "piece/s");
 
-                        Toast.makeText(context, "Clicked sell item", Toast.LENGTH_SHORT).show();
-                        diy_sell.setVisibility(View.VISIBLE);
-                        qty.setVisibility(View.VISIBLE);
-                        button_sell.setVisibility(View.VISIBLE);
-                        contact_seller.setVisibility(View.VISIBLE);
-                        //create_promo.setVisibility(View.VISIBLE);
-                        owner_add.setVisibility(View.VISIBLE);
-                        owner_cn.setVisibility(View.VISIBLE);
-                        selling_price.setVisibility(View.VISIBLE);
-                        seller_info.setVisibility(View.VISIBLE);
-                        diy_owner.setText(info.diyName);
+                    eQty.add(postDataSnapshot.child("Item Quantity").getValue().toString());
+                    Log.e("eQty", String.valueOf(eQty));
 
-
-                        userdata.addChildEventListener(new ChildEventListener() {
-                            @Override
-                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                                if(diYnames.user_id.equals(user_profile.getUserID())){
-                                    user_name = user_profile.getF_name()+" "+user_profile.getL_name();
+                    userdata.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                            if (diYnames.user_id.equals(user_profile.getUserID())) {
+                                user_name = user_profile.getF_name() + " " + user_profile.getL_name();
 //                                    qty.setText(user_name);
-                                    Log.e("user_name",user_name);
+                                owner_cn.setText(user_profile.getContact_no());
+                                owner_add.setText(user_profile.getAddress());
+                                Log.e("user_name", user_name);
 
-
-                                }
 
                             }
 
-                            @Override
-                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                            }
-
-                            @Override
-                            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                            }
-
-                            @Override
-                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-                        button_sell.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                myRef.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        final Float float_this = Float.valueOf(0);
-
-                                        DIYSell productInfo = dataSnapshot.getValue(DIYSell.class);
-                                        final String diyName = productInfo.getDiyName();
-                                        final String diyUrl = productInfo.getDiyUrl();
-                                        final String user_id = productInfo.getUser_id();
-                                        final String productID = productInfo.getProductID();
-                                        final String status = productInfo.getIdentity();
-
-                                        if (!userID.equals(info.getUser_id())) {
-                                            Log.e("pending_not_same", String.valueOf("" + userID != info.getUser_id()));
-                                            Log.e("userid", String.valueOf("" + userID));
-                                            Log.e("info_userid", String.valueOf("" + info.getUser_id()));
-
-                                            pending_reference.orderByChild("productID").equalTo(info.productID).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    if (dataSnapshot.exists()) {
-                                                        Log.e("same_prodID", "" + dataSnapshot.exists());
-                                                        Log.e("same_data", "" + dataSnapshot);
-
-                                                        final Dialog dialog = new Dialog(ViewRelatedDIYS.this);
-                                                        dialog.setContentView(R.layout.exist_dialog);
-                                                        TextView text = (TextView) dialog.findViewById(R.id.e_text);
-                                                        text.setText("DIY already added to pending list!");
-                                                        ImageView image = (ImageView) dialog.findViewById(R.id.exist_dialog_imageview);
-                                                        image.setImageResource(R.drawable.exist);
-
-                                                        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOKI);
-                                                        dialogButton.setOnClickListener(new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View v) {
-                                                                Intent intent = new Intent(ViewRelatedDIYS.this, Bottle_Recommend.class);
-                                                                startActivity(intent);
-                                                            }
-                                                        });
-                                                        dialog.show();
-                                                    } else {
-
-                                                        DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this, float_this);
-                                                        String upload_info = pending_reference.push().getKey();
-                                                        pending_reference.child(upload_info).setValue(info);
-                                                        pending_reference.child(upload_info).child("DIY Price").setValue(get_price);
-
-                                                        final Dialog dialog = new Dialog(ViewRelatedDIYS.this);
-                                                        dialog.setContentView(R.layout.done_dialog);
-                                                        TextView text = (TextView) dialog.findViewById(R.id.text);
-                                                        text.setText("DIY added to pending list!");
-                                                        ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
-                                                        image.setImageResource(R.drawable.done);
-
-                                                        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-                                                        dialogButton.setOnClickListener(new View.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(View v) {
-                                                                Intent intent = new Intent(ViewRelatedDIYS.this, Bottle_Recommend.class);
-                                                                startActivity(intent);
-                                                            }
-                                                        });
-                                                        dialog.show();
-                                                    }
-                                                }
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-                                                }
-                                            });
-                                        }else if(userID.equals(info.getUser_id())) {
-                                            Log.e("pending_same", String.valueOf("" + userID.equals(info.getUser_id())));
-                                            Toast.makeText(ViewRelatedDIYS.this, "It's your own product!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                    }
-                                });
-                            }
-                        });
-
-                        contact_seller.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Toast.makeText(ViewRelatedDIYS.this, "Contact Seller button clicked!", Toast.LENGTH_SHORT).show();
-
-                                final Dialog myDialog = new Dialog(context);
-                                myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                myDialog.setContentView(R.layout.contact_seller);
-                                myDialog.setCancelable(false);
-                                Button chat = (Button) myDialog.findViewById(R.id.chat);
-                                Button call = (Button) myDialog.findViewById(R.id.call);
-                                Button sms = (Button) myDialog.findViewById(R.id.sms);
-                                TextView cancel = (TextView) myDialog.findViewById(R.id.cancel);
-
-                                chat.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Toast.makeText(ViewRelatedDIYS.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                call.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Toast.makeText(ViewRelatedDIYS.this, "Call button clicked!", Toast.LENGTH_SHORT).show();
-
-                                        String phone = owner_cn.getText().toString();
-                                        Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
-                                                "tel", phone, null));
-                                        startActivity(phoneIntent);
-                                    }
-                                });
-                                sms.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Toast.makeText(ViewRelatedDIYS.this, "SMS button clicked!", Toast.LENGTH_SHORT).show();
-
-                                        String phone = owner_cn.getText().toString();
-                                        Intent smsMsgAppVar = new Intent(Intent.ACTION_VIEW);
-                                        smsMsgAppVar.setData(Uri.parse("sms:" +  phone));
-                                        smsMsgAppVar.putExtra("sms_body", "Hi, Good Day! ");
-                                        startActivity(smsMsgAppVar);
-                                    }
-                                });
-                                cancel.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        myDialog.cancel();
-                                    }
-                                });
-
-                                myDialog.show();
-                                myDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                    @Override
-                                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                        if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                            dialog.cancel();
-                                            return true;
-                                        }
-                                        return false;
-                                    }
-                                });
-                            }
-                        });
-
-                        if (diYnames.diyUrl != null) {
-                            imgview = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
-                            diyImagesViewPagerAdapter = new ViewImagesRecommendationPagerAdapter(getBaseContext(), diYnames.diyUrl);
-                            imgview.setAdapter(diyImagesViewPagerAdapter);
                         }
 
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    //nganung dli musulod ari? pero dli ma display ang owner if wala ning first condition boshet
+                    if (get_name.equals(diYnames.getDiyName())) {
+                        Toast.makeText(context, "Condition", Toast.LENGTH_SHORT).show();
+                        if (diYnames.getIdentity().equals("selling")) {
+
+                            Toast.makeText(context, "Clicked sell item", Toast.LENGTH_SHORT).show();
+                            diy_sell.setVisibility(View.VISIBLE);
+                            qty.setVisibility(View.VISIBLE);
+                            button_sell.setVisibility(View.VISIBLE);
+                            contact_seller.setVisibility(View.VISIBLE);
+                            //create_promo.setVisibility(View.VISIBLE);
+                            owner_add.setVisibility(View.VISIBLE);
+                            owner_cn.setVisibility(View.VISIBLE);
+                            selling_price.setVisibility(View.VISIBLE);
+                            seller_info.setVisibility(View.VISIBLE);
+                            diy_owner.setText(info.diyName);
 
 
-                    }
-                    else if(diYnames.getIdentity().equals("community")) {
-                        Toast.makeText(context, "Clicked for viewing item", Toast.LENGTH_SHORT).show();
+                            button_sell.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    myRef.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            final Float float_this = Float.valueOf(0);
 
-                        diy_sell.setVisibility(View.INVISIBLE);
-                        button_sell.setVisibility(View.INVISIBLE);
-                        contact_seller.setVisibility(View.INVISIBLE);
-                        //create_promo.setVisibility(View.INVISIBLE);
-                        owner_add.setVisibility(View.INVISIBLE);
-                        owner_cn.setVisibility(View.INVISIBLE);
-                        selling_price.setVisibility(View.INVISIBLE);
-                        seller_info.setVisibility(View.INVISIBLE);
-                        qty.setVisibility(View.VISIBLE);
-                        txtBy.setVisibility(View.VISIBLE);
-                        diy_owner.setText(diYnames.diyName);
+                                            DIYSell productInfo = dataSnapshot.getValue(DIYSell.class);
+                                            final String diyName = productInfo.getDiyName();
+                                            final String diyUrl = productInfo.getDiyUrl();
+                                            final String user_id = productInfo.getUser_id();
+                                            final String productID = productInfo.getProductID();
+                                            final String status = productInfo.getIdentity();
 
-                        userdata.addChildEventListener(new ChildEventListener() {
-                            @Override
-                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                                if(diYnames.getUser_id().equals(user_profile.getUserID())){
-                                    user_name = user_profile.getF_name()+" "+user_profile.getL_name();
-                                    qty.setText(user_name);
-                                    Log.e("user_name", "" + user_name);
-                                }else if(diYnames.user_id.equals(user_profile.getUserID())){
-                                    user_name = user_profile.getF_name()+" "+user_profile.getL_name();
-                                    qty.setText(user_name);
+                                            if (!userID.equals(info.getUser_id())) {
+                                                Log.e("pending_not_same", String.valueOf("" + userID != info.getUser_id()));
+                                                Log.e("userid", String.valueOf("" + userID));
+                                                Log.e("info_userid", String.valueOf("" + info.getUser_id()));
+
+                                                pending_reference.orderByChild("productID").equalTo(info.productID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.exists()) {
+                                                            Log.e("same_prodID", "" + dataSnapshot.exists());
+                                                            Log.e("same_data", "" + dataSnapshot);
+
+                                                            final Dialog dialog = new Dialog(ViewRelatedDIYS.this);
+                                                            dialog.setContentView(R.layout.exist_dialog);
+                                                            TextView text = (TextView) dialog.findViewById(R.id.e_text);
+                                                            text.setText("DIY already added to pending list!");
+                                                            ImageView image = (ImageView) dialog.findViewById(R.id.exist_dialog_imageview);
+                                                            image.setImageResource(R.drawable.exist);
+
+                                                            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOKI);
+                                                            dialogButton.setOnClickListener(new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View v) {
+                                                                    Intent intent = new Intent(ViewRelatedDIYS.this, Bottle_Recommend.class);
+                                                                    startActivity(intent);
+                                                                }
+                                                            });
+                                                            dialog.show();
+                                                        } else {
+
+                                                            DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this, float_this);
+                                                            String upload_info = pending_reference.push().getKey();
+                                                            pending_reference.child(upload_info).setValue(info);
+                                                            pending_reference.child(upload_info).child("DIY Price").setValue(get_price);
+
+                                                            final Dialog dialog = new Dialog(ViewRelatedDIYS.this);
+                                                            dialog.setContentView(R.layout.done_dialog);
+                                                            TextView text = (TextView) dialog.findViewById(R.id.text);
+                                                            text.setText("DIY added to pending list!");
+                                                            ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
+                                                            image.setImageResource(R.drawable.done);
+
+                                                            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                                                            dialogButton.setOnClickListener(new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View v) {
+                                                                    Intent intent = new Intent(ViewRelatedDIYS.this, Bottle_Recommend.class);
+                                                                    startActivity(intent);
+                                                                }
+                                                            });
+                                                            dialog.show();
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
+                                                    }
+                                                });
+                                            } else if (userID.equals(info.getUser_id())) {
+                                                Log.e("pending_same", String.valueOf("" + userID.equals(info.getUser_id())));
+                                                Toast.makeText(ViewRelatedDIYS.this, "It's your own product!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+                                        }
+                                    });
                                 }
+                            });
+
+                            contact_seller.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(ViewRelatedDIYS.this, "Contact Seller button clicked!", Toast.LENGTH_SHORT).show();
+
+                                    final Dialog myDialog = new Dialog(context);
+                                    myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                    myDialog.setContentView(R.layout.contact_seller);
+                                    myDialog.setCancelable(false);
+                                    Button chat = (Button) myDialog.findViewById(R.id.chat);
+                                    Button call = (Button) myDialog.findViewById(R.id.call);
+                                    Button sms = (Button) myDialog.findViewById(R.id.sms);
+                                    TextView cancel = (TextView) myDialog.findViewById(R.id.cancel);
+
+                                    chat.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Toast.makeText(ViewRelatedDIYS.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                    call.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Toast.makeText(ViewRelatedDIYS.this, "Call button clicked!", Toast.LENGTH_SHORT).show();
+
+                                            String phone = owner_cn.getText().toString();
+                                            Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
+                                                    "tel", phone, null));
+                                            startActivity(phoneIntent);
+                                        }
+                                    });
+                                    sms.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Toast.makeText(ViewRelatedDIYS.this, "SMS button clicked!", Toast.LENGTH_SHORT).show();
+
+                                            String phone = owner_cn.getText().toString();
+                                            Intent smsMsgAppVar = new Intent(Intent.ACTION_VIEW);
+                                            smsMsgAppVar.setData(Uri.parse("sms:" + phone));
+                                            smsMsgAppVar.putExtra("sms_body", "Hi, Good Day! ");
+                                            startActivity(smsMsgAppVar);
+                                        }
+                                    });
+                                    cancel.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            myDialog.cancel();
+                                        }
+                                    });
+
+                                    myDialog.show();
+                                    myDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                        @Override
+                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                                dialog.cancel();
+                                                return true;
+                                            }
+                                            return false;
+                                        }
+                                    });
+                                }
+                            });
+
+                            if (diYnames.diyUrl != null) {
+                                imgview = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
+                                diyImagesViewPagerAdapter = new ViewImagesRecommendationPagerAdapter(getBaseContext(), diYnames.diyUrl);
+                                imgview.setAdapter(diyImagesViewPagerAdapter);
                             }
 
-                            @Override
-                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                            }
-
-                            @Override
-                            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                            }
-
-                            @Override
-                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-//                        String messageMat = "";
-//                        List<String> messageMaterials = new ArrayList<String>();
-//                        //int count = 1;
-//                        for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-//                            String dbMaterialName = postSnapshot.child("name").getValue(String.class).toLowerCase();
-//                            String dbMaterialUnit = postSnapshot.child("unit").getValue(String.class);
-//                            Long dbMaterialQuantity = postSnapshot.child("quantity").getValue(Long.class);
-////                                messageMat += "\n" + dbMaterialName + " = " + dbMaterialQuantity + " " + dbMaterialUnit;
-//                            messageMat += "\n" + dbMaterialQuantity + " " + dbMaterialUnit+ " "+ dbMaterialName;
-//                            messageMaterials.add(messageMat);
-//                            //count++;
-//                        }
-
-//                        String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
-//                        Log.e("splits", "" + splits);
-
-//                            String messageMat = "";
-//                            List<String> messageMaterials = new ArrayList<String>();
-//                            int count = 1;
-//                            for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-//                                DataSnapshot dbMaterialNode = postSnapshot;
-//                                String dbMaterialName = dbMaterialNode.child("name").getValue(String.class).toLowerCase();
-//                                String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
-//                                long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
-//                                messageMat = dbMaterialQuantity + " " + dbMaterialUnit + " " + dbMaterialName;
-//                                messageMaterials.add(messageMat);
-//                                count++;
-//                            }
-//
-//                            String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
-//                            Log.e("splits", "" + splits);
-
-//                        String messageProd = "";
-//                        List<String> messageProcedure = new ArrayList<String>();
-//                        for (int i = 0; i < splits.length; i++) {
-//                            Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
-//                            String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
-//                            messageProd += "\n" + message;
-//                            messageProcedure.add(message);
-//
-//                            Log.d("messageProd", messageProd);
-//                        }
-//                        diy_materials.setText(messageMat);
-//                        diy_procedures.setText(messageProd);
-
-                        if (diYnames.diyUrl != null) {
-                            imgview = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
-                            diyImagesViewPagerAdapter = new ViewImagesRecommendationPagerAdapter(getBaseContext(), diYnames.diyUrl);
-                            imgview.setAdapter(diyImagesViewPagerAdapter);
                         }
                     }
                 }
@@ -506,8 +399,17 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                 diyImageStorageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
-                        Log.d("Image Download URI", uri.toString());
-                        Glide.with(context).load(uri.toString())
+                        Log.e("HEY", "HEY");
+
+//                        final String get_image = getIntent().getStringExtra("imagebitmap");
+//                        Log.e("get_image",get_image);
+//                        Log.d("Image Download URI", uri.toString());
+
+                        byte[] byteArray = getIntent().getByteArrayExtra("image");
+                        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                        Log.e("bmp", String.valueOf(bmp));
+
+                        Glide.with(context).load(bmp)
                                 .fitCenter().centerCrop().crossFade()
                                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                                 .into(diyImageView);

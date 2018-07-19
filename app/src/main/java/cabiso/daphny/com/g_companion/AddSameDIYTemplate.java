@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import cabiso.daphny.com.g_companion.Model.DIYSell;
+import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.SellingDIY;
 
 /**
@@ -56,7 +57,7 @@ public class AddSameDIYTemplate extends AppCompatActivity{
     private ProgressDialog progressDialog;
     UploadTask uploadTask;
 
-    private DatabaseReference databaseReference, related_diy_by_user;
+    private DatabaseReference databaseReference, related_diy_by_user, databaseRef;
     private FirebaseStorage mStorage;
     private StorageReference storageReference, imageRef;
     //String mCurrentPhotoPath;
@@ -65,20 +66,30 @@ public class AddSameDIYTemplate extends AppCompatActivity{
     File photoFile;
     public final String APP_TAG = "same_diy_products";
     ArrayList<SellingDIY> dbSelling;
+    private DIYnames diyProd;
+    private String itemProdName, sameItemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_same_diy_template);
 
+        Intent intent = getIntent();
+        itemProdName = intent.getExtras().getString("itemProdName");
+        Log.e("itemProdName",itemProdName);
+
+        sameItemId = intent.getExtras().getString("sameItemId");
+        Log.e("sameItemId",sameItemId);
+
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("same_diy_product");
         related_diy_by_user = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID);
+        databaseRef = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.sameItemId);
 
         mStorage = FirebaseStorage.getInstance();
-        storageReference = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("same_diy_product_storage");
+        storageReference = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("diy_by_tags");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarDetails);
         setSupportActionBar(toolbar);
@@ -89,7 +100,7 @@ public class AddSameDIYTemplate extends AppCompatActivity{
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),DIYDetailViewActivity.class));
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
             }
         });
 
@@ -97,7 +108,6 @@ public class AddSameDIYTemplate extends AppCompatActivity{
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         addImageProduct = (ImageView) findViewById(R.id.add_product_image);
-        name = (EditText) findViewById(R.id.add_diy_product_name);
         price = (EditText) findViewById(R.id.add_diy_product_price);
         quantity = (EditText) findViewById(R.id.add_diy_product_quantity);
         addDIYProduct = (Button) findViewById(R.id.addDIYProduct);
@@ -111,24 +121,24 @@ public class AddSameDIYTemplate extends AppCompatActivity{
             }
         });
 
+
         addDIYProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 //                imageRef = storageReference.child(photoFile.getAbsolutePath());
-                imageRef = storageReference.child(String.valueOf(name.getText()));
+                imageRef = storageReference.child(String.valueOf(addImageProduct.getDrawable()));
 
 //                StorageReference fileRef =
 //                        storageReference.child(photoFileName).child(String.valueOf(name.getText()));
 
-                Toast.makeText(AddSameDIYTemplate.this, "Button Clicked" + "\n" +
-                        name.getText() + "\n" + price.getText() + "\n" + quantity.getText() + "\n" + photoFile ,
+                Toast.makeText(AddSameDIYTemplate.this, "Button Clicked"  + "\n" + price.getText() + "\n" + quantity.getText() + "\n" + photoFile ,
                         Toast.LENGTH_SHORT).show();
 
                 //creating and showing progress dialog
                 progressDialog = new ProgressDialog(AddSameDIYTemplate.this);
                 progressDialog.setMax(100);
-                progressDialog.setMessage("Adding DIY Product...");
+                progressDialog.setMessage("Adding Related DIY Product...");
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
                 progressDialog.show();
                 progressDialog.setCancelable(false);
@@ -158,7 +168,7 @@ public class AddSameDIYTemplate extends AppCompatActivity{
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         Float float_this = Float.valueOf(0);
 
-                        String upload = databaseReference.push().getKey();
+                        String upload = databaseRef.push().getKey();
                         String productID_sell = generateString();
 
                         String for_price = price.getText().toString();
@@ -170,16 +180,25 @@ public class AddSameDIYTemplate extends AppCompatActivity{
 
                         dbSelling.add(new SellingDIY().setSelling_price(price).setSelling_qty(qty));
 
-                        //push data to Firebase Database - same_diy_product node
-                        databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
+                        databaseRef.child("related_diys").child(upload).setValue(new DIYSell(itemProdName,
                                 taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
                                 float_this, float_this));
-                        databaseReference.child(upload).child("status").setValue("selling");
-                        databaseReference.child(upload).child("DIY Price").setValue(price);
-                        databaseReference.child(upload).child("Item Quantity").setValue(qty);
+                        databaseRef.child("related_diys").child(upload).child("status").setValue("selling");
+                        databaseRef.child("related_diys").child(upload).child("DIY Price").setValue(price);
+                        databaseRef.child("related_diys").child(upload).child("Item Quantity").setValue(qty);
+
+                        //push data to Firebase Database - same_diy_product node
+//                        databaseReference.child(upload).setValue(new DIYSell(itemProdName,
+//                                taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
+//                                float_this, float_this));
+//                        databaseReference.child(upload).child("status").setValue("selling");
+//                        databaseReference.child(upload).child("DIY Price").setValue(price);
+//                        databaseReference.child(upload).child("Item Quantity").setValue(qty);
+
+                        Log.e("productID", itemProdName);
 
 
-                        related_diy_by_user.child(upload).setValue(new DIYSell(name.getText().toString(),
+                        related_diy_by_user.child(upload).setValue(new DIYSell(itemProdName,
                                 taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
                                 float_this, float_this));
                         related_diy_by_user.child(upload).child("DIY Price").setValue(dbSelling);
@@ -194,7 +213,7 @@ public class AddSameDIYTemplate extends AppCompatActivity{
                             public void onClick(DialogInterface dialog, int which) {
 
                                 Intent in = new Intent(AddSameDIYTemplate.this, MainActivity.class);
-                                in.putExtra("a", "neww");
+//                                in.putExtra("a", "neww");
                                 startActivity(in);
                             }
                         });
@@ -208,6 +227,7 @@ public class AddSameDIYTemplate extends AppCompatActivity{
         });
 
     }
+
 
     public static String generateString() {
         String prod_id = UUID.randomUUID().toString();

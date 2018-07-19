@@ -57,4 +57,16 @@ public class SectionDataModel {
     public void setAllPicturesInSection(ArrayList<DIYnames> allPicturesInSection) {
         this.allPicturesInSection = allPicturesInSection;
     }
+
+    public void addItemInSection(String item){
+        this.allItemsInSection.add(item);
+    }
+    public void addProfileInSection(User_Profile profile){
+        this.allProfileInSection.add(profile);
+    }
+    public void addPictureInSection(DIYnames picture){
+        this.allPicturesInSection.add(picture);
+    }
+
+
 }

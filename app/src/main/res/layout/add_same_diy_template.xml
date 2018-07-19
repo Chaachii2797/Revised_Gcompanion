@@ -48,60 +48,31 @@
         android:src="@drawable/add" />
 
     <TextView
-        android:id="@+id/textView30"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/add_product_image"
-        android:layout_alignStart="@+id/add_product_image"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="40dp"
-        android:layout_marginStart="40dp"
-        android:text="Owner Name:"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <EditText
-        android:id="@+id/add_diy_product_name"
-        style="@style/LoginStyle"
-        android:layout_width="280dp"
-        android:layout_height="40dp"
-        android:layout_alignLeft="@+id/textView30"
-        android:layout_alignStart="@+id/textView30"
-        android:layout_below="@+id/textView30"
-        android:backgroundTint="@color/backgroundColor"
-        android:imeOptions="actionNext"
-        android:inputType="text"
-        android:paddingLeft="20dp"
-        android:textColor="@color/gen_scheme4"
-        android:textSize="18sp" />
-
-    <TextView
         android:id="@+id/textView35"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="50dp"
         android:text="DIY Price:"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:layout_below="@+id/add_diy_product_name"
-        android:layout_alignLeft="@+id/add_diy_product_name"
-        android:layout_alignStart="@+id/add_diy_product_name" />
+        android:layout_below="@+id/add_product_image"
+        android:layout_alignLeft="@+id/add_diy_product_price"
+        android:layout_alignStart="@+id/add_diy_product_price" />
 
     <EditText
         android:id="@+id/add_diy_product_price"
         style="@style/LoginStyle"
         android:layout_width="270dp"
         android:layout_height="45dp"
-        android:layout_alignLeft="@+id/textView35"
-        android:layout_alignStart="@+id/textView35"
-        android:layout_below="@+id/textView35"
         android:backgroundTint="@color/backgroundColor"
         android:imeOptions="actionNext"
         android:inputType="number|numberDecimal"
         android:numeric="integer|decimal"
         android:paddingLeft="40dp"
         android:textColor="@color/gen_scheme4"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_below="@+id/textView35"
+        android:layout_centerHorizontal="true" />
 
 
     <Button
@@ -134,7 +105,7 @@
         android:id="@+id/textView36"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:text="DIY Qauntity:"
         android:textSize="18sp"
         android:textStyle="bold"

@@ -56,4 +56,10 @@
         <item name="android:indeterminateDrawable">@drawable/circular_progress_dialog</item>
     </style>
 
+
+    <!-- Instant Messaging -->
+    <style name="AppTheme.NoActionBar.Splash">
+        <item name="android:windowBackground">@drawable/new_logo_word</item>
+    </style>
+
 </resources>

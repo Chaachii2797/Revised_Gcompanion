@@ -17,14 +17,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-
-import cabiso.daphny.com.g_companion.Model.DBMaterial;
+import cabiso.daphny.com.g_companion.InstantMessaging.utils.MessagingContants;
+import cabiso.daphny.com.g_companion.InstantMessaging.utils.SharedPrefUtil;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 
 public class Signup extends AppCompatActivity implements View.OnClickListener{
@@ -114,7 +112,7 @@ public class Signup extends AppCompatActivity implements View.OnClickListener{
                     String contct = contact.getText().toString();
                     String add = address.getText().toString();
                     String pass = password.getText().toString();
-
+                    String token;
                     if(f_name.isEmpty() && l_name.isEmpty()) {
                         fname.setError("First Name cannot be empty!");
                         lname.setError("Last Name cannot be empty!");
@@ -140,7 +138,8 @@ public class Signup extends AppCompatActivity implements View.OnClickListener{
 
                         // after saving the value open next activity
 //                        Intent ob = new Intent(Signup.this, Login.class);
-                        User_Profile user_profile = new User_Profile(add, contct, f_name, l_name, emails, pass, userID);
+                        User_Profile user_profile = new User_Profile(add, contct, f_name, l_name, emails, pass, userID,
+                                new SharedPrefUtil(getApplication()).getString(MessagingContants.ARG_FIREBASE_TOKEN));
                         register(user_profile);
 //                        startActivity(ob);
                     }   // commit the values

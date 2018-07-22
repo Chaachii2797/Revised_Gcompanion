@@ -54,7 +54,6 @@
         <activity android:name=".Signup" />
         <activity android:name=".ImageRecognitionTags" />
         <activity android:name=".Profile" />
-        <activity android:name=".Messaging" />
         <activity android:name=".Calendar" />
         <activity android:name=".Wishlists" />
         <activity android:name=".SalesReport" />
@@ -96,21 +95,6 @@
         <activity android:name=".ViewRelatedDIYS" />
         <activity android:name=".WelcomeActivity" />
 
-        <service
-            android:name=".FirebaseIDService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name=".MyService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
-
         <intent-filter>
             <action android:name="android.intent.action.SEARCH" />
         </intent-filter>
@@ -122,10 +106,25 @@
         <activity android:name=".ImageRecognitionForMaterials" />
         <activity android:name=".ToBidProduct" />
 
-        <!--<service-->
-            <!--android:name=".MyService"-->
-            <!--android:enabled="true"-->
-            <!--android:exported="true"></service>-->
+        <activity android:name=".InstantMessaging.Messaging" />
+        <activity android:name=".InstantMessaging.ui.activities.ChatSplashActivity" />
+        <activity android:name=".InstantMessaging.ui.activities.LoginActivity" />
+        <activity android:name=".InstantMessaging.ui.activities.RegisterActivity" />
+        <activity android:name=".InstantMessaging.ui.activities.UserListingActivity" />
+        <activity android:name=".InstantMessaging.ui.activities.ChatActivity" />
+
+        <service android:name=".InstantMessaging.fcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".InstantMessaging.fcm.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+
     </application>
 
 </manifest>

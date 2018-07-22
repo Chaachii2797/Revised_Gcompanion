@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
 import clarifai2.api.ClarifaiBuilder;
@@ -239,7 +240,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(wishlist);
                 break;
             case R.id.nav_chat:
-                Intent chat = new Intent(MainActivity.this,Messaging.class);
+                Intent chat = new Intent(MainActivity.this, ChatSplashActivity.class);
                 startActivity(chat);
                 break;
             case R.id.nav_sold:

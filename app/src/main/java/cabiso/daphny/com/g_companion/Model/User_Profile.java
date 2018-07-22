@@ -12,11 +12,14 @@ public class User_Profile {
     String email;
     String password;
     String userID;
+    String firebaseToken;
+
 
     public User_Profile() {
     }
 
-    public User_Profile(String address, String contact_no, String f_name, String l_name, String email, String password, String userID) {
+    public User_Profile(String address, String contact_no, String f_name, String l_name, String email, String password,
+                        String userID, String firebaseToken) {
         this.address = address;
         this.contact_no = contact_no;
         this.f_name = f_name;
@@ -24,6 +27,7 @@ public class User_Profile {
         this.email = email;
         this.password = password;
         this.userID = userID;
+        this.firebaseToken = firebaseToken;
     }
 
     public String getAddress() {
@@ -89,4 +93,6 @@ public class User_Profile {
         this.password = password;
         return this;
     }
+
+
 }

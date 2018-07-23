@@ -248,6 +248,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
             public void onDataChange(final DataSnapshot itemSnapshot) {
                 final DIYnames diyInfo = itemSnapshot.getValue(DIYnames.class);
                 final DIYSell info = itemSnapshot.getValue(DIYSell.class);
+                identityReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(itemSnapshot.getKey());
+
                 if(diyInfo.getIdentity().equals("community")){
                     diy_sell.setVisibility(View.INVISIBLE);
                     button_buy.setVisibility(View.INVISIBLE);
@@ -413,7 +415,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     }
                 }
 
-                else if(diyInfo.getIdentity().equals("selling")){
+                else if(diyInfo.getIdentity().equalsIgnoreCase("selling")){
                     diy_sell.setVisibility(View.VISIBLE);
                     user_owner_name.setVisibility(View.VISIBLE);
                     php.setVisibility(View.VISIBLE);
@@ -490,6 +492,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                             if(diyInfo.user_id.equals(userID)){
                                 button_buy.setVisibility(View.INVISIBLE);
                                 contact_seller.setVisibility(View.INVISIBLE);
+                                create_promo.setVisibility(View.VISIBLE);
+                                bid_item.setVisibility(View.VISIBLE);
                             }else{
                                 button_buy.setVisibility(View.VISIBLE);
                                 contact_seller.setVisibility(View.VISIBLE);
@@ -647,7 +651,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), diyInfo.diyUrl);
                         diyImagesViewPager.setAdapter(diyImagesViewPagerAdapter);
                     }
-                    identityReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(itemSnapshot.getKey());
+
                     create_promo.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -805,6 +809,32 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                         }
                     });
+
+                    boolean isExpired = false;
+
+                    for(DataSnapshot saleSnapshot:itemSnapshot.child("itemPromo").getChildren()){
+                        CreatePromo createPromo = saleSnapshot.getValue(CreatePromo.class);
+
+                        try{
+                            // check expiry
+                            Date strDate = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).parse(createPromo.getPromo_ends());
+                            if (new Date().after(strDate)) {
+                                isExpired = true;
+                            }
+                        } catch(ParseException e){
+                            Log.e("expiryException",e.getMessage());
+                        }
+
+                    }
+
+                    if(isExpired){
+                        HashMap<String, Object> result = new HashMap<>();
+                        result.put("identity", "Selling");
+                        identityReference.updateChildren(result);
+
+                        outside_view.setImageResource(0);
+
+                    }
 
                     contact_seller.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -1058,7 +1088,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         try{
                             // check expiry
                             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
-//                            Date strDate = sdf.parse(biddingItem.getXpire_date()+"");
                             Date strDate = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).parse(biddingItem.getXpire_date());
                             if (new Date().after(strDate)) {
                                 isExpired = true;

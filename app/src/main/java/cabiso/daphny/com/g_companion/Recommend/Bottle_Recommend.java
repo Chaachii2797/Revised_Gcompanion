@@ -182,9 +182,13 @@ public class Bottle_Recommend extends AppCompatActivity {
 
     private void sortDiyList(ArrayList<DIYnames> diyList){
         float matchScoreRate;
+        float matchhhScoreRate;
         for(int b = 0 ; b < diyList.size(); b++){
             matchScoreRate = ((float)diyList.get(b).getMatchScore()/(float)diyList.get(b).getTotalMaterial())*100;
+            matchhhScoreRate = ((float)diyList.get(b).getTotalMaterial())/(float)diyList.get(b).getMatchScore()*100;
             Log.e("AAAAformula","("+diyList.get(b).getMatchScore()+"/"+diyList.get(b).getTotalMaterial()+ ") *100 = "+matchScoreRate + " "
+                    +diyList.get(b).getDiyName());
+            Log.e("BALIformula","("+diyList.get(b).getTotalMaterial()+"/"+diyList.get(b).getMatchScore()+ ") *100 = "+matchhhScoreRate + " "
                     +diyList.get(b).getDiyName());
 //            TextView tvPercent = (TextView) findViewById(R.id.tvPercentage);
 //            tvPercent.setText((int) matchScoreRate);

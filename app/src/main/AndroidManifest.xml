@@ -19,6 +19,8 @@
         android:name="android.hardware.camera"
         android:required="true" />
 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:name="android.support.multidex.MultiDexApplication"
         android:allowBackup="true"
@@ -54,6 +56,7 @@
         <activity android:name=".Signup" />
         <activity android:name=".ImageRecognitionTags" />
         <activity android:name=".Profile" />
+        <activity android:name=".SearchActivity" />
         <activity android:name=".Calendar" />
         <activity android:name=".Wishlists" />
         <activity android:name=".SalesReport" />
@@ -105,7 +108,6 @@
         <activity android:name=".Recommend.PendingView_Activity" />
         <activity android:name=".ImageRecognitionForMaterials" />
         <activity android:name=".ToBidProduct" />
-
         <activity android:name=".InstantMessaging.Messaging" />
         <activity android:name=".InstantMessaging.ui.activities.ChatSplashActivity" />
         <activity android:name=".InstantMessaging.ui.activities.LoginActivity" />
@@ -124,7 +126,7 @@
             </intent-filter>
         </service>
 
-
+        <activity android:name=".SearchActivity"></activity>
     </application>
 
 </manifest>

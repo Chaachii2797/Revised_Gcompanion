@@ -62,6 +62,7 @@ import java.util.Locale;
 import cabiso.daphny.com.g_companion.Adapter.BiddersAdapter;
 import cabiso.daphny.com.g_companion.Adapter.RecyclerViewDataAdapter;
 import cabiso.daphny.com.g_companion.Adapter.RelatedDIYAdapter;
+import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.UserListingActivity;
 import cabiso.daphny.com.g_companion.Model.Bidders;
 import cabiso.daphny.com.g_companion.Model.CreatePromo;
 import cabiso.daphny.com.g_companion.Model.DIYBidding;
@@ -539,7 +540,14 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                 @Override
                                 public void onClick(View v) {
                                     Toast.makeText(DIYDetailViewActivity.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
-                                    sendNotification();
+
+//                                    if(diyInfo.getUser_id())
+                                    if(diyInfo.getUser_id().equals(loggedInName.getKey())){
+                                        Intent intent = new Intent(DIYDetailViewActivity.this, UserListingActivity.class);
+                                        startActivity(intent);
+                                        sendNotification();
+                                        Log.e("DATAKEY",loggedInName.getKey());
+                                    }
                                 }
                             });
                             call.setOnClickListener(new View.OnClickListener() {

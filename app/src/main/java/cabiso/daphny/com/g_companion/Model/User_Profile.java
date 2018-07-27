@@ -13,6 +13,7 @@ public class User_Profile {
     String password;
     String userID;
     String firebaseToken;
+    String android_id;
 
 
     public User_Profile() {
@@ -28,6 +29,7 @@ public class User_Profile {
         this.password = password;
         this.userID = userID;
         this.firebaseToken = firebaseToken;
+        this.android_id = android_id;
     }
 
     public String getAddress() {
@@ -94,5 +96,11 @@ public class User_Profile {
         return this;
     }
 
+    public String getAndroid_id() {
+        return android_id;
+    }
 
+    public void setAndroid_id(String android_id) {
+        this.android_id = android_id;
+    }
 }

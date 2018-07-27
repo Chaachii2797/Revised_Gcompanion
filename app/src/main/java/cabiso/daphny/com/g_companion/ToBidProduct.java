@@ -69,7 +69,7 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
                 Toast.makeText(ToBidProduct.this,"Successfully Added a new bid",Toast.LENGTH_SHORT);
 
                 HashMap<String, Object> result = new HashMap<>();
-                result.put("identity", "ON BID");
+                result.put("identity", "ON BID!");
                 identityReference.updateChildren(result);
                 Intent intent = new Intent(ToBidProduct.this,MainActivity.class);
                 startActivity(intent);

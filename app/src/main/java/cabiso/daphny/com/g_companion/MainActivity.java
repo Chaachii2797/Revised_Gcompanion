@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity
     private ViewPagerAdapter mViewPagerAdapter;
     private TabLayout mTabLayout;
 
+    private String searchString;
+
     //private Bottle_Recommend lv;
 
     private ImageView image;
@@ -72,6 +75,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        this.searchString = "";
 
         itemReference =  FirebaseDatabase.getInstance().getReference("diy_by_tags");
         // Initialize Firebase Auth
@@ -203,14 +209,20 @@ public class MainActivity extends AppCompatActivity
         // Retrieve the SearchView and plug it into SearchManager
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
 
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+//                startActivity(intent);
+            }
+        });
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // use this method when query submitted
-//                String searches = (String) dataSnapshot.child(dataSnapshot.getKey()).child("diyName").getValue();
-//                Query mQuery = itemReference.orderByChild(searches).equalTo(query);
-//                searchesItemName(query);
-                Toast.makeText(getApplicationContext(),"Search pls", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MainActivity.this,SearchActivity.class);
+                intent.putExtra("searchString",query);
+                startActivity(intent);
                 return false;
             }
 
@@ -219,14 +231,14 @@ public class MainActivity extends AppCompatActivity
                 // use this method for auto complete search process
 //                String searches = (String) dataSnapshot.child(dataSnapshot.getKey()).child("diyName").getValue();
 //                Query mQuery = itemReference.orderByChild(searches).equalTo(newText);
-
+                Toast.makeText(getApplicationContext(),"Entered: "+newText, Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
 
 
-        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -278,7 +290,7 @@ public class MainActivity extends AppCompatActivity
         android.support.v4.app.FragmentTransaction ft;
         switch (itemID){
             case R.id.nav_profile:
-                Intent intent2=new Intent(this,MyProfileActivity.class);
+                Intent intent2=new Intent(this,SearchActivity.class);
                 startActivity(intent2);
                 break;
             case R.id.nav_wishlist:

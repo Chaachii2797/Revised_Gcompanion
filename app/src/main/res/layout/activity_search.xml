@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cabiso.daphny.com.g_companion.SearchActivity">
+    tools:context="cabiso.daphny.com.g_companion.Search.SearchActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,19 +15,21 @@
         android:layout_below="@+id/relativeLayout"
         android:background="@color/gen_scheme2">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/search_recycler"
+        <ListView
+            android:id="@+id/lv_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentBottom="true">
-
-        </android.support.v7.widget.RecyclerView>
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"/>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/relativeLayout">
+        android:id="@+id/relativeLayout"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -39,14 +41,31 @@
 
         <EditText
             android:id="@+id/et_search_item"
+            style="@style/LoginStyle2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:hint="Search here..."
+            android:layout_height="40dp"
             android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"/>
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="7dp"
+            android:backgroundTint="#FFE8EAEA"
+            android:ems="10"
+            android:fontFamily="sans-serif"
+            android:hint="Search here ....."
+            android:textColor="#7f8c8d"
+            android:textSize="18sp"
+            android:paddingLeft="20dp"/>
+        <!--<EditText-->
+            <!--android:id="@+id/et_search_item"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:hint="Search here..."-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:layout_marginRight="15dp"-->
+            <!--android:background="@android:color/transparent"-->
+            <!--android:textColor="@android:color/white"/>-->
 
     </RelativeLayout>
 

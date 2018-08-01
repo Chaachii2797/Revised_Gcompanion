@@ -84,7 +84,6 @@ public class Activity_View_Recommend extends AppCompatActivity {
         selling_price = (CardView) findViewById(R.id.cardView3);
         seller_info = (CardView) findViewById(R.id.cardView4);
 
-
         final String get_name = getIntent().getStringExtra("name");
         diy_name.setText(get_name);
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();

@@ -63,10 +63,8 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
         mBtnAddBid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("addBid","CLICKED ADD BID");
                 DIYBidding formBidding = getFormInput();
                 itemReference.child("bidding").push().setValue(formBidding);
-                Toast.makeText(ToBidProduct.this,"Successfully Added a new bid",Toast.LENGTH_SHORT);
 
                 HashMap<String, Object> result = new HashMap<>();
                 result.put("identity", "ON BID!");

@@ -283,40 +283,33 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 dialog.setContentView(R.layout.row_spinner);
                 dialog.setCancelable(true);
 
-                final Spinner spinner1 = (Spinner) dialog.findViewById(R.id.unitspinner);
-                final Spinner spinner2 = (Spinner) dialog.findViewById(R.id.qtySpinner);
+                final Spinner sp_for_unit = (Spinner) dialog.findViewById(R.id.unitspinner);
+                final Spinner sp_for_qty = (Spinner) dialog.findViewById(R.id.qtySpinner);
                 Button okButton = (Button) dialog.findViewById(R.id.okaybtn);
 
-                spinner1.setAdapter(umAdapter);
-                spinner2.setAdapter(qAdapter);
+                sp_for_unit.setAdapter(umAdapter);
+                sp_for_qty.setAdapter(qAdapter);
 
-
-                spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                sp_for_unit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         // TODO Auto-generated method stub
                         spinner_item_um = unitOfMeasurement[position];
                     }
-
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
                         // TODO Auto-generated method stub
-
                     }
                 });
-
-                spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                sp_for_qty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         // TODO Auto-generated method stub
                         spinner_item_q = quantity[position];
-
                     }
-
                     @Override
                     public void onNothingSelected(AdapterView<?> parent) {
                         // TODO Auto-generated method stub
-
                     }
                 });
 
@@ -333,7 +326,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     @Override
                     public void onClick(View v) {
                         String quantityMaterials = spinner_item_q + " " + spinner_item_um + " " + material.getText().toString();
-//                        String qty_uni_mat = spinner_item_q + " " + spinner_item_um ;
                         String unit_material = spinner_item_um;
                         int quantity = Integer.parseInt(spinner_item_q);
                         String materials = material.getText().toString();
@@ -346,10 +338,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         itemMaterial.add(qm);
 
                         dbMaterials.add(new DBMaterial().setName(materials).setQuantity(quantity).setUnit(unit_material));
-
                         itemQuantity.add(qty_qty_mat);
                         itemUnit.add(_unit);
-
                         itemMat.add(mat);
 
                         mAdapter.notifyDataSetChanged();
@@ -357,7 +347,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
                         Toast.makeText(CaptureDIY.this, spinner_item_q + " " +spinner_item_um, Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
-
                     }
                 });
 

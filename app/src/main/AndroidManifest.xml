@@ -56,7 +56,7 @@
         <activity android:name=".Signup" />
         <activity android:name=".ImageRecognitionTags" />
         <activity android:name=".Profile" />
-        <activity android:name=".SearchActivity" />
+        <activity android:name=".Search.SearchActivity" />
         <activity android:name=".Calendar" />
         <activity android:name=".Wishlists" />
         <activity android:name=".SalesReport" />
@@ -67,6 +67,7 @@
         <activity android:name=".MyDiys" />
         <activity android:name=".SellMyDIYs" />
         <activity android:name=".Pending_Activity" />
+        <activity android:name=".Search.SearchView" />
         <activity android:name=".Recommend.Bottle_Recommend" />
         <activity android:name=".Recommend.Paper_Recommend" />
         <activity android:name=".Recommend.Rubber_Recommend" />
@@ -126,7 +127,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".SearchActivity"></activity>
+        <activity android:name=".Search.SearchActivity" />
+        <activity android:name=".Search.SearchView"></activity>
     </application>
 
 </manifest>

@@ -216,13 +216,13 @@
                 android:id="@+id/cardView3"
                 android:layout_width="330dp"
                 android:layout_height="55dp"
-                android:layout_below="@+id/cardView2"
-                android:layout_marginBottom="10dp"
                 android:layout_marginTop="45dp"
-                android:layout_marginLeft="15dp"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardCornerRadius="5dp"
-                app:elevation="5dp">
+                app:elevation="5dp"
+                android:layout_below="@+id/cardView2"
+                android:layout_alignLeft="@+id/cardView2"
+                android:layout_alignStart="@+id/cardView2">
 
                 <TextView
                     android:id="@+id/textView33"
@@ -360,15 +360,14 @@
                 style="@style/LoginStyle"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/btn_sell_diy"
-                android:layout_alignBottom="@+id/btn_sell_diy"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="15dp"
                 android:backgroundTint="@color/gen_scheme1"
                 android:text="Contact Seller"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_alignBaseline="@+id/btn_sell_diy"
+                android:layout_alignBottom="@+id/btn_sell_diy"
+                android:layout_alignLeft="@+id/cardView4"
+                android:layout_alignStart="@+id/cardView4" />
 
 
         </RelativeLayout>

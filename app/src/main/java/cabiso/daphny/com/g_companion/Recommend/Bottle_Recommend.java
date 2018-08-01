@@ -93,7 +93,7 @@ public class Bottle_Recommend extends AppCompatActivity {
         progressDialog.setMessage("Please wait loading DIYs...");
 
         final Bundle extra = getIntent().getBundleExtra("dbmaterials");
-        dbMaterials = (ArrayList<DBMaterial>) extra.getSerializable("dbmaterials");
+        dbMaterials = (ArrayList<DBMaterial>) extra.getSerializable("dbmaterials    ");
         Log.e("FROMIMAGE", String.valueOf(dbMaterials));
         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
 
@@ -112,6 +112,7 @@ public class Bottle_Recommend extends AppCompatActivity {
                             long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
                             diYnames.addDbMaterial(new DBMaterial().setName(dbMaterialName).setUnit(dbMaterialUnit).setQuantity((int) dbMaterialQuantity));
                             diYnames.incrementTotalMaterial(dataSnapshot.child("materials").getChildrenCount());
+
                             for(int m = 0; m < dbMaterials.size(); m++) {
                                 String dbMaterialsItem = dbMaterials.get(m).getName()+" ("+dbMaterials.get(m).getQuantity()+" "+dbMaterials.get(m).getUnit()+")";
                                 Log.e("scanedMaterial",dbMaterialsItem+" --- "+dbMaterialName+" ("+dbMaterialQuantity+" "+dbMaterialUnit+")"+" = "+diYnames.getDiyName());
@@ -119,7 +120,6 @@ public class Bottle_Recommend extends AppCompatActivity {
                                     diYnames.incrementScore();
                                     if (dbMaterials.get(m).getQuantity() >= dbMaterialQuantity) {
                                         if (dbMaterials.get(m).getUnit().equals(dbMaterialUnit)) {
-//                                            diYnames.incrementScore();
                                             if (!exists(diYnames)) {
                                                 Log.e("dbMaterialNameCheck3", dbMaterialName + " == " + dbMaterials.get(m).getName()+" ~ "+ diYnames.getMatchScore()
                                                         +" "+diYnames.getDiyName());

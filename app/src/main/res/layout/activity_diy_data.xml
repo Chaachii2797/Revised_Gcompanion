@@ -194,6 +194,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="20dp"
+                    android:editable="true"
                     android:hint="1. Glue
                               2. Scissors
                               3. Pencil"

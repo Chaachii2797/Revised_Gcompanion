@@ -1,13 +1,16 @@
-package cabiso.daphny.com.g_companion;
+package cabiso.daphny.com.g_companion.Search;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.*;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,20 +22,22 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import cabiso.daphny.com.g_companion.Adapter.SearchAdapter;
+import cabiso.daphny.com.g_companion.Model.DBMaterial;
+import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.R;
+import cabiso.daphny.com.g_companion.Recommend.Activity_View_Recommend;
 
 public class SearchActivity extends Activity {
 
     private EditText search_item;
-    private RecyclerView recyclerView;
+    private ListView recyclerView;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference searchReference;
     private DatabaseReference ownerReference;
 
-    private ArrayList<String> item_list;
-    private ArrayList<String> img_list;
-    private ArrayList<String> identity_list;
+    private ArrayList<DIYnames> item_list;
+    private ArrayList<DBMaterial> dbMaterials;
 
     private SearchAdapter searchAdapter;
     private String searchString;
@@ -51,18 +56,12 @@ public class SearchActivity extends Activity {
         this.searchString = "";
         this.searchString = getIntent().getStringExtra("searchString");
         search_item = (EditText) findViewById(R.id.et_search_item);
-        recyclerView = (RecyclerView) findViewById(R.id.search_recycler);
+        recyclerView = (ListView) findViewById(R.id.lv_search);
 
         searchReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
         ownerReference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
-
         item_list = new ArrayList<>();
-        img_list = new ArrayList<>();
-        identity_list = new ArrayList<>();
 
         search_item.setText(this.searchString);
 
@@ -90,10 +89,27 @@ public class SearchActivity extends Activity {
                 String search = s.toString();
                 if(s.toString().isEmpty()){
                     item_list.clear();
-                    recyclerView.removeAllViews();
                 } else {
                     setAdapter(search.substring(1));
                 }
+            }
+        });
+
+        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DIYnames selected_diy = (DIYnames) parent.getAdapter().getItem(position);
+                String name = (String) selected_diy.diyName;
+
+                Log.d("name:",selected_diy.diyName);
+                Intent intent = new Intent(SearchActivity.this, SearchView.class);
+                intent.putExtra("name",name);
+
+//                Bundle extra = new Bundle();
+//                extra.putSerializable("dbmaterials", dbMaterials);
+//                intent.putExtra("dbmaterials", extra);
+                startActivity(intent);
+
             }
         });
 
@@ -105,24 +121,17 @@ public class SearchActivity extends Activity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 item_list.clear();
-                recyclerView.removeAllViews();
 
-                int counter = 0;
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
-                    String name = snapshot.child("diyName").getValue(String.class);
-                    String img = snapshot.child("diyUrl").getValue(String.class);
-                    String identity = snapshot.child("identity").getValue(String.class);
-
+                    DIYnames diy_names = snapshot.getValue(DIYnames.class);
+                    String name = diy_names.getDiyName();
 
                     if(name.contains(diYnames)){
-                        item_list.add(name);
-                        img_list.add(img);
-                        identity_list.add(identity);
-                        counter++;
+                        item_list.add(diy_names);
                     }
                 }
 
-                searchAdapter = new SearchAdapter(SearchActivity.this, item_list, img_list, identity_list);
+                searchAdapter = new SearchAdapter(SearchActivity.this, R.layout.search_item, item_list);
                 recyclerView.setAdapter(searchAdapter);
             }
 

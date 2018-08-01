@@ -1,6 +1,5 @@
 package cabiso.daphny.com.g_companion;
 
-import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,11 +28,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
-import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
+import cabiso.daphny.com.g_companion.Search.SearchActivity;
 import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
@@ -212,8 +209,7 @@ public class MainActivity extends AppCompatActivity
         searchView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
-//                startActivity(intent);
+
             }
         });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
@@ -229,55 +225,13 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onQueryTextChange(String newText) {
                 // use this method for auto complete search process
-//                String searches = (String) dataSnapshot.child(dataSnapshot.getKey()).child("diyName").getValue();
-//                Query mQuery = itemReference.orderByChild(searches).equalTo(newText);
                 Toast.makeText(getApplicationContext(),"Entered: "+newText, Toast.LENGTH_SHORT).show();
                 return false;
             }
         });
 
-
-//        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
         return super.onCreateOptionsMenu(menu);
     }
-
-
-//    private void searchesItemName(final String item_name){
-//
-//        itemReference.child("diyName").addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                DIYnames item_diyNames = dataSnapshot.getValue(DIYnames.class);
-//                String diyNames = null;
-//                if(diyNames.toLowerCase().contains(item_name.toLowerCase())){
-//                    Toast.makeText(MainActivity.this, "CORRECTUUU.", Toast.LENGTH_SHORT).show();
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

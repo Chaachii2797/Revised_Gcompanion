@@ -56,7 +56,6 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
     }
 
 
-
     @NonNull
 
     @Override

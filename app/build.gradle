@@ -27,13 +27,11 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    // okhttp
+    // event bus
 
 
     compile 'com.android.support:support-v4:25.3.1'
-    // okhttp
-    // event bus
-    
-
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.android.support:multidex:1.0.0'
     compile 'com.android.support:appcompat-v7:25.3.1'

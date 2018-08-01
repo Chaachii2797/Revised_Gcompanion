@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="cabiso.daphny.com.g_companion.Search.SearchView">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_search"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary">
+
+            <ImageView
+                android:id="@+id/logo_search"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center" />
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/scrollView_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bg_screen1">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/carview_s1"
+                    android:layout_width="match_parent"
+                    android:layout_height="270dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    app:cardBackgroundColor="?attr/colorPrimary">
+
+                    <android.support.v4.view.ViewPager
+                        android:id="@+id/sview_view_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_below="@id/appBarLayout_search"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginTop="40dp"
+                        android:background="@android:color/transparent">
+                    </android.support.v4.view.ViewPager>
+
+                </android.support.v7.widget.CardView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sview_diy_name"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/carview_s1"
+                    android:background="@color/gen_scheme1"
+                    android:capitalize="words"
+                    android:paddingLeft="15dp"
+                    android:paddingTop="10dp"
+                    android:text="TextView"
+                    android:textColor="@android:color/black"
+                    android:textSize="26sp"
+                    android:textStyle="bold"
+                    android:typeface="serif" />
+                
+                <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="330dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cardview_s2"
+                    android:layout_below="@id/sview_diy_name"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="15dp"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="5dp"
+                    app:elevation="5dp">
+                    
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sview_diy_materials"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/materials"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="20dp"
+                        android:hint="1. Glue
+                              2. Scissors
+                              3. Pencil"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp"/>
+
+                    <TextView
+                        android:id="@+id/materials"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gen_scheme1"
+                        android:paddingLeft="10dp"
+                        android:text="Materials:"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+                </android.support.v7.widget.CardView>
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="330dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cardview_s3"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="5dp"
+                    app:elevation="5dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignLeft="@+id/cardview_s2"
+                    android:layout_alignStart="@+id/cardview_s2">
+
+                    <TextView
+                        android:id="@+id/procedures"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/gen_scheme1"
+                        android:paddingLeft="10dp"
+                        android:text="Procedure:"
+                        android:textColor="@android:color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/sview_diy_procedures"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/sview_diy_materials"
+                        android:layout_alignStart="@+id/sview_diy_materials"
+                        android:layout_below="@+id/procedures"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="30dp"
+                        android:hint="1. Make the materials clean. \n 2. Use scissors to cut it. Be careful. \n 3. Use glue."
+                        android:scrollbars="vertical"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
+                </android.support.v7.widget.CardView>
+
+            </RelativeLayout>
+
+        </ScrollView>
+</RelativeLayout>

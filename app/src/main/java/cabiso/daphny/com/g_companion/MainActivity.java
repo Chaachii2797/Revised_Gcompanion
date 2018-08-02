@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(pending);
                 break;
             case R.id.nav_calendar:
-                Intent calendar = new Intent(MainActivity.this,Calendar.class);
+                Intent calendar = new Intent(MainActivity.this,CalendarActivity.class);
                 startActivity(calendar);
                 break;
             case R.id.nav_report:

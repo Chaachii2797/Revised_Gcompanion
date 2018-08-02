@@ -125,6 +125,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     private ListView proceduresList;
     private CommunityAdapter pAdapter;
     private CommunityAdapter mAdapter;
+    private Spinner categorySpinner;
+
     ArrayList<CommunityItem> itemMaterial;
     ArrayList<CommunityItem> itemMat;
     ArrayList<CommunityItem> itemForMaterials;
@@ -189,6 +191,10 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
         material = (EditText) findViewById(R.id.etMaterials);
         tagGroup = (TagView) findViewById(R.id.tag_group);
+        //for DIY catagory spinner
+        categorySpinner = (Spinner) findViewById(R.id.categorySpinner);
+
+
 
         unitOfMeasurement = getResources().getStringArray(R.array.UM);
         umAdapter=new SpinnerAdapter(getApplicationContext());
@@ -385,6 +391,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 //imageRef = storageReference.child(photoFile.getAbsolutePath());
                 imageRef = storageReference.child(String.valueOf(name.getText()));
 
+                final String category = categorySpinner.getSelectedItem().toString();
+                Log.e("Category", category);
+
                 //creating and showing progress dialog
                 progressDialog = new ProgressDialog(CaptureDIY.this);
                 progressDialog.setMax(100);
@@ -428,6 +437,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         databaseReference.child(upload).child("materials").setValue(dbMaterials);
                         databaseReference.child(upload).child("procedures").setValue(itemProcedure);
                         databaseReference.child(upload).child("status").setValue("community");
+                        databaseReference.child(upload).child("category").setValue(category);
+
 
                         //push data to Firebase Database - diy_by_user node
                         byuser_Reference.child(upload).setValue(new DIYnames(name.getText().toString(),
@@ -436,6 +447,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
                         byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
                         byuser_Reference.child(upload).child("status").setValue("community");
+                        byuser_Reference.child(upload).child("category").setValue(category);
 
                         Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 

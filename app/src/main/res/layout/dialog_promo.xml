@@ -44,7 +44,8 @@
             android:gravity="center"
             android:hint="Promo Price"
             android:inputType="textPersonName"
-            android:paddingLeft="20dp" />
+            android:paddingLeft="20dp"
+            android:textColor="@android:color/black" />
 
         <EditText
             android:id="@+id/et_promo_end_date"
@@ -62,7 +63,8 @@
             android:gravity="center"
             android:hint="Promo End Date"
             android:inputType="textPersonName"
-            android:paddingLeft="20dp" />
+            android:paddingLeft="20dp"
+            android:textColor="@color/black" />
     </LinearLayout>
 
     <LinearLayout

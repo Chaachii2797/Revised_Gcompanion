@@ -11,7 +11,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.PagerAdapter;
@@ -121,7 +120,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private String userID;
     private String loggedInUserName;
 
-    private FloatingActionButton fab_template;
+//    private FloatingActionButton fab_template;
     private RelatedDIYAdapter relatedDIYadapter;
 
     //related DIYs Arraylist
@@ -168,7 +167,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        fab_template = (FloatingActionButton) findViewById(R.id.fab_add_product);
+        //FAB for adding related diys
+//        fab_template = (FloatingActionButton) findViewById(R.id.fab_add_product);
 
         /* User Interface Initializations */
         recyclerView = (RecyclerView) findViewById(R.id.lv_bidders);
@@ -349,24 +349,24 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         }
                     });
 
-                    fab_template.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if(diyInfo.user_id.equals(userID)){
-                                Toast.makeText(DIYDetailViewActivity.this,"This is your item!", Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                Toast.makeText(DIYDetailViewActivity.this, "Please complete this.", Toast.LENGTH_SHORT).show();
-                                Intent in = new Intent(DIYDetailViewActivity.this, AddSameDIYTemplate.class);
-                                in.putExtra("sameItemId", itemSnapshot.getKey());
-                                Log.e("sameItemId",itemSnapshot.getKey());
-
-                                in.putExtra("itemProdName", diyInfo.diyName);
-                                Log.e("itemProdName", diyInfo.diyName);
-                                startActivity(in);
-                            }
-                        }
-                    });
+//                    fab_template.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            if(diyInfo.user_id.equals(userID)){
+//                                Toast.makeText(DIYDetailViewActivity.this,"This is your item!", Toast.LENGTH_SHORT).show();
+//                            }
+//                            else {
+//                                Toast.makeText(DIYDetailViewActivity.this, "Please complete this.", Toast.LENGTH_SHORT).show();
+//                                Intent in = new Intent(DIYDetailViewActivity.this, AddSameDIYTemplate.class);
+//                                in.putExtra("sameItemId", itemSnapshot.getKey());
+//                                Log.e("sameItemId",itemSnapshot.getKey());
+//
+//                                in.putExtra("itemProdName", diyInfo.diyName);
+//                                Log.e("itemProdName", diyInfo.diyName);
+//                                startActivity(in);
+//                            }
+//                        }
+//                    });
 
 
                     String messageMat = "";
@@ -426,7 +426,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     seller_info.setVisibility(View.VISIBLE);
                     diy_name.setText(info.diyName);
 //                    button_buy.setVisibility(View.VISIBLE);
-                    fab_template.setVisibility(View.INVISIBLE);
+//                    fab_template.setVisibility(View.INVISIBLE);
                     cardview07.setVisibility(View.INVISIBLE);
                     relatedDIYrecyclerView.setVisibility(View.INVISIBLE);
                     cardview05.setVisibility(View.INVISIBLE);
@@ -693,7 +693,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     seller_info.setVisibility(View.VISIBLE);
                     diy_name.setText(info.diyName);
 
-                    fab_template.setVisibility(View.INVISIBLE);
+//                    fab_template.setVisibility(View.INVISIBLE);
                     cardview07.setVisibility(View.INVISIBLE);
                     relatedDIYrecyclerView.setVisibility(View.INVISIBLE);
                     cardview05.setVisibility(View.INVISIBLE);
@@ -909,7 +909,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     diy_name.setText(info.diyName);
                     contact_seller.setVisibility(View.VISIBLE);
                     bid_item.setVisibility(View.INVISIBLE);
-                    fab_template.setVisibility(View.INVISIBLE);
+//                    fab_template.setVisibility(View.INVISIBLE);
                     cardview07.setVisibility(View.INVISIBLE);
                     relatedDIYrecyclerView.setVisibility(View.INVISIBLE);
                     cardview0.setVisibility(View.INVISIBLE);//materials

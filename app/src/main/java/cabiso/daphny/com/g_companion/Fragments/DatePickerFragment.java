@@ -31,7 +31,7 @@
 //    @Override
 //    public Dialog onCreateDialog(Bundle savedInstanceState) {
 //        // Use the current date as the default date in the picker
-//        final Calendar calendar = Calendar.getInstance();
+//        final CalendarActivity calendar = CalendarActivity.getInstance();
 //        int start_year = calendar.get(Calendar.YEAR);
 //        int start_month = calendar.get(Calendar.MONTH);
 //        int start_day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -47,7 +47,7 @@
 //        startDate.setText(month+" "+dayOfMonth+" "+year);
 //
 //        // Create a Date variable/object with user chosen date
-//        Calendar cal = Calendar.getInstance();
+//        CalendarActivity cal = CalendarActivity.getInstance();
 //        cal.setTimeInMillis(0);
 //        cal.set(year, month, dayOfMonth, 0, 0, 0);
 //        Date chosenDate = cal.getTime();

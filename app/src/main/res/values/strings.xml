@@ -82,7 +82,29 @@
         <item>100</item>
         <item>250</item>
         <item>500</item>
+    </string-array>
 
+    <string-array name="category">
+        <item>Aluminum</item>
+        <item>Bottle</item>
+        <item>Box</item>
+        <item>Book</item>
+        <item>Can</item>
+        <item>Cap</item>
+        <item>Cardboard</item>
+        <item>Clothes</item>
+        <item>Cup</item>
+        <item>Foam</item>
+        <item>Foil</item>
+        <item>Fork</item>
+        <item>Glass</item>
+        <item>Metal</item>
+        <item>Paper</item>
+        <item>Plastic</item>
+        <item>Rubber</item>
+        <item>Spoon</item>
+        <item>Wire</item>
+        <item>Wood</item>
     </string-array>
 
     <!-- Instant Messaging-->
@@ -101,5 +123,28 @@
     <string name="title_activity_splash">SplashActivity</string>
     <string name="logout">Logout</string>
     <string name="are_you_sure">Are you sure ?</string>
+
+    <string name="tab_date">Meet-up Date</string>
+    <string name="tab_time">Meet-up Time</string>
+
+    <!--Alarm Sounds-->
+    <string-array name="music_array">
+        <item>Pick alarm sound!</item>
+        <item>Aliens</item>
+        <item>Chikka</item>
+        <item>Dunes</item>
+        <item>Hair</item>
+        <item>Here</item>
+        <item>Hola-hola</item>
+        <item>Kokobop</item>
+        <item>Little Things</item>
+        <item>New Romantics</item>
+        <item>Orchestra</item>
+        <item>Oriental</item>
+        <item>Peligro</item>
+        <item>Piano</item>
+        <item>Rain</item>
+        <item>Touch</item>
+    </string-array>
 
 </resources>

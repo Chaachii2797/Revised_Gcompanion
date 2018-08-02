@@ -46,8 +46,8 @@ public class Constants {
             "{\"name\": \"Soapbox\", \"code\": \"BP\"}, \n" +
             "{\"name\": \"Broom\", \"code\": \"BR\"}, \n" +
             "{\"name\": \"Buttons\", \"code\": \"BU\"}, \n" +
-            "{\"name\": \"Calendar Paper\", \"code\": \"CP\"}, \n" +
-            "{\"name\": \"Calendar\", \"code\": \"CA\"}, \n" +
+            "{\"name\": \"CalendarActivity Paper\", \"code\": \"CP\"}, \n" +
+            "{\"name\": \"CalendarActivity\", \"code\": \"CA\"}, \n" +
             "{\"name\": \"Cans (Small)\", \"code\": \"CA\"}, \n" +
             "{\"name\": \"Cans (Medium)\", \"code\": \"CA\"}, \n" +
             "{\"name\": \"Cans (Large)\", \"code\": \"CA\"}, \n" +

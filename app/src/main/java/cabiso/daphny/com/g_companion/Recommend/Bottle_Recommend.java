@@ -110,18 +110,22 @@ public class Bottle_Recommend extends AppCompatActivity {
                             Log.e("dataSnapshotMaterial",dbMaterialName+" --- "+diYnames.getDiyName());
                             String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
                             long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
-                            diYnames.addDbMaterial(new DBMaterial().setName(dbMaterialName).setUnit(dbMaterialUnit).setQuantity((int) dbMaterialQuantity));
+                            diYnames.addDbMaterial(new DBMaterial().setName(dbMaterialName).setUnit(dbMaterialUnit)
+                                    .setQuantity((int) dbMaterialQuantity));
                             diYnames.incrementTotalMaterial(dataSnapshot.child("materials").getChildrenCount());
 
                             for(int m = 0; m < dbMaterials.size(); m++) {
-                                String dbMaterialsItem = dbMaterials.get(m).getName()+" ("+dbMaterials.get(m).getQuantity()+" "+dbMaterials.get(m).getUnit()+")";
-                                Log.e("scanedMaterial",dbMaterialsItem+" --- "+dbMaterialName+" ("+dbMaterialQuantity+" "+dbMaterialUnit+")"+" = "+diYnames.getDiyName());
+                                String dbMaterialsItem = dbMaterials.get(m).getName()+" ("+dbMaterials.get(m).getQuantity()
+                                        +" "+dbMaterials.get(m).getUnit()+")";
+                                Log.e("scanedMaterial",dbMaterialsItem+" --- "+dbMaterialName+" ("+dbMaterialQuantity+" "
+                                        +dbMaterialUnit+")"+" = "+diYnames.getDiyName());
                                 if (dbMaterialName.equals(dbMaterials.get(m).getName())) {
                                     diYnames.incrementScore();
                                     if (dbMaterials.get(m).getQuantity() >= dbMaterialQuantity) {
                                         if (dbMaterials.get(m).getUnit().equals(dbMaterialUnit)) {
                                             if (!exists(diYnames)) {
-                                                Log.e("dbMaterialNameCheck3", dbMaterialName + " == " + dbMaterials.get(m).getName()+" ~ "+ diYnames.getMatchScore()
+                                                Log.e("dbMaterialNameCheck3", dbMaterialName + " == " + dbMaterials.get(m).getName()
+                                                        +" ~ "+ diYnames.getMatchScore()
                                                         +" "+diYnames.getDiyName());
                                                 diyList.add(diYnames);
                                                 sortDiyList(diyList);

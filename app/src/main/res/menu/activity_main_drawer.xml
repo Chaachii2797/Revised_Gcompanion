@@ -30,7 +30,7 @@
 
         <item
             android:id="@+id/nav_calendar"
-            android:icon="@drawable/ic_calendar"
+            android:icon="@drawable/ic_schedule"
             android:title="Calendar" />
 
         <item

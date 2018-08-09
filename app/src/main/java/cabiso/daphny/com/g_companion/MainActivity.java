@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
+import cabiso.daphny.com.g_companion.Promo.PromoActivity;
 import cabiso.daphny.com.g_companion.Search.SearchActivity;
 import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
 import clarifai2.api.ClarifaiBuilder;
@@ -268,8 +269,10 @@ public class MainActivity extends AppCompatActivity
                 startActivity(calendar);
                 break;
             case R.id.nav_report:
-                Intent sales = new Intent(MainActivity.this,SalesReport.class);
-                startActivity(sales);
+                Intent promo = new Intent(MainActivity.this, PromoActivity.class);
+                startActivity(promo);
+//                Intent sales = new Intent(MainActivity.this,SalesReport.class);
+//                startActivity(sales);
                 break;
             case R.id.nav_about:
                 Intent about = new Intent(MainActivity.this,About.class);

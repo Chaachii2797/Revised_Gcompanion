@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="cabiso.daphny.com.g_companion.ToBidProduct">
+    tools:context="cabiso.daphny.com.g_companion.ToBidProduct"
+    android:background="@color/gen_scheme2">
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -44,6 +45,27 @@
             android:weightSum="1">
 
             <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="right">
+
+                <TextView
+                    android:id="@+id/on_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date Today : "
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_on_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -60,49 +82,53 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
-                        android:text="Price MIn" />
+                        android:text="Initial Price"
+                        android:textStyle="bold" />
 
                     <EditText
-                        android:id="@+id/etPriceMin"
+                        android:id="@+id/etInitialPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
-                        android:inputType="number|numberDecimal" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/appBarLayout"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView35"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:text="Price Max" />
-
-                    <EditText
-                        android:id="@+id/etPriceMax"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
+                        android:hint="Input Initial Price"
                         android:inputType="number|numberDecimal" />
 
                 </LinearLayout>
             </LinearLayout>
 
-            <EditText
-                android:id="@+id/et_xpiry_date"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="Bid Expiration"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/et_xpiry_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="Input Bid Expiration" />
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Bid Expiration" />
+                android:layout_marginBottom="5dp"
+                android:text="Comment"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/etMessage"
@@ -110,8 +136,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.68"
                 android:ems="10"
-                android:hint="Comment"
+                android:hint="Input Comment"
                 android:inputType="textMultiLine|textLongMessage" />
+        </LinearLayout>
 
             <Button
                 android:id="@+id/btnAddBid"

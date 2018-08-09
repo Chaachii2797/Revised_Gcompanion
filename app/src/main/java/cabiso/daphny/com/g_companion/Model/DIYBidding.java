@@ -5,8 +5,7 @@ package cabiso.daphny.com.g_companion.Model;
  */
 
 public class DIYBidding {
-    private int price_max;
-    private int price_min;
+    private int intial_price;
     private String date;
     private String xpire_date;
     private String bidder;
@@ -16,21 +15,12 @@ public class DIYBidding {
 
     }
 
-    public int getPrice_max() {
-        return price_max;
+    public int getIntial_price() {
+        return intial_price;
     }
 
-    public DIYBidding setPrice_max(int price_max) {
-        this.price_max = price_max;
-        return this;
-    }
-
-    public int getPrice_min() {
-        return price_min;
-    }
-
-    public DIYBidding setPrice_min(int price_min) {
-        this.price_min = price_min;
+    public DIYBidding setInitialPrice(int intial_price) {
+        this.intial_price = intial_price;
         return this;
     }
 

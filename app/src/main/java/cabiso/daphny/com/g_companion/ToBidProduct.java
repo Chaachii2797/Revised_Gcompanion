@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,10 +29,10 @@ import cabiso.daphny.com.g_companion.Model.DIYBidding;
 public class ToBidProduct extends Activity implements View.OnClickListener {
 
     private EditText mEtPriceMin;
-    private EditText mEtPriceMax;
     private EditText mEtPriceMessage;
     private FirebaseUser mFirebaseUser;
     private EditText mEtExpiryDate;
+    private TextView mTvDateToday;
     private String userID;
     private String itemId;
     private Button mBtnAddBid;
@@ -44,11 +45,13 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_to_bid_product);
 
-        mEtPriceMin = (EditText) findViewById(R.id.etPriceMin);
-        mEtPriceMax = (EditText) findViewById(R.id.etPriceMax);
+        mEtPriceMin = (EditText) findViewById(R.id.etInitialPrice);
         mEtPriceMessage = (EditText) findViewById(R.id.etMessage);
         mEtExpiryDate = (EditText) findViewById(R.id.et_xpiry_date);
+        mTvDateToday = (TextView) findViewById(R.id.tv_on_date);
         mBtnAddBid = (Button) findViewById(R.id.btnAddBid);
+
+        mTvDateToday.setText(sdate);
 
         Intent intent = getIntent();
         itemId = intent.getExtras().getString("itemId");
@@ -79,8 +82,7 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
         return new DIYBidding()
                 .setBidder(this.userID)
                 .setMessage(this.mEtPriceMessage.getText()+"")
-                .setPrice_min(Integer.parseInt(this.mEtPriceMin.getText()+""))
-                .setPrice_max(Integer.parseInt(this.mEtPriceMax.getText()+""))
+                .setInitialPrice(Integer.parseInt(this.mEtPriceMin.getText()+""))
                 .setDate(sdate)
                 .setXpire_date(mEtExpiryDate.getText().toString());
     }

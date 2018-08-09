@@ -1,39 +1,34 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="230dp"
+    android:layout_height="200dp"
     android:layout_marginBottom="5dp"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
     android:layout_marginTop="5dp"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="15dp"
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/diy_item_icon"
+            android:id="@+id/img_promo_img"
             android:layout_width="match_parent"
-            android:layout_height="230dp"
+            android:layout_height="200dp"
             android:layout_weight="1"
             android:scaleType="centerCrop"
             app:srcCompat="@drawable/bg3" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="230dp"
+            android:layout_height="200dp"
             android:background="@drawable/gradient_background">
 
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/diy_item_icon"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY" />
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,24 +36,22 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="15dp"
+            android:background="@drawable/gradient_ribbon_yellow"
             android:gravity="right"
             android:orientation="horizontal"
             android:paddingBottom="5dp"
+            android:paddingLeft="80dp"
             android:paddingRight="10dp"
             android:paddingTop="5dp">
 
             <TextView
-                android:id="@+id/item_identity"
+                android:id="@+id/textView42"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
                 android:fontFamily="sans-serif-condensed"
                 android:text="BUY 1 TAKE 2"
-                android:textColor="#000000" />
+                android:textColor="#FFFFFF" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,50 +63,53 @@
             android:layout_alignParentStart="true"
             android:gravity="bottom"
             android:orientation="vertical"
-            android:paddingTop="20dp"
-            android:paddingBottom="10dp"
-            android:paddingRight="20dp"
-            android:paddingLeft="20dp">
+            android:padding="20dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView43"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="₱"
+                    android:textColor="#1abc9c"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/promo_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-condensed"
+                    android:paddingLeft="10dp"
+                    android:text="100"
+                    android:textColor="#1abc9c"
+                    android:textSize="30sp" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/item_name"
+                android:id="@+id/promo_item_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-condensed"
                 android:text="Product Name"
+                android:textAlignment="textStart"
                 android:textColor="#FFFFFF"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/item_name_owner"
+                android:id="@+id/promo_identity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView"
-                android:textColor="#FFFFFF" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/heartu"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@null"
-                    android:src="@drawable/vector_heart" />
-
-                <ImageButton
-                    android:id="@+id/staru"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@null"
-                    android:descendantFocusability="blocksDescendants"
-                    android:src="@android:drawable/btn_star" />
-            </LinearLayout>
-
+                android:fontFamily="sans-serif-condensed"
+                android:text="Category"
+                android:textColor="#9FFFFFFF" />
         </LinearLayout>
     </RelativeLayout>
 

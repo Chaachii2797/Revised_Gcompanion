@@ -70,6 +70,7 @@
         <activity android:name=".SellMyDIYs" />
         <activity android:name=".Pending_Activity" />
         <activity android:name=".Search.SearchView" />
+        <activity android:name=".Promo.PromoActivity" />
         <activity android:name=".Recommend.Bottle_Recommend" />
         <activity android:name=".Recommend.Paper_Recommend" />
         <activity android:name=".Recommend.Rubber_Recommend" />
@@ -130,7 +131,8 @@
         </service>
 
         <activity android:name=".Search.SearchActivity" />
-        <activity android:name=".Search.SearchView"></activity>
+        <activity android:name=".Search.SearchView" />
+        <activity android:name=".Promo.PromoActivity"></activity>
     </application>
 
 </manifest>

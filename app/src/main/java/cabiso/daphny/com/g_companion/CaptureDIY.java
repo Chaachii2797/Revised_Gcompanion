@@ -555,8 +555,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 //                                dbRef.child(upload).child("DIY Price").setValue(etPrice.getText().toString());
                                 databaseReference.child(upload).child("DIY Price").setValue(dbSelling);
                                 databaseReference.child(upload).child("status").setValue("selling");
-                                databaseReference.child(upload).child("Item Quantity").setValue(etQuantity.getText().toString());
-                                databaseReference.child(upload).child("Item Description").setValue(etDescription.getText().toString());
 
                                 //push data to Firebase Database - diy_by_user node
                                 byuser_Reference.child(upload).setValue(new DIYSell(name.getText().toString(),
@@ -567,8 +565,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 //                                dbRef.child(upload).child("DIY Price").setValue(etPrice.getText().toString());
                                 byuser_Reference.child(upload).child("DIY Price").setValue(dbSelling);
                                 byuser_Reference.child(upload).child("status").setValue("selling");
-                                byuser_Reference.child(upload).child("Item Quantity").setValue(etQuantity.getText().toString());
-                                byuser_Reference.child(upload).child("Item Description").setValue(etDescription.getText().toString());
                                 Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
                                 // Alert Dialog for finished uploaing DIYs

@@ -1,12 +1,21 @@
 package cabiso.daphny.com.g_companion.Model;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class DIYnames implements Comparable<DIYnames>, Serializable{
+public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serializable{
 
+    private static DatabaseReference databaseReference;
     public String diyName;
     public String diyUrl;
     public String user_id;
@@ -18,7 +27,9 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
     public int matchScoreRate;
     public int materialMatches;
     public int totalMaterialItems;
+    private static DIYnames diyInfo = null;
     private ArrayList<DBMaterial> dbMaterials = new ArrayList<>();
+
 
     public DIYnames(String diyName, String diyUrl, String user_id, String productID, String identity,
                     Float bookmarks, Float likes){
@@ -36,10 +47,21 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
     }
 
     public DIYnames() {
-
+        this.databaseReference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
     }
 
     public DIYnames(String s, String s1) {
+    }
+
+    public void copy(DIYnames diYnames){
+        if(diYnames!=null){
+            this.setDiyName(diYnames.getDiyName());
+            this.setDiyUrl(diYnames.getDiyUrl());
+            this.setUser_id(diYnames.getUser_id());
+            this.setProductID(diYnames.getProductID());
+            this.setIdentity(diYnames.getIdentity());
+            this.setBookmarks(diYnames.getBookmarks());
+        }
     }
 
     public void setMatchScoreRate(int rate){
@@ -153,8 +175,30 @@ public class DIYnames implements Comparable<DIYnames>, Serializable{
         }
     }
 
-    @Override
-    public String toString() {
-        return "product name : " + diyName;
+    public static void getDetails(DIYnames ref,String diyID){
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("diy_by_tags").child(diyID);
+        if(diyID.length() > 0) {
+            if(ref!=null) {
+                databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(final DataSnapshot itemSnapshot) {
+                        diyInfo = itemSnapshot.getValue(DIYnames.class);
+                        Log.e("diyTestDetailsOBJECT1", diyInfo.toString());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                ref = diyInfo;
+            }
+        }
     }
+//
+//    @Override
+//    public String toString() {
+//        return "product name : " + diyName;
+//    }
 }

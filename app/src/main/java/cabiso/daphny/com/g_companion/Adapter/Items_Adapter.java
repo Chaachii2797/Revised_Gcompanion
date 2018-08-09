@@ -39,7 +39,7 @@ public class Items_Adapter extends ArrayAdapter<DIYnames> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        LayoutInflater inflater = context.getLayoutInflater();
+        final LayoutInflater inflater = context.getLayoutInflater();
 
         View v = inflater.inflate(resource, null);
 

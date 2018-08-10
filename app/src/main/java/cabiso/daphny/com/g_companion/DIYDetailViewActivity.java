@@ -45,7 +45,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -54,6 +53,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -61,7 +61,6 @@ import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Adapter.BiddersAdapter;
 import cabiso.daphny.com.g_companion.Adapter.RecyclerViewDataAdapter;
-import cabiso.daphny.com.g_companion.Adapter.RelatedDIYAdapter;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.UserListingActivity;
 import cabiso.daphny.com.g_companion.Model.Bidders;
 import cabiso.daphny.com.g_companion.Model.CreatePromo;
@@ -83,7 +82,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private TextView diy_name, diy_materials, diy_procedures, diy_sell, php, user_owner_name,txtBy;
     private Button button_buy, contact_seller, create_promo, bid_item, want_to_bid;
     private String user_name;
-    private CardView selling_price, seller_info, bid_info, cardview0, cardview00, cardview05, cardview06, cardview07;
+    private CardView selling_price, seller_info, bid_info, cardview0, cardview00, cardview05, cardview06, cardview07, cardview08;
     private RecyclerView recyclerView;
     private int currentNotificationID = 0;
 
@@ -92,7 +91,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
     //sellers info
     private TextView sellers_info, sellers_cnTV, sellers_addTV, sellers_contact_no, sellers_address;
-
+    private RelativeLayout relCardview;
     //promo
     private TextView promo_price, promo_textview;
     private ImageView outside_view;
@@ -101,6 +100,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private TextView tv_bidders;
     private RecyclerView lv_bidders;
     private Button btn_bidders;
+    private TextView textView3135, bidding_winner_name, bidding_winner_amount; //bidding winner
 
     final Context context = this;
     List<String> item = new ArrayList<>();
@@ -114,17 +114,16 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     private DatabaseReference identityReference;
     private DatabaseReference promoReference;
     private DatabaseReference pending_reference;
-    private DatabaseReference winnersReference;
     private DatabaseReference biddersReference;
     private FirebaseUser mFirebaseUser;
+    private DatabaseReference relatedReference;
 
-    private DatabaseReference databaseReference, itemReference;
+    private DatabaseReference databaseReference, itemReference, biddingRef;
 
     private String userID;
     private String loggedInUserName;
 
 //    private FloatingActionButton fab_template;
-    private RelatedDIYAdapter relatedDIYadapter;
 
     //related DIYs Arraylist
     ArrayList<SectionDataModel> allSampleData;
@@ -150,8 +149,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
         itemReference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
         promoReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
+        relatedReference  = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
-
+        //related DIYS
         allSampleData = new ArrayList<SectionDataModel>();
         ePics = new ArrayList<>();
         ePrice = new ArrayList<>();
@@ -185,6 +185,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         diy_sell = (TextView) findViewById(R.id.sell_details);
         user_owner_name = (TextView) findViewById(R.id.txt_user_owner_name);
         txtBy = (TextView) findViewById(R.id.txt_by);
+        textView3135 = (TextView) findViewById(R.id.textView3135);
+        bidding_winner_name = (TextView) findViewById(R.id.winner_bid_owner);
+        bidding_winner_amount = (TextView) findViewById(R.id.winner_bid_amount);
 
         button_buy = (Button) findViewById(R.id.btn_sell_diy);
         want_to_bid = (Button) findViewById(R.id.btn_bidders_bid);
@@ -200,6 +203,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         sellers_contact_no = (TextView) findViewById(R.id.diy_owner_cn);
         sellers_cnTV = (TextView) findViewById(R.id.cnTV);
         sellers_addTV = (TextView) findViewById(R.id.addTV);
+        relCardview = (RelativeLayout) findViewById(R.id.relCardview);
 
         //owners statement
         ownr_txt = (TextView) findViewById(R.id.owners_statement);
@@ -222,6 +226,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         cardview05 = (CardView) findViewById(R.id.cardView5); //bidders
         cardview06 = (CardView) findViewById(R.id.cardView6); //seller bid info
         cardview07 = (CardView) findViewById(R.id.cardView7); //related DIYS
+        cardview08 = (CardView) findViewById(R.id.cardView8); //Bidding Winner
 
         /* Bidding Lists */
         biddersAdapter = new BiddersAdapter(DIYDetailViewActivity.this,diyBiddings);
@@ -247,6 +252,13 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         relatedDIYrecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         relatedDIYrecyclerView.setAdapter(adapter);
 
+//        //Display related DIYS
+//        final SectionDataModel dm = new SectionDataModel();
+//        dm.setHeaderTitle("Related DIYS: ");
+//        dm.setAllItemsInSection(ePrice);
+//        dm.setAllProfileInSection(eOwner);
+//        dm.setAllPicturesInSection(ePics);
+//        allSampleData.add(dm);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -254,6 +266,92 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                 final DIYnames diyInfo = itemSnapshot.getValue(DIYnames.class);
                 final DIYSell info = itemSnapshot.getValue(DIYSell.class);
                 identityReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(itemSnapshot.getKey());
+
+
+                final String category = itemSnapshot.child("category").getValue().toString();
+                Log.e("categoryInDB", category);
+
+                //Display related DIYS
+                final SectionDataModel dm = new SectionDataModel();
+                dm.setHeaderTitle("Related DIYS: ");
+                dm.setAllItemsInSection(ePrice);
+                dm.setAllProfileInSection(eOwner);
+                dm.setAllPicturesInSection(ePics);
+                allSampleData.add(dm);
+
+                relatedReference.orderByChild("category").equalTo(category).addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        DIYnames diy = dataSnapshot.getValue(DIYnames.class);
+                        User_Profile relOwner = dataSnapshot.getValue(User_Profile.class);
+                        Log.e("relOwner", "" + String.valueOf(relOwner));
+
+
+
+                        if(diyInfo.diyName != diy.diyName){
+
+                            Log.e("catStatusss", diy.diyName + " = " + String.valueOf(dataSnapshot.getChildrenCount()));
+
+                            Log.e("diysssss", diy.diyName);
+                            Log.e("relOwnersss", "" + dataSnapshot);
+
+                            Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();//
+
+
+                            String message_prices="";
+                            String message_qtys = "";
+                            List<String> message_Prices = new ArrayList<String>();
+                            List<String> message_Qtys = new ArrayList<String>();
+                            for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
+                                double price = postSnapshot.child("selling_price").getValue(double.class);
+                                int qty = postSnapshot.child("selling_qty").getValue(int.class);
+                                message_qtys += qty;
+                                message_Qtys.add(message_qtys);
+                                message_prices += price;
+                                message_Prices.add(message_prices);
+
+                                Log.e("relPrice", message_prices);
+                                Log.e("relQty", message_qtys);
+                            }
+
+                            dm.addItemInSection(diy.diyName);
+                            dm.addProfileInSection(dataSnapshot.getValue(User_Profile.class));
+                            dm.addPictureInSection(dataSnapshot.getValue(DIYnames.class));
+
+                            Log.e("dm", String.valueOf(dm));
+                            Log.e("allSampleData", String.valueOf(allSampleData));
+                            Log.e("allPrice", String.valueOf(ePrice));
+                            Log.e("allOwner", String.valueOf(eOwner));
+                            Log.e("allPics", String.valueOf(ePics));
+
+                            adapter.notifyDataSetChanged();
+
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
 
                 if(diyInfo.getIdentity().equals("community")){
                     diy_sell.setVisibility(View.INVISIBLE);
@@ -269,6 +367,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     txtBy.setVisibility(View.VISIBLE);
                     bid_item.setVisibility(View.INVISIBLE);
                     diy_name.setText(diyInfo.diyName);
+
+                    //related DIYS
                     cardview07.setVisibility(View.VISIBLE);
                     relatedDIYrecyclerView.setVisibility(View.VISIBLE);
                     cardview05.setVisibility(View.INVISIBLE);
@@ -283,42 +383,16 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     tv_bidders.setVisibility(View.INVISIBLE);
                     lv_bidders.setVisibility(View.INVISIBLE);
                     btn_bidders.setVisibility(View.INVISIBLE);
+                    cardview08.setVisibility(View.INVISIBLE);//display bidding winner
+
 
                     RelativeLayout.LayoutParams nlp = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                    nlp.topMargin = 1200;
+                    nlp.topMargin = 1100;
                     nlp.bottomMargin = 15;
                     nlp.leftMargin = 20;
                     nlp.rightMargin = 20;
                     cardview07.setLayoutParams(nlp);
-
-                    //Display related DIYS
-                    SectionDataModel dm = new SectionDataModel();
-                    dm.setHeaderTitle("Related DIYS: ");
-                    dm.setAllItemsInSection(ePrice);
-                    dm.setAllProfileInSection(eOwner);
-                    dm.setAllPicturesInSection(ePics);
-
-                    for (DataSnapshot postDataSnapshot: itemSnapshot.child("related_diys").getChildren()) {
-                        DIYnames diynem = postDataSnapshot.getValue(DIYnames.class);
-                        Log.e("diynem", String.valueOf(diynem));
-                        if(diyInfo.diyName.equals(diynem.getDiyName())){
-                            Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();//
-
-                            dm.addItemInSection(postDataSnapshot.child("DIY Price").getValue().toString());
-                            dm.addProfileInSection(postDataSnapshot.getValue(User_Profile.class));
-                            dm.addPictureInSection(postDataSnapshot.getValue(DIYnames.class));
-
-                            Log.e("dm", String.valueOf(dm));
-                            Log.e("allSampleData", String.valueOf(allSampleData));
-                            Log.e("allPrice", String.valueOf(ePrice));
-                            Log.e("allOwner", String.valueOf(eOwner));
-                            Log.e("allPics", String.valueOf(ePics));
-
-                        }
-                    }
-                    allSampleData.add(dm);
-                    adapter.notifyDataSetChanged();
 
 
                     user_data.addChildEventListener(new ChildEventListener() {
@@ -431,12 +505,13 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     diy_name.setText(info.diyName);
 //                    button_buy.setVisibility(View.VISIBLE);
 //                    fab_template.setVisibility(View.INVISIBLE);
-                    cardview07.setVisibility(View.INVISIBLE);
-                    relatedDIYrecyclerView.setVisibility(View.INVISIBLE);
+
+                    //related DIYS
+                    cardview07.setVisibility(View.VISIBLE);
+                    relatedDIYrecyclerView.setVisibility(View.VISIBLE);
                     cardview05.setVisibility(View.INVISIBLE);
                     cardview06.setVisibility(View.INVISIBLE);
                     recyclerView.setVisibility(View.INVISIBLE);
-
                     bid_item.setVisibility(View.INVISIBLE);
                     create_promo.setVisibility(View.INVISIBLE);
                     //promo
@@ -444,19 +519,28 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     promo_textview.setVisibility(View.INVISIBLE);
                     cardview0.setVisibility(View.INVISIBLE);//materials
                     cardview00.setVisibility(View.INVISIBLE);//procedures
-
+                    cardview08.setVisibility(View.INVISIBLE);//bidding winner
 
                     RelativeLayout.LayoutParams nlp = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                    nlp.topMargin = 700;
+                    nlp.topMargin = 580;
                     nlp.bottomMargin = 15;
                     nlp.leftMargin = 20;
                     nlp.rightMargin = 20;
                     selling_price.setLayoutParams(nlp);
 
+                    RelativeLayout.LayoutParams adjss = new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                    adjss.topMargin = 970;
+                    adjss.bottomMargin = 15;
+                    adjss.leftMargin = 20;
+                    adjss.rightMargin = 20;
+                    cardview07.setLayoutParams(adjss);
+
+
                     RelativeLayout.LayoutParams adjs = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                    adjs.topMargin = 1100;
+                    adjs.topMargin = 1550;
                     adjs.bottomMargin = 15;
                     adjs.leftMargin = 20;
                     adjs.rightMargin = 20;
@@ -464,7 +548,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                     RelativeLayout.LayoutParams adjust = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                    adjust.topMargin = 1210;
+                    adjust.topMargin = 1660;
                     adjust.bottomMargin = 20;
                     adjust.leftMargin = 20;
                     adjust.rightMargin = 20;
@@ -706,19 +790,21 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     selling_price.setVisibility(View.VISIBLE);
                     seller_info.setVisibility(View.VISIBLE);
                     diy_name.setText(info.diyName);
-
 //                    fab_template.setVisibility(View.INVISIBLE);
-                    cardview07.setVisibility(View.INVISIBLE);
-                    relatedDIYrecyclerView.setVisibility(View.INVISIBLE);
+
+                    //related DIYS
+                    cardview07.setVisibility(View.VISIBLE);
+                    relatedDIYrecyclerView.setVisibility(View.VISIBLE);
                     cardview05.setVisibility(View.INVISIBLE);
                     cardview06.setVisibility(View.INVISIBLE);
                     recyclerView.setVisibility(View.INVISIBLE);
                     cardview0.setVisibility(View.INVISIBLE);//materials
                     cardview00.setVisibility(View.INVISIBLE);//procedures
+                    cardview08.setVisibility(View.INVISIBLE);//display bidding winner
 
                     RelativeLayout.LayoutParams nlp = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                    nlp.topMargin = 700;
+                    nlp.topMargin = 580;
                     nlp.bottomMargin = 15;
                     nlp.leftMargin = 25;
                     nlp.rightMargin = 25;
@@ -742,7 +828,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                     RelativeLayout.LayoutParams adju = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                    adju.topMargin = 1320;
+                    adju.topMargin = 1520;
                     adju.bottomMargin = 20;
                     adju.leftMargin = 20;
                     adju.rightMargin = 20;
@@ -924,8 +1010,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     contact_seller.setVisibility(View.VISIBLE);
                     bid_item.setVisibility(View.INVISIBLE);
 //                    fab_template.setVisibility(View.INVISIBLE);
-                    cardview07.setVisibility(View.INVISIBLE);
-                    relatedDIYrecyclerView.setVisibility(View.INVISIBLE);
+                    //related DIYS
+                    cardview07.setVisibility(View.VISIBLE);
+                    relatedDIYrecyclerView.setVisibility(View.VISIBLE);
                     cardview0.setVisibility(View.INVISIBLE);//materials
                     cardview00.setVisibility(View.INVISIBLE);//procedures
 
@@ -942,6 +1029,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     tv_bidders.setVisibility(View.VISIBLE);
                     lv_bidders.setVisibility(View.VISIBLE);
                     btn_bidders.setVisibility(View.VISIBLE);
+                    cardview08.setVisibility(View.INVISIBLE);//display bidding winner
 
                     //promo
                     promo_price.setVisibility(View.INVISIBLE);
@@ -954,7 +1042,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                     RelativeLayout.LayoutParams nlp = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                    nlp.topMargin = 700;
+                    nlp.topMargin = 580;
                     nlp.bottomMargin = 15;
                     nlp.leftMargin = 20;
                     nlp.rightMargin = 20;
@@ -1028,6 +1116,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                     }
 
+                    //bidding expiration
                     for (DataSnapshot insideDataSnapshot: itemSnapshot.child("bidding").getChildren()) {
                         DIYBidding biddingItem = insideDataSnapshot.getValue(DIYBidding.class);
                         tv_bid_xpire.setText(biddingItem.getXpire_date());
@@ -1047,31 +1136,67 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         Log.e("CHECKEXPIRATION",isExpired+"");
                     }
 
+                    //for getting the max bid
+                    biddingRef = FirebaseDatabase.getInstance().getReference().child("diy_by_tags")
+                            .child(itemSnapshot.getKey()).child("bidders");
+                    Log.e("biddingRef", String.valueOf(biddingRef));
+
+                    biddingRef.orderByChild("bid_price").limitToLast(1).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                                Log.e("childSnapshot", String.valueOf(childSnapshot));
+
+                                Bidders biddersss = childSnapshot.getValue(Bidders.class);
+                                Log.e("bidPrices", biddersss.getBid_price());
+                                String Key = childSnapshot.getKey();
+                                Log.e("Keyssss", Key);
+                                Toast.makeText(context, "Max bid" + " = " + biddersss.getBid_price(), Toast.LENGTH_SHORT).show();
+
+                                bidding_winner_amount.setText("₱ :" + " " +biddersss.getBid_price());
+                                bidding_winner_name.setText(biddersss.getUser_name());
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    //invisible views when bidding iss expired
+                    if(isExpired){
+                        want_to_bid.setVisibility(View.INVISIBLE);
+                        cardview06.setVisibility(View.INVISIBLE);
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        cardview05.setVisibility(View.INVISIBLE);
+                        lv_bidders.setVisibility(View.INVISIBLE);
+                        relCardview.setVisibility(View.INVISIBLE);
+                        cardview08.setVisibility(View.VISIBLE);
+
+                        RelativeLayout.LayoutParams winBid = new RelativeLayout.LayoutParams(
+                                RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                        winBid.topMargin = 1000;
+                        winBid.bottomMargin = 15;
+                        winBid.leftMargin = 20;
+                        winBid.rightMargin = 20;
+                        cardview08.setLayoutParams(winBid);
+
+                    }
+
                     for (DataSnapshot inside_DataSnapshot: itemSnapshot.child("bidders").getChildren()) {
                         Bidders biddersItem = inside_DataSnapshot.getValue(Bidders.class);
+                        Log.e("biddersItem", String.valueOf(biddersItem));
+
+                        String bidds = inside_DataSnapshot.child("bid_price").getValue(String.class);
+                        Log.e("bidds", String.valueOf(bidds));
+                        Log.e(" biddsssss",biddersItem.getBid_price());
+
                         diyBiddings.add(biddersItem);
                         biddersAdapter.notifyDataSetChanged();
                     }
 
-                    winnersReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags")
-                            .child(itemSnapshot.getKey());
-                    Query highestBid = winnersReference.child("bidders").orderByChild("bid_price").limitToLast(1);
-                    if(isExpired){
-                        want_to_bid.setVisibility(View.INVISIBLE);
-                        highestBid.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                for(DataSnapshot insideSnapshot:dataSnapshot.getChildren()){
-                                    Toast.makeText(DIYDetailViewActivity.this,insideSnapshot.child("bid_price").getValue().toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
 
                     want_to_bid.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -1095,7 +1220,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                         biddersReference.push().setValue(new Bidders(bidders_value.getText().toString()
                                                 ,userID, loggedInUserName, sdate));
 
-                                        Intent intent = new Intent(DIYDetailViewActivity.this, DIYDetailViewActivity.class);
+                                        Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
                                         startActivity(intent);
                                     }
                                 });
@@ -1303,6 +1428,19 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
         }
 
+    }
+
+    public class compareProduct implements Comparator<Bidders> {
+        public int compare(Bidders a, Bidders b) {
+            if (Integer.parseInt(a.getBid_price()) > Integer.parseInt(b.getBid_price()))
+                return -1; // highest value first
+            Log.e("aPrice", a.getBid_price());
+            Log.e("bPrice", b.getBid_price());
+            if (a.getBid_price() == b.getBid_price())
+                return 0;
+
+            return 1;
+        }
     }
 
 }

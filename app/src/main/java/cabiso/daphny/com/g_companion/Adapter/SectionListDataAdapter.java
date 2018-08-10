@@ -16,9 +16,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -37,17 +34,19 @@ import cabiso.daphny.com.g_companion.ViewRelatedDIYS;
 public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListDataAdapter.SingleItemRowHolder> {
 
     private Context mContext;
-    private DatabaseReference diy_owner, diyByTags;
-    private ArrayList<String> ePrice = new ArrayList<>();
+    private DatabaseReference diy_owner, diyByTags, dbRef;
+    private ArrayList<DIYnames> ePrice = new ArrayList<>();
     private ArrayList<User_Profile> eOwner = new ArrayList<>();
     private ArrayList<DIYnames> ePics = new ArrayList<>();
     private ArrayList<DIYnames> itemsList;
     private FirebaseUser mFirebaseUser;
 
 
-    public SectionListDataAdapter(Context context,ArrayList<DIYnames> itemsList) {
+    public SectionListDataAdapter(Context context, ArrayList<DIYnames> itemsList, ArrayList<User_Profile> eOwner) {
         this.itemsList = itemsList;
         this.mContext = context;
+        this.eOwner = eOwner;
+        this.eOwner = eOwner;
     }
 
 
@@ -63,103 +62,16 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     public void onBindViewHolder(final SingleItemRowHolder holder, final int position) {
         diy_owner = FirebaseDatabase.getInstance().getReference().child("userdata");
         diyByTags = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
-        //get related DIY owner
-//        final String get_name = getIntent().getStringExtra("pprice");
-//        holder.diyPrice.setText(get_name);
+        dbRef = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
+        holder.diyName.setText(this.itemsList.get(position).getDiyName());
 
-        diyByTags.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                for (DataSnapshot postDataSnapshot : dataSnapshot.child("related_diys").getChildren()) {
-                    final DIYnames diyInfos = postDataSnapshot.getValue(DIYnames.class);
+        Glide.with(mContext)
+                        .load(itemsList.get(position).getDiyUrl())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .centerCrop()
+                        .into(holder.itemImage);
 
-                    Log.e("diyInfos", String.valueOf(diyInfos));
-                    String sell_price = postDataSnapshot.child("DIY Price").getValue().toString();
-                    String quantity = postDataSnapshot.child("Item Quantity").getValue().toString();
-
-                    Log.e("diy_prices", sell_price);
-                    Log.e("quantity",quantity);
-                    final double price = Double.parseDouble(sell_price);
-                    final int qty = Integer.parseInt(quantity);
-
-                    Log.e("prices", String.valueOf(price));
-                    ePrice.add(postDataSnapshot.child("DIY Price").getValue().toString());
-                    Log.e("ePrice", String.valueOf(ePrice));
-//                holder.diyPrice.setText(sell_price);
-//                holder.diyQty.setText(qty + " " + "piece/s");
-
-                    //Nakuha na siya boshet
-                    holder.diyPrice.setText("₱:" + " " + ePrice.get(position));
-
-                    ePics.add(postDataSnapshot.getValue(DIYnames.class));
-                    Log.e("ePics", String.valueOf(ePics));
-
-                    Glide.with(mContext)
-                            .load(ePics.get(position).diyUrl)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .centerCrop()
-                            .into(holder.itemImage);
-
-                    Log.e("diyItemURL", ePics.get(position).getDiyUrl());
-
-
-                    diy_owner.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                            User_Profile owner_profile = dataSnapshot.getValue(User_Profile.class);
-                            if (diyInfos.user_id.equals(owner_profile.getUserID())) {
-                                String user;
-                                user = owner_profile.getF_name() + " " + owner_profile.getL_name();
-//                            holder.diyOwner.setText(user);
-                                Log.e("user", user);
-                                eOwner.add(dataSnapshot.getValue(User_Profile.class));
-                                Log.e("eOwner", String.valueOf(eOwner));
-                                holder.diyOwner.setText("by:" + " " + eOwner.get(position).getF_name() + " " + eOwner.get(position).getL_name());
-                                Log.e("fName", eOwner.get(position).getF_name() + " " + eOwner.get(position).getL_name());
-                            }
-                        }
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
 
     }
@@ -170,29 +82,36 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 //        return itemsList.size();
     }
 
+
+
     public class SingleItemRowHolder extends RecyclerView.ViewHolder {
 
-        protected TextView diyOwner, diyPrice;
+        protected TextView diyOwner, diyName;
         protected ImageView itemImage;
 
 
-        public SingleItemRowHolder(View view) {
+        public SingleItemRowHolder(final View view) {
             super(view);
 
-            diyPrice = (TextView) view.findViewById(R.id.related_diy_price);
-            diyOwner = (TextView) view.findViewById(R.id.related_diy_owner);
+            diyName = (TextView) view.findViewById(R.id.related_diy_name);
+//            diyOwner = (TextView) view.findViewById(R.id.related_diy_owner);
             itemImage = (ImageView) view.findViewById(R.id.retaled_diy_img);
 
+//            view.setOnClickListener(this);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     DIYnames diys = new DIYnames();
+                    DIYnames relDiys = (DIYnames) itemsList.get(getAdapterPosition());
+
+//                    int position = getAdapterPosition();
+
 
                     //send data to ViewRelatedDIYS using intent
                     Intent intent = new Intent(v.getContext(), ViewRelatedDIYS.class);
-                    intent.putExtra("Nname",diyOwner.getText());
-                    intent.putExtra("Pprice", diyPrice.getText());
-                    intent.putExtra("image",diys.getDiyUrl());
+                    intent.putExtra("Nname", relDiys.diyName);
+                    Log.e("Nname", relDiys.diyName);
+
 
                     v.buildDrawingCache();
                     Bitmap image = v.getDrawingCache();
@@ -205,11 +124,32 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                     intent.putExtra("image", byteArray);
                     v.getContext().startActivity(intent);
 
-                    Toast.makeText(v.getContext(), diyOwner.getText() + "\n" + diyPrice.getText().toString()
+                    Toast.makeText(v.getContext(), diyName.getText().toString()
                             + "\n" + itemImage.getDrawable(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
+
+        /**
+         * Called when a view has been clicked.
+         *
+         * @param v The view that was clicked.
+         */
+//        @Override
+//        public void onClick(View v) {
+//            Log.e("POS_CLICKED: ",""+getAdapterPosition());
+//
+//            int position = getAdapterPosition();
+//            Toast.makeText(v.getContext(),Integer.toString(position), Toast.LENGTH_SHORT).show();
+//
+//
+//            DIYnames rel_diy = itemsList.get(position);
+//            String name = (String) rel_diy.diyName;
+//
+//            Log.e("name: ",rel_diy.diyName);
+//            Intent intent = new Intent(v.getContext(), ViewRelatedDIYS.class);
+//            intent.putExtra("Nname",name);
+//        }
     }
 
 }

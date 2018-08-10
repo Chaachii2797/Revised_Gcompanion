@@ -31,7 +31,7 @@
 
 
         <TextView
-            android:id="@+id/related_diy_price"
+            android:id="@+id/related_diy_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
@@ -39,23 +39,23 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="3dp"
             android:gravity="center"
-            android:text="Price"
+            android:text="Name"
             android:textAppearance="?attr/textAppearanceListItem"
             android:textSize="14sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/related_diy_owner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="3dp"
-            android:gravity="center"
-            android:text="Owner"
-            android:textAppearance="?attr/textAppearanceListItem"
-            android:textSize="12sp" />
+        <!--<TextView-->
+            <!--android:id="@+id/related_diy_owner"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="3dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:layout_marginTop="3dp"-->
+            <!--android:gravity="center"-->
+            <!--android:text="Owner"-->
+            <!--android:textAppearance="?attr/textAppearanceListItem"-->
+            <!--android:textSize="12sp" />-->
 
 
     </LinearLayout>

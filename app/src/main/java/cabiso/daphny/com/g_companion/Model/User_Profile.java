@@ -32,6 +32,8 @@ public class User_Profile {
         this.android_id = android_id;
     }
 
+
+
     public String getAddress() {
         return address;
 

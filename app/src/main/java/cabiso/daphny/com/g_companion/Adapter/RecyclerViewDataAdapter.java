@@ -39,11 +39,13 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
 
         final String sectionName = dataList.get(i).getHeaderTitle();
 
-        ArrayList singleSectionItems = dataList.get(i).getAllItemsInSection();
+        ArrayList singleSectionItems = dataList.get(i).getAllPicturesInSection();
+
+        ArrayList singleSectionItemsOwner = dataList.get(i).getAllProfileInSection();
 
         itemRowHolder.itemTitle.setText(sectionName);
 
-        SectionListDataAdapter itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems);
+        SectionListDataAdapter itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, singleSectionItemsOwner);
 
         itemRowHolder.recycler_view_list.setHasFixedSize(true);
         itemRowHolder.recycler_view_list.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));

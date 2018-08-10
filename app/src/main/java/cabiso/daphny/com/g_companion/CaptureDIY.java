@@ -194,8 +194,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         //for DIY catagory spinner
         categorySpinner = (Spinner) findViewById(R.id.categorySpinner);
 
-
-
         unitOfMeasurement = getResources().getStringArray(R.array.UM);
         umAdapter=new SpinnerAdapter(getApplicationContext());
 
@@ -374,6 +372,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 }
             }
         });
+
+
         final ImageView addProductImagePlusIcon = (ImageView) findViewById(R.id.add_product_image_plus_icon);
         addProductImagePlusIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -391,8 +391,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 //imageRef = storageReference.child(photoFile.getAbsolutePath());
                 imageRef = storageReference.child(String.valueOf(name.getText()));
 
+                //DIY category
                 final String category = categorySpinner.getSelectedItem().toString();
-                Log.e("Category", category);
+                Log.e("CategorySelected", category);
 
                 //creating and showing progress dialog
                 progressDialog = new ProgressDialog(CaptureDIY.this);
@@ -498,6 +499,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                        // imgRef = storageRef.child(photoFile.getAbsolutePath());
                         imgRef = storageRef.child(String.valueOf(name.getText()));
 
+                        final String category = categorySpinner.getSelectedItem().toString();
+                        Log.e("CategorySelected", category);
+
                         //creating and showing progress dialog
                         progressDialog = new ProgressDialog(CaptureDIY.this);
                         progressDialog.setMax(100);
@@ -545,6 +549,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 //                                dbMaterials.add(new DBMaterial().setName(materials).setQuantity(quantity).setUnit(unit_material));
                                 dbSelling.add(new SellingDIY().setSelling_price(price).setSelling_qty(qty).setSelling_descr(for_descr));
 
+
                                 //push data to Firebase Database - diy_by_tags node
                                 String productID_sell = generateString();
                                 databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
@@ -552,9 +557,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                         float_this, float_this));
                                 databaseReference.child(upload).child("materials").setValue(dbMaterials);
                                 databaseReference.child(upload).child("procedures").setValue(itemProcedure);
-//                                dbRef.child(upload).child("DIY Price").setValue(etPrice.getText().toString());
                                 databaseReference.child(upload).child("DIY Price").setValue(dbSelling);
                                 databaseReference.child(upload).child("status").setValue("selling");
+//                                databaseReference.child(upload).child("Item Quantity").setValue(etQuantity.getText().toString());
+//                                databaseReference.child(upload).child("Item Description").setValue(etDescription.getText().toString());
+                                databaseReference.child(upload).child("category").setValue(category);
+
 
                                 //push data to Firebase Database - diy_by_user node
                                 byuser_Reference.child(upload).setValue(new DIYSell(name.getText().toString(),
@@ -562,9 +570,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                         float_this, float_this));
                                 byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
                                 byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
-//                                dbRef.child(upload).child("DIY Price").setValue(etPrice.getText().toString());
                                 byuser_Reference.child(upload).child("DIY Price").setValue(dbSelling);
                                 byuser_Reference.child(upload).child("status").setValue("selling");
+//                                byuser_Reference.child(upload).child("Item Quantity").setValue(etQuantity.getText().toString());
+//                                byuser_Reference.child(upload).child("Item Description").setValue(etDescription.getText().toString());
+                                byuser_Reference.child(upload).child("category").setValue(category);
+
                                 Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
                                 // Alert Dialog for finished uploaing DIYs

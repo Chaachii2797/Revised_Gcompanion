@@ -39,6 +39,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
@@ -75,7 +76,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
         setContentView(R.layout.view_related_diys);
 
         imgview = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
-        diy_owner = (TextView) findViewById(R.id.diy_owner_name);
+        diy_owner = (TextView) findViewById(R.id.diy_name);
 //        diy_materials = (TextView) findViewById(R.id.diy_material);
 //        diy_procedures = (TextView) findViewById(R.id.diy_procedure);
         diy_sell = (TextView) findViewById(R.id.sell_details);
@@ -113,7 +114,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),DIYDetailViewActivity.class));
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -125,19 +126,11 @@ public class ViewRelatedDIYS extends AppCompatActivity {
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                for (DataSnapshot postDataSnapshot : dataSnapshot.child("related_diys").getChildren()) {
-                    final DIYnames diYnames = postDataSnapshot.getValue(DIYnames.class);
-                    final DIYSell info = postDataSnapshot.getValue(DIYSell.class);
+                    final DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
+                    final DIYSell info = dataSnapshot.getValue(DIYSell.class);
                     Log.e("diYnames", String.valueOf(diYnames));
                     Log.e("info", String.valueOf(info));
 
-
-                    String quant = postDataSnapshot.child("Item Quantity").getValue().toString();
-                    Log.e("quant", String.valueOf(quant));
-                    qty.setText(quant + " " + "piece/s");
-
-                    eQty.add(postDataSnapshot.child("Item Quantity").getValue().toString());
-                    Log.e("eQty", String.valueOf(eQty));
 
                     userdata.addChildEventListener(new ChildEventListener() {
                         @Override
@@ -145,7 +138,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                             User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
                             if (diYnames.user_id.equals(user_profile.getUserID())) {
                                 user_name = user_profile.getF_name() + " " + user_profile.getL_name();
-//                                    qty.setText(user_name);
+                                qty.setText(user_name);
                                 owner_cn.setText(user_profile.getContact_no());
                                 owner_add.setText(user_profile.getAddress());
                                 Log.e("user_name", user_name);
@@ -176,8 +169,19 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                         }
                     });
 
-                    //nganung dli musulod ari? pero dli ma display ang owner if wala ning first condition boshet
+                String message_price="";
+                List<String> message_Price = new ArrayList<String>();
+                for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
+                    int price= postSnapshot.child("selling_price").getValue(int.class);
+                    message_price += price;
+                    message_Price.add(message_price);
+                }
+
+                diy_sell.setText(message_price);
+
+                //nganung dli musulod ari? pero dli ma display ang owner if wala ning first condition boshet
                     if (get_name.equals(diYnames.getDiyName())) {
+                        Log.e("getNames", diYnames.getDiyName());
                         Toast.makeText(context, "Condition", Toast.LENGTH_SHORT).show();
                         if (diYnames.getIdentity().equals("selling")) {
 
@@ -280,6 +284,9 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                 }
                             });
 
+
+
+
                             contact_seller.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -350,10 +357,110 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                 imgview.setAdapter(diyImagesViewPagerAdapter);
                             }
 
+                        }
+                        else if(diYnames.getIdentity().equals("community")) {
 
+                            diy_sell.setVisibility(View.INVISIBLE);
+                            button_sell.setVisibility(View.INVISIBLE);
+                            contact_seller.setVisibility(View.INVISIBLE);
+                            //create_promo.setVisibility(View.INVISIBLE);
+                            owner_add.setVisibility(View.INVISIBLE);
+                            owner_cn.setVisibility(View.INVISIBLE);
+                            selling_price.setVisibility(View.INVISIBLE);
+                            seller_info.setVisibility(View.INVISIBLE);
+                            qty.setVisibility(View.VISIBLE);
+                            txtBy.setVisibility(View.VISIBLE);
+                            diy_owner.setText(diYnames.diyName);
+
+                            userdata.addChildEventListener(new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                    if (diYnames.user_id.equals(user_profile.getUserID())) {
+                                        user_name = user_profile.getF_name() + " " + user_profile.getL_name();
+                                    qty.setText(user_name);
+                                        owner_cn.setText(user_profile.getContact_no());
+                                        owner_add.setText(user_profile.getAddress());
+                                        Log.e("user_name", user_name);
+
+
+                                    }
+                                }
+
+                                @Override
+                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                            String messageMat = "";
+                            List<String> messageMaterials = new ArrayList<String>();
+                            //int count = 1;
+                            for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
+                                String dbMaterialName = postSnapshot.child("name").getValue(String.class).toLowerCase();
+                                String dbMaterialUnit = postSnapshot.child("unit").getValue(String.class);
+                                Long dbMaterialQuantity = postSnapshot.child("quantity").getValue(Long.class);
+//                                messageMat += "\n" + dbMaterialName + " = " + dbMaterialQuantity + " " + dbMaterialUnit;
+                                messageMat += "\n" + dbMaterialQuantity + " " + dbMaterialUnit+ " "+ dbMaterialName;
+                                messageMaterials.add(messageMat);
+                                //count++;
+                            }
+
+                            String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
+                            Log.e("splits", "" + splits);
+
+//                            String messageMat = "";
+//                            List<String> messageMaterials = new ArrayList<String>();
+//                            int count = 1;
+//                            for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
+//                                DataSnapshot dbMaterialNode = postSnapshot;
+//                                String dbMaterialName = dbMaterialNode.child("name").getValue(String.class).toLowerCase();
+//                                String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
+//                                long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
+//                                messageMat = dbMaterialQuantity + " " + dbMaterialUnit + " " + dbMaterialName;
+//                                messageMaterials.add(messageMat);
+//                                count++;
+//                            }
+//
+//                            String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
+//                            Log.e("splits", "" + splits);
+
+                            String messageProd = "";
+                            List<String> messageProcedure = new ArrayList<String>();
+                            for (int i = 0; i < splits.length; i++) {
+                                Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
+                                String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
+                                messageProd += "\n" + message;
+                                messageProcedure.add(message);
+
+                                Log.d("messageProd", messageProd);
+                            }
+                            diy_materials.setText(messageMat);
+                            diy_procedures.setText(messageProd);
+
+                            if (diYnames.diyUrl != null) {
+                                imgview = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
+                                diyImagesViewPagerAdapter = new ViewImagesRecommendationPagerAdapter(getBaseContext(), diYnames.diyUrl);
+                                imgview.setAdapter(diyImagesViewPagerAdapter);
+                            }
                         }
                     }
-                }
+
             }
 
 

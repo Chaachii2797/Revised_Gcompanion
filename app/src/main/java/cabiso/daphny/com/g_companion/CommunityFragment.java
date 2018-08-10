@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -60,6 +59,7 @@ public class CommunityFragment extends Fragment{
     private DatabaseReference databaseReference;
     private DatabaseReference userdata_reference;
     private DatabaseReference communityReference;
+    private DatabaseReference categoryRef;
 
     private FirebaseUser mFirebaseUser;
     private String userID;
@@ -103,6 +103,7 @@ public class CommunityFragment extends Fragment{
         databaseReference = FirebaseDatabase.getInstance().getReference();
         communityReference = databaseReference.child("diy_by_tags");
         userdata_reference = databaseReference.child("userdata");
+        categoryRef = databaseReference.child("diy_by_tags");
     }
 
     @Nullable
@@ -182,14 +183,12 @@ public class CommunityFragment extends Fragment{
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                 User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+
                                 if(model.getUser_id().equals(user_profile.getUserID())){
                                     username = user_profile.getF_name()+" "+user_profile.getL_name();
 //                                    viewHolder.mOwnerName.setText(username);
-                                    Log.e("OWNERNAME", user_profile.getF_name()+" "+user_profile.getL_name());
-                                    Log.e("userID", model.getUser_id());
-                                    Log.e("userID22", model.user_id);
+                                    Log.e("userID", model.user_id);
                                     Log.e("username", username);
-                                    Log.e("OWNERNAMEview", viewHolder.mOwnerName.getText().toString());
                                 }else{
 //                                    viewHolder.mOwnerName.setText("NAN");
                                     viewHolder.mOwnerName.setText("NAN");
@@ -238,8 +237,7 @@ public class CommunityFragment extends Fragment{
                                 viewHolder.mIdentity.setText("SOLD");
                                 viewHolder.mIdentity.setBackgroundColor(Color.CYAN);
                             }
-                        }
-                        //   viewHolder.mCategory.setText(model.tag);
+                    }
 
                         //dec.29,2017
                         final DatabaseReference reference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
@@ -325,6 +323,7 @@ public class CommunityFragment extends Fragment{
 
         recyclerView.setAdapter(cAdapter);
     }
+
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
 

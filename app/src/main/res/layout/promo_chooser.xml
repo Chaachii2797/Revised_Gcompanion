@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="250dp"
+    android:background="@color/gen_scheme1">
+
+    <TextView
+        android:id="@+id/contact_prompt_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="CHOOSE WHAT KIND OF PROMO"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold">
+
+    </TextView>
+
+    <Button
+        android:id="@+id/id_price_discount"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:text="price discount"
+        android:textSize="24sp"
+        android:layout_below="@+id/contact_prompt_header"
+        android:layout_centerHorizontal="true">
+
+    </Button>
+
+    <Button
+        android:id="@+id/id_buyTake_discount"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:text="buy and take"
+        android:textSize="24sp"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/id_price_discount"
+        android:layout_alignLeft="@+id/id_price_discount"
+        android:layout_alignStart="@+id/id_price_discount">
+
+    </Button>
+
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/id_buyTake_discount"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="Cancel"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
+
+</RelativeLayout>

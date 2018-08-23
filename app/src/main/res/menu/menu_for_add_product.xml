@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/open_gallery"
+    <item
         android:titleCondensed="Add picture"
         android:title="Choose image"
         android:icon="@mipmap/gallery"></item>

@@ -7,8 +7,6 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="cabiso.daphny.com.g_companion.MainActivity">
 
-
-
     <android.support.v4.view.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"

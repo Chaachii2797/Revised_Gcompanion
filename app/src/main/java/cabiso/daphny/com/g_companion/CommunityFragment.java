@@ -12,7 +12,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,16 +47,18 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
+import cabiso.daphny.com.g_companion.Promo.PromoModel;
 import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
 /**
  * Created by Lenovo on 10/18/2017.
  */
 
-public class CommunityFragment extends Fragment{
+public class    CommunityFragment extends Fragment{
 
     private DatabaseReference databaseReference;
     private DatabaseReference userdata_reference;
@@ -104,6 +108,7 @@ public class CommunityFragment extends Fragment{
         communityReference = databaseReference.child("diy_by_tags");
         userdata_reference = databaseReference.child("userdata");
         categoryRef = databaseReference.child("diy_by_tags");
+
     }
 
     @Nullable
@@ -117,9 +122,15 @@ public class CommunityFragment extends Fragment{
         recyclerView = (RecyclerView) view.findViewById(R.id.communityList);
 
         int numberOfColumns = 1;
-        recyclerView.setLayoutManager(new GridLayoutManager(context, numberOfColumns));
 
+        recyclerView.setLayoutManager(new GridLayoutManager(context, numberOfColumns));
         recyclerView.setNestedScrollingEnabled(false);
+
+
+//        mPromoRecyclerView = (RecyclerView) view.findViewById(R.id.promoRecyclerView);
+//        mPromoRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+//        mPromoRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
 
         fam = (FloatingActionMenu) view.findViewById(R.id.fab_menu);
         fam.setOnMenuToggleListener(new FloatingActionMenu.OnMenuToggleListener() {
@@ -130,6 +141,7 @@ public class CommunityFragment extends Fragment{
                     windowManager.dimAmount = 0.75f;
                     getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                 } else {
+
                 }
             }
         });
@@ -167,6 +179,7 @@ public class CommunityFragment extends Fragment{
     public void onStart(){
         super.onStart();
         Toast.makeText(getActivity(), "Hi! Welcome to G-Companion", Toast.LENGTH_SHORT).show();
+
         final FirebaseRecyclerAdapter<DIYnames, ItemViewHolder> cAdapter =
                 new FirebaseRecyclerAdapter<DIYnames, ItemViewHolder>(DIYnames.class,
                         R.layout.recycler_item,ItemViewHolder.class, communityReference) {

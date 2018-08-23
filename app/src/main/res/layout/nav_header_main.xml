@@ -51,7 +51,6 @@
         android:textSize="15sp" />
 
     <RatingBar
-        android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/user_Address"

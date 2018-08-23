@@ -74,7 +74,7 @@ public class Pending_Activity extends AppCompatActivity implements RatingDialogL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_);
 
-        recyclerView = (RecyclerView) findViewById(R.id.list);
+        recyclerView = (RecyclerView) findViewById(R.id.lvView);
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
 

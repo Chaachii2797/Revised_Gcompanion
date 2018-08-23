@@ -80,7 +80,7 @@ public class Bottle_Recommend extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend_bottle);
-        recyclerView = (RecyclerView) findViewById(R.id.list);
+        recyclerView = (RecyclerView) findViewById(R.id.recommendLvView);
 
         addDiy = true;
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();

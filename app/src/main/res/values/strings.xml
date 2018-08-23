@@ -1,50 +1,25 @@
 <resources>
     <string name="app_name">G-Companion</string>
 
-    <string name="sign_out">Sign Out</string>
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
     <string name="next">NEXT</string>
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="loading">Please wait....</string>
 
-    <string name="user_name">User Name</string>
     <string name="password">Password</string>
-    <string name="forgot_password">Forgot Password ?</string>
     <string name="login">Login</string>
-    <string name="appicon">AppIcon</string>
-    <string name="login_background">login_background</string>
-    <string name="sign_up">SIGN UP</string>
-    <string name="tab_one">Market Place</string>
-    <string name="tab_two">Community</string>
 
     <string name="search_hint">Search</string>
 
 
-    <string-array name="categories">
-        <item>Select Category</item>
-        <item>Bottle</item>
-        <item>Paper</item>
-        <item>Plastic</item>
-        <item>Rubber</item>
-    </string-array>
-
     <!-- Ratings Dialog-->
-    <string name="send_review">Send review</string>
     <string name="cancel">Cancel</string>
-    <string name="title">App rating</string>
-    <string name="description">Please write your feedback</string>
-
-    <string name="signed_in_fmt">Signed in as: %s</string>
-    <string name="signed_out">Signed out</string>
 
     <string-array name="UM">
         <item>meter/s</item>
@@ -117,10 +92,8 @@
     <string name="adding_user_to_db">Adding user to database.</string>
     <string name="please_wait">Please wait...</string>
 
-    <string name="font_family_roboto_light">sans-serif-thin</string>
     <string name="type_a_message">Type a message...</string>
     <string name="action_logout">Logout</string>
-    <string name="title_activity_splash">SplashActivity</string>
     <string name="logout">Logout</string>
     <string name="are_you_sure">Are you sure ?</string>
 

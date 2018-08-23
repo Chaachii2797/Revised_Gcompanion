@@ -14,7 +14,6 @@ class ViewPagerAdapter extends FragmentStatePagerAdapter{
     private static String PAGE_TITLE = "LIST OF DIYS";
     private static String MY_DIY_TITLE = "My Items";
 
-
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
     }

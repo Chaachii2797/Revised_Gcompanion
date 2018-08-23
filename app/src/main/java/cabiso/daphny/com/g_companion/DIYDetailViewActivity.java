@@ -69,6 +69,7 @@ import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.SectionDataModel;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
+import cabiso.daphny.com.g_companion.Promo.PriceDiscount;
 import cabiso.daphny.com.g_companion.Promo.PromoActivity;
 
 /**
@@ -661,6 +662,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                     startActivity(smsMsgAppVar);
                                 }
                             });
+
                             cancel.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -715,10 +717,46 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     create_promo.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent to_promo = new Intent(DIYDetailViewActivity.this,PromoActivity.class);
-                            to_promo.putExtra("diy_Name",diyInfo.getDiyName());
-                            Log.e("NAMEEEE", diyInfo.getDiyName());
-                            startActivity(to_promo);
+
+                            final Dialog myDialog = new Dialog(context);
+                            myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            myDialog.setContentView(R.layout.promo_chooser);
+                            myDialog.setCancelable(false);
+
+                            Button priceDiscount = (Button) myDialog.findViewById(R.id.id_price_discount);
+                            Button buyTakeDiscount = (Button) myDialog.findViewById(R.id.id_buyTake_discount);
+                            TextView cancel = (TextView) myDialog.findViewById(R.id.cancel);
+
+                            priceDiscount.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent toPriceDiscount = new Intent(DIYDetailViewActivity.this, PriceDiscount.class);
+                                    toPriceDiscount.putExtra("diy_Name",diyInfo.getDiyName());
+                                    toPriceDiscount.putExtra("diy_ID", diyInfo.getProductID());
+                                    toPriceDiscount.putExtra("diy_img", diyInfo.getDiyUrl());
+                                    toPriceDiscount.putExtra("getDBKey", itemSnapshot.getKey());
+                                    startActivity(toPriceDiscount);
+                                }
+                            });
+                            buyTakeDiscount.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent to_promo = new Intent(DIYDetailViewActivity.this,PromoActivity.class);
+                                    to_promo.putExtra("diy_Name",diyInfo.getDiyName());
+                                    to_promo.putExtra("diy_ID", diyInfo.getProductID());
+                                    to_promo.putExtra("diy_img", diyInfo.getDiyUrl());
+                                    Log.e("NAMEEEE", diyInfo.getDiyName());
+                                    startActivity(to_promo);
+                                }
+                            });
+                            cancel.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    myDialog.cancel();
+                                }
+                            });
+
+                            myDialog.show();
                         }
                     });
 

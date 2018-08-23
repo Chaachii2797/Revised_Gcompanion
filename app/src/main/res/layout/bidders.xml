@@ -10,7 +10,6 @@
         android:background="@drawable/rounded_border">
 
         <ImageView
-            android:id="@+id/img_bidders_dialog"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_alignParentLeft="true"

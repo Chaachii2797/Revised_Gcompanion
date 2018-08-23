@@ -5,115 +5,146 @@
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/theFragmentFrame"
     tools:context="innovatecode.com.tabexample.TabTwoFragment">
 
-    <android.support.v4.widget.NestedScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
-        android:fillViewport="true">
+        android:orientation="vertical">
 
-        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/communityList"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                tools:context="cabiso.daphny.com.g_companion.CommunityFragment"
-                tools:listitem="@layout/recycler_item"
-                android:layout_alignParentTop="true"
-                android:layout_alignLeft="@+id/marketList"
-                android:layout_alignStart="@+id/marketList" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <!--<android.support.v7.widget.RecyclerView-->
-                <!--android:id="@+id/marketList"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_below="@+id/communityList"-->
-                <!--android:layout_marginBottom="10dp"-->
-                <!--android:layout_marginRight="5dp"-->
-                <!--android:layout_marginLeft="5dp"-->
-                <!--tools:context="cabiso.daphny.com.g_companion.CommunityFragment"-->
-                <!--tools:listitem="@layout/diy_item" />-->
+                <android.support.v4.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true"
+                    android:scrollbars="vertical">
+
+                    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <fragment
+                            android:id="@+id/promoFragment"
+                            android:name="cabiso.daphny.com.g_companion.PromoFragment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="15dp"
+                            android:paddingTop="15dp"
+                            android:text="Available Items"
+                            android:textStyle="bold" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/communityList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/marketList"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignStart="@+id/marketList"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginTop="8dp"
+                            tools:context="cabiso.daphny.com.g_companion.CommunityFragment"
+                            tools:listitem="@layout/recycler_item" />
+
+                        <!--<android.support.v7.widget.RecyclerView-->
+                        <!--android:id="@+id/marketList"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_below="@+id/communityList"-->
+                        <!--android:layout_marginBottom="10dp"-->
+                        <!--android:layout_marginRight="5dp"-->
+                        <!--android:layout_marginLeft="5dp"-->
+                        <!--tools:context="cabiso.daphny.com.g_companion.CommunityFragment"-->
+                        <!--tools:listitem="@layout/diy_item" />-->
+
+                    </LinearLayout>
+                </android.support.v4.widget.NestedScrollView>
+
+            </LinearLayout>
+
+            <com.github.clans.fab.FloatingActionMenu
+                android:id="@+id/fab_menu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="bottom|end"
+
+                fab:menu_animationDelayPerItem="50"
+                fab:menu_backgroundColor="#66000000"
+                fab:menu_buttonSpacing="0dp"
+                fab:menu_buttonToggleAnimation="@anim/fab_scale_up"
+                fab:menu_colorNormal="#16a085"
+                fab:menu_colorPressed="#1abc9c"
+                fab:menu_colorRipple="#99FFFFFF"
+                fab:menu_fab_hide_animation="@anim/fab_close"
+                fab:menu_fab_label="Choose and action"
+                fab:menu_fab_show_animation="@anim/fab_open"
+                fab:menu_fab_size="normal"
+                fab:menu_icon="@drawable/fab_add"
+                fab:menu_labels_colorNormal="#333333"
+                fab:menu_labels_colorPressed="#444444"
+                fab:menu_labels_colorRipple="#66FFFFFF"
+                fab:menu_labels_cornerRadius="3dp"
+                fab:menu_labels_ellipsize="end"
+                fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+                fab:menu_labels_margin="0dp"
+                fab:menu_labels_maxLines="-1"
+                fab:menu_labels_padding="8dp"
+                fab:menu_labels_paddingBottom="4dp"
+                fab:menu_labels_paddingLeft="8dp"
+                fab:menu_labels_paddingRight="8dp"
+                fab:menu_labels_paddingTop="4dp"
+                fab:menu_labels_position="left"
+                fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+                fab:menu_labels_showShadow="true"
+                fab:menu_labels_singleLine="true"
+                fab:menu_labels_textColor="#FFFFFF"
+                fab:menu_labels_textSize="14sp"
+                fab:menu_openDirection="up"
+                fab:menu_shadowRadius="4dp"
+                fab:menu_shadowXOffset="1dp"
+                fab:menu_shadowYOffset="3dp"
+                fab:menu_showShadow="true">
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/community_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add_diy"
+                    fab:fab_colorNormal="#16a085"
+                    fab:fab_colorPressed="#1abc9c"
+                    fab:fab_label="Upload DIY"
+                    fab:fab_size="normal" />
+
+                <com.github.clans.fab.FloatingActionButton
+                    android:id="@+id/image_recog_fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_camera"
+                    fab:fab_colorNormal="#16a085"
+                    fab:fab_colorPressed="#1abc9c"
+                    fab:fab_label="Image Recognition"
+                    fab:fab_size="normal" />
+
+            </com.github.clans.fab.FloatingActionMenu>
 
         </RelativeLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </LinearLayout>
 
-    <com.github.clans.fab.FloatingActionMenu
-        android:id="@+id/fab_menu"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="bottom|end"
-
-        fab:menu_animationDelayPerItem="50"
-        fab:menu_backgroundColor="#66000000"
-        fab:menu_buttonSpacing="0dp"
-        fab:menu_buttonToggleAnimation="@anim/fab_scale_up"
-        fab:menu_colorNormal="#16a085"
-        fab:menu_colorPressed="#1abc9c"
-        fab:menu_colorRipple="#99FFFFFF"
-        fab:menu_fab_hide_animation="@anim/fab_close"
-        fab:menu_fab_label="Choose and action"
-        fab:menu_fab_show_animation="@anim/fab_open"
-        fab:menu_fab_size="normal"
-        fab:menu_icon="@drawable/fab_add"
-        fab:menu_labels_colorNormal="#333333"
-        fab:menu_labels_colorPressed="#444444"
-        fab:menu_labels_colorRipple="#66FFFFFF"
-        fab:menu_labels_cornerRadius="3dp"
-        fab:menu_labels_ellipsize="end"
-        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
-        fab:menu_labels_margin="0dp"
-        fab:menu_labels_maxLines="-1"
-        fab:menu_labels_padding="8dp"
-        fab:menu_labels_paddingBottom="4dp"
-        fab:menu_labels_paddingLeft="8dp"
-        fab:menu_labels_paddingRight="8dp"
-        fab:menu_labels_paddingTop="4dp"
-        fab:menu_labels_position="left"
-        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
-        fab:menu_labels_showShadow="true"
-        fab:menu_labels_singleLine="true"
-        fab:menu_labels_textColor="#FFFFFF"
-        fab:menu_labels_textSize="14sp"
-        fab:menu_openDirection="up"
-        fab:menu_shadowRadius="4dp"
-        fab:menu_shadowXOffset="1dp"
-        fab:menu_shadowYOffset="3dp"
-        fab:menu_showShadow="true">
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/community_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_diy"
-            fab:fab_colorNormal="#16a085"
-            fab:fab_colorPressed="#1abc9c"
-            fab:fab_label="Upload DIY"
-            fab:fab_size="normal" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/image_recog_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_camera"
-            fab:fab_colorNormal="#16a085"
-            fab:fab_colorPressed="#1abc9c"
-            fab:fab_label="Image Recognition"
-            fab:fab_size="normal"
-            />
-
-    </com.github.clans.fab.FloatingActionMenu>
 </android.support.design.widget.CoordinatorLayout>
 

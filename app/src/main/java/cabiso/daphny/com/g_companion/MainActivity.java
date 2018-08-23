@@ -34,13 +34,15 @@ import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.Promo.PromoActivity;
 import cabiso.daphny.com.g_companion.Search.SearchActivity;
 import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
+import cabiso.daphny.com.g_companion.notifications.NotificationActivity;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        CommunityFragment.OnListFragmentInteractionListener, OnListFragmentInteractionListener{
+        CommunityFragment.OnListFragmentInteractionListener, OnListFragmentInteractionListener,
+        PromoFragment.OnListFragmentInteractionListener{
 
 //    private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -167,6 +169,8 @@ public class MainActivity extends AppCompatActivity
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.getCurrentItem();
 
+
+
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout = (TabLayout) findViewById(R.id.tab);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -257,7 +261,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(chat);
                 break;
             case R.id.nav_sold:
-                Intent sold = new Intent(MainActivity.this,Sold_Activity.class);
+                Intent sold = new Intent(MainActivity.this,NotificationActivity.class);
                 startActivity(sold);
                 break;
             case R.id.nav_pending:

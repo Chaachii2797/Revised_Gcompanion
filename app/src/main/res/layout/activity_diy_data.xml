@@ -194,7 +194,6 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/textView38"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-condensed"
@@ -710,7 +709,6 @@
                 </android.support.v7.widget.CardView>
 
             <TextView
-                android:id="@+id/textQTY"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:background="@color/gen_scheme1"

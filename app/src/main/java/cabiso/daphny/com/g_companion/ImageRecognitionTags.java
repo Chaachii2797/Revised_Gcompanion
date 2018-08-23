@@ -110,7 +110,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
         imgRecogSetQties.add(item2);
 
         //added changess star
-        imagerecog_listview = (ListView) findViewById(R.id.image_recog_lv);
+        imagerecog_listview = (ListView) findViewById(R.id.lvTags);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.imToolbar);
         setSupportActionBar(toolbar);

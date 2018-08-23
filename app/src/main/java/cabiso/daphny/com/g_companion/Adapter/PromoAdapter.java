@@ -51,10 +51,10 @@ public class PromoAdapter extends ArrayAdapter<DIYnames> {
 
         View v = inflater.inflate(resource, null);
 
-        TextView tvName = (TextView) v.findViewById(R.id.promo_diyName);
-        ImageView img = (ImageView) v.findViewById(R.id.promo_img);
-        TextView tvcategory = (TextView) v.findViewById(R.id.promo_category);
-        final CheckBox checkbox = (CheckBox) v.findViewById(R.id.checkBoxPromo);
+        TextView tvName = (TextView) v.findViewById(R.id.promo_item_name);
+        ImageView img = (ImageView) v.findViewById(R.id.img_promo_img);
+        TextView tvcategory = (TextView) v.findViewById(R.id.promo_identity);
+        final CheckBox checkbox = (CheckBox) v.findViewById(R.id.cb_for_promo_checked);
 
         tvName.setText(listDIY.get(position).getDiyName());
         tvcategory.setText(listDIY.get(position).getIdentity());

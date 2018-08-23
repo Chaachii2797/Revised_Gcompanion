@@ -3,6 +3,5 @@
     <item android:id="@+id/addToCommunity"
         android:title="Add to Community"></item>
 
-    <item android:id="@+id/addToMyDIYs"
-        android:title="Add to My DIYs"></item>
+    <item android:title="Add to My DIYs"></item>
 </menu>

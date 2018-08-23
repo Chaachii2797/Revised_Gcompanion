@@ -87,6 +87,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     private DatabaseReference databaseReference;
     private DatabaseReference byuser_Reference;
+    private DatabaseReference diyPricesQty;
     private Task<Void> materialsReference;
     private Task<Void> proceduresReference;
     private FirebaseDatabase database;
@@ -163,7 +164,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
         byuser_Reference = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID);
-
+        diyPricesQty = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
 
         mStorage = FirebaseStorage.getInstance();
         storageReference = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("diy_by_tags");
@@ -547,8 +548,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 Random random = new Random();
                                 String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 //                                dbMaterials.add(new DBMaterial().setName(materials).setQuantity(quantity).setUnit(unit_material));
-                                dbSelling.add(new SellingDIY().setSelling_price(price).setSelling_qty(qty).setSelling_descr(for_descr));
 
+//                                dbSelling.add(new SellingDIY().setSelling_price(price).setSelling_qty(qty).setSelling_descr(for_descr));
 
                                 //push data to Firebase Database - diy_by_tags node
                                 String productID_sell = generateString();
@@ -557,7 +558,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                         float_this, float_this));
                                 databaseReference.child(upload).child("materials").setValue(dbMaterials);
                                 databaseReference.child(upload).child("procedures").setValue(itemProcedure);
-                                databaseReference.child(upload).child("DIY Price").setValue(dbSelling);
+                                diyPricesQty.child(upload).setValue(new SellingDIY().setSelling_price(price).setSelling_qty(qty).setSelling_descr(for_descr));
+//                                databaseReference.child(upload).child("DIY Price").setValue(dbSelling);
                                 databaseReference.child(upload).child("status").setValue("selling");
 //                                databaseReference.child(upload).child("Item Quantity").setValue(etQuantity.getText().toString());
 //                                databaseReference.child(upload).child("Item Description").setValue(etDescription.getText().toString());

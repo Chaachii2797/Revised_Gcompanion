@@ -51,7 +51,6 @@
                 android:layout_gravity="right">
 
                 <TextView
-                    android:id="@+id/on_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Date Today : "
@@ -78,7 +77,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tvPriceMax"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"

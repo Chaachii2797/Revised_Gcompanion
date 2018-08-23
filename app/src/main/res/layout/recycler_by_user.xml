@@ -24,7 +24,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="230dp"
-            android:background="@drawable/gradient_background">
+            android:background="@drawable/r_gradient_black_overlay">
 
         </RelativeLayout>
 

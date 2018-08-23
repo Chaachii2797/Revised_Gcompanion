@@ -9,7 +9,6 @@
 
 
     <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scrollviewproduct"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
@@ -29,7 +28,6 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/productinfo"
                     android:layout_width="match_parent"
                     android:layout_height="210dp"
                     android:orientation="vertical">
@@ -112,7 +110,6 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/ownerinfo"
                     android:layout_width="match_parent"
                     android:layout_height="290dp"
                     android:orientation="vertical">
@@ -151,7 +148,6 @@
 
 
                     <TextView
-                        android:id="@+id/textView22"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Address:"
@@ -224,7 +220,6 @@
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/main.appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -249,7 +244,6 @@
                 android:background="@android:color/white" />
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/main.toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:popupTheme="@style/ThemeOverlay.AppCompat.Light"

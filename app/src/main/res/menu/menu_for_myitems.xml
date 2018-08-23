@@ -3,9 +3,7 @@
     <item android:id="@+id/sold_item"
         android:title="Sold"></item>
 
-    <item android:id="@+id/biid_item"
-        android:title="Free Bidding"></item>
+    <item android:title="Free Bidding"></item>
 
-    <item android:id="@+id/biid_increment_item"
-        android:title="Incremental Bidding"></item>
+    <item android:title="Incremental Bidding"></item>
 </menu>

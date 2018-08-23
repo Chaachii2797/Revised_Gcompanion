@@ -25,7 +25,6 @@ import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
-import cabiso.daphny.com.g_companion.Model.DIYnames;
 
 /**
  * Created by Lenovo on 7/31/2017.
@@ -33,7 +32,7 @@ import cabiso.daphny.com.g_companion.Model.DIYnames;
 
 public class Item_Activity extends AppCompatActivity {
 
-    private ArrayList<DIYnames> diyList = new ArrayList<>();
+    private ArrayList<DIYSell> diyList = new ArrayList<>();
     private ListView lv;
     private Items_Adapter adapter;
     private ProgressDialog progressDialog;
@@ -74,7 +73,7 @@ public class Item_Activity extends AppCompatActivity {
                     progressDialog.dismiss();
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        DIYnames img = snapshot.getValue(DIYnames.class);
+                        DIYSell img = snapshot.getValue(DIYSell.class);
                         if (img.getUser_id().toString().equals(userID)) {
                             diyList.add(img);
                         }
@@ -88,7 +87,7 @@ public class Item_Activity extends AppCompatActivity {
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            DIYnames itemRef = adapter.getItem(position);
+                            DIYSell itemRef = adapter.getItem(position);
 //                            adapter.remove(adapter.getItem(position));
 //                            adapter.notifyDataSetChanged();
                             Toast toast = Toast.makeText(Item_Activity.this, itemRef.diyName
@@ -135,7 +134,7 @@ public class Item_Activity extends AppCompatActivity {
                 String myItem_status = diyList.get(listPosition).getIdentity();
 
                 DIYSell product = new DIYSell(myItem_diyName, myItem_diyUrl, myItem_user_id,
-                        myItem_productID, myItem_status, float_this, float_this);
+                        myItem_productID, myItem_status, float_this, float_this, "seller");
                 String upload = itemReference.push().getKey();
                 itemReference.child(upload).setValue(product);
 

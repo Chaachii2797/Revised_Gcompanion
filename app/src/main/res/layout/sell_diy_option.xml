@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="450dp"
     android:layout_margin="5dp"
-    android:backgroundTint="@android:color/holo_green_dark"
     android:orientation="vertical"
     android:paddingLeft="15dp"
     android:paddingRight="15dp">
@@ -31,8 +30,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="13dp"
         android:background="@drawable/shape"
-        android:backgroundTint="@color/bg_screen2"
+        android:backgroundTint="@color/gen_scheme1"
         android:text="Okay"
+        style="@style/LoginStyle"
         android:textColor="@android:color/white" />
 
     <TextView

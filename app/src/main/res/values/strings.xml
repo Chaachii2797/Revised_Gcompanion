@@ -24,17 +24,28 @@
     <string-array name="UM">
         <item>meter/s</item>
         <item>centimeter/s</item>
-        <item>liter/s</item>
-        <item>gallon</item>
-        <item>ounce</item>
-        <item>gram/s</item>
-        <item>milligram/s</item>
-        <item>kilogram/s</item>
+        <item>millimeter/s</item>
+        <item>sheet/s</item>
         <item>inche/s</item>
         <item>feet</item>
         <item>square inches</item>
+        <item>square feet</item>
+        <item>milligram/s</item>
+        <item>gram/s</item>
+        <item>kilogram/s</item>
+        <item>cubic meter/s</item>
+        <item>milliliter</item>
+        <item>liter/s</item>
+        <item>gallon</item>
+        <item>ounce</item>
         <item>piece/s</item>
         <item>dozen</item>
+        <item>watt</item>
+        <item>kilowatt</item>
+        <item>volt</item>
+        <item>small</item>
+        <item>big</item>
+
     </string-array>
 
     <string-array name="qty">
@@ -53,31 +64,67 @@
         <item>13</item>
         <item>14</item>
         <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
         <item>50</item>
         <item>100</item>
+        <item>150</item>
+        <item>200</item>
         <item>250</item>
+        <item>300</item>
+        <item>350</item>
+        <item>400</item>
+        <item>450</item>
         <item>500</item>
     </string-array>
 
     <string-array name="category">
         <item>Aluminum</item>
+
+
         <item>Bottle</item>
         <item>Box</item>
         <item>Book</item>
         <item>Can</item>
+        <item>Canvas</item>
         <item>Cap</item>
+        <item>Card</item>
         <item>Cardboard</item>
+        <item>Carton</item>
+        <item>CD</item>
+        <item>Chair</item>
         <item>Clothes</item>
+        <item>Container</item>
+        <item>Cord</item>
+        <item>Corks</item>
         <item>Cup</item>
         <item>Foam</item>
         <item>Foil</item>
         <item>Fork</item>
+        <item>Furniture</item>
         <item>Glass</item>
         <item>Metal</item>
         <item>Paper</item>
         <item>Plastic</item>
+        <item>Pot</item>
         <item>Rubber</item>
         <item>Spoon</item>
+        <item>Steel</item>
+        <item>String</item>
+        <item>Tire</item>
         <item>Wire</item>
         <item>Wood</item>
     </string-array>

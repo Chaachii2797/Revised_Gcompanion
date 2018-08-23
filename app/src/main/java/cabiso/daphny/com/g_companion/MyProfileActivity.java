@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 
+import cabiso.daphny.com.g_companion.EditData.EditProfileActivity;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 
 import static cabiso.daphny.com.g_companion.R.id.user_ratings;
@@ -53,7 +53,7 @@ import static cabiso.daphny.com.g_companion.R.id.user_ratings;
 
 public class MyProfileActivity extends AppCompatActivity implements RatingDialogListener {
     private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser user;
+    private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabaseReference;
     private DatabaseReference userdataReference;
     private String userID;
@@ -73,10 +73,8 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
         super.onCreate(savedInstanceState);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-        user = mFirebaseAuth.getCurrentUser();
-        userID = user.getUid();
-
-        Log.d("USER ID", userID);
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        userID = mFirebaseUser.getUid();
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         userdataReference = mDatabaseReference.child("userdata");
@@ -88,13 +86,22 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
 
         setContentView(R.layout.activity_my_profile);
 
-        final EditText profile_username = (EditText) findViewById(R.id.profile_name);
-        final EditText profile_email = (EditText) findViewById(R.id.profile_email);
-        final EditText profile_password = (EditText) findViewById(R.id.profile_password);
-        final EditText profile_phone = (EditText)findViewById(R.id.profile_phone);
-        final EditText profile_address = (EditText) findViewById(R.id.profile_address);
+        final TextView username = (TextView) findViewById(R.id.name);
+        final TextView email = (TextView) findViewById(R.id.email);
+        final TextView password = (TextView) findViewById(R.id.password);
+        final TextView phone = (TextView)findViewById(R.id.phone);
+        final TextView address = (TextView) findViewById(R.id.address);
+
+
+        final TextView profile_username = (TextView) findViewById(R.id.profile_name);
+        final TextView profile_email = (TextView) findViewById(R.id.profile_email);
+        final TextView profile_password = (TextView) findViewById(R.id.profile_password);
+        final TextView profile_phone = (TextView)findViewById(R.id.profile_phone);
+        final TextView profile_address = (TextView) findViewById(R.id.profile_address);
         profile_picture = (ImageView) findViewById(R.id.profile_picture);
+        final Button edit_profile_btn = (Button) findViewById(R.id.edit_submit);
         final TextView rate = (TextView) findViewById(user_ratings);
+
 
         rate.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -151,6 +158,7 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 userProfileInfo = dataSnapshot.getValue(User_Profile.class);
+                Log.d("profileUserID", userID);
                 if(userProfileInfo!=null){
                   //  Log.d("username", userProfileInfo.username);
                     profile_username.setText(userProfileInfo.getF_name() + " " + userProfileInfo.getL_name());
@@ -162,6 +170,7 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
                     profile_address.setText(userProfileInfo.getAddress());
                     //Log.d("address", userProfileInfo.address);
 //                    rate.setText(Integer.toString(userProfileInfo.userRating));
+                    profile_password.setText(userProfileInfo.getPassword());
                 }
             }
 
@@ -171,23 +180,22 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
             }
         });
 
-        Button submitButton = (Button) findViewById(R.id.profile_submit);
-        database = FirebaseDatabase.getInstance();
-        submitButton.setOnClickListener(new View.OnClickListener() {
+        edit_profile_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (user != null) {
-                    if(profile_username.getText()!=null&&profile_email.getText()!=null&&profile_password.getText()
-                            !=null&&profile_phone.getText()!=null&&profile_address.getText()!=null){
-                        userdataReference.child(user.getUid().toString()).setValue
-                                (new UserProfileInfo(profile_username.getText().toString(),profile_email.getText().toString(),
-                                        profile_phone.getText().toString(), profile_address.getText().toString(),
-                                        Integer.parseInt((String) rate.getText())));
-                    }
-                }
+                Intent intent = new Intent(MyProfileActivity.this, EditProfileActivity.class);
+                intent.putExtra("profileUserId", userdataReference.child(userID).getKey());
+
+                intent.putExtra("profileUserName", userProfileInfo.getF_name() + " " + userProfileInfo.getL_name());
+                intent.putExtra("profileEmailAdd", userProfileInfo.getEmail());
+                intent.putExtra("profilePass", userProfileInfo.getPassword());
+                intent.putExtra("profileNumber", userProfileInfo.getContact_no());
+                intent.putExtra("profileAddress", userProfileInfo.getAddress());
+
+                Log.e("profileUserId", userdataReference.child(userID).getKey());
+                startActivity(intent);
             }
         });
-
 
     }
 

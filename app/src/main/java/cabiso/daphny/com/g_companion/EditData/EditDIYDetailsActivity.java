@@ -1,11 +1,13 @@
-package cabiso.daphny.com.g_companion;
+package cabiso.daphny.com.g_companion.EditData;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -13,8 +15,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -41,9 +43,6 @@ import android.widget.Toast;
 
 import com.cunoraz.tagview.Tag;
 import com.cunoraz.tagview.TagView;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -51,8 +50,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -65,59 +64,48 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 import java.util.UUID;
 
 import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
+import cabiso.daphny.com.g_companion.Adapter.DBMaterialsAdapter;
+import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.Constants;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYBidding;
-import cabiso.daphny.com.g_companion.Model.DIYSell;
-import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.QuantityItem;
 import cabiso.daphny.com.g_companion.Model.SellingDIY;
 import cabiso.daphny.com.g_companion.Model.TagClass;
-import clarifai2.api.ClarifaiBuilder;
-import clarifai2.api.ClarifaiClient;
+import cabiso.daphny.com.g_companion.R;
 
 /**
- * Created by Lenovo on 8/22/2017.
+ * Created by Lenovo on 8/13/2018.
  */
 
+public class EditDIYDetailsActivity extends AppCompatActivity implements View.OnClickListener{
 
-public class CaptureDIY extends AppCompatActivity implements View.OnClickListener{
 
     private DatabaseReference databaseReference;
     private DatabaseReference byuser_Reference;
-    private Task<Void> materialsReference;
-    private Task<Void> proceduresReference;
-    private FirebaseDatabase database;
-    private FirebaseAuth mFirebaseAuth;
+    private DatabaseReference biddingReference;
 
     private FirebaseStorage mStorage;
+    private FirebaseDatabase database;
     private StorageReference storageReference, imageRef;
+    private Uri diyPictureUri;
 
     private StorageReference storageRef, imgRef;
 
     private FirebaseUser mFirebaseUser;
     private String userID;
     private String imageFileName;
-
-    private Uri diyPictureUri;
-
     static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 11;
     private List<String> tags = new ArrayList<>();
     private List<String> extras = new ArrayList<>();
     private List<String> validWords = new ArrayList<>();
-
-    final ClarifaiClient client;
-
-    public CaptureDIY() {
-        client = new ClarifaiBuilder("cb169e9d3f9e4ec5a7769cc0422f3162").buildSync();
-    }
 
     private static final int SELECT_PHOTO = 100;
     private static final int MAX_LENGTH = 100;
@@ -131,13 +119,16 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     private CommunityAdapter pAdapter;
     private CommunityAdapter mAdapter;
     private Spinner categorySpinner;
+    private DBMaterialsAdapter dbMaterialsAdapter;
+
 
     //for bidding
     private EditText mEtPriceMin;
     private EditText mEtPriceMessage;
     private EditText mEtExpiryDate;
     private TextView mTvDateToday;
-    private String diyName, diyOwner, diyMaterials, diyProcedures;
+    private String diyName, diyOwner, diyKey, diyPrice, diyQty, diyDsc, diyBidInitialPrice, diyBidExpiry,
+            diyBidComment, diyKeyInside, diyImage;
     private Button mBtnAddBid;
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
     Calendar myCalendar = Calendar.getInstance();
@@ -169,16 +160,56 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     File photoFile;
     public final String APP_TAG = "diy_by_tags";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_capture_diy);
+        setContentView(R.layout.edit_diy_details_activity);
+
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
-        byuser_Reference = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID);
+        //get Intent from DIYDetailViewActivity for Edit DIY
+        final Intent intent = getIntent();
+        diyKey = intent.getExtras().getString("diyKey");
+        diyName = intent.getExtras().getString("diyName");
+        diyOwner = intent.getExtras().getString("diyOwner");
+        int diyCategory = intent.getIntExtra("diyCategory", 0);
+        diyPrice = intent.getExtras().getString("diyPrice");
+        diyQty = intent.getExtras().getString("diyQuantity");
+        diyDsc =intent.getExtras().getString("diyDescription");
+        diyBidInitialPrice = intent.getExtras().getString("diyBidInitialPrice");
+        diyBidExpiry = intent.getExtras().getString("diyBidExpiry");
+        diyBidComment = intent.getExtras().getString("diyBidComment");
+        diyKeyInside = intent.getExtras().getString("diyKeyInside");
+//        diyImage = intent.getExtras().getString("diyImage");
+//
+//
+//        Log.e("diyImageee", "" + diyImage);
+//        Bundle extras = getIntent().getExtras();
+//        Uri uri= Uri.parse(extras.getString("diyImage"));
+//        Log.e("uriiiiiiii", "" + uri);
+
+//        Bundle b = getIntent().getExtras();
+//        if (b != null) {
+//            String uri_Str= b.getString("diyImage");
+//            Uri uris = Uri.parse(uri_Str);
+//            Log.e("urissss", "" + uris);
+//        }
+
+        Log.e("diyBidInitialPriceee", "" + diyBidInitialPrice);
+        Log.e("diyBidCommentttt","" + diyBidComment);
+        Log.e("diyBidExpiryyyy","" + diyBidExpiry);
+
+        Log.e("diyPriceeee","" + diyPrice);
+        Log.e("diyDscsss", "" +diyDsc);
+        Log.e("diyQtyyyy","" + diyQty);
+
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.diyKey);
+        byuser_Reference = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID).child(this.diyKey);
+        biddingReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.diyKey)
+                .child("bidding");
 
         mStorage = FirebaseStorage.getInstance();
         storageReference = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("diy_by_tags");
@@ -195,7 +226,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent im = new Intent(CaptureDIY.this,MainActivity.class);
+                Intent im = new Intent(EditDIYDetailsActivity.this,MainActivity.class);
                 startActivity(im);
             }
         });
@@ -207,15 +238,18 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         name.setText(diyName);
 
         material = (EditText) findViewById(R.id.etMaterials);
+
         tagGroup = (TagView) findViewById(R.id.tag_group);
+
         //for DIY catagory spinner
         categorySpinner = (Spinner) findViewById(R.id.categorySpinner);
+        categorySpinner.setSelection(diyCategory);
 
         unitOfMeasurement = getResources().getStringArray(R.array.UM);
         umAdapter=new SpinnerAdapter(getApplicationContext());
 
         quantity = getResources().getStringArray(R.array.qty);
-        qAdapter=new SpinnerAdapter1(getApplicationContext());
+        qAdapter= new SpinnerAdapter1(getApplicationContext());
 
 
         material.addTextChangedListener(new TextWatcher() {
@@ -238,7 +272,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         tagGroup.setOnTagLongClickListener(new TagView.OnTagLongClickListener() {
             @Override
             public void onTagLongClick(Tag tag, int position) {
-                Toast.makeText(CaptureDIY.this, "Long Click: " + tag.text, Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditDIYDetailsActivity.this, "Long Click: " + tag.text, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -254,13 +288,13 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
             @Override
             public void onTagDeleted(final TagView view, final Tag tag, final int position) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(CaptureDIY.this, R.style.AppTheme);
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditDIYDetailsActivity.this, R.style.AppTheme);
                 builder.setMessage("\"" + tag.text + "\" will be delete. Are you sure?");
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         view.remove(position);
-                        Toast.makeText(CaptureDIY.this, "\"" + tag.text + "\" deleted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditDIYDetailsActivity.this, "\"" + tag.text + "\" deleted", Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.setNegativeButton("No", null);
@@ -269,8 +303,15 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             }
         });
 
+
+
         procedure = (EditText) findViewById(R.id.etProcedures);
         imgView = (ImageView) findViewById(R.id.add_product_image_plus_icon);
+
+//        Bitmap oldImage = BitmapFactory.decodeFile(diyImage);
+//
+//        imgView.setImageBitmap(oldImage);
+
         materialsList = (ListView) findViewById(R.id.materialsList);
 
         proceduresList = (ListView) findViewById(R.id.proceduresList);
@@ -289,6 +330,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         mAdapter = new CommunityAdapter(getApplicationContext(), itemMaterial);
         pAdapter = new CommunityAdapter(getApplicationContext(), itemProcedure);
 
+
         materialsList.setAdapter(mAdapter);
         proceduresList.setAdapter(pAdapter);
 
@@ -297,6 +339,63 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         getWordBank();
         prepareTags();
 
+        LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("INTENT_NAME"));
+
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
+                   Log.e("postSnapshot", String.valueOf(postSnapshot));
+
+                    String material_name = postSnapshot.child("name").getValue(String.class);
+                    int material_qty = postSnapshot.child("quantity").getValue(int.class);
+                    String material_unit = postSnapshot.child("unit").getValue(String.class);
+                    Log.e("material_name",material_name);
+                    Log.e("material_qty", String.valueOf(material_qty));
+                    Log.e("material_unit",material_unit);
+
+                    // Putting Data into Getter Setter \\
+                    DBMaterial matList = new DBMaterial();
+                    matList.setName(material_name);
+                    matList.setQuantity(material_qty);
+                    matList.setUnit(material_unit);
+
+                    dbMaterials.add(matList);
+                    mAdapter.notifyDataSetChanged();
+                    dbMaterialsAdapter = new DBMaterialsAdapter(getApplicationContext(), dbMaterials);
+
+                    materialsList.setAdapter(dbMaterialsAdapter);
+
+
+                }
+
+                for (DataSnapshot postSnapshots : dataSnapshot.child("procedures").getChildren()) {
+                    String diy_procedures = postSnapshots.child("val").getValue(String.class);
+                    Log.e("diy_procedures", diy_procedures);
+
+                    CommunityItem prodList = new CommunityItem();
+                    prodList.setVal(diy_procedures);
+
+                    itemProcedure.add(prodList);
+                    pAdapter.notifyDataSetChanged();
+                    pAdapter = new CommunityAdapter(getApplicationContext(), itemProcedure);
+                    proceduresList.setAdapter(pAdapter);
+
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
 // ADD DIY TO THE COMMUNITY
         btnAddMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -304,12 +403,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
                 String inputMaterials = material.getText().toString();
                 if (inputMaterials.isEmpty()) {
-                    Toast.makeText(CaptureDIY.this, "Please enter materials", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditDIYDetailsActivity.this, "Please enter materials", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(CaptureDIY.this, spinner_item_q + spinner_item_um, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditDIYDetailsActivity.this, spinner_item_q + spinner_item_um, Toast.LENGTH_SHORT).show();
 
 
-                    final Dialog dialog = new Dialog(CaptureDIY.this);
+                    final Dialog dialog = new Dialog(EditDIYDetailsActivity.this);
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     dialog.setContentView(R.layout.row_spinner);
                     dialog.setCancelable(true);
@@ -372,7 +471,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                             mAdapter.notifyDataSetChanged();
                             material.setText("");
 
-                            Toast.makeText(CaptureDIY.this, spinner_item_q + " " + spinner_item_um, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditDIYDetailsActivity.this, spinner_item_q + " " + spinner_item_um, Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
                     });
@@ -385,12 +484,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             public void onClick(View v) {
                 String inputProcedure = procedure.getText().toString();
                 if (inputProcedure.isEmpty()) {
-                    Toast.makeText(CaptureDIY.this, "Please enter procedure", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditDIYDetailsActivity.this, "Please enter procedures", Toast.LENGTH_SHORT).show();
                 } else {
                     CommunityItem md = new CommunityItem(inputProcedure);
                     itemProcedure.add(md);
                     pAdapter.notifyDataSetChanged();
-                    procedure.setText("");
+                    procedure.setText(" ");
 
                 }
             }
@@ -412,87 +511,78 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onClick(final View v) {
 
-                //imageRef = storageReference.child(photoFile.getAbsolutePath());
-                imageRef = storageReference.child(String.valueOf(name.getText()));
+                Toast.makeText(EditDIYDetailsActivity.this, "Clicked position : " +
+                        categorySpinner.getSelectedItemPosition(), Toast.LENGTH_SHORT).show();
 
-                //DIY category
-                final String category = categorySpinner.getSelectedItem().toString();
-                final int categoryPos = categorySpinner.getSelectedItemPosition();
-                Log.e("CategorySelected", category);
-                Log.e("categoryPos", String.valueOf(categoryPos));
+                HashMap<String, Object> results = new HashMap<>();
+                results.put("diyName", name.getText().toString());
+                results.put("category", categorySpinner.getSelectedItem());
+                results.put("materials", dbMaterials);
+                results.put("procedures", itemProcedure);
 
-                //creating and showing progress dialog
-                progressDialog = new ProgressDialog(CaptureDIY.this);
-                progressDialog.setMax(100);
-                progressDialog.setMessage("Adding DIY to the Community...");
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                progressDialog.show();
-                progressDialog.setCancelable(false);
-
-                //starting upload
-                uploadTask = imageRef.putFile(Uri.fromFile(photoFile));
-                // Observe state change events such as progress, pause, and resume
-                uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                        //sets and increments value of progressbar
-                        progressDialog.incrementProgressBy((int) progress);
-                    }
-                });
-                // Register observers to listen for when the download is done or if it fails
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        Toast.makeText(CaptureDIY.this, "Error in uploading!", Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        Float float_this = Float.valueOf(0);
-
-                        String upload = databaseReference.push().getKey();
-                        String productID = generateString();
-
-                        //push data to Firebase Database - diy_by_tags node
-                        databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
-                                taskSnapshot.getDownloadUrl().toString(), userID, productID, "community",
-                                float_this, float_this));
-                        databaseReference.child(upload).child("materials").setValue(dbMaterials);
-                        databaseReference.child(upload).child("procedures").setValue(itemProcedure);
-                        databaseReference.child(upload).child("category").setValue(category);
-                        databaseReference.child(upload).child("category_postition").setValue(categoryPos);
+                Log.e("name", name.getText().toString());
+                Log.e("categoryyy", String.valueOf(categorySpinner.getSelectedItem()));
+                Log.e("materialssss", String.valueOf(dbMaterials));
+                Log.e("proceduressss", String.valueOf(itemProcedure));
 
 
-                        //push data to Firebase Database - diy_by_user node
-                        byuser_Reference.child(upload).setValue(new DIYnames(name.getText().toString(),
-                                taskSnapshot.getDownloadUrl().toString(), userID, productID, "community",
-                                float_this, float_this));
-                        byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
-                        byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
-                        byuser_Reference.child(upload).child("category").setValue(category);
-                        byuser_Reference.child(upload).child("category_postition").setValue(categoryPos);
+                databaseReference.updateChildren(results);
+                byuser_Reference.updateChildren(results);
 
-                        Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(EditDIYDetailsActivity.this, MainActivity.class);
+                startActivity(intent);
 
-                        // Alert Dialog for finished uploaing DIYs
-                        AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this, R.style.MyAlertDialogStyle);
-                        ab.setMessage("Thank you for contributing to the DIY Community!");
-                        ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent in = new Intent(CaptureDIY.this, MainActivity.class);
-                                startActivity(in);
-                            }
-                        });
+//                imageRef = storageReference.child(String.valueOf(name.getText()));
+//
+//
+//                //starting upload
+//                uploadTask = imageRef.putFile(Uri.fromFile(photoFile));
+//                // Observe state change events such as progress, pause, and resume
+//                uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                    }
+//                });
+//                // Register observers to listen for when the download is done or if it fails
+//                uploadTask.addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception exception) {
+//                        // Handle unsuccessful uploads
+//                        Toast.makeText(EditDIYDetailsActivity.this, "Error in uploading!", Toast.LENGTH_SHORT).show();
+//                    }
+//                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//
+//                        HashMap<String, Object> results = new HashMap<>();
+//                        results.put("diyName", name.getText().toString());
+//                        results.put("diyUrl", taskSnapshot.getDownloadUrl().toString());
+//                        results.put("category", categorySpinner.getSelectedItem());
+//                        results.put("materials", dbMaterials);
+//                        results.put("procedures", itemProcedure);
+//
+//                        Log.e("name", name.getText().toString());
+//                        Log.e("categoryyy", String.valueOf(categorySpinner.getSelectedItem()));
+//                        Log.e("materialssss", String.valueOf(dbMaterials));
+//                        Log.e("proceduressss", String.valueOf(itemProcedure));
+//
+//
+//                        databaseReference.updateChildren(results);
+//                        byuser_Reference.updateChildren(results);
+//
+//                        Intent intent = new Intent(EditDIYDetailsActivity.this, MainActivity.class);
+//                        startActivity(intent);
+//
+//
+//                        Toast.makeText(EditDIYDetailsActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+//
+//
+//                    }
+//                });
 
-                        ab.create().show();
-                        progressDialog.dismiss();
-                    }
-                });
+
 
             }
         });
@@ -503,14 +593,20 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         sellButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(CaptureDIY.this);
+                final Dialog dialog = new Dialog(EditDIYDetailsActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.sell_diy_option);
                 dialog.setCancelable(true);
 
                 final EditText etPrice = (EditText) dialog.findViewById(R.id.etPrice);
+                etPrice.setText(diyPrice);
+
                 final EditText etQuantity = (EditText) dialog.findViewById(R.id.etQty);
+                etQuantity.setText(diyQty);
+
                 final EditText etDescription = (EditText) dialog.findViewById(R.id.etDescription);
+                etDescription.setText(diyDsc);
+
                 Button sellOkButton = (Button) dialog.findViewById(R.id.okaybtn);
 
 
@@ -519,106 +615,86 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 sellOkButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(CaptureDIY.this, etPrice.getText() + "," + etQuantity.getText() + "," + etDescription.getText(),
+                        Toast.makeText(EditDIYDetailsActivity.this, etPrice.getText() + "," + etQuantity.getText() + "," + etDescription.getText(),
                                 Toast.LENGTH_SHORT).show();
 
-                       // imgRef = storageRef.child(photoFile.getAbsolutePath());
-                        imgRef = storageRef.child(String.valueOf(name.getText()));
+                        String for_price = etPrice.getText().toString();
+                        String for_qty = etQuantity.getText().toString();
+                        final String for_descr = etDescription.getText().toString();
+                        final float price = Float.parseFloat((for_price));
+                        final int qty = Integer.parseInt(for_qty);
 
-                        final String category = categorySpinner.getSelectedItem().toString();
-                        final int categoryPos = categorySpinner.getSelectedItemPosition();
-                        Log.e("CategorySelected", category);
-                        Log.e("categoryPos", String.valueOf(categoryPos));
+                        dbSelling.add(new SellingDIY().setSelling_price(price).setSelling_qty(qty).setSelling_descr(for_descr));
+                        HashMap<String, Object> sellResults = new HashMap<>();
+                        sellResults.put("diyName", name.getText().toString());
+                        sellResults.put("category", categorySpinner.getSelectedItem());
+                        sellResults.put("DIY Price", dbSelling);
+                        sellResults.put("materials", dbMaterials);
+                        sellResults.put("procedures", itemProcedure);
 
-                        //creating and showing progress dialog
-                        progressDialog = new ProgressDialog(CaptureDIY.this);
-                        progressDialog.setMax(100);
-                        progressDialog.setMessage("Adding DIY for Selling...");
-                        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                        progressDialog.show();
-                        progressDialog.setCancelable(false);
+                        Toast.makeText(EditDIYDetailsActivity.this, "Editted: " + etPrice.getText() + " " +
+                                etQuantity.getText() + " " + etDescription.getText(), Toast.LENGTH_SHORT).show();
 
-                        //starting upload
-                        uploadTask = imgRef.putFile(Uri.fromFile(photoFile));
-                        // Observe state change events such as progress, pause, and resume
-                        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                                //sets and increments value of progressbar
-                                progressDialog.incrementProgressBy((int) progress);
-                            }
-                        });
-                        // Register observers to listen for when the download is done or if it fails
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle unsuccessful uploads
-                                Toast.makeText(CaptureDIY.this, "Error in uploading!", Toast.LENGTH_SHORT).show();
-                                progressDialog.dismiss();
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        databaseReference.updateChildren(sellResults);
+                        byuser_Reference.updateChildren(sellResults);
 
-                                String for_price = etPrice.getText().toString();
-                                String for_qty = etQuantity.getText().toString();
-                                final String for_descr = etDescription.getText().toString();
-                                final float price = Float.parseFloat((for_price));
-                                final int qty = Integer.parseInt(for_qty);
-
-                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                                Float float_this = Float.valueOf(0);
-
-                                String upload = databaseReference.push().getKey();
-
-                                Random random = new Random();
-                                String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-//                                dbMaterials.add(new DBMaterial().setName(materials).setQuantity(quantity).setUnit(unit_material));
-                                dbSelling.add(new SellingDIY().setSelling_price(price).setSelling_qty(qty).setSelling_descr(for_descr));
+                        Intent intent = new Intent(EditDIYDetailsActivity.this, MainActivity.class);
+                        startActivity(intent);
 
 
-                                //push data to Firebase Database - diy_by_tags node
-                                String productID_sell = generateString();
-                                databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
-                                        taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "Selling",
-                                        float_this, float_this, "seller"));
-                                databaseReference.child(upload).child("materials").setValue(dbMaterials);
-                                databaseReference.child(upload).child("procedures").setValue(itemProcedure);
-                                databaseReference.child(upload).child("DIY Price").setValue(dbSelling);
-                                databaseReference.child(upload).child("category").setValue(category);
-                                databaseReference.child(upload).child("category_postition").setValue(categoryPos);
-
-                                //push data to Firebase Database - diy_by_user node
-                                byuser_Reference.child(upload).setValue(new DIYSell(name.getText().toString(),
-                                        taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "Selling",
-                                        float_this, float_this, "seller"));
-                                byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
-                                byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
-                                byuser_Reference.child(upload).child("DIY Price").setValue(dbSelling);
-                                byuser_Reference.child(upload).child("category").setValue(category);
-                                byuser_Reference.child(upload).child("category_postition").setValue(categoryPos);
-
-                                Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
-
-                                // Alert Dialog for finished uploaing DIYs
-                                AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this, R.style.MyAlertDialogStyle);
-                                ab.setMessage("Thank you for selling your DIY!");
-                                ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent in = new Intent(CaptureDIY.this, MainActivity.class);
-                                        startActivity(in);
-                                    }
-                                });
-
-                                ab.create().show();
-                                progressDialog.dismiss();
-                            }
-                        });
-
-                        dialog.dismiss();
-
+//                        imgRef = storageRef.child(String.valueOf(name.getText()));
+//
+////                        //starting upload
+//                        uploadTask = imgRef.putFile(Uri.fromFile(photoFile));
+////                        // Observe state change events such as progress, pause, and resume
+//                        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                            @Override
+//                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                            }
+//                        });
+////                        // Register observers to listen for when the download is done or if it fails
+//                        uploadTask.addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception exception) {
+////                                // Handle unsuccessful uploads
+//                                Toast.makeText(EditDIYDetailsActivity.this, "Error in uploading!", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                            @Override
+//                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//
+//
+//                                String for_price = etPrice.getText().toString();
+//                                String for_qty = etQuantity.getText().toString();
+//                                final String for_descr = etDescription.getText().toString();
+//                                final float price = Float.parseFloat((for_price));
+//                                final int qty = Integer.parseInt(for_qty);
+//
+//                                dbSelling.add(new SellingDIY().setSelling_price(price).setSelling_qty(qty).setSelling_descr(for_descr));
+//                                HashMap<String, Object> sellResults = new HashMap<>();
+//                                sellResults.put("diyName", name.getText().toString());
+//                                sellResults.put("diyUrl", taskSnapshot.getDownloadUrl().toString());
+//                                sellResults.put("category", categorySpinner.getSelectedItem());
+//                                sellResults.put("DIY Price", dbSelling);
+//                                sellResults.put("materials", dbMaterials);
+//                                sellResults.put("procedures", itemProcedure);
+//
+//                                Toast.makeText(EditDIYDetailsActivity.this, "Editted: " + etPrice.getText() + " " +
+//                                        etQuantity.getText() + " " + etDescription.getText(), Toast.LENGTH_SHORT).show();
+//
+//                                databaseReference.updateChildren(sellResults);
+//                                byuser_Reference.updateChildren(sellResults);
+//
+//                                Intent intent = new Intent(EditDIYDetailsActivity.this, MainActivity.class);
+//                                startActivity(intent);
+//                            }
+//                        });
+//
+//                        dialog.dismiss();
+//
                     }
                 });
 
@@ -632,16 +708,22 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         bidButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(CaptureDIY.this, "Bid button clicked", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditDIYDetailsActivity.this, "Bid button clicked", Toast.LENGTH_SHORT).show();
 
-                final Dialog dialog = new Dialog(CaptureDIY.this);
+                final Dialog dialog = new Dialog(EditDIYDetailsActivity.this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 dialog.setContentView(R.layout.bidding_dialog);
                 dialog.show();
 
                 mEtPriceMin = (EditText) dialog.findViewById(R.id.etBidInitialPrice);
+                mEtPriceMin.setText(diyBidInitialPrice);
+
                 mEtPriceMessage = (EditText) dialog.findViewById(R.id.etBidMessage);
+                mEtPriceMessage.setText(diyBidComment);
+
                 mEtExpiryDate = (EditText) dialog.findViewById(R.id.etBidExpiryDate);
+                mEtExpiryDate.setText(diyBidExpiry);
+
                 mTvDateToday = (TextView) dialog.findViewById(R.id.tv_on_date_today);
                 mBtnAddBid = (Button) dialog.findViewById(R.id.btnAddBid);
 
@@ -669,7 +751,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                     @Override
                     public void onClick(View v) {
                         // TODO Auto-generated method stub
-                        new DatePickerDialog(CaptureDIY.this, date, myCalendar
+                        new DatePickerDialog(EditDIYDetailsActivity.this, date, myCalendar
                                 .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
                                 myCalendar.get(Calendar.DAY_OF_MONTH)).show();
                     }
@@ -680,103 +762,82 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 mBtnAddBid.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        imgRef = storageRef.child(String.valueOf(name.getText()));
 
-                        final String category = categorySpinner.getSelectedItem().toString();
-                        final int categoryPos = categorySpinner.getSelectedItemPosition();
-                        Log.e("CategorySelected", category);
-                        Log.e("categoryPos", String.valueOf(categoryPos));
+                        Toast.makeText(EditDIYDetailsActivity.this, "Bid Info button clicked", Toast.LENGTH_SHORT).show();
 
-                        //creating and showing progress dialog
-                        progressDialog = new ProgressDialog(CaptureDIY.this);
-                        progressDialog.setMax(100);
-                        progressDialog.setMessage("Adding DIY for Bidding...");
-                        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                        progressDialog.show();
-                        progressDialog.setCancelable(false);
+                        DIYBidding formBidding = getFormInput();
 
-                        //starting upload
-                        uploadTask = imgRef.putFile(Uri.fromFile(photoFile));
-                        // Observe state change events such as progress, pause, and resume
-                        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                                //sets and increments value of progressbar
-                                progressDialog.incrementProgressBy((int) progress);
-                            }
-                        });
-                        // Register observers to listen for when the download is done or if it fails
-                        uploadTask.addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception exception) {
-                                // Handle unsuccessful uploads
-                                Toast.makeText(CaptureDIY.this, "Error in uploading!", Toast.LENGTH_SHORT).show();
-                                progressDialog.dismiss();
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        HashMap<String, Object> bidResults = new HashMap<>();
+                        bidResults.put(diyKeyInside, formBidding);
+                        biddingReference.updateChildren(bidResults);
 
-                                String initial_price = mEtPriceMin.getText().toString();
-                                String bid_message = mEtPriceMessage.getText().toString();
-                                String expiry_date = mEtExpiryDate.getText().toString();
-                                int initialBidPrice = Integer.parseInt((initial_price));
+                        HashMap<String, Object> bid = new HashMap<>();
+                        bid.put("diyName", name.getText().toString());
+                        bid.put("category", categorySpinner.getSelectedItem());
+                        bid.put("materials", dbMaterials);
+                        bid.put("procedures", itemProcedure);
+                        databaseReference.updateChildren(bid);
 
-                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                                Float float_this = Float.valueOf(0);
+                        HashMap<String, Object> bidResultsByUser = new HashMap<>();
+                        bidResultsByUser.put("bidding", formBidding);
+                        byuser_Reference.updateChildren(bidResultsByUser);
 
-                                String upload = databaseReference.push().getKey();
-
-                                Random random = new Random();
-                                String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-
-//                                dbBidding.add(new DIYBidding().setInitialPrice(initialBidPrice).setMessage(bid_message)
-//                                                .setXpire_date(expiry_date));
-
-                                DIYBidding formBidding = getFormInput();
-
-                                //push data to Firebase Database - diy_by_tags node
-                                String productID_sell = generateString();
-                                databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
-                                        taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "ON BID!",
-                                        float_this, float_this, "seller"));
-                                databaseReference.child(upload).child("materials").setValue(dbMaterials);
-                                databaseReference.child(upload).child("procedures").setValue(itemProcedure);
-                                databaseReference.child(upload).child("category").setValue(category);
-                                databaseReference.child(upload).child("category_postition").setValue(categoryPos);
-                                databaseReference.child(upload).child("bidding").push().setValue(formBidding);
+                        Intent intent = new Intent(EditDIYDetailsActivity.this, MainActivity.class);
+                        startActivity(intent);
 
 
-                                //push data to Firebase Database - diy_by_user node
-                                byuser_Reference.child(upload).setValue(new DIYSell(name.getText().toString(),
-                                        taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "ON BID!",
-                                        float_this, float_this, "seller"));
-                                byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
-                                byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
-                                byuser_Reference.child(upload).child("category").setValue(category);
-                                byuser_Reference.child(upload).child("category_postition").setValue(categoryPos);
-                                byuser_Reference.child(upload).child("bidding").push().setValue(formBidding);
-
-                                Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
-
-                                // Alert Dialog for finished uploaing DIYs
-                                AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this, R.style.MyAlertDialogStyle);
-                                ab.setMessage("Thank you for!");
-                                ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent in = new Intent(CaptureDIY.this, MainActivity.class);
-                                        startActivity(in);
-                                    }
-                                });
-
-                                ab.create().show();
-                                progressDialog.dismiss();
-                            }
-                        });
-
-                        dialog.dismiss();
+//                        imgRef = storageRef.child(String.valueOf(name.getText()));
+//
+////                        //starting upload
+//                        uploadTask = imgRef.putFile(Uri.fromFile(photoFile));
+//                        // Observe state change events such as progress, pause, and resume
+//                        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                            @Override
+//                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                            }
+//                        });
+////                        // Register observers to listen for when the download is done or if it fails
+//                        uploadTask.addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception exception) {
+//                                // Handle unsuccessful uploads
+//                                Toast.makeText(EditDIYDetailsActivity.this, "Error in uploading!", Toast.LENGTH_SHORT).show();
+//
+//                            }
+//                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                            @Override
+//                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//
+//                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+//
+//                                DIYBidding formBidding = getFormInput();
+//
+//                                HashMap<String, Object> bidResults = new HashMap<>();
+//                                bidResults.put(diyKeyInside, formBidding);
+//                                biddingReference.updateChildren(bidResults);
+//
+//                                HashMap<String, Object> bid = new HashMap<>();
+//                                bid.put("diyName", name.getText().toString());
+//                                bid.put("diyUrl", taskSnapshot.getDownloadUrl().toString());
+//                                bid.put("category", categorySpinner.getSelectedItem());
+//                                bid.put("materials", dbMaterials);
+//                                bid.put("procedures", itemProcedure);
+//                                databaseReference.updateChildren(bid);
+//
+//                                HashMap<String, Object> bidResultsByUser = new HashMap<>();
+//                                bidResultsByUser.put("bidding", formBidding);
+//                                byuser_Reference.updateChildren(bidResultsByUser);
+//
+//                                Intent intent = new Intent(EditDIYDetailsActivity.this, MainActivity.class);
+//                                startActivity(intent);
+//
+//                                Toast.makeText(EditDIYDetailsActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+//
+//
+//                            }
+//                        });
+//
+//                        dialog.dismiss();
                     }
                 });
 
@@ -784,8 +845,27 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         });
 
 
-
     }
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String receivedMaterial = intent.getStringExtra("materialName");
+            String receivedProcedure = intent.getStringExtra("procedureName");
+//            String receivedImage = intent.getStringExtra("diyImageUri");
+
+            material.setText(receivedMaterial);
+            procedure.setText(receivedProcedure);
+
+            Log.e("receivedMaterial", "" + receivedMaterial);
+            Log.e("receivedProcedure", "" + receivedProcedure);
+//            Log.e("receivedImage", "" + receivedImage);
+//
+//            Log.e("Check", "Inside On Receiver");
+//            Toast.makeText(getApplicationContext(), "received",
+//                    Toast.LENGTH_LONG).show();
+        }
+    };
 
 
     private void updateLabel() {
@@ -811,31 +891,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             openContextMenu(diy_Button);
         }
 
-        //for bidding calendar
-//        if (v == mEtExpiryDate) {
-//            final Calendar calendar = Calendar.getInstance();
-//            int year = calendar.get(Calendar.YEAR);
-//            int month = calendar.get(Calendar.MONTH);
-//            int date = calendar.get(Calendar.DAY_OF_MONTH);
-//
-//            Toast.makeText(this, "Dateeeeeeeeee", Toast.LENGTH_SHORT).show();
-//            final DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-//                @Override
-//                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                    Toast.makeText(CaptureDIY.this, "Expiryy", Toast.LENGTH_SHORT).show();
-//                    String set_expiry = year + "-" + String.valueOf(month + 1) + "-" + (dayOfMonth);
-////                    datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-////                    String set_expiry = String.valueOf(month + 1) + "/" + (dayOfMonth) + "/" + year;
-//                    if (calendar.before(set_expiry)) {
-//                        Toast.makeText(getApplication(), "YOU CANNOT PICK PASSED WEEKS!", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        mEtExpiryDate.setText(set_expiry);
-//                    }
-//                }
-//            }, year, month, date);
-//            datePickerDialog.show();
-////        }
-//        }
     }
 
 
@@ -1000,7 +1055,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         photoFile = getPhotoFileUri(photoFileName);
         Log.e("photoFile", String.valueOf(photoFile));
 
-        Uri fileProvider = FileProvider.getUriForFile(CaptureDIY.this, "cabiso.daphny.com.g_companion", photoFile);
+        Uri fileProvider = FileProvider.getUriForFile(EditDIYDetailsActivity.this, "cabiso.daphny.com.g_companion", photoFile);
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -1077,31 +1132,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 Toast.makeText(this, "NOT NULL IMAGE", Toast.LENGTH_SHORT).show();
             }
 
-
         } else { // Result was a failure
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
 
-//                diyPictureUri = data.getData();
-//                if(diyPictureUri==null){
-//                    imgView.setImageURI(diyPictureUri);
-//                    Toast.makeText(this, "NULL IMAGE", Toast.LENGTH_SHORT).show();
-//                }else{
-//                    Toast.makeText(this, "NOT NULL IMAGE ", Toast.LENGTH_SHORT).show();
-//                }
-//
-//
-//                Bitmap bmp = (Bitmap) data.getExtras().get("data");
-//                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//
-//                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                byte[] byteArray = stream.toByteArray();
-//
-//                // convert byte array to Bitmap
-//                Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0,
-//                        byteArray.length);
-//                imgView.setImageBitmap(bitmap);
-
-          //  }
 
         }
     }
@@ -1122,8 +1155,10 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(CaptureDIY.this, MainActivity.class);
+        Intent intent = new Intent(EditDIYDetailsActivity.this, MainActivity.class);
         startActivity(intent);
     }
+
+
 
 }

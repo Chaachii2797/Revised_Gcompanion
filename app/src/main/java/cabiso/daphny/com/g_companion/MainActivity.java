@@ -34,15 +34,13 @@ import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.Promo.PromoActivity;
 import cabiso.daphny.com.g_companion.Search.SearchActivity;
 import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
-import cabiso.daphny.com.g_companion.notifications.NotificationActivity;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        CommunityFragment.OnListFragmentInteractionListener, OnListFragmentInteractionListener,
-        PromoFragment.OnListFragmentInteractionListener{
+        CommunityFragment.OnListFragmentInteractionListener, OnListFragmentInteractionListener, PromoFragment.OnListFragmentInteractionListener{
 
 //    private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -169,8 +167,6 @@ public class MainActivity extends AppCompatActivity
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.getCurrentItem();
 
-
-
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
         mTabLayout = (TabLayout) findViewById(R.id.tab);
         mTabLayout.setupWithViewPager(mViewPager);
@@ -249,10 +245,10 @@ public class MainActivity extends AppCompatActivity
         android.support.v4.app.FragmentTransaction ft;
         switch (itemID){
             case R.id.nav_profile:
-                Intent intent2=new Intent(this,SearchActivity.class);
+                Intent intent2=new Intent(this,MyProfileActivity.class);
                 startActivity(intent2);
                 break;
-            case R.id.nav_wishlist:
+            case R.id.nav_bookmark:
                 Intent wishlist = new Intent(MainActivity.this,Wishlists.class);
                 startActivity(wishlist);
                 break;
@@ -260,13 +256,17 @@ public class MainActivity extends AppCompatActivity
                 Intent chat = new Intent(MainActivity.this, ChatSplashActivity.class);
                 startActivity(chat);
                 break;
-            case R.id.nav_sold:
-                Intent sold = new Intent(MainActivity.this,NotificationActivity.class);
-                startActivity(sold);
-                break;
             case R.id.nav_pending:
                 Intent pending = new Intent(MainActivity.this,Pending_Activity.class);
                 startActivity(pending);
+                break;
+            case R.id.nav_meetup:
+                Intent meetup = new Intent(MainActivity.this,ForMeetUpActivity.class);
+                startActivity(meetup);
+                break;
+            case R.id.nav_sold:
+                Intent sold = new Intent(MainActivity.this,Sold_Activity.class);
+                startActivity(sold);
                 break;
             case R.id.nav_calendar:
                 Intent calendar = new Intent(MainActivity.this,CalendarActivity.class);

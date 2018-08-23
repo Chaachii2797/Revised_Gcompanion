@@ -17,13 +17,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
 
-import cabiso.daphny.com.g_companion.Adapter.BiddersAdapter;
 import cabiso.daphny.com.g_companion.Model.DIYBidding;
 
 public class ToBidProduct extends Activity implements View.OnClickListener {
@@ -37,7 +36,7 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
     private String itemId;
     private Button mBtnAddBid;
     private DatabaseReference itemReference;
-    private DatabaseReference identityReference;
+    private DatabaseReference identityReference, itemReferenceByUser;
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
     @Override
@@ -55,6 +54,8 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
 
         Intent intent = getIntent();
         itemId = intent.getExtras().getString("itemId");
+        Log.e("itemId", itemId);
+
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
@@ -63,15 +64,20 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
 
         itemReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.itemId);
         identityReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.itemId);
+        itemReferenceByUser = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID).child(this.itemId);
+        Log.e("itemReferenecByUser", String.valueOf(itemReferenceByUser));
+
         mBtnAddBid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DIYBidding formBidding = getFormInput();
                 itemReference.child("bidding").push().setValue(formBidding);
+                itemReferenceByUser.child("bidding").push().setValue(formBidding);
 
                 HashMap<String, Object> result = new HashMap<>();
                 result.put("identity", "ON BID!");
                 identityReference.updateChildren(result);
+                itemReferenceByUser.updateChildren(result);
                 Intent intent = new Intent(ToBidProduct.this,MainActivity.class);
                 startActivity(intent);
             }

@@ -33,13 +33,15 @@
 
     <!-- Dialog -->
     <style name="MyAlertDialogStyle" parent="Base.V7.Theme.AppCompat.Light.Dialog">
-        <item name="android:background">@color/bg_screen1</item>
+        <item name="android:background">@color/gen_scheme1</item>
         <item name="buttonBarPositiveButtonStyle">@style/MyAlertDialogButtonStyle</item>
         <item name="buttonBarNegativeButtonStyle">@style/MyAlertDialogButtonStyle</item>
+        <item name="android:textColor">@color/backgroundColor</item>
+
     </style>
 
     <style name="MyAlertDialogButtonStyle" parent="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog">
-        <item name="android:textColor">@color/bg_screen2</item>
+        <item name="android:textColor">@color/backgroundColor</item>
         <item name="android:textSize">@dimen/text_size_medium</item>
     </style>
 

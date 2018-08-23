@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gen_scheme3"
-    android:orientation="vertical">
+    tools:context="cabiso.daphny.com.g_companion.Search.SearchView">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -16,24 +16,24 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbarDetails"
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary">
 
             <ImageView
-                android:src="@drawable/new_logo_white"
+                android:id="@+id/logo"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:src="@drawable/new_logo_white"/>
         </android.support.v7.widget.Toolbar>
-
     </android.support.design.widget.AppBarLayout>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/scrollView"
+        android:id="@+id/scrollView_search"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -45,254 +45,270 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/bg_screen1"
-            android:orientation="vertical">
+            android:background="@color/bg_screen1">
 
-            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/cardView1"
+            <android.support.v7.widget.CardView
+                android:id="@+id/carview1"
                 android:layout_width="match_parent"
                 android:layout_height="270dp"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 app:cardBackgroundColor="?attr/colorPrimary">
 
-                <RelativeLayout
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/related_view_pager"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/appBarLayout_search"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="40dp"
+                    android:background="@android:color/transparent">
+                </android.support.v4.view.ViewPager>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="270dp">
-                        android:background="@drawable/gradient_background"
-                    </RelativeLayout>
+                <LinearLayout
+                    android:id="@+id/diy_name_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:layout_below="@+id/carview1"
+                    android:layout_marginTop="150dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true">
 
-                    <android.support.v4.view.ViewPager
-                        android:id="@+id/diyImagesViewPagers_sell"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/appBarLayout"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="40dp"
-                        android:background="@android:color/transparent" />
-
-                    <LinearLayout
-                        android:id="@+id/promo_details"
+                    <TextView
+                        android:id="@+id/diy_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:gravity="bottom"
-                        android:orientation="vertical"
-                        android:padding="20dp">
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif-condensed"
+                        android:text="Product Name"
+                        android:textColor="#FFFFFF"
+                        android:textSize="30sp" />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/diy_name"
+                            android:id="@+id/txt_by"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed"
+                            android:text="By:"
+                            android:textColor="#FFFFFF" />
+
+                        <TextView
+                            android:id="@+id/txt_user_owner_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="sans-serif-condensed"
-                            android:text="Product Name"
-                            android:textAlignment="textStart"
-                            android:textColor="#FFFFFF"
-                            android:textSize="30sp" />
+                            android:paddingLeft="3dp"
+                            android:text="DIY Owner"
+                            android:textColor="#FFFFFF" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-condensed"
-                                android:text="By:"
-                                android:textColor="#FFFFFF" />
-
-                            <TextView
-                                android:id="@+id/tvQty"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:fontFamily="sans-serif-condensed"
-                                android:paddingLeft="3dp"
-                                android:text="user "
-                                android:textColor="#FFFFFF" />
-                        </LinearLayout>
-
+                        <TextView
+                            android:id="@+id/textQTY"
+                            android:layout_width="76dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-condensed"
+                            android:paddingLeft="3dp"
+                            android:text="Quantity"
+                            android:textColor="#FFFFFF" />
                     </LinearLayout>
-                </RelativeLayout>
 
+                </LinearLayout>
             </android.support.v7.widget.CardView>
 
-            <!--<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-            <!--android:id="@+id/cardView"-->
-            <!--android:layout_width="330dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@+id/diy_name"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_marginTop="40dp"-->
-            <!--app:cardBackgroundColor="@android:color/white"-->
-            <!--app:cardCornerRadius="5dp"-->
-            <!--app:elevation="5dp">-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/diy_material"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_below="@+id/textView29"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_marginLeft="15dp"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:hint="1. Glue-->
-            <!--2. Scissors-->
-            <!--3. Pencil"-->
-            <!--android:textColor="@android:color/black"-->
-            <!--android:textSize="16sp" />-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/textView29"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignLeft="@+id/diy_procedure"-->
-            <!--android:layout_alignStart="@+id/diy_procedure"-->
-            <!--android:layout_below="@+id/diyImagesViewPagers_sell"-->
-            <!--android:background="@color/gen_scheme1"-->
-            <!--android:paddingLeft="10dp"-->
-            <!--android:text="Materials:"-->
-            <!--android:textColor="@android:color/black"-->
-            <!--android:textSize="20sp"-->
-            <!--android:textStyle="bold" />-->
-
-            <!--</android.support.v7.widget.CardView>-->
-
-
-            <!--KARON NI-->
-
-            <!--<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"-->
-            <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-            <!--android:id="@+id/cardView2"-->
-            <!--android:layout_width="330dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignLeft="@+id/cardView"-->
-            <!--android:layout_alignStart="@+id/cardView"-->
-            <!--android:layout_below="@+id/cardView"-->
-            <!--android:layout_marginBottom="10dp"-->
-            <!--android:layout_marginTop="15dp"-->
-            <!--app:cardBackgroundColor="@android:color/white"-->
-            <!--app:cardCornerRadius="5dp"-->
-            <!--app:elevation="5dp">-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/textView31"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignLeft="@+id/textView29"-->
-            <!--android:layout_alignStart="@+id/textView29"-->
-            <!--android:layout_below="@+id/diy_material"-->
-            <!--android:background="@color/gen_scheme1"-->
-            <!--android:paddingLeft="10dp"-->
-            <!--android:text="Procedures:"-->
-            <!--android:textColor="@android:color/black"-->
-            <!--android:textSize="20sp"-->
-            <!--android:textStyle="bold" />-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/diy_procedure"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignLeft="@+id/diy_material"-->
-            <!--android:layout_alignStart="@+id/diy_material"-->
-            <!--android:layout_below="@+id/textView31"-->
-            <!--android:layout_marginBottom="20dp"-->
-            <!--android:layout_marginLeft="15dp"-->
-            <!--android:layout_marginTop="30dp"-->
-            <!--android:hint="1. Make the materials clean. \n 2. Use scissors to cut it. Be careful. \n 3. Use glue."-->
-            <!--android:scrollbars="vertical"-->
-            <!--android:textColor="@android:color/black"-->
-            <!--android:textSize="16sp" />-->
-
-            <!--</android.support.v7.widget.CardView>-->
-
-
-            <TextView
-                android:id="@+id/txt_by"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/diy_name"
-                android:background="@color/gen_scheme1"
-                android:paddingBottom="10dp"
-                android:paddingLeft="15dp"
-                android:text="by:"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:typeface="serif" />
 
             <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/cardView3"
                 android:layout_width="330dp"
-                android:layout_height="55dp"
-                android:layout_below="@+id/promo_details"
+                android:layout_height="wrap_content"
+                android:id="@+id/cardview2"
+                android:layout_below="@id/carview1"
+                android:layout_centerHorizontal="true"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="290dp"
-                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardCornerRadius="5dp"
                 app:elevation="5dp">
 
                 <TextView
-                    android:id="@+id/textView33"
-                    android:layout_width="40dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/sview_diy_materials"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/materials"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:hint="1. Glue
+                              2. Scissors
+                              3. Pencil"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/materials"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gen_scheme1"
+                    android:paddingLeft="10dp"
+                    android:text="Materials:"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/cardview3"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="5dp"
+                app:elevation="5dp"
+                android:layout_marginTop="11dp"
+                android:layout_below="@+id/cardview2"
+                android:layout_alignLeft="@+id/cardview2"
+                android:layout_alignStart="@+id/cardview2">
+
+                <TextView
+                    android:id="@+id/procedures"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gen_scheme1"
+                    android:paddingLeft="10dp"
+                    android:text="Procedure:"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/sview_diy_procedures"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/sview_diy_materials"
+                    android:layout_alignStart="@+id/sview_diy_materials"
+                    android:layout_below="@+id/procedures"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="30dp"
+                    android:hint="1. Make the materials clean. \n 2. Use scissors to cut it. Be careful. \n 3. Use glue."
+                    android:scrollbars="vertical"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+            </android.support.v7.widget.CardView>
+
+            <!--For ORIGINAL PRICE-->
+            <android.support.v7.widget.CardView
+                android:id="@+id/cardView4"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/cardview3"
+                android:layout_alignStart="@+id/cardview3"
+                android:layout_below="@+id/cardview3"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="5dp"
+                app:elevation="5dp">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/textView33"
+                        android:layout_width="40dp"
+                        android:layout_height="50dp"
+                        android:layout_alignLeft="@+id/cardView2"
+                        android:layout_alignStart="@+id/cardView2"
+                        android:layout_below="@+id/cardView2"
+                        android:layout_marginLeft="18dp"
+                        android:layout_marginStart="18dp"
+                        android:gravity="center"
+                        android:text="₱:"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/related_sell_details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/textView33"
+                        android:layout_toRightOf="@+id/textView33"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:text="Price"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/outside_imageview"
+                        android:layout_width="105dp"
+                        android:layout_height="50dp"
+                        android:layout_alignBottom="@+id/textView33"
+                        android:layout_alignLeft="@+id/textView33"
+                        android:layout_alignStart="@+id/textView33"
+                        android:adjustViewBounds="true"
+                        android:scaleType="fitXY" />
+                </RelativeLayout>
+
+                <!--For Promo price-->
+                <TextView
+                    android:id="@+id/textView34"
+                    android:layout_width="wrap_content"
                     android:layout_height="50dp"
-                    android:layout_alignLeft="@+id/cardView2"
-                    android:layout_alignStart="@+id/cardView2"
                     android:layout_below="@+id/cardView2"
-                    android:layout_marginLeft="18dp"
-                    android:layout_marginStart="18dp"
-                    android:gravity="center"
-                    android:text="₱:"
+                    android:layout_marginLeft="128dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="10dp"
+                    android:text="New ₱rice:"
+                    android:textColor="@color/errorColor"
                     android:textSize="26sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/sell_details"
-                    android:layout_width="150dp"
+                    android:id="@+id/related_promo_price"
+                    android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_below="@+id/cardView2"
-                    android:layout_marginLeft="60dp"
-                    android:layout_toEndOf="@+id/textView33"
-                    android:layout_toRightOf="@+id/textView33"
+                    android:layout_marginLeft="260dp"
                     android:paddingBottom="10dp"
                     android:paddingTop="10dp"
                     android:text="Price"
+                    android:textColor="@color/errorColor"
                     android:textSize="26sp"
                     android:textStyle="bold" />
 
-
             </android.support.v7.widget.CardView>
 
+            <!--Seller info (Contact Number and Address)-->
             <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/cardView4"
+                android:id="@+id/cardView5"
                 android:layout_width="330dp"
                 android:layout_height="120dp"
-                android:layout_marginTop="5dp"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardCornerRadius="5dp"
                 app:elevation="5dp"
-                android:layout_below="@+id/cardView3"
-                android:layout_alignLeft="@+id/cardView3"
-                android:layout_alignStart="@+id/cardView3">
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@+id/cardView4"
+                android:layout_alignLeft="@+id/cardView4"
+                android:layout_alignStart="@+id/cardView4">
 
                 <TextView
                     android:id="@+id/textView313"
@@ -309,7 +325,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/diy_owner_cn"
+                    android:id="@+id/relatedDiy_owner_cn"
                     android:layout_width="180dp"
                     android:layout_height="30dp"
                     android:layout_alignLeft="@+id/diy_material"
@@ -337,12 +353,12 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/diy_owner_add"
+                    android:id="@+id/relatedDiy_owner_add"
                     android:layout_width="220dp"
                     android:layout_height="30dp"
                     android:layout_alignLeft="@+id/diy_material"
                     android:layout_alignStart="@+id/diy_material"
-                    android:layout_below="@+id/diy_owner_cn"
+                    android:layout_below="@+id/item_date_bidded"
                     android:layout_marginLeft="95dp"
                     android:layout_marginTop="75dp"
                     android:scrollbars="vertical"
@@ -366,8 +382,10 @@
 
             </android.support.v7.widget.CardView>
 
+
+            <!--Ma adto sa pending sa seller ug buyer-->
             <Button
-                android:id="@+id/btn_sell_diy"
+                android:id="@+id/btn_buy_relatedDiy"
                 style="@style/LoginStyle"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
@@ -376,28 +394,68 @@
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_below="@+id/cardView5"
                 android:layout_marginLeft="15dp"
-                android:layout_below="@+id/cardView4"
-                android:layout_toRightOf="@+id/btn_contact_diy_owner" />
+                android:layout_alignLeft="@+id/cardView5"
+                android:layout_alignRight="@+id/cardView5"
+                android:layout_alignEnd="@+id/cardView5"/>
 
+            <!--For buyers, (Chat, sms, call seller)-->
             <Button
-                android:id="@+id/btn_contact_diy_owner"
+                android:id="@+id/btn_contact_relatedDiy_owner"
                 style="@style/LoginStyle"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/btn_sell_diy"
-                android:layout_alignBottom="@+id/btn_sell_diy"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="15dp"
                 android:backgroundTint="@color/gen_scheme1"
                 android:text="Contact Seller"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_alignBaseline="@+id/btn_buy_relatedDiy"
+                android:layout_alignBottom="@+id/btn_buy_relatedDiy"
+                android:layout_alignLeft="@+id/cardView5"
+                android:layout_alignStart="@+id/cardView5" />
+
+
+            <!--&lt;!&ndash;For sellers to make thier item on PROMO/SALE&ndash;&gt;-->
+            <!--<Button-->
+                <!--android:id="@+id/btn_create_promo"-->
+                <!--style="@style/LoginStyle"-->
+                <!--android:layout_width="160dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignEnd="@+id/btn_sell_diy"-->
+                <!--android:layout_alignLeft="@+id/btn_contact_diy_owner"-->
+                <!--android:layout_alignRight="@+id/btn_sell_diy"-->
+                <!--android:layout_alignStart="@+id/btn_contact_diy_owner"-->
+                <!--android:layout_below="@+id/btn_sell_diy"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:layout_marginBottom="8dp"-->
+                <!--android:backgroundTint="@color/gen_scheme1"-->
+                <!--android:text="Create Promo"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:textSize="18sp" />-->
+
+
+            <!--&lt;!&ndash;For sellers to bid thier item&ndash;&gt;-->
+            <!--<Button-->
+                <!--android:id="@+id/btn_bid_item"-->
+                <!--style="@style/LoginStyle"-->
+                <!--android:layout_width="160dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignLeft="@+id/btn_create_promo"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_alignStart="@+id/btn_create_promo"-->
+                <!--android:layout_below="@id/btn_create_promo"-->
+                <!--android:backgroundTint="@color/gen_scheme1"-->
+                <!--android:text="bid this item"-->
+                <!--android:textColor="@android:color/white"-->
+                <!--android:textSize="18sp"-->
+                <!--android:layout_marginBottom="15dp"-->
+                <!--android:layout_alignRight="@+id/btn_create_promo"-->
+                <!--android:layout_alignEnd="@+id/btn_create_promo" />-->
 
 
         </RelativeLayout>
-    </ScrollView>
 
+    </ScrollView>
 </RelativeLayout>

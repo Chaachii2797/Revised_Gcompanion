@@ -15,20 +15,21 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.R;
 
 /**
  * Created by cicctuser on 9/29/2017.
  */
 
-public class Items_Adapter extends ArrayAdapter<DIYnames> {
+public class Items_Adapter extends ArrayAdapter<DIYSell> {
 
     private Activity context;
     private int resource;
-    private List<DIYnames> listDIY;
+//    private List<DIYnames> listDIY;
+    private List<DIYSell> listDIY;
 
-    public Items_Adapter(@NonNull Activity context, @LayoutRes int resource, @NonNull List<DIYnames> objects) {
+    public Items_Adapter(@NonNull Activity context, @LayoutRes int resource, @NonNull List<DIYSell> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -46,7 +47,7 @@ public class Items_Adapter extends ArrayAdapter<DIYnames> {
         TextView tvName = (TextView) v.findViewById(R.id.get_diyName);
         ImageView img = (ImageView) v.findViewById(R.id.diy_item_icons);
         TextView tvcategory = (TextView) v.findViewById(R.id.tv_category);
-
+        tvcategory.setText(listDIY.get(position).getIdentity());
 
         tvName.setText(listDIY.get(position).getDiyName());
         Glide.with(context).load(listDIY.get(position).getDiyUrl()).into(img);

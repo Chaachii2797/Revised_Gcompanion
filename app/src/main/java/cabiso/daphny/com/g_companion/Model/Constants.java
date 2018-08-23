@@ -140,6 +140,7 @@ public class Constants {
             "{\"name\": \"Phone\", \"code\": \"PH\"}, \n" +
             "{\"name\": \"Picture Frame\", \"code\": \"PI\"}, \n" +
             "{\"name\": \"Pillow\", \"code\": \"PL\"}, \n" +
+            "{\"name\": \"Plywood\", \"code\": \"PW\"}, \n" +
             "{\"name\": \"Bottle (Plastic)\", \"code\": \"PS\"}, \n" +
             "{\"name\": \"Plates\", \"code\": \"PL\"}, \n" +
             "{\"name\": \"Paint\", \"code\": \"PA\"}, \n" +
@@ -161,11 +162,13 @@ public class Constants {
             "{\"name\": \"Masking Tape\", \"code\": \"MT\"}, \n" +
             "{\"name\": \"Cellophane Tape\", \"code\": \"CT\"}, \n" +
             "{\"name\": \"Cellophane\", \"code\": \"CL\"}, \n" +
+            "{\"name\": \"Screw\", \"code\": \"SR\"}, \n" +
             "{\"name\": \"Scissors\", \"code\": \"SC\"}, \n" +
             "{\"name\": \"Shoe\", \"code\": \"SH\"}, \n" +
             "{\"name\": \"Shoe Box\", \"code\": \"SB\"}, \n" +
             "{\"name\": \"Sling\", \"code\": \"SL\"}, \n" +
             "{\"name\": \"Spoon\", \"code\": \"SP\"}, \n" +
+            "{\"name\": \"Sponge\", \"code\": \"SO\"}, \n" +
             "{\"name\": \"Spray\", \"code\": \"SR\"}, \n" +
             "{\"name\": \"Spray Paint\", \"code\": \"SP\"}, \n" +
             "{\"name\": \"Steel\", \"code\": \"ST\"}, \n" +
@@ -177,6 +180,8 @@ public class Constants {
             "{\"name\": \"Sunglass\", \"code\": \"SU\"}, \n" +
             "{\"name\": \"Stamps\", \"code\": \"SM\"}, \n" +
             "{\"name\": \"Scrap metal\", \"code\": \"SP\"}, \n" +
+            "{\"name\": \"Synthetic Leather\", \"code\": \"SL\"}, \n" +
+            "{\"name\": \"Tire\", \"code\": \"TI\"}, \n" +
             "{\"name\": \"T-shirt\", \"code\": \"TS\"}, \n" +
             "{\"name\": \"Telephone\", \"code\": \"TE\"}, \n" +
             "{\"name\": \"Toilet paper\", \"code\": \"TO\"}, \n" +

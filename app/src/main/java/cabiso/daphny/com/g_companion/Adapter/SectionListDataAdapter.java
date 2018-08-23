@@ -2,8 +2,6 @@ package cabiso.daphny.com.g_companion.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,10 +17,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.Model.SellingDIY;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
 import cabiso.daphny.com.g_companion.ViewRelatedDIYS;
@@ -35,7 +33,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
     private Context mContext;
     private DatabaseReference diy_owner, diyByTags, dbRef;
-    private ArrayList<DIYnames> ePrice = new ArrayList<>();
+    private ArrayList<SellingDIY> ePrice = new ArrayList<>();
     private ArrayList<User_Profile> eOwner = new ArrayList<>();
     private ArrayList<DIYnames> ePics = new ArrayList<>();
     private ArrayList<DIYnames> itemsList;
@@ -53,7 +51,6 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     @Override
     public SingleItemRowHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.related_diys, parent, false);
-//        SingleItemRowHolder mh = new SingleItemRowHolder(v);
         return new SingleItemRowHolder(v);
 
     }
@@ -79,7 +76,6 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     @Override
     public int getItemCount() {
         return (null != itemsList ? itemsList.size() : 0);
-//        return itemsList.size();
     }
 
 
@@ -94,7 +90,6 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
             super(view);
 
             diyName = (TextView) view.findViewById(R.id.related_diy_name);
-//            diyOwner = (TextView) view.findViewById(R.id.related_diy_owner);
             itemImage = (ImageView) view.findViewById(R.id.retaled_diy_img);
 
 //            view.setOnClickListener(this);
@@ -104,24 +99,24 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                     DIYnames diys = new DIYnames();
                     DIYnames relDiys = (DIYnames) itemsList.get(getAdapterPosition());
 
-//                    int position = getAdapterPosition();
-
 
                     //send data to ViewRelatedDIYS using intent
                     Intent intent = new Intent(v.getContext(), ViewRelatedDIYS.class);
                     intent.putExtra("Nname", relDiys.diyName);
                     Log.e("Nname", relDiys.diyName);
 
+//                    intent.putExtra("Pprice", sellPrice.getSelling_price());
+//                    Log.e("Pprice", String.valueOf(sellPrice.getSelling_price()));
 
-                    v.buildDrawingCache();
-                    Bitmap image = v.getDrawingCache();
-                    Bundle extras = new Bundle();
-                    extras.putParcelable("imagebitmap", image);
-
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    intent.putExtra("image", byteArray);
+//                    v.buildDrawingCache();
+//                    Bitmap image = v.getDrawingCache();
+//                    Bundle extras = new Bundle();
+//                    extras.putParcelable("imagebitmap", image);
+//
+//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//                    byte[] byteArray = stream.toByteArray();
+//                    intent.putExtra("image", byteArray);
                     v.getContext().startActivity(intent);
 
                     Toast.makeText(v.getContext(), diyName.getText().toString()

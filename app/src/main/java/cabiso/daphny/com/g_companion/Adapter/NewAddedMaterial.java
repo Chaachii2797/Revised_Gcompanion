@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -87,12 +87,12 @@ public class NewAddedMaterial extends ArrayAdapter<DBMaterial> {
     private static class ViewHolder{
         TextView tvTag;
         TextView tvQtyUnity;
-        Button btnDelete_tag;
+        ImageButton btnDelete_tag;
         ImageView mat_img;
         public ViewHolder(View view){
             tvQtyUnity = (TextView) view.findViewById(R.id.tvQtyUnity);
             tvTag = (TextView)view.findViewById(R.id.tvAddedMat);
-            btnDelete_tag = (Button) view.findViewById(R.id.btn_delete_tag);
+            btnDelete_tag = (ImageButton) view.findViewById(R.id.btn_delete_tag);
             mat_img = (ImageView) view.findViewById(R.id.addedMat_image);
         }
     }

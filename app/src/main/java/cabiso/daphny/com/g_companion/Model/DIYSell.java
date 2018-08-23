@@ -8,19 +8,20 @@ import java.io.Serializable;
  * Created by Lenovo on 1/7/2018.
  */
 
-public class DIYSell implements Comparable<DIYSell>, Serializable{
+public class DIYSell extends SellingDIY implements Comparable<DIYSell>, Serializable{
 
     public String diyName;
     public String diyUrl;
     public String user_id;
     public String productID;
     public String identity;
+    public String buyerID;
     public Float bookmarks;
     public Float likes;
     public int materialMatches;
 
     public DIYSell(String diyName, String diyUrl, String user_id, String productID, String identity,
-                    Float bookmarks, Float likes){
+                    Float bookmarks, Float likes, String buyerID){
         this.diyName = diyName;
         this.diyUrl = diyUrl;
         this.user_id = user_id;
@@ -28,6 +29,7 @@ public class DIYSell implements Comparable<DIYSell>, Serializable{
         this.identity = identity;
         this.bookmarks = bookmarks;
         this.likes = likes;
+        this.buyerID = buyerID;
     }
 
     public DIYSell(){
@@ -55,6 +57,14 @@ public class DIYSell implements Comparable<DIYSell>, Serializable{
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    public String getBuyerID() {
+        return buyerID;
+    }
+
+    public void setBuyerID(String buyerID) {
+        this.buyerID = buyerID;
     }
 
     public String getProductID() {

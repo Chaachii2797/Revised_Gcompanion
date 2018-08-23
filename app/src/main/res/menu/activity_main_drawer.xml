@@ -9,9 +9,9 @@
             android:title="Profile" />
 
         <item
-            android:id="@+id/nav_wishlist"
-            android:icon="@drawable/ic_diy_community"
-            android:title="Wish list" />
+            android:id="@+id/nav_bookmark"
+            android:icon="@drawable/ic_bookmark"
+            android:title="Bookmark" />
 
         <item
             android:id="@+id/nav_chat"
@@ -19,14 +19,20 @@
             android:title="Chat" />
 
         <item
+            android:id="@+id/nav_pending"
+            android:icon="@mipmap/pending"
+            android:title="Pending Item/s" />
+
+        <item
+            android:id="@+id/nav_meetup"
+            android:icon="@drawable/ic_diy_community"
+            android:title="For Meet-up" />
+
+        <item
             android:id="@+id/nav_sold"
             android:icon="@mipmap/sold"
             android:title="Sold Item/s" />
 
-        <item
-            android:id="@+id/nav_pending"
-            android:icon="@mipmap/pending"
-            android:title="Pending Item/s" />
 
         <item
             android:id="@+id/nav_calendar"

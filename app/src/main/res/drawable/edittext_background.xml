@@ -5,7 +5,7 @@
         <shape android:shape="rectangle">
             <stroke
                 android:width="3dp"
-                android:color="@color/bg_screen2" />
+                android:color="@color/gen_scheme1" />
         </shape>
     </item>
 

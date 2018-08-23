@@ -3,7 +3,11 @@
     <item android:id="@+id/sold_item"
         android:title="Sold"></item>
 
-    <item android:title="Free Bidding"></item>
+    <item
+        android:id="@+id/chat_buyer"
+        android:title="Chat Buyer"></item>
 
-    <item android:title="Incremental Bidding"></item>
+    <item
+        android:id="@+id/for_meetup"
+        android:title="For Meet-up"></item>
 </menu>

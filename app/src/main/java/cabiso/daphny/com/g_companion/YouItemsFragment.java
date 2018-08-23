@@ -47,6 +47,8 @@ public class YouItemsFragment extends Fragment {
     private DatabaseReference by_userReference;
     private DatabaseReference databaseReference;
     private DatabaseReference userdata_ref;
+    private DatabaseReference updateDataReference;
+
     private String username;
 
     private OnListFragmentInteractionListener user_Listener;
@@ -150,12 +152,21 @@ public class YouItemsFragment extends Fragment {
                         });
 
                             if(model.identity!=null){
-                                if(model.identity.equals("selling")){
+                                if(model.identity.equalsIgnoreCase("selling")){
                                     viewHolder.user_Identity.setText("Selling");
-                                    viewHolder.user_Identity.setBackgroundColor(Color.RED);
-                                }else{
+                                    viewHolder.user_Identity.setBackgroundColor(Color.MAGENTA);
+                                }else if(model.identity.equalsIgnoreCase("community")){
                                     viewHolder.user_Identity.setText("Community");
                                     viewHolder.user_Identity.setBackgroundColor(Color.YELLOW);
+                                }else if(model.identity.equalsIgnoreCase("on bid!")){
+                                    viewHolder.user_Identity.setText("On BID!");
+                                    viewHolder.user_Identity.setBackgroundColor(Color.GREEN);
+                                }else if(model.identity.equalsIgnoreCase("ON SALE!")){
+                                    viewHolder.user_Identity.setText("On SALE!");
+                                    viewHolder.user_Identity.setBackgroundColor(Color.RED);
+                                }else if(model.identity.equalsIgnoreCase("sold")) {
+                                    viewHolder.user_Identity.setText("SOLD");
+                                    viewHolder.user_Identity.setBackgroundColor(Color.CYAN);
                                 }
 
 
@@ -190,6 +201,7 @@ public class YouItemsFragment extends Fragment {
                                     @Override
                                     public void onClick(View v) {
                                         if (null != user_Listener) {
+
                                             // Notify the active callbacks interface (the activity, if the
                                             // fragment is attached to one) that an item has been selected.
                                             user_Listener.onListFragmentInteractionListener(getRef(position));
@@ -207,6 +219,8 @@ public class YouItemsFragment extends Fragment {
                 };
         user_recyclerView.setAdapter(user_Adapter);
     }
+
+
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
 
@@ -248,4 +262,6 @@ public class YouItemsFragment extends Fragment {
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteractionListener(DatabaseReference ref);
     }
+
+
 }

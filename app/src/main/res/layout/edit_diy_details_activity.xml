@@ -23,7 +23,7 @@
             android:background="?attr/colorPrimary"
             android:gravity="center"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Upload DIY"
+            app:title="Edit DIY"
             app:titleMarginStart="30dp">
 
             <ImageView

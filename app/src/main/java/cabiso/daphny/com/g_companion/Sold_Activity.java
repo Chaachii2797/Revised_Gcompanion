@@ -26,12 +26,16 @@ import com.stepstone.apprating.listener.RatingDialogListener;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
+import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.Review;
 
 /**
@@ -56,6 +60,7 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
     private ArrayList<DBMaterial> dbMaterials;
     int count;
     float curRate;
+    String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
 
     public Sold_Activity() {
@@ -66,8 +71,6 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sold_);
-
-        recyclerView = (RecyclerView) findViewById(R.id.lvView);
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
@@ -107,8 +110,6 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         final DIYSell itemRef = adapter.getItem(position);
-
-                        Toast.makeText(Sold_Activity.this, "Item: " + itemRef, Toast.LENGTH_SHORT).show();
 
                         if(itemRef.getUser_id().equals(userID)) {
                             Toast.makeText(Sold_Activity.this, "You can't rate your own item.", Toast.LENGTH_SHORT).show();
@@ -175,18 +176,20 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
         curRate = Float.valueOf(decimalFormat.format((curRate * count + rate)/ ++count));
         final float curRatee = (int) (curRate * count);
 //        curRate = Float.valueOf(decimalFormat.format((curRate + rate)));
-        Toast.makeText(Sold_Activity.this,"Rate : " + rate + "\n Comment : " + comment,Toast.LENGTH_SHORT).show();
+        Toast.makeText(Sold_Activity.this,"Rate : " + rate + "\n Comment : " + comment ,Toast.LENGTH_SHORT).show();
 
         soldItemReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 final DIYSell diYs = dataSnapshot.getValue(DIYSell.class);
-//                Review review = new Review().setComment(comment).setRatings(rate).setReviewer(userID).setDate_submitted("");
-                final Review review = new Review().setRatings(rate).setComment(comment).setReviewer(userID).setDate_submitted("");
-                if(diYs.getUser_id()!=null){
-                    userdataReference.child(diYs.getUser_id()).child("ratings").push().setValue(review);
-                }else{
+                final DIYnames diyInfo = dataSnapshot.getValue(DIYnames.class);
+
+                final Review review = new Review().setRatings(rate).setComment(comment).setReviewer(userID).setDate_submitted(sdate);
+                if(diYs.getUser_id().equals(userID)){
                     Toast.makeText(Sold_Activity.this, "USERIDIMG: "+diYs.user_id, Toast.LENGTH_SHORT).show();
+
+                }else{
+                    userdataReference.child(diYs.getUser_id()).child("ratings").push().setValue(review);
                 }
             }
 

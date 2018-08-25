@@ -2,6 +2,7 @@ package cabiso.daphny.com.g_companion;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -183,6 +184,8 @@ public class ForMeetUpActivity extends AppCompatActivity {
 //                                        results.put("selling_qty", quantityCount);
 //                                        diyReference.child("key sa kani nga diy? huhu").child("DIY Price").updateChildren(results);
 //
+                                        Intent intent = new Intent(ForMeetUpActivity.this, Sold_Activity.class);
+                                        startActivity(intent);
                                     }
                                 });
 

@@ -79,10 +79,15 @@
         <activity android:name=".MyDiys" />
         <activity android:name=".SellMyDIYs" />
         <activity android:name=".Pending_Activity" />
+        <activity android:name=".ForMeetUpActivity" />
+        <activity android:name=".Sold_Activity" />
         <activity android:name=".Search.SearchView" />
         <activity android:name=".Promo.PromoActivity" />
         <activity android:name=".Promo.PriceDiscount" />
         <activity android:name=".Recommend.Bottle_Recommend" />
+        <activity android:name=".EditData.EditDIYDetailsActivity" />
+        <activity android:name=".EditData.EditProfileActivity" />
+
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -97,7 +102,6 @@
         <activity android:name=".ProductDetailViewActivity" />
         <activity android:name=".ChatWithSellerActivity" />
         <activity android:name=".Item_Activity" />
-        <activity android:name=".Sold_Activity" />
         <activity android:name=".SearchResultsActivity" />
         <activity android:name=".DIYDetailViewActivity" />
         <activity android:name=".SellDIYDetail" />

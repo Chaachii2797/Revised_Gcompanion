@@ -70,7 +70,6 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                         .into(holder.itemImage);
 
 
-
     }
 
     @Override
@@ -92,7 +91,6 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
             diyName = (TextView) view.findViewById(R.id.related_diy_name);
             itemImage = (ImageView) view.findViewById(R.id.retaled_diy_img);
 
-//            view.setOnClickListener(this);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -105,46 +103,13 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                     intent.putExtra("Nname", relDiys.diyName);
                     Log.e("Nname", relDiys.diyName);
 
-//                    intent.putExtra("Pprice", sellPrice.getSelling_price());
-//                    Log.e("Pprice", String.valueOf(sellPrice.getSelling_price()));
-
-//                    v.buildDrawingCache();
-//                    Bitmap image = v.getDrawingCache();
-//                    Bundle extras = new Bundle();
-//                    extras.putParcelable("imagebitmap", image);
-//
-//                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//                    image.compress(Bitmap.CompressFormat.PNG, 100, stream);
-//                    byte[] byteArray = stream.toByteArray();
-//                    intent.putExtra("image", byteArray);
                     v.getContext().startActivity(intent);
 
-                    Toast.makeText(v.getContext(), diyName.getText().toString()
-                            + "\n" + itemImage.getDrawable(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(v.getContext(), diyName.getText().toString(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
-        /**
-         * Called when a view has been clicked.
-         *
-         * @param v The view that was clicked.
-         */
-//        @Override
-//        public void onClick(View v) {
-//            Log.e("POS_CLICKED: ",""+getAdapterPosition());
-//
-//            int position = getAdapterPosition();
-//            Toast.makeText(v.getContext(),Integer.toString(position), Toast.LENGTH_SHORT).show();
-//
-//
-//            DIYnames rel_diy = itemsList.get(position);
-//            String name = (String) rel_diy.diyName;
-//
-//            Log.e("name: ",rel_diy.diyName);
-//            Intent intent = new Intent(v.getContext(), ViewRelatedDIYS.class);
-//            intent.putExtra("Nname",name);
-//        }
     }
 
 }

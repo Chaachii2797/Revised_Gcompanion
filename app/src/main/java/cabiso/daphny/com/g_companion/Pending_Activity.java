@@ -71,7 +71,6 @@ public class Pending_Activity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pending_);
 
-        recyclerView = (RecyclerView) findViewById(R.id.lvView);
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
 
@@ -119,9 +118,6 @@ public class Pending_Activity extends AppCompatActivity{
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                             final DIYSell itemRef = adapter.getItem(position);
-
-                            Toast.makeText(Pending_Activity.this, "Pos: " + itemRef, Toast.LENGTH_SHORT).show();
-
 
                             if(itemRef.getIdentity().equals("For Confirmation")){
                                 Toast.makeText(Pending_Activity.this, "This is your item. Contact buyer.", Toast.LENGTH_SHORT).show();

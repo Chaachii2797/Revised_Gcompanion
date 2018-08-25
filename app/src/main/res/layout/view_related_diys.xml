@@ -66,7 +66,20 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="40dp"
                     android:background="@android:color/transparent">
+
                 </android.support.v4.view.ViewPager>
+
+                <Button
+                    android:id="@+id/editDIYBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="55dp"
+                    android:layout_marginLeft="290dp"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-condensed"
+                    android:background="@color/gen_scheme1"
+                    android:textColor="@color/backgroundColor"
+                    android:text="Edit DIY" />
 
                 <LinearLayout
                     android:id="@+id/diy_name_details"
@@ -76,7 +89,7 @@
                     android:orientation="vertical"
                     android:padding="20dp"
                     android:layout_below="@+id/carview1"
-                    android:layout_marginTop="150dp"
+                    android:layout_marginTop="170dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true">
 
@@ -383,25 +396,273 @@
             </android.support.v7.widget.CardView>
 
 
-            <!--Ma adto sa pending sa seller ug buyer-->
-            <Button
-                android:id="@+id/btn_buy_relatedDiy"
-                style="@style/LoginStyle"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/gen_scheme1"
-                android:text="BUY DIY"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="8dp"
-                android:layout_below="@+id/cardView5"
-                android:layout_marginLeft="15dp"
-                android:layout_alignLeft="@+id/cardView5"
-                android:layout_alignRight="@+id/cardView5"
-                android:layout_alignEnd="@+id/cardView5"/>
 
-            <!--For buyers, (Chat, sms, call seller)-->
+
+            <!--For seller to bid their items-->
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cardView6"
+                android:layout_width="330dp"
+                android:layout_height="120dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="5dp"
+                app:elevation="5dp"
+                android:layout_below="@+id/cardView5"
+                android:layout_alignLeft="@+id/cardView5"
+                android:layout_alignStart="@+id/cardView5"
+                android:layout_marginTop="14dp">
+
+                <TextView
+                    android:id="@+id/owners_statement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/textView29"
+                    android:layout_alignStart="@+id/textView29"
+                    android:layout_below="@+id/diy_material"
+                    android:background="@color/gen_scheme1"
+                    android:paddingLeft="10dp"
+                    android:text="Owners Statement:"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/et_bidding_expiration"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/diy_material"
+                    android:layout_alignStart="@+id/diy_material"
+                    android:layout_below="@+id/textView31"
+                    android:layout_marginLeft="155dp"
+                    android:layout_marginTop="30dp"
+                    android:hint="Bidding Expiration :"
+                    android:scrollbars="vertical"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/bidding_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/diy_material"
+                    android:layout_alignStart="@+id/diy_material"
+                    android:layout_below="@+id/diy_owner_cn"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="55dp"
+                    android:scrollbars="vertical"
+                    android:text="Bidding Initial Price"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/et_bidding_price"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/diy_material"
+                    android:layout_alignStart="@+id/diy_material"
+                    android:layout_below="@+id/item_date_bidded"
+                    android:layout_marginLeft="165dp"
+                    android:layout_marginTop="55dp"
+                    android:hint="Bidding Price :"
+                    android:scrollbars="vertical"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/bidding_expiration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/diy_material"
+                    android:layout_alignStart="@+id/diy_material"
+                    android:layout_below="@+id/textView31"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="30dp"
+                    android:scrollbars="vertical"
+                    android:text="Bidding Expiration"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/bidding_cmmnt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/diy_material"
+                    android:layout_alignStart="@+id/diy_material"
+                    android:layout_below="@+id/diy_owner_cn"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="80dp"
+                    android:scrollbars="vertical"
+                    android:text="Owners Proposal :"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/et_bidding_commnt"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/diy_material"
+                    android:layout_alignStart="@+id/diy_material"
+                    android:layout_below="@+id/item_date_bidded"
+                    android:layout_marginLeft="165dp"
+                    android:layout_marginTop="80dp"
+                    android:scrollbars="vertical"
+                    android:hint="Bidding Comment :"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+            </android.support.v7.widget.CardView>
+
+            <!--For buyers to bid the items-->
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cardView7"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="5dp"
+                app:elevation="5dp"
+                android:paddingTop="40dp"
+                android:layout_below="@+id/cardView6"
+                android:layout_alignLeft="@+id/cardView6"
+                android:layout_alignStart="@+id/cardView6"
+                android:layout_marginTop="15dp">
+
+                <RelativeLayout
+                    android:id="@+id/relCardview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/lv_bidders"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:paddingTop="25dp"></android.support.v7.widget.RecyclerView>
+
+                    <Button
+                        android:id="@+id/btn_buyers_bid"
+                        style="@style/LoginStyle"
+                        android:layout_width="160dp"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/lv_bidders"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="85dp"
+                        android:layout_marginTop="5dp"
+                        android:backgroundTint="@color/gen_scheme1"
+                        android:text="Want to Bid"
+                        android:textColor="@android:color/white"
+                        android:textSize="18sp" />
+
+                </RelativeLayout>
+
+
+                <TextView
+                    android:id="@+id/tv_bidders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/textView29"
+                    android:layout_alignStart="@+id/textView29"
+                    android:layout_below="@+id/diy_material"
+                    android:layout_marginBottom="50dp"
+                    android:background="@color/gen_scheme1"
+                    android:paddingLeft="10dp"
+                    android:text="Bidders :"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </android.support.v7.widget.CardView>
+
+            <!--For displaying Related DIYS-->
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cardView8"
+                android:layout_width="330dp"
+                android:layout_height="250dp"
+                android:layout_alignLeft="@+id/cardView7"
+                android:layout_alignStart="@+id/cardView7"
+                android:layout_below="@+id/cardView7"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/gen_scheme4"
+                app:elevation="5dp">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/relatedDIYrecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="horizontal" />
+
+            </android.support.v7.widget.CardView>
+
+
+            <!--For displaying Maximum Bid Price (Ika expire sa bidding)-->
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/cardView9"
+                android:layout_width="330dp"
+                android:layout_height="90dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="5dp"
+                app:elevation="5dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/cardView8"
+                android:layout_alignLeft="@+id/cardView5"
+                android:layout_alignStart="@+id/cardView5">
+
+                <TextView
+                    android:id="@+id/textView3135"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/textView29"
+                    android:layout_alignStart="@+id/textView29"
+                    android:layout_below="@+id/diy_material"
+                    android:background="@color/gen_scheme1"
+                    android:paddingLeft="10dp"
+                    android:text="Bidding Winner"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/winner_bid_amount"
+                    android:layout_width="180dp"
+                    android:layout_height="30dp"
+                    android:layout_alignLeft="@+id/diy_material"
+                    android:layout_alignStart="@+id/diy_material"
+                    android:layout_below="@+id/textView31"
+                    android:layout_marginLeft="135dp"
+                    android:layout_marginTop="40dp"
+                    android:scrollbars="vertical"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/winner_bid_owner"
+                    android:layout_width="130dp"
+                    android:layout_height="30dp"
+                    android:layout_alignLeft="@+id/diy_material"
+                    android:layout_alignStart="@+id/diy_material"
+                    android:layout_below="@+id/textView31"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="40dp"
+                    android:hint="Winner Name: "
+                    android:scrollbars="vertical"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+            </android.support.v7.widget.CardView>
+
+
+            <!--Ma adto sa pending sa seller ug buyer-->
             <Button
                 android:id="@+id/btn_contact_relatedDiy_owner"
                 style="@style/LoginStyle"
@@ -411,48 +672,61 @@
                 android:text="Contact Seller"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:layout_alignBaseline="@+id/btn_buy_relatedDiy"
-                android:layout_alignBottom="@+id/btn_buy_relatedDiy"
-                android:layout_alignLeft="@+id/cardView5"
-                android:layout_alignStart="@+id/cardView5" />
+                android:layout_marginTop="15dp"
+                android:layout_alignLeft="@+id/cardView9"
+                android:layout_alignStart="@+id/cardView9"
+                android:layout_below="@+id/cardView9"/>
 
 
-            <!--&lt;!&ndash;For sellers to make thier item on PROMO/SALE&ndash;&gt;-->
-            <!--<Button-->
-                <!--android:id="@+id/btn_create_promo"-->
-                <!--style="@style/LoginStyle"-->
-                <!--android:layout_width="160dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignEnd="@+id/btn_sell_diy"-->
-                <!--android:layout_alignLeft="@+id/btn_contact_diy_owner"-->
-                <!--android:layout_alignRight="@+id/btn_sell_diy"-->
-                <!--android:layout_alignStart="@+id/btn_contact_diy_owner"-->
-                <!--android:layout_below="@+id/btn_sell_diy"-->
-                <!--android:layout_marginTop="10dp"-->
-                <!--android:layout_marginBottom="8dp"-->
-                <!--android:backgroundTint="@color/gen_scheme1"-->
-                <!--android:text="Create Promo"-->
-                <!--android:textColor="@android:color/white"-->
-                <!--android:textSize="18sp" />-->
+            <!--For buyers, (Chat, sms, call seller)-->
+            <Button
+                android:id="@+id/btn_buy_relatedDiy"
+                style="@style/LoginStyle"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/gen_scheme1"
+                android:text="BUY DIY"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:layout_alignBaseline="@+id/btn_contact_relatedDiy_owner"
+                android:layout_alignBottom="@+id/btn_contact_relatedDiy_owner"
+                android:layout_alignRight="@+id/cardView9"
+                android:layout_alignEnd="@+id/cardView9" />
+
+            <!--For sellers to make thier item on PROMO/SALE-->
+            <Button
+                android:id="@+id/btn_create_my_promo"
+                style="@style/LoginStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/gen_scheme1"
+                android:text="Create Promo"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_below="@+id/btn_contact_relatedDiy_owner"
+                android:layout_centerHorizontal="true" />
 
 
-            <!--&lt;!&ndash;For sellers to bid thier item&ndash;&gt;-->
-            <!--<Button-->
-                <!--android:id="@+id/btn_bid_item"-->
-                <!--style="@style/LoginStyle"-->
-                <!--android:layout_width="160dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignLeft="@+id/btn_create_promo"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_alignStart="@+id/btn_create_promo"-->
-                <!--android:layout_below="@id/btn_create_promo"-->
-                <!--android:backgroundTint="@color/gen_scheme1"-->
-                <!--android:text="bid this item"-->
-                <!--android:textColor="@android:color/white"-->
-                <!--android:textSize="18sp"-->
-                <!--android:layout_marginBottom="15dp"-->
-                <!--android:layout_alignRight="@+id/btn_create_promo"-->
-                <!--android:layout_alignEnd="@+id/btn_create_promo" />-->
+            <!--For sellers to bid thier item-->
+            <Button
+                android:id="@+id/btn_bid_my_item"
+                style="@style/LoginStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/gen_scheme1"
+                android:text="bid this item"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_below="@+id/btn_create_my_promo"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
 
 
         </RelativeLayout>

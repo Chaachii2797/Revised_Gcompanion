@@ -1,13 +1,9 @@
 package cabiso.daphny.com.g_companion;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -27,9 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.UUID;
-
-import cabiso.daphny.com.g_companion.InstantMessaging.models.User;
 import cabiso.daphny.com.g_companion.InstantMessaging.utils.MessagingContants;
 import cabiso.daphny.com.g_companion.InstantMessaging.utils.SharedPrefUtil;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
@@ -158,7 +151,8 @@ public class Signup extends AppCompatActivity implements View.OnClickListener{
                         password.setError("Password Number cannot be empty!");
                     }else{
                         User_Profile user_profile = new User_Profile(add, contct, f_name, l_name, emails, pass, userID,
-                                new SharedPrefUtil(getApplication()).getString(MessagingContants.ARG_FIREBASE_TOKEN));
+                                new SharedPrefUtil(getApplication()).getString(MessagingContants.ARG_FIREBASE_TOKEN),
+                                "userProfielPic", 0f);
                         register(user_profile);
 //                        startActivity(ob);
                     }   // commit the values

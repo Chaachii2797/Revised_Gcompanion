@@ -14,13 +14,15 @@ public class User_Profile {
     String userID;
     String firebaseToken;
     String android_id;
+    String userProfileUrl;
+    Float userRating;
 
 
     public User_Profile() {
     }
 
     public User_Profile(String address, String contact_no, String f_name, String l_name, String email, String password,
-                        String userID, String firebaseToken) {
+                        String userID, String firebaseToken, String userProfileUrl, Float userRating) {
         this.address = address;
         this.contact_no = contact_no;
         this.f_name = f_name;
@@ -30,6 +32,8 @@ public class User_Profile {
         this.userID = userID;
         this.firebaseToken = firebaseToken;
         this.android_id = android_id;
+        this.userProfileUrl = userProfileUrl;
+        this.userRating = userRating;
     }
 
 
@@ -96,6 +100,22 @@ public class User_Profile {
     public User_Profile setPassword(String password) {
         this.password = password;
         return this;
+    }
+
+    public String getUserProfileUrl() {
+        return userProfileUrl;
+    }
+
+    public void setUserProfileUrl(String userProfileUrl) {
+        this.userProfileUrl = userProfileUrl;
+    }
+
+    public Float getUserRating() {
+        return userRating;
+    }
+
+    public void setUserRating(Float userRating) {
+        this.userRating = userRating;
     }
 
     public String getAndroid_id() {

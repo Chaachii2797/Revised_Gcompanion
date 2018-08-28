@@ -3,7 +3,6 @@ package cabiso.daphny.com.g_companion;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,10 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +44,7 @@ import java.util.Date;
 
 import cabiso.daphny.com.g_companion.EditData.EditProfileActivity;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static cabiso.daphny.com.g_companion.R.id.user_ratings;
 
@@ -55,7 +56,7 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabaseReference;
-    private DatabaseReference userdataReference;
+    private DatabaseReference userdataReference, userDBReference;
     private String userID;
     private User_Profile userProfileInfo;
     private FirebaseStorage mStorage;
@@ -64,8 +65,9 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
     private FirebaseDatabase database;
     private File profileImage;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    protected static final int GALLERY_PICTURE = 1;
 
-    private ImageView profile_picture;
+    private CircleImageView profile_picture;
     private Uri profilePictureUri;
 
     @Override
@@ -84,21 +86,16 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
                 "file_upload UPLOAD FILE");
         userStorageReference = storageReference.child("UserStorage"+"/"+userID);
 
+        userDBReference = FirebaseDatabase.getInstance().getReference().child("userdata").child(userID);
+
         setContentView(R.layout.activity_my_profile);
-
-        final TextView username = (TextView) findViewById(R.id.name);
-        final TextView email = (TextView) findViewById(R.id.email);
-        final TextView password = (TextView) findViewById(R.id.password);
-        final TextView phone = (TextView)findViewById(R.id.phone);
-        final TextView address = (TextView) findViewById(R.id.address);
-
 
         final TextView profile_username = (TextView) findViewById(R.id.profile_name);
         final TextView profile_email = (TextView) findViewById(R.id.profile_email);
         final TextView profile_password = (TextView) findViewById(R.id.profile_password);
         final TextView profile_phone = (TextView)findViewById(R.id.profile_phone);
         final TextView profile_address = (TextView) findViewById(R.id.profile_address);
-        profile_picture = (ImageView) findViewById(R.id.profile_picture);
+        profile_picture = (CircleImageView) findViewById(R.id.profile_picture);
         final Button edit_profile_btn = (Button) findViewById(R.id.edit_submit);
         final TextView rate = (TextView) findViewById(user_ratings);
 
@@ -137,7 +134,7 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
         pictureReference.getFile(profileImage).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                profile_picture.setImageBitmap(BitmapFactory.decodeFile(profileImage.getAbsolutePath()));
+//                profile_picture.setImageBitmap(BitmapFactory.decodeFile(profileImage.getAbsolutePath()));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -160,18 +157,28 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
                 userProfileInfo = dataSnapshot.getValue(User_Profile.class);
                 Log.d("profileUserID", userID);
                 if(userProfileInfo!=null){
-                  //  Log.d("username", userProfileInfo.username);
                     profile_username.setText(userProfileInfo.getF_name() + " " + userProfileInfo.getL_name());
-                   // Log.d("username", userProfileInfo.username);
                     profile_email.setText(userProfileInfo.getEmail());
-                    //Log.d("email", userProfileInfo.email);
                     profile_phone.setText(userProfileInfo.getContact_no());
-                    //Log.d("profile", userProfileInfo.phone);
                     profile_address.setText(userProfileInfo.getAddress());
-                    //Log.d("address", userProfileInfo.address);
-//                    rate.setText(Integer.toString(userProfileInfo.userRating));
                     profile_password.setText(userProfileInfo.getPassword());
+
+                    rate.setText(userProfileInfo.getUserRating().toString());
+                    Log.e("userratee", String.valueOf(userProfileInfo.getUserRating()));
+
+
+                    if(userProfileInfo.getUserProfileUrl() == null) {
+                        profile_picture.setImageDrawable(getResources().getDrawable(R.drawable.add));
+
+                    } else{
+                        Glide.with(MyProfileActivity.this)
+                                .load(userProfileInfo.getUserProfileUrl())
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .fitCenter().crossFade()
+                                .into(profile_picture);
+                    }
                 }
+
             }
 
             @Override
@@ -198,6 +205,7 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
         });
 
     }
+
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -273,6 +281,9 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+                userDBReference.child("userProfileUrl").setValue(taskSnapshot.getDownloadUrl().toString());
+
             }
         });
     }

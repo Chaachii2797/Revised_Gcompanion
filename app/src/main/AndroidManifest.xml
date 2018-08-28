@@ -81,6 +81,7 @@
         <activity android:name=".Pending_Activity" />
         <activity android:name=".ForMeetUpActivity" />
         <activity android:name=".Sold_Activity" />
+        <activity android:name=".CalendarActivity" />
         <activity android:name=".Search.SearchView" />
         <activity android:name=".Promo.PromoActivity" />
         <activity android:name=".Promo.PriceDiscount" />

@@ -30,13 +30,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
-import cabiso.daphny.com.g_companion.Model.DIYnames;
-import cabiso.daphny.com.g_companion.Model.Review;
 
 /**
  * Created by Lenovo on 7/31/2017.
@@ -169,27 +168,34 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
 
     }
 
-    @Override
-    public void onPositiveButtonClicked(final int rate, @NotNull final String comment) {
-        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-        // int rates = (5*252 + 4*124 + 3*40 + 2*29 + 1*33) / (252+124+40+29+33);
-        curRate = Float.valueOf(decimalFormat.format((curRate * count + rate)/ ++count));
-        final float curRatee = (int) (curRate * count);
-//        curRate = Float.valueOf(decimalFormat.format((curRate + rate)));
-        Toast.makeText(Sold_Activity.this,"Rate : " + rate + "\n Comment : " + comment ,Toast.LENGTH_SHORT).show();
+    public void onPositiveButtonClicked(int rate, @NotNull final String comment){
+        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        curRate = Float.valueOf(decimalFormat.format((curRate * count + rate)
+                / ++count));
+        Toast.makeText(Sold_Activity.this,
+                "New Rating: " + curRate, Toast.LENGTH_SHORT).show();
+
+        Log.e("curRatee", String.valueOf(curRate));
+        Log.e("countt", String.valueOf(count));
 
         soldItemReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 final DIYSell diYs = dataSnapshot.getValue(DIYSell.class);
-                final DIYnames diyInfo = dataSnapshot.getValue(DIYnames.class);
 
-                final Review review = new Review().setRatings(rate).setComment(comment).setReviewer(userID).setDate_submitted(sdate);
+//                final Review review = new Review().setRatings(rate).setComment(comment).setReviewer(userID).setDate_submitted(sdate);
+
                 if(diYs.getUser_id().equals(userID)){
                     Toast.makeText(Sold_Activity.this, "USERIDIMG: "+diYs.user_id, Toast.LENGTH_SHORT).show();
 
                 }else{
-                    userdataReference.child(diYs.getUser_id()).child("ratings").push().setValue(review);
+
+                    HashMap<String, Object> result = new HashMap<>();
+                    result.put("userRating", curRate);
+
+                    userdataReference.child(diYs.getUser_id()).updateChildren(result);
+                    Log.e("ratee", String.valueOf(curRate));
+
                 }
             }
 
@@ -213,7 +219,70 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
 
             }
         });
+
     }
+
+//    @Override
+//    public void onPositiveButtonClicked(final int rate, @NotNull final String comment) {
+//        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+//        // int rates = (5*252 + 4*124 + 3*40 + 2*29 + 1*33) / (252+124+40+29+33);
+//        curRate = Float.valueOf(decimalFormat.format((curRate * count + rate)/ count++));
+//        Log.e("curRate", String.valueOf(curRate));
+//
+//        final float curRatee = (int) (curRate * count);
+//        Log.e("curRatee", String.valueOf(curRatee));
+//
+//        float dRate= (float) ((curRatee*5) /100);
+//        Log.e("dRate", String.valueOf(dRate));
+////        curRate = Float.valueOf(decimalFormat.format((curRate + rate)));
+//        Toast.makeText(Sold_Activity.this,"Rate : " + rate + "\n Comment : " + comment ,Toast.LENGTH_SHORT).show();
+//
+//
+//        soldItemReference.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                final DIYSell diYs = dataSnapshot.getValue(DIYSell.class);
+//
+////                final Review review = new Review().setRatings(rate).setComment(comment).setReviewer(userID).setDate_submitted(sdate);
+//
+//                if(diYs.getUser_id().equals(userID)){
+//                    Toast.makeText(Sold_Activity.this, "USERIDIMG: "+diYs.user_id, Toast.LENGTH_SHORT).show();
+//
+//                }else{
+//
+//                    HashMap<String, Object> result = new HashMap<>();
+//                    result.put("userRating", rate);
+//
+//                    userdataReference.child(diYs.getUser_id()).updateChildren(result);
+//                    Log.e("ratee", String.valueOf(rate));
+//
+//
+//
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     @Override
     public void onNegativeButtonClicked() {

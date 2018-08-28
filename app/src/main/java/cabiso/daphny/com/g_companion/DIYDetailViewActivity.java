@@ -505,6 +505,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                             item.putExtra("diyCategory", categoryPosition);
                             item.putExtra("diyMaterials", finalMessageMat);
                             item.putExtra("diyProcedures", finalMessageProd);
+                            item.putExtra("diyImage", diyInfo.diyUrl);
 
                             startActivity(item);
                         }
@@ -796,7 +797,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                             item.putExtra("diyName", diyInfo.diyName);
                             item.putExtra("diyOwner", user_name);
                             item.putExtra("diyCategory", categoryPosition);
-
+                            item.putExtra("diyImage", diyInfo.diyUrl);
                             item.putExtra("diyPrice", finalMessage_price1);
                             item.putExtra("diyQuantity", finalMessage_qty);
                             item.putExtra("diyDescription", finalMessage_dsc1);
@@ -976,55 +977,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         }
                     });
 
-//                    create_promo.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            final Dialog myDialog = new Dialog(context);
-//                            myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//                            myDialog.setContentView(R.layout.dialog_promo);
-//                            myDialog.show();
-//
-//                            final EditText promo_end_date = (EditText) myDialog.findViewById(R.id.et_promo_end_date);
-//                            final EditText promo_price = (EditText) myDialog.findViewById(R.id.et_promo_prce);
-//                            Button ok = (Button) myDialog.findViewById(R.id.btn_ok);
-//                            final Calendar calendar = Calendar.getInstance();
-//                            final int year = calendar.get(Calendar.YEAR);
-//                            final int month = calendar.get(Calendar.MONTH);
-//                            final int date = calendar.get(Calendar.DAY_OF_MONTH);
-//
-//                            final String price = String.valueOf(promo_price.getText().toString());
-//                            promo_end_date.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    final DatePickerDialog datePickerDialog = new DatePickerDialog(DIYDetailViewActivity.this,
-//                                            new DatePickerDialog.OnDateSetListener() {
-//                                        @Override
-//                                        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                                            String set_end_date = year + "-" + String.valueOf(month + 1) + "-" + (dayOfMonth);
-//                                            promo_end_date.setText(set_end_date);
-//                                        }
-//                                    }, year, month, date);
-//                                    datePickerDialog.show();
-//                                }
-//                            });
-//                            ok.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    CreatePromo createPromo = new CreatePromo();
-//                                    promoReference.child(itemSnapshot.getKey()).child("itemPromo").push()
-//                                            .setValue((createPromo.setPromo_userID(userID).setUser_promo_name(loggedInUserName)
-//                                                    .setPromo_price(promo_price.getText().toString()).setPromo_start(sdate)
-//                                                    .setPromo_ends(promo_end_date.getText().toString())));
-//
-//                                    HashMap<String, Object> result = new HashMap<>();
-//                                    result.put("identity", "ON SALE!");
-//                                    identityReference.updateChildren(result);
-//                                    myDialog.cancel();
-//                                }
-//                            });
-//                            Toast.makeText(context, "CREATE PROMO BUTTON CLICKED", Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
 
                     bid_item.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -1278,8 +1230,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                             item.putExtra("diyName", diyInfo.diyName);
                             item.putExtra("diyOwner", user_name);
                             item.putExtra("diyCategory", categoryPosition);
-
-
+                            item.putExtra("diyImage", diyInfo.diyUrl);
 
                             startActivity(item);
                         }
@@ -1527,8 +1478,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                 item.putExtra("diyName", diyInfo.diyName);
                                 item.putExtra("diyOwner", user_name);
                                 item.putExtra("diyCategory", categoryPosition);
-                                //bidding info
+                                item.putExtra("diyImage", diyInfo.diyUrl);
 
+                                //bidding info
                                 item.putExtra("diyBidInitialPrice", biddingItem.getIntial_price()+"");
                                 item.putExtra("diyBidExpiry", biddingItem.getXpire_date());
                                 item.putExtra("diyBidComment", biddingItem.getMessage());
@@ -1757,27 +1709,10 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     @Override
                     public void onSuccess(final Uri uri) {
                         Log.e("uriDIYImage", String.valueOf(uri));
-                        //Picasso.with(context).load(uri.getLastPathSegment()).resize(350,350).into(productImageView);
                         Glide.with(context).load(uri.toString())
                                 .fitCenter().centerCrop().crossFade()
                                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                                 .into(diyImageView);
-
-//                        edit_diy_btn.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v) {
-//
-//                                Intent item = new Intent(DIYDetailViewActivity.this,EditDIYDetailsActivity.class);
-//                                item.putExtra("diyImage", uri);
-//                                startActivity(item);
-////                                Intent intent = new Intent(context, EditDIYDetailsActivity.class);
-////                                intent.setAction("INTENT_NAME");
-////                                intent.putExtra("diyImageUri", uri.toString());
-////                                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-////
-////                                Toast.makeText(context, "Clicked image; " + " " + uri.toString(), Toast.LENGTH_SHORT).show();
-//                            }
-//                        });
 
 
                     }

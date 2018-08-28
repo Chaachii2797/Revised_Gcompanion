@@ -9,19 +9,18 @@
     android:orientation="vertical"
     android:weightSum="1">
 
-    <ImageView
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/user_prof_pic"
-        android:layout_width="160dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:layout_weight="0.52"
-        android:clickable="true"
-        android:onClick="onClickProfile"
-        android:paddingTop="@dimen/nav_header_vertical_spacing"
-        app:srcCompat="@drawable/ic_profile"
+        android:layout_width="100dp"
+        android:layout_height="90dp"
+        android:src="@drawable/profile"
+        app:civ_border_width="5dp"
+        app:civ_border_color="@color/gen_scheme1"
+        android:layout_marginTop="30dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="17dp" />
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:id="@+id/user_userName"
@@ -52,9 +51,13 @@
 
     <RatingBar
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_below="@+id/user_Address"
         android:layout_centerHorizontal="true"
+        android:id="@+id/ratingBar"
+        android:numStars="5"
+        android:isIndicator="true"
+        android:layout_marginBottom="15dp"
         android:layout_gravity="center" />
 
 </RelativeLayout>

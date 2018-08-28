@@ -18,9 +18,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -31,11 +34,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
-import cabiso.daphny.com.g_companion.Promo.PromoActivity;
 import cabiso.daphny.com.g_companion.Search.SearchActivity;
 import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class MainActivity extends AppCompatActivity
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity
     private FirebaseUser mFirebaseUser;
     private DatabaseReference user_reference;
     private DatabaseReference databaseReference;
-    private DatabaseReference itemReference;
+    private DatabaseReference itemReference, ratingReference;
     private String mUsername;
     private String mPhotoUrl;
     private TextView name;
@@ -73,7 +76,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         this.searchString = "";
 
@@ -106,8 +108,9 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         final TextView txtAddress = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_Address);
         final TextView txtProfileName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_userName);
+        final CircleImageView txtProfileImg = (CircleImageView) navigationView.getHeaderView(0).findViewById(R.id.user_prof_pic);
+        final RatingBar ratingBar = (RatingBar) navigationView.getHeaderView(0).findViewById(R.id.ratingBar);
 
-//        txtProfileName.setText("Daphny Cabiso");
         databaseReference = FirebaseDatabase.getInstance().getReference();
         user_reference = databaseReference.child("userdata");
         user_reference.addChildEventListener(new ChildEventListener() {
@@ -118,12 +121,25 @@ public class MainActivity extends AppCompatActivity
                     mUsername = user_profile.getF_name()+" "+user_profile.getL_name();
                     txtProfileName.setText(mUsername);
                     txtAddress.setText(user_profile.getAddress());
+
+                    Glide.with(MainActivity.this)
+                            .load(user_profile.getUserProfileUrl())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .fitCenter().crossFade()
+                            .into(txtProfileImg);
+
+                    Log.e("userProfff", "" + user_profile.getUserProfileUrl());
+
+                    ratingBar.setRating(user_profile.getUserRating());
+                    Log.e("userRate", String.valueOf(user_profile.getUserRating()));
+
                 }
                 else if(uid.equals(user_profile.getUserID())){
                     Log.e("UID",uid);
                     Log.e("GOOGLENAME",name);
                     txtProfileName.setText(name);
                 }
+
             }
 
             @Override
@@ -273,10 +289,8 @@ public class MainActivity extends AppCompatActivity
                 startActivity(calendar);
                 break;
             case R.id.nav_report:
-                Intent promo = new Intent(MainActivity.this, PromoActivity.class);
-                startActivity(promo);
-//                Intent sales = new Intent(MainActivity.this,SalesReport.class);
-//                startActivity(sales);
+                Intent sales = new Intent(MainActivity.this,SalesReport.class);
+                startActivity(sales);
                 break;
             case R.id.nav_about:
                 Intent about = new Intent(MainActivity.this,About.class);

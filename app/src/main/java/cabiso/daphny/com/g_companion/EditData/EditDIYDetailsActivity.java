@@ -41,6 +41,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cunoraz.tagview.Tag;
 import com.cunoraz.tagview.TagView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -183,21 +185,10 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
         diyBidExpiry = intent.getExtras().getString("diyBidExpiry");
         diyBidComment = intent.getExtras().getString("diyBidComment");
         diyKeyInside = intent.getExtras().getString("diyKeyInside");
-//        diyImage = intent.getExtras().getString("diyImage");
-//
-//
-//        Log.e("diyImageee", "" + diyImage);
-//        Bundle extras = getIntent().getExtras();
-//        Uri uri= Uri.parse(extras.getString("diyImage"));
-//        Log.e("uriiiiiiii", "" + uri);
+        diyImage = intent.getExtras().getString("diyImage");
 
-//        Bundle b = getIntent().getExtras();
-//        if (b != null) {
-//            String uri_Str= b.getString("diyImage");
-//            Uri uris = Uri.parse(uri_Str);
-//            Log.e("urissss", "" + uris);
-//        }
 
+        Log.e("diyImageee", "" + diyImage);
         Log.e("diyBidInitialPriceee", "" + diyBidInitialPrice);
         Log.e("diyBidCommentttt","" + diyBidComment);
         Log.e("diyBidExpiryyyy","" + diyBidExpiry);
@@ -308,9 +299,13 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
         procedure = (EditText) findViewById(R.id.etProcedures);
         imgView = (ImageView) findViewById(R.id.add_product_image_plus_icon);
 
-//        Bitmap oldImage = BitmapFactory.decodeFile(diyImage);
-//
-//        imgView.setImageBitmap(oldImage);
+        diyImage= String.valueOf(intent.getStringExtra("diyImage"));
+
+        Glide.with(this)
+                .load(diyImage)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .fitCenter().crossFade()
+                .into(imgView);
 
         materialsList = (ListView) findViewById(R.id.materialsList);
 
@@ -525,23 +520,34 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
                 Log.e("materialssss", String.valueOf(dbMaterials));
                 Log.e("proceduressss", String.valueOf(itemProcedure));
 
-
                 databaseReference.updateChildren(results);
                 byuser_Reference.updateChildren(results);
 
                 Intent intent = new Intent(EditDIYDetailsActivity.this, MainActivity.class);
                 startActivity(intent);
 
+                Toast.makeText(EditDIYDetailsActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+
+
 //                imageRef = storageReference.child(String.valueOf(name.getText()));
 //
+//                //creating and showing progress dialog
+//                progressDialog = new ProgressDialog(EditDIYDetailsActivity.this);
+//                progressDialog.setMax(100);
+//                progressDialog.setMessage("Adding DIY to the Community...");
+//                progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//                progressDialog.show();
+//                progressDialog.setCancelable(false);
 //
-//                //starting upload
+////                //starting upload
 //                uploadTask = imageRef.putFile(Uri.fromFile(photoFile));
-//                // Observe state change events such as progress, pause, and resume
+////                // Observe state change events such as progress, pause, and resume
 //                uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
 //                    @Override
 //                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//
+//                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+//                        //sets and increments value of progressbar
+//                        progressDialog.incrementProgressBy((int) progress);
 //                    }
 //                });
 //                // Register observers to listen for when the download is done or if it fails
@@ -550,6 +556,8 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
 //                    public void onFailure(@NonNull Exception exception) {
 //                        // Handle unsuccessful uploads
 //                        Toast.makeText(EditDIYDetailsActivity.this, "Error in uploading!", Toast.LENGTH_SHORT).show();
+//                        progressDialog.dismiss();
+//
 //                    }
 //                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 //                    @Override
@@ -567,10 +575,12 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
 //                        Log.e("categoryyy", String.valueOf(categorySpinner.getSelectedItem()));
 //                        Log.e("materialssss", String.valueOf(dbMaterials));
 //                        Log.e("proceduressss", String.valueOf(itemProcedure));
+//                        Log.e("diyUrllll", taskSnapshot.getDownloadUrl().toString());
 //
 //
 //                        databaseReference.updateChildren(results);
 //                        byuser_Reference.updateChildren(results);
+//
 //
 //                        Intent intent = new Intent(EditDIYDetailsActivity.this, MainActivity.class);
 //                        startActivity(intent);
@@ -578,6 +588,7 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
 //
 //                        Toast.makeText(EditDIYDetailsActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
 //
+//                        progressDialog.dismiss();
 //
 //                    }
 //                });
@@ -632,8 +643,7 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
                         sellResults.put("materials", dbMaterials);
                         sellResults.put("procedures", itemProcedure);
 
-                        Toast.makeText(EditDIYDetailsActivity.this, "Editted: " + etPrice.getText() + " " +
-                                etQuantity.getText() + " " + etDescription.getText(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditDIYDetailsActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
                         databaseReference.updateChildren(sellResults);
                         byuser_Reference.updateChildren(sellResults);
@@ -666,7 +676,6 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
 //
 //                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
 //
-//
 //                                String for_price = etPrice.getText().toString();
 //                                String for_qty = etQuantity.getText().toString();
 //                                final String for_descr = etDescription.getText().toString();
@@ -682,8 +691,7 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
 //                                sellResults.put("materials", dbMaterials);
 //                                sellResults.put("procedures", itemProcedure);
 //
-//                                Toast.makeText(EditDIYDetailsActivity.this, "Editted: " + etPrice.getText() + " " +
-//                                        etQuantity.getText() + " " + etDescription.getText(), Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(EditDIYDetailsActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
 //
 //                                databaseReference.updateChildren(sellResults);
 //                                byuser_Reference.updateChildren(sellResults);
@@ -694,7 +702,7 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
 //                        });
 //
 //                        dialog.dismiss();
-//
+
                     }
                 });
 
@@ -784,6 +792,8 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
 
                         Intent intent = new Intent(EditDIYDetailsActivity.this, MainActivity.class);
                         startActivity(intent);
+
+                        Toast.makeText(EditDIYDetailsActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
 
 //                        imgRef = storageRef.child(String.valueOf(name.getText()));

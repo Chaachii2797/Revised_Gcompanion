@@ -110,6 +110,7 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
                             promoItem.setPromo_expiry(mTvExpiry.getText() + "");
                             promoItem.setPromo_createdDate(sdate);
                             promoItem.setBuy_counts(mEtPromoQuantity.getText() + "");
+                            promoItem.setStatus("wholesale");
 //                        promoList.add(promoItem);
 
                             addPromoReference.child("promo_sale").push().setValue(promoItem);

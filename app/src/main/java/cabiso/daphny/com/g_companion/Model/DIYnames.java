@@ -22,6 +22,7 @@ public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serial
     public String identity;
     public Float bookmarks;
     public Float likes;
+    public String loggedInUser;
     public int matchScore;
     public int matchScoreRate;
     public int materialMatches;
@@ -31,7 +32,7 @@ public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serial
 
 
     public DIYnames(String diyName, String diyUrl, String user_id, String productID, String identity,
-                    Float bookmarks, Float likes){
+                    Float bookmarks, Float likes, String loggedInUser){
         this.diyName = diyName;
         this.diyUrl = diyUrl;
         this.user_id = user_id;
@@ -39,6 +40,7 @@ public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serial
         this.identity = identity;
         this.bookmarks = bookmarks;
         this.likes = likes;
+        this.loggedInUser = loggedInUser;
         this.dbMaterials = new ArrayList<>();
         this.matchScore = 1;
         this.matchScoreRate = 0;
@@ -151,6 +153,15 @@ public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serial
 
     public DIYnames setLikes(Float likes) {
         this.likes = likes;
+        return this;
+    }
+
+    public String getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public DIYnames setLoggedInUser(String loggedInUser) {
+        this.loggedInUser = loggedInUser;
         return this;
     }
 

@@ -39,8 +39,8 @@ public class PriceDiscount extends AppCompatActivity implements View.OnClickList
     private String productID;
     private String imgID;
     private String dbKey;
+    private String priceID;
 
-    private int percentedPrice;
     private double origPrice;
 
     private TextView mTvProductName;
@@ -50,7 +50,7 @@ public class PriceDiscount extends AppCompatActivity implements View.OnClickList
     private EditText mPriceDiscount;
     private ImageButton mBtnBack;
 
-    private PriceDiscountModel priceDiscountModel;
+    private PriceDiscountModel priceDiscountModel = new PriceDiscountModel();
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
     private FirebaseUser mFirebaseUser;
@@ -67,13 +67,16 @@ public class PriceDiscount extends AppCompatActivity implements View.OnClickList
         diyNameID = intent.getExtras().getString("diy_Name");
         productID = intent.getExtras().getString("diy_ID");
         dbKey = intent.getExtras().getString("getDBKey");
+        priceID = intent.getExtras().getString("sellingPrice");
+
         imgID = String.valueOf(intent.getExtras().get("diy_img"));
+        Log.e("PRICEUUUU", priceID+ "");
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
 
         dbReferencePrice = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(dbKey);
-        dbPromoSale = FirebaseDatabase.getInstance().getReference().child("promo_sale");
+        dbPromoSale = FirebaseDatabase.getInstance().getReference();
 
         mTvProductName = (TextView) findViewById(R.id.tvProductName);
         mExpiryDate = (TextView) findViewById(R.id.tv_set_expiry_date);
@@ -82,78 +85,18 @@ public class PriceDiscount extends AppCompatActivity implements View.OnClickList
         mPriceDiscount = (EditText) findViewById(R.id.etDiscountPercent);
         mBtnBack = (ImageButton) findViewById(R.id.ibBlack);
 
+        Log.e("diy_ID", productID);
+
         mTvProductName.setText(diyNameID);
 
         mExpiryDate.setOnClickListener(this);
+        mFinish.setOnClickListener(this);
 
         mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent back = new Intent(PriceDiscount.this, DIYDetailViewActivity.class);
                 startActivity(back);
-            }
-        });
-
-        dbReferencePrice.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                SellingDIY sellingDiy = dataSnapshot.getValue(SellingDIY.class);
-//                int origPrice = Integer.parseInt(String.valueOf(sellingDiy.getSelling_price()));
-//                int discount = Integer.parseInt(mPriceDiscount.getText().toString());
-//                int percentDiscount = (discount/100);
-//                percentedPrice = origPrice*percentDiscount;
-
-                for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
-                    origPrice = postSnapshot.child("selling_price").getValue(double.class);
-                    int discount = Integer.parseInt(mPriceDiscount.getText().toString());
-                    int percentDiscount = (discount/100);
-                    percentedPrice = (int) (origPrice*percentDiscount);
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        mFinish.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(priceDiscountModel!=null){
-                   try {
-                       priceDiscountModel.setPromo_id(productID);
-                       priceDiscountModel.setPromo_diyName(diyNameID);
-                       priceDiscountModel.setPromo_expiry(mExpiryDate.getText() + "");
-                       priceDiscountModel.setPromo_details(mDetails.getText() + "");
-                       priceDiscountModel.setPercent_discount(mPriceDiscount.getText() + "");
-                       priceDiscountModel.setPromo_newPrice(String.valueOf(percentedPrice));
-                       priceDiscountModel.setPromo_image(imgID);
-                       priceDiscountModel.setPromo_createdDate(sdate);
-
-                       dbPromoSale.push().setValue(priceDiscountModel);
-                       Intent back = new Intent(PriceDiscount.this, MainActivity.class);
-                       Log.e("PRICEEEEE", String.valueOf(origPrice));
-                       startActivity(back);
-                   }catch (DatabaseException de){
-                       de.getMessage();
-                   }
-                }
             }
         });
     }
@@ -178,6 +121,38 @@ public class PriceDiscount extends AppCompatActivity implements View.OnClickList
                 }
             }, year, month, date);
             datePickerDialog.show();
+        }
+        if(v==mFinish){
+            Log.e("diy_IDDDDDDDDD", productID);
+
+            try {
+                origPrice = Double.parseDouble(priceID);
+                double discount = Integer.parseInt(mPriceDiscount.getText().toString());
+                Log.e("discountOrigP", discount+ " "+origPrice);
+                double percentDiscount = (discount/100);
+                Log.e("percentDiscount", percentDiscount+"");
+                double  percentedPrice = (origPrice*percentDiscount);
+                double finalPrice = (origPrice-percentedPrice);
+                Log.e("PRICEUUUUDISCOUNT", (origPrice*percentDiscount)+" "+ finalPrice+ "");
+
+                priceDiscountModel.setPromo_id(productID +"");
+                priceDiscountModel.setPromo_diyName(diyNameID);
+                priceDiscountModel.setPromo_expiry(mExpiryDate.getText() + "");
+                priceDiscountModel.setPromo_details(mDetails.getText() + "");
+                priceDiscountModel.setPercent_discount(mPriceDiscount.getText() + ""+"%");
+                priceDiscountModel.setPromo_newPrice(String.valueOf(finalPrice));
+                priceDiscountModel.setPromo_image(imgID);
+                priceDiscountModel.setPromo_createdDate(sdate);
+                priceDiscountModel.setStatus("discount");
+
+                Intent back = new Intent(PriceDiscount.this, MainActivity.class);
+                Log.e("PRICEEEEE", String.valueOf(origPrice));
+                startActivity(back);
+
+                dbPromoSale.child("promo_sale").child(productID).setValue(priceDiscountModel);
+            }catch (NumberFormatException nFe){
+                nFe.getMessage();
+            }
         }
     }
 }

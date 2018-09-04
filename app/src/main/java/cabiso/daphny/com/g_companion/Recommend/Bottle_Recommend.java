@@ -52,7 +52,7 @@ public class Bottle_Recommend extends AppCompatActivity {
     private ImageView loadview;
     private RecommendDIYAdapter adapter;
     private ProgressDialog progressDialog;
-    private RecyclerView recyclerView;
+    private ListView recyclerView;
     private ProgressBar mprogressBar;
     // ImageButton star;
 
@@ -80,7 +80,7 @@ public class Bottle_Recommend extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recommend_bottle);
-        recyclerView = (RecyclerView) findViewById(R.id.recommendLvView);
+        recyclerView = (ListView) findViewById(R.id.recommendLvView);
 
         addDiy = true;
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -93,7 +93,7 @@ public class Bottle_Recommend extends AppCompatActivity {
         progressDialog.setMessage("Please wait loading DIYs...");
 
         final Bundle extra = getIntent().getBundleExtra("dbmaterials");
-        dbMaterials = (ArrayList<DBMaterial>) extra.getSerializable("dbmaterials    ");
+        dbMaterials = (ArrayList<DBMaterial>) extra.getSerializable("dbmaterials");
         Log.e("FROMIMAGE", String.valueOf(dbMaterials));
         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
 
@@ -103,8 +103,8 @@ public class Bottle_Recommend extends AppCompatActivity {
                     final DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
 
                     if(!userID.equals(diYnames.getUser_id())){
+//                        boolean isMatched = false;
                         for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-
                             DataSnapshot dbMaterialNode = postSnapshot;
                             String dbMaterialName = dbMaterialNode.child("name").getValue(String.class).toLowerCase();
                             Log.e("dataSnapshotMaterial",dbMaterialName+" --- "+diYnames.getDiyName());
@@ -112,26 +112,27 @@ public class Bottle_Recommend extends AppCompatActivity {
                             long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
                             diYnames.addDbMaterial(new DBMaterial().setName(dbMaterialName).setUnit(dbMaterialUnit).setQuantity((int) dbMaterialQuantity));
                             diYnames.incrementTotalMaterial(dataSnapshot.child("materials").getChildrenCount());
-
                             for(int m = 0; m < dbMaterials.size(); m++) {
                                 String dbMaterialsItem = dbMaterials.get(m).getName()+" ("+dbMaterials.get(m).getQuantity()+" "+dbMaterials.get(m).getUnit()+")";
                                 Log.e("scanedMaterial",dbMaterialsItem+" --- "+dbMaterialName+" ("+dbMaterialQuantity+" "+dbMaterialUnit+")"+" = "+diYnames.getDiyName());
                                 if (dbMaterialName.equals(dbMaterials.get(m).getName())) {
-                                    diYnames.incrementScore();
                                     if (dbMaterials.get(m).getQuantity() >= dbMaterialQuantity) {
                                         if (dbMaterials.get(m).getUnit().equals(dbMaterialUnit)) {
                                                 Log.e("dbMaterialNameCheck3", dbMaterialName + " == " + dbMaterials.get(m).getName()+" ~ "+ diYnames.getMatchScore()
                                                         +" "+diYnames.getDiyName());
-                                                diyList.add(diYnames);
-                                                sortDiyList(diyList);
-                                                adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
-                                                lv.setAdapter(adapter);
-
+//                                            isMatched = true;
+                                            diYnames.incrementScore();
                                         }
                                     }
                                 }
                             }
                         }
+//                        if(isMatched) {
+                            diyList.add(diYnames);
+                            sortDiyList(diyList);
+                            adapter = new RecommendDIYAdapter(Bottle_Recommend.this, R.layout.pending_layout, diyList);
+                            lv.setAdapter(adapter);
+//                        }
                     }else{
                         Toast.makeText(Bottle_Recommend.this, "YOUR MAKING YOUR OWN ITEM!", Toast.LENGTH_SHORT).show();
                     }
@@ -183,18 +184,30 @@ public class Bottle_Recommend extends AppCompatActivity {
         float matchScoreRate;
         float matchhhScoreRate;
         for(int b = 0 ; b < diyList.size(); b++){
-            matchScoreRate = ((float)diyList.get(b).getMatchScore()/(float)diyList.get(b).getTotalMaterial())*100;
-            matchhhScoreRate = ((float)diyList.get(b).getTotalMaterial())/(float)diyList.get(b).getMatchScore()*100;
-            Log.e("AAAAformula","("+diyList.get(b).getMatchScore()+"/"+diyList.get(b).getTotalMaterial()+ ") *100 = "+matchScoreRate + " "
-                    +diyList.get(b).getDiyName());
-            Log.e("BALIformula","("+diyList.get(b).getTotalMaterial()+"/"+diyList.get(b).getMatchScore()+ ") *100 = "+matchhhScoreRate + " "
-                    +diyList.get(b).getDiyName());
-//            TextView tvPercent = (TextView) findViewById(R.id.tvPercentage);
-//            tvPercent.setText((int) matchScoreRate);
+//            matchScoreRate = ((float)diyList.get(b).getMatchScore()/(float)diyList.get(b).getTotalMaterial())*100;
+//            matchhhScoreRate = ((float)diyList.get(b).getTotalMaterial())/(float)diyList.get(b).getMatchScore()*100;
+//            Log.e("AAAAformula","("+diyList.get(b).getMatchScore()+"/"+diyList.get(b).getTotalMaterial()+ ") *100 = "+matchScoreRate + " "
+//                    +diyList.get(b).getDiyName());
+//            Log.e("BALIformula","("+diyList.get(b).getTotalMaterial()+"/"+diyList.get(b).getMatchScore()+ ") *100 = "+matchhhScoreRate + " "
+//                    +diyList.get(b).getDiyName());
+////            TextView tvPercent = (TextView) findViewById(R.id.tvPercentage);
+////            tvPercent.setText((int) matchScoreRate);
+//            diyList.get(b).setMatchScoreRate((int) matchScoreRate);
+//            if(matchScoreRate < 60){
+//                diyList.remove(b);
+////                Log.e("matchScoreRateB",diyList.get(x).getMatchScoreRate()+" "+ diyList.get(x).getDiyName());
+//            }
+            int score = diyList.get(b).getMatchScore();
+            if(dbMaterials.size() > score){
+                matchScoreRate = ((float)score/dbMaterials.size())*100;
+            } else {
+                matchScoreRate = 100;
+            }
+
+            Log.e("recommendationFormula",diyList.get(b).getDiyName()+" = ("+score+"/"+dbMaterials.size()+")*100 =" + matchScoreRate);
             diyList.get(b).setMatchScoreRate((int) matchScoreRate);
-            if(matchScoreRate < 60){
+            if(matchScoreRate < 60) {
                 diyList.remove(b);
-//                Log.e("matchScoreRateB",diyList.get(x).getMatchScoreRate()+" "+ diyList.get(x).getDiyName());
             }
         }
         for(int x = 0; x < diyList.size(); x++){

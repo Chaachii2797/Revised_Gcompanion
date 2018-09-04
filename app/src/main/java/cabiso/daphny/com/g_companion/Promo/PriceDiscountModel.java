@@ -13,13 +13,14 @@ public class PriceDiscountModel {
     private String promo_newPrice;
     private String promo_image;
     private String promo_createdDate;
+    private String status;
 
     public PriceDiscountModel(){
 
     }
 
-    public PriceDiscountModel(String promo_id, String promo_diyName, String promo_expiry, String promo_details,
-                              String percent_discount, String promo_newPrice, String promo_image, String promo_createdDate) {
+    public PriceDiscountModel(String promo_id, String promo_diyName, String promo_expiry, String promo_details, String percent_discount,
+                               String promo_newPrice, String promo_image, String promo_createdDate, String status) {
         this.promo_id = promo_id;
         this.promo_diyName = promo_diyName;
         this.promo_expiry = promo_expiry;
@@ -28,6 +29,7 @@ public class PriceDiscountModel {
         this.promo_newPrice = promo_newPrice;
         this.promo_image = promo_image;
         this.promo_createdDate = promo_createdDate;
+        this.status = status;
     }
 
     public String getPromo_id() {
@@ -99,6 +101,15 @@ public class PriceDiscountModel {
 
     public PriceDiscountModel setPromo_createdDate(String promo_createdDate) {
         this.promo_createdDate = promo_createdDate;
+        return this;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public PriceDiscountModel setStatus(String status) {
+        this.status = status;
         return this;
     }
 }

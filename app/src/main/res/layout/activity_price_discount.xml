@@ -75,8 +75,7 @@
                     android:text="FINISH"
                     android:textColor="#ffffff"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:contextClickable="true"/>
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 

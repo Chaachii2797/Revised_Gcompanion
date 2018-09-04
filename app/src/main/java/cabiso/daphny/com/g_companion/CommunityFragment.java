@@ -51,7 +51,6 @@ import java.util.Map;
 
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
-import cabiso.daphny.com.g_companion.Promo.PromoModel;
 import cabiso.daphny.com.g_companion.Recommend.RecommendDIYAdapter;
 
 /**

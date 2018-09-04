@@ -62,6 +62,9 @@ public class Activity_View_Recommend extends AppCompatActivity {
     private DatabaseReference pending_reference;
     final Context context = this;
 
+    private DatabaseReference loggedInName;
+    private String loggedInUserName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,20 @@ public class Activity_View_Recommend extends AppCompatActivity {
         //databaseReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
         pending_reference = FirebaseDatabase.getInstance().getReference("DIY Pending Items").child(userID);
 
+        loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
+
+        loggedInName.child(userID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
+                loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
             myRef.addChildEventListener(new ChildEventListener() {
@@ -168,6 +185,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
                                 message_Price.add(message_price);
                             }
 
+
                             final String finalMessage_price = message_price;
                             button_sell.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -214,7 +232,8 @@ public class Activity_View_Recommend extends AppCompatActivity {
                                                             dialog.show();
                                                         } else {
 
-                                                            DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this, float_this, "seller");
+                                                            DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this,
+                                                                    float_this, "seller", loggedInUserName);
                                                             String upload_info = pending_reference.push().getKey();
                                                             pending_reference.child(upload_info).setValue(info);
                                                             pending_reference.child(upload_info).child("DIY Price").setValue(finalMessage_price);

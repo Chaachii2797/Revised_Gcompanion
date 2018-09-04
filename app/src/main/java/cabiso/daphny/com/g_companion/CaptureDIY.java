@@ -51,6 +51,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -142,6 +143,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
     Calendar myCalendar = Calendar.getInstance();
 
+    private DatabaseReference loggedInName;
+    private String loggedInUserName;
+
     ArrayList<CommunityItem> itemMaterial;
     ArrayList<CommunityItem> itemMat;
     ArrayList<CommunityItem> itemForMaterials;
@@ -182,9 +186,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
         mStorage = FirebaseStorage.getInstance();
         storageReference = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("diy_by_tags");
-
         storageRef = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("diy_by_tags");
-
+        loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarAddDIY);
         setSupportActionBar(toolbar);
@@ -396,6 +399,18 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             }
         });
 
+        loggedInName.child(userID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
+                loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         final ImageView addProductImagePlusIcon = (ImageView) findViewById(R.id.add_product_image_plus_icon);
         addProductImagePlusIcon.setOnClickListener(new View.OnClickListener() {
@@ -460,21 +475,21 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         //push data to Firebase Database - diy_by_tags node
                         databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
                                 taskSnapshot.getDownloadUrl().toString(), userID, productID, "community",
-                                float_this, float_this));
+                                float_this, float_this, loggedInUserName));
                         databaseReference.child(upload).child("materials").setValue(dbMaterials);
                         databaseReference.child(upload).child("procedures").setValue(itemProcedure);
                         databaseReference.child(upload).child("category").setValue(category);
                         databaseReference.child(upload).child("category_postition").setValue(categoryPos);
 
-
                         //push data to Firebase Database - diy_by_user node
                         byuser_Reference.child(upload).setValue(new DIYnames(name.getText().toString(),
                                 taskSnapshot.getDownloadUrl().toString(), userID, productID, "community",
-                                float_this, float_this));
+                                float_this, float_this, loggedInUserName));
                         byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
                         byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
                         byuser_Reference.child(upload).child("category").setValue(category);
                         byuser_Reference.child(upload).child("category_postition").setValue(categoryPos);
+
 
                         Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
@@ -582,7 +597,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 String productID_sell = generateString();
                                 databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "Selling",
-                                        float_this, float_this, "seller"));
+                                        float_this, float_this, "seller", loggedInUserName));
                                 databaseReference.child(upload).child("materials").setValue(dbMaterials);
                                 databaseReference.child(upload).child("procedures").setValue(itemProcedure);
                                 databaseReference.child(upload).child("DIY Price").setValue(dbSelling);
@@ -592,7 +607,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 //push data to Firebase Database - diy_by_user node
                                 byuser_Reference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "Selling",
-                                        float_this, float_this, "seller"));
+                                        float_this, float_this, "seller", loggedInUserName));
                                 byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
                                 byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
                                 byuser_Reference.child(upload).child("DIY Price").setValue(dbSelling);
@@ -740,18 +755,17 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 String productID_sell = generateString();
                                 databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "ON BID!",
-                                        float_this, float_this, "seller"));
+                                        float_this, float_this, "seller", loggedInUserName));
                                 databaseReference.child(upload).child("materials").setValue(dbMaterials);
                                 databaseReference.child(upload).child("procedures").setValue(itemProcedure);
                                 databaseReference.child(upload).child("category").setValue(category);
                                 databaseReference.child(upload).child("category_postition").setValue(categoryPos);
                                 databaseReference.child(upload).child("bidding").push().setValue(formBidding);
 
-
                                 //push data to Firebase Database - diy_by_user node
                                 byuser_Reference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "ON BID!",
-                                        float_this, float_this, "seller"));
+                                        float_this, float_this, "seller", loggedInUserName));
                                 byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
                                 byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
                                 byuser_Reference.child(upload).child("category").setValue(category);
@@ -779,12 +793,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         dialog.dismiss();
                     }
                 });
-
             }
         });
-
-
-
     }
 
 
@@ -1026,7 +1036,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         return file;
     }
 
-
     public void getWordBank(){
         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("word_bank");
         myRef.addChildEventListener(new ChildEventListener() {
@@ -1076,7 +1085,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             }else{
                 Toast.makeText(this, "NOT NULL IMAGE", Toast.LENGTH_SHORT).show();
             }
-
 
         } else { // Result was a failure
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();

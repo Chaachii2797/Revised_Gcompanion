@@ -19,9 +19,10 @@ public class DIYSell extends SellingDIY implements Comparable<DIYSell>, Serializ
     public Float bookmarks;
     public Float likes;
     public int materialMatches;
+    public String loggedInUser;
 
     public DIYSell(String diyName, String diyUrl, String user_id, String productID, String identity,
-                    Float bookmarks, Float likes, String buyerID){
+                    Float bookmarks, Float likes, String buyerID, String loggedInUser){
         this.diyName = diyName;
         this.diyUrl = diyUrl;
         this.user_id = user_id;
@@ -30,6 +31,7 @@ public class DIYSell extends SellingDIY implements Comparable<DIYSell>, Serializ
         this.bookmarks = bookmarks;
         this.likes = likes;
         this.buyerID = buyerID;
+        this.loggedInUser = loggedInUser;
     }
 
     public DIYSell(){
@@ -97,6 +99,14 @@ public class DIYSell extends SellingDIY implements Comparable<DIYSell>, Serializ
 
     public void setLikes(Float likes) {
         this.likes = likes;
+    }
+
+    public String getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public void setLoggedInUser(String loggedInUser) {
+        this.loggedInUser = loggedInUser;
     }
 
     public int getMaterialMatches() {

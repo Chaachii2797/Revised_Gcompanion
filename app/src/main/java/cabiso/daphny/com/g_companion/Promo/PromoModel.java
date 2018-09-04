@@ -30,6 +30,7 @@ public class PromoModel implements Serializable{
     public ArrayList<String> freeItemQuantity;
     public String buy_counts;
     public String take_counts;
+    public String status;
 
     public PromoModel(){
 //        this.free_item = new HashMap<>();
@@ -38,7 +39,7 @@ public class PromoModel implements Serializable{
     }
 
     public PromoModel(String promo_id, String promo_details, String promo_expiry, String promo_createdDate, String promo_diyName,
-                      String promo_image, String buy_counts, String take_counts) {
+                      String promo_image, String buy_counts, String take_counts, String status) {
         this.promo_id = promo_id;
         this.promo_details = promo_details;
         this.promo_expiry = promo_expiry;
@@ -47,6 +48,7 @@ public class PromoModel implements Serializable{
         this.promo_image = promo_image;
         this.buy_counts = buy_counts;
         this.take_counts = take_counts;
+        this.status = status;
     }
 
     public PromoModel addPromoItem(int position,DIYnames item,String quantity){
@@ -140,5 +142,14 @@ public class PromoModel implements Serializable{
 
     public ArrayList<String> getFreeItemQuantity() {
         return freeItemQuantity;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public PromoModel setStatus(String status) {
+        this.status = status;
+        return this;
     }
 }

@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
@@ -50,6 +51,9 @@ public class ForMeetUpActivity extends AppCompatActivity {
     final ArrayList<DIYSell> diyNames = new ArrayList<>();
     final ArrayList<String> snapKey = new ArrayList<>();
 
+    private DatabaseReference loggedInName;
+    private String loggedInUserName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +71,21 @@ public class ForMeetUpActivity extends AppCompatActivity {
         userdataReference = FirebaseDatabase.getInstance().getReference().child("userdata");
         meetUpRef = FirebaseDatabase.getInstance().getReference().child("Items_ForMeetUp").child(userID);
         diyReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
+        loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
         Log.e("diyReference", String.valueOf(diyReference));
 
+        loggedInName.child(userID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
+                loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         meetUpRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -101,7 +118,6 @@ public class ForMeetUpActivity extends AppCompatActivity {
                     final int count = lv.getAdapter().getCount();
                     registerForContextMenu(lv);
 
-
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -109,7 +125,6 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                             if(itemRef.getIdentity().equals("For Buyer Meet-up")) {
                                 Toast.makeText(ForMeetUpActivity.this, "DIY name: " + itemRef.getDiyName() + " = " + position, Toast.LENGTH_SHORT).show();
-
 
                                 for (int i=0;i < diyNames.size();i++) {
                                     if (diyNames.get(i).getDiyName().equals(itemRef.getDiyName())) {
@@ -141,19 +156,26 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                         double sold_price = meetUpList.get(position).getSelling_price();
 
                                         DIYSell product = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
-                                                sold_productID, "DELIVERED", float_this, float_this, sold_buyer);
+                                                sold_productID, "DELIVERED", float_this, float_this, sold_buyer, loggedInUserName);
 
                                         String upload = soldReference.push().getKey();
                                         soldReference.child(upload).setValue(product);
                                         soldReference.child(upload).child("userStatus").setValue("seller");
                                         soldReference.child(upload).child("selling_price").setValue(sold_price);
 
+//                                        if (sold_productID.equals(itemRef.getProductID())) {
+//                                            HashMap<String, Object> results = new HashMap<>();
+//                                            results.put("selling_qty", itemRef.getSelling_qty()-1);
+//                                            Log.e("SLLINGQTY", String.valueOf(itemRef.getSelling_qty()-1));
+//                                            soldReference.child(upload).updateChildren(results);
+//                                        }
+
                                         //DBref for buyer
                                         DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
                                                 .child("Sold_Items").child(sold_buyer);
 
                                         DIYSell buyProduct = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
-                                                sold_productID, "PURCHASED", float_this, float_this, sold_buyer);
+                                                sold_productID, "PURCHASED", float_this, float_this, sold_buyer, loggedInUserName);
 
                                         String buyUpload = soldReference.child(upload).getKey();
                                         soldReference.child(buyUpload).setValue(buyProduct);
@@ -218,8 +240,6 @@ public class ForMeetUpActivity extends AppCompatActivity {
             }
         });
 
-
-
         diyReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -247,8 +267,6 @@ public class ForMeetUpActivity extends AppCompatActivity {
                     final List<String> message_Dsc = new ArrayList<String>();
 
 
-
-
                     for(DataSnapshot priceSnap : snaps.child("DIY Price").getChildren()){
                         Log.e("priceSnap", String.valueOf(priceSnap));
 
@@ -271,9 +289,6 @@ public class ForMeetUpActivity extends AppCompatActivity {
                         prices.add(message_qty);
                         Log.e("pricess", String.valueOf(prices));
                     }
-
-
-
                 }
             }
 
@@ -281,14 +296,6 @@ public class ForMeetUpActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-
-
-
-
         });
-
-
-
-
     }
 }

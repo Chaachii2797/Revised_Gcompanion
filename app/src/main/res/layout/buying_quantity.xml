@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/buy_quantity"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_imageview"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:editable="true"
+        android:hint="Quantity to buy?"
+        android:textColor="@color/gen_scheme4"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnQtyDialog"
+        style="@style/LoginStyle"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buy_quantity"
+        android:layout_alignStart="@+id/buy_quantity"
+        android:layout_below="@+id/buy_quantity"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="@color/dot_dark_screen2"
+        android:gravity="center"
+        android:text=" Ok " />
+
+</RelativeLayout>

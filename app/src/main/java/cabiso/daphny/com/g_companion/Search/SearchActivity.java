@@ -3,7 +3,6 @@ package cabiso.daphny.com.g_companion.Search;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.*;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,7 +24,6 @@ import java.util.ArrayList;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.R;
-import cabiso.daphny.com.g_companion.Recommend.Activity_View_Recommend;
 
 public class SearchActivity extends Activity {
 
@@ -112,7 +110,6 @@ public class SearchActivity extends Activity {
 
             }
         });
-
     }
 
     private void setAdapter(final String diYnames){

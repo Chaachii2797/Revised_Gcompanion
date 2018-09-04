@@ -25,8 +25,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -69,6 +72,10 @@ public class AddSameDIYTemplate extends AppCompatActivity{
     private DIYnames diyProd;
     private String itemProdName, sameItemId;
 
+
+    private DatabaseReference loggedInName;
+    private String loggedInUserName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +94,7 @@ public class AddSameDIYTemplate extends AppCompatActivity{
         databaseReference = FirebaseDatabase.getInstance().getReference().child("same_diy_product");
         related_diy_by_user = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID);
         databaseRef = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.sameItemId);
+        loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
 
         mStorage = FirebaseStorage.getInstance();
         storageReference = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("diy_by_tags");
@@ -143,6 +151,19 @@ public class AddSameDIYTemplate extends AppCompatActivity{
                 progressDialog.show();
                 progressDialog.setCancelable(false);
 
+                loggedInName.child(userID).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
+                        loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
                 //starting upload
                 uploadTask = imageRef.putFile(Uri.fromFile(photoFile));
 
@@ -182,7 +203,7 @@ public class AddSameDIYTemplate extends AppCompatActivity{
 
                         databaseRef.child("related_diys").child(upload).setValue(new DIYSell(itemProdName,
                                 taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
-                                float_this, float_this, "seller"));
+                                float_this, float_this, "seller", loggedInUserName));
                         databaseRef.child("related_diys").child(upload).child("status").setValue("selling");
                         databaseRef.child("related_diys").child(upload).child("DIY Price").setValue(price);
                         databaseRef.child("related_diys").child(upload).child("Item Quantity").setValue(qty);
@@ -200,7 +221,7 @@ public class AddSameDIYTemplate extends AppCompatActivity{
 
                         related_diy_by_user.child(upload).setValue(new DIYSell(itemProdName,
                                 taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
-                                float_this, float_this, "seller"));
+                                float_this, float_this, "seller", loggedInUserName));
                         related_diy_by_user.child(upload).child("DIY Price").setValue(dbSelling);
                         related_diy_by_user.child(upload).child("status").setValue("selling");
 //                        related_diy_by_user.child(upload).child("Item Quantity").setValue(quantity.getText().toString());

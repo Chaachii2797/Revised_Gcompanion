@@ -43,6 +43,9 @@ public class Item_Activity extends AppCompatActivity {
     private String userID;
     private FirebaseUser mFirebaseUser;
 
+    private DatabaseReference loggedInName;
+    private String loggedInUserName;
+
     private DatabaseReference itemReference;
     public Item_Activity() {
 
@@ -53,6 +56,7 @@ public class Item_Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_);
 
+            loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
             recyclerView = (RecyclerView) findViewById(R.id.lvView);
 
             mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -125,6 +129,19 @@ public class Item_Activity extends AppCompatActivity {
                 int listPosition = info.position;
                 Float float_this = Float.valueOf(0);
 
+                loggedInName.child(userID).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
+                        loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
                 final int count =lv.getAdapter().getCount();
                 itemReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items").child(userID);
                 String myItem_diyName = diyList.get(listPosition).getDiyName();
@@ -134,7 +151,7 @@ public class Item_Activity extends AppCompatActivity {
                 String myItem_status = diyList.get(listPosition).getIdentity();
 
                 DIYSell product = new DIYSell(myItem_diyName, myItem_diyUrl, myItem_user_id,
-                        myItem_productID, myItem_status, float_this, float_this, "seller");
+                        myItem_productID, myItem_status, float_this, float_this, "seller", loggedInUserName);
                 String upload = itemReference.push().getKey();
                 itemReference.child(upload).setValue(product);
 

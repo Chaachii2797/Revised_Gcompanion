@@ -160,7 +160,7 @@ public class Pending_Activity extends AppCompatActivity{
                                         int meetup_qty = sellList.get(position).getSelling_qty();
 
                                         DIYSell product = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
-                                                meetup_productID, "For Buyer Meet-up" , float_this, float_this, meetup_buyer);
+                                                meetup_productID, "For Buyer Meet-up" , float_this, float_this, meetup_buyer," ");
 
                                         String upload = forMeetupReference.push().getKey();
                                         forMeetupReference.child(upload).setValue(product);
@@ -174,7 +174,7 @@ public class Pending_Activity extends AppCompatActivity{
 
                                         //DBref for buyer
                                         DIYSell buyProduct = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
-                                                meetup_productID, "For Seller Meet-up" , float_this, float_this, meetup_buyer);
+                                                meetup_productID, "For Buyer Meet-up" , float_this, float_this, meetup_buyer," ");
 
                                         String buyUpload = meetReference.child(upload).getKey();
                                         meetReference.child(buyUpload).setValue(buyProduct);
@@ -222,7 +222,7 @@ public class Pending_Activity extends AppCompatActivity{
                                         int pendng_qty = sellList.get(position).getSelling_qty();
 
                                         DIYSell product = new DIYSell(pending_diyName, pending_diyUrl, pending_user_id,
-                                                pending_productID, "PURCHASED" , float_this, float_this, pending_buyer);
+                                                pending_productID, "PURCHASED" , float_this, float_this, pending_buyer, " ");
 
                                         String upload = soldReference.push().getKey();
                                         soldReference.child(upload).setValue(product);
@@ -230,12 +230,11 @@ public class Pending_Activity extends AppCompatActivity{
                                         soldReference.child(upload).child("selling_price").setValue(pending_price);
                                         soldReference.child(upload).child("selling_qty").setValue(pendng_qty);
 
-
                                         DatabaseReference buyerReference = FirebaseDatabase.getInstance().getReference()
                                                 .child("Sold_Items").child(pending_buyer);
 
                                         DIYSell buyProduct = new DIYSell(pending_diyName, pending_diyUrl, pending_user_id,
-                                                pending_productID, "PURCHASED" , float_this, float_this, pending_buyer);
+                                                pending_productID, "PURCHASED" , float_this, float_this, pending_buyer, "");
 
                                         String buyUpload = buyerReference.child(upload).getKey();
                                         buyerReference.child(buyUpload).setValue(buyProduct);

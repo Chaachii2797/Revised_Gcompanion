@@ -1,13 +1,11 @@
 package cabiso.daphny.com.g_companion.Promo;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -16,10 +14,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -30,10 +24,9 @@ import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.DIYDetailViewActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
-import cabiso.daphny.com.g_companion.Model.SellingDIY;
 import cabiso.daphny.com.g_companion.R;
 
-public class PriceDiscount extends AppCompatActivity implements View.OnClickListener{
+public class PriceDiscountActivity extends AppCompatActivity implements View.OnClickListener{
 
     private String diyNameID;
     private String productID;
@@ -95,7 +88,7 @@ public class PriceDiscount extends AppCompatActivity implements View.OnClickList
         mBtnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent back = new Intent(PriceDiscount.this, DIYDetailViewActivity.class);
+                Intent back = new Intent(PriceDiscountActivity.this, DIYDetailViewActivity.class);
                 startActivity(back);
             }
         });
@@ -122,9 +115,9 @@ public class PriceDiscount extends AppCompatActivity implements View.OnClickList
             }, year, month, date);
             datePickerDialog.show();
         }
+
         if(v==mFinish){
             Log.e("diy_IDDDDDDDDD", productID);
-
             try {
                 origPrice = Double.parseDouble(priceID);
                 double discount = Integer.parseInt(mPriceDiscount.getText().toString());
@@ -134,7 +127,6 @@ public class PriceDiscount extends AppCompatActivity implements View.OnClickList
                 double  percentedPrice = (origPrice*percentDiscount);
                 double finalPrice = (origPrice-percentedPrice);
                 Log.e("PRICEUUUUDISCOUNT", (origPrice*percentDiscount)+" "+ finalPrice+ "");
-
                 priceDiscountModel.setPromo_id(productID +"");
                 priceDiscountModel.setPromo_diyName(diyNameID);
                 priceDiscountModel.setPromo_expiry(mExpiryDate.getText() + "");
@@ -144,15 +136,14 @@ public class PriceDiscount extends AppCompatActivity implements View.OnClickList
                 priceDiscountModel.setPromo_image(imgID);
                 priceDiscountModel.setPromo_createdDate(sdate);
                 priceDiscountModel.setStatus("discount");
-
-                Intent back = new Intent(PriceDiscount.this, MainActivity.class);
+                Intent back = new Intent(PriceDiscountActivity.this, MainActivity.class);
                 Log.e("PRICEEEEE", String.valueOf(origPrice));
                 startActivity(back);
-
-                dbPromoSale.child("promo_sale").child(productID).setValue(priceDiscountModel);
+                dbPromoSale.child("promo_sale").push().setValue(priceDiscountModel);
             }catch (NumberFormatException nFe){
                 nFe.getMessage();
             }
+
         }
     }
 }

@@ -119,9 +119,11 @@ public class Constants {
             "{\"name\": \"Laptop\", \"code\": \"LA\"}, \n" +
             "{\"name\": \"Lightbulbs\", \"code\": \"LI\"}, \n" +
             "{\"name\": \"Leaves\", \"code\": \"LE\"}, \n" +
+            "{\"name\": \"Leather Glue\", \"code\": \"LG\"}, \n" +
             "{\"name\": \"Matchbox\", \"code\": \"MB\"}, \n" +
             "{\"name\": \"Marker\", \"code\": \"MB\"}, \n" +
             "{\"name\": \"Metal\", \"code\": \"ME\"}, \n" +
+            "{\"name\": \"Metal Nail\", \"code\": \"MN\"}, \n" +
             "{\"name\": \"Mouse\", \"code\": \"MO\"}, \n" +
             "{\"name\": \"Magazines\", \"code\": \"MA\"}, \n" +
             "{\"name\": \"Mattress\", \"code\": \"MT\"}, \n" +
@@ -175,7 +177,8 @@ public class Constants {
             "{\"name\": \"Stick\", \"code\": \"SI\"}, \n" +
             "{\"name\": \"Straw\", \"code\": \"SW\"}, \n" +
             "{\"name\": \"String\", \"code\": \"SR\"}, \n" +
-            "{\"name\": \"Ring\", \"code\": \"SR\"}, \n" +
+            "{\"name\": \"Ring\", \"code\": \"RI\"}, \n" +
+            "{\"name\": \"Rope\", \"code\": \"RO\"}, \n" +
             "{\"name\": \"Styro\", \"code\": \"SY\"}, \n" +
             "{\"name\": \"Sunglass\", \"code\": \"SU\"}, \n" +
             "{\"name\": \"Stamps\", \"code\": \"SM\"}, \n" +

@@ -37,7 +37,7 @@ public class BiddersAdapter extends RecyclerView.Adapter<BiddersAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Bidders biddingItem = mBiddings.get(position);
-        holder.mItemPriceBidded.setText(biddingItem.getBid_price());
+        holder.mItemPriceBidded.setText("₱: " + biddingItem.getBid_price());
         holder.mItemBiddersName.setText(biddingItem.getUser_name());
 //        if(biddingItem != null){
 //        }

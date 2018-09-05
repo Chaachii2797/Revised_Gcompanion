@@ -10,14 +10,38 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
+
+        <!--selling-->
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:paddingLeft="15dp"
-            android:paddingTop="15dp"
-            android:text="Promo Items"
-            android:textStyle="bold" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:id="@+id/titleTv"
+                android:text="Promo Items!"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/viewMorePromoDiysBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="170dp"
+                android:layout_marginRight="15dp"
+                android:layout_toRightOf="@+id/titleTv"
+                android:background="@color/green_100"
+                android:text="View More"
+                android:textSize="10sp" />
+
+        </RelativeLayout>
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -33,8 +57,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentTop="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
                     android:layout_marginTop="5dp"
                     tools:context="cabiso.daphny.com.g_companion.YouItemsFragment"
                     tools:listitem="@layout/promo_sale_item" />

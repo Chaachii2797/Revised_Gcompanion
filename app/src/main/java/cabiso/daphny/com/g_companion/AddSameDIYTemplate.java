@@ -203,7 +203,7 @@ public class AddSameDIYTemplate extends AppCompatActivity{
 
                         databaseRef.child("related_diys").child(upload).setValue(new DIYSell(itemProdName,
                                 taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
-                                float_this, float_this, "seller", loggedInUserName));
+                                float_this, float_this, "seller", " "));
                         databaseRef.child("related_diys").child(upload).child("status").setValue("selling");
                         databaseRef.child("related_diys").child(upload).child("DIY Price").setValue(price);
                         databaseRef.child("related_diys").child(upload).child("Item Quantity").setValue(qty);
@@ -221,7 +221,7 @@ public class AddSameDIYTemplate extends AppCompatActivity{
 
                         related_diy_by_user.child(upload).setValue(new DIYSell(itemProdName,
                                 taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "selling",
-                                float_this, float_this, "seller", loggedInUserName));
+                                float_this, float_this, "seller", " "));
                         related_diy_by_user.child(upload).child("DIY Price").setValue(dbSelling);
                         related_diy_by_user.child(upload).child("status").setValue("selling");
 //                        related_diy_by_user.child(upload).child("Item Quantity").setValue(quantity.getText().toString());

@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -73,10 +74,24 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_my_profile);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         userID = mFirebaseUser.getUid();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.back_btn);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+            }
+        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         userdataReference = mDatabaseReference.child("userdata");
@@ -87,8 +102,6 @@ public class MyProfileActivity extends AppCompatActivity implements RatingDialog
         userStorageReference = storageReference.child("UserStorage"+"/"+userID);
 
         userDBReference = FirebaseDatabase.getInstance().getReference().child("userdata").child(userID);
-
-        setContentView(R.layout.activity_my_profile);
 
         final TextView profile_username = (TextView) findViewById(R.id.profile_name);
         final TextView profile_email = (TextView) findViewById(R.id.profile_email);

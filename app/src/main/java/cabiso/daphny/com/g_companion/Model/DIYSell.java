@@ -22,7 +22,7 @@ public class DIYSell extends SellingDIY implements Comparable<DIYSell>, Serializ
     public String loggedInUser;
 
     public DIYSell(String diyName, String diyUrl, String user_id, String productID, String identity,
-                    Float bookmarks, Float likes, String buyerID, String loggedInUser){
+                    Float bookmarks, Float likes, String buyerID, String loggedInUser ){
         this.diyName = diyName;
         this.diyUrl = diyUrl;
         this.user_id = user_id;

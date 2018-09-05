@@ -233,7 +233,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
                                                         } else {
 
                                                             DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this,
-                                                                    float_this, "seller", loggedInUserName);
+                                                                    float_this, "seller", " ");
                                                             String upload_info = pending_reference.push().getKey();
                                                             pending_reference.child(upload_info).setValue(info);
                                                             pending_reference.child(upload_info).child("DIY Price").setValue(finalMessage_price);

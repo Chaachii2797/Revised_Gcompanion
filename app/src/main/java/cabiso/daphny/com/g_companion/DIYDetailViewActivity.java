@@ -70,7 +70,7 @@ import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.SectionDataModel;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
-import cabiso.daphny.com.g_companion.Promo.PriceDiscount;
+import cabiso.daphny.com.g_companion.Promo.PriceDiscountActivity;
 import cabiso.daphny.com.g_companion.Promo.PromoActivity;
 
 /**
@@ -868,7 +868,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                                 } else {
 
                                                     DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, "Pending", float_this,
-                                                            float_this, buyerid, "");
+                                                            float_this, buyerid, " ");
                                                     final String upload_info = pending_reference.push().getKey();
                                                     pending_reference.child(upload_info).setValue(info);
                                                     pending_reference.child(upload_info).child("selling_price").setValue(pendingPrice);
@@ -884,7 +884,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                                     Log.e("userIDDD", userID);
 
                                                     DIYSell buyer = new DIYSell(diyName, diyUrl, user_id, productID, "For Confirmation", float_this,
-                                                            float_this, buyerid, "");
+                                                            float_this, buyerid, " ");
                                                     final String uploadBuyerInfo = pendingRefByOwner.child(upload_info).getKey();
                                                     pendingRefByOwner.child(uploadBuyerInfo).setValue(buyer);
                                                     pendingRefByOwner.child(uploadBuyerInfo).child("selling_price").setValue(pendingPrice);
@@ -947,7 +947,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                             priceDiscount.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent toPriceDiscount = new Intent(DIYDetailViewActivity.this, PriceDiscount.class);
+                                    Intent toPriceDiscount = new Intent(DIYDetailViewActivity.this, PriceDiscountActivity.class);
                                     toPriceDiscount.putExtra("diy_Name",diyInfo.getDiyName());
                                     toPriceDiscount.putExtra("diy_ID", diyInfo.getProductID());
                                     toPriceDiscount.putExtra("diy_img", diyInfo.getDiyUrl());

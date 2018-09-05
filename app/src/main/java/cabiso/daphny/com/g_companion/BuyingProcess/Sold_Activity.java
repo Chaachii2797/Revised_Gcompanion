@@ -1,4 +1,4 @@
-package cabiso.daphny.com.g_companion;
+package cabiso.daphny.com.g_companion.BuyingProcess;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -36,6 +36,7 @@ import java.util.Locale;
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
+import cabiso.daphny.com.g_companion.R;
 
 /**
  * Created by Lenovo on 7/31/2017.

@@ -480,6 +480,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         databaseReference.child(upload).child("procedures").setValue(itemProcedure);
                         databaseReference.child(upload).child("category").setValue(category);
                         databaseReference.child(upload).child("category_postition").setValue(categoryPos);
+                        databaseReference.child(upload).child("dateAdded").setValue(sdate);
 
                         //push data to Firebase Database - diy_by_user node
                         byuser_Reference.child(upload).setValue(new DIYnames(name.getText().toString(),
@@ -489,6 +490,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
                         byuser_Reference.child(upload).child("category").setValue(category);
                         byuser_Reference.child(upload).child("category_postition").setValue(categoryPos);
+                        byuser_Reference.child(upload).child("dateAdded").setValue(sdate);
 
 
                         Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
@@ -597,22 +599,24 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 String productID_sell = generateString();
                                 databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "Selling",
-                                        float_this, float_this, "seller", loggedInUserName));
+                                        float_this, float_this, "none", loggedInUserName));
                                 databaseReference.child(upload).child("materials").setValue(dbMaterials);
                                 databaseReference.child(upload).child("procedures").setValue(itemProcedure);
                                 databaseReference.child(upload).child("DIY Price").setValue(dbSelling);
                                 databaseReference.child(upload).child("category").setValue(category);
                                 databaseReference.child(upload).child("category_postition").setValue(categoryPos);
+                                databaseReference.child(upload).child("dateAdded").setValue(sdate);
 
                                 //push data to Firebase Database - diy_by_user node
                                 byuser_Reference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "Selling",
-                                        float_this, float_this, "seller", loggedInUserName));
+                                        float_this, float_this, "none", loggedInUserName));
                                 byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
                                 byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
                                 byuser_Reference.child(upload).child("DIY Price").setValue(dbSelling);
                                 byuser_Reference.child(upload).child("category").setValue(category);
                                 byuser_Reference.child(upload).child("category_postition").setValue(categoryPos);
+                                byuser_Reference.child(upload).child("dateAdded").setValue(sdate);
 
                                 Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
@@ -755,28 +759,30 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 String productID_sell = generateString();
                                 databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "ON BID!",
-                                        float_this, float_this, "seller", loggedInUserName));
+                                        float_this, float_this, "none", loggedInUserName));
                                 databaseReference.child(upload).child("materials").setValue(dbMaterials);
                                 databaseReference.child(upload).child("procedures").setValue(itemProcedure);
                                 databaseReference.child(upload).child("category").setValue(category);
                                 databaseReference.child(upload).child("category_postition").setValue(categoryPos);
                                 databaseReference.child(upload).child("bidding").push().setValue(formBidding);
+                                databaseReference.child(upload).child("dateAdded").setValue(sdate);
 
                                 //push data to Firebase Database - diy_by_user node
                                 byuser_Reference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "ON BID!",
-                                        float_this, float_this, "seller", loggedInUserName));
+                                        float_this, float_this, "none", loggedInUserName));
                                 byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
                                 byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
                                 byuser_Reference.child(upload).child("category").setValue(category);
                                 byuser_Reference.child(upload).child("category_postition").setValue(categoryPos);
                                 byuser_Reference.child(upload).child("bidding").push().setValue(formBidding);
+                                byuser_Reference.child(upload).child("dateAdded").setValue(sdate);
 
                                 Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
                                 // Alert Dialog for finished uploaing DIYs
                                 AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this, R.style.MyAlertDialogStyle);
-                                ab.setMessage("Thank you for!");
+                                ab.setMessage("Thank you for bidding your DIY!");
                                 ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

@@ -32,8 +32,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import cabiso.daphny.com.g_companion.BuyingProcess.ForMeetUpActivity;
+import cabiso.daphny.com.g_companion.BuyingProcess.Pending_Activity;
+import cabiso.daphny.com.g_companion.BuyingProcess.Sold_Activity;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
+import cabiso.daphny.com.g_companion.MainDIYS.DiysFragment;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
+import cabiso.daphny.com.g_companion.Promo.PromoFragment;
 import cabiso.daphny.com.g_companion.Search.SearchActivity;
 import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
 import clarifai2.api.ClarifaiBuilder;
@@ -43,9 +48,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        CommunityFragment.OnListFragmentInteractionListener, OnListFragmentInteractionListener, PromoFragment.OnListFragmentInteractionListener{
-
-//    private static final String TAG = MainActivity.class.getSimpleName();
+        CommunityFragment.OnListFragmentInteractionListener,
+        OnListFragmentInteractionListener, PromoFragment.OnListFragmentInteractionListener,
+        DiysFragment.OnListFragmentInteractionListener{
 
 
     private FirebaseAuth mFirebaseAuth;
@@ -62,11 +67,7 @@ public class MainActivity extends AppCompatActivity
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
     private TabLayout mTabLayout;
-
     private String searchString;
-
-    //private Bottle_Recommend lv;
-
     private ImageView image;
     // private final ClarifaiClient clarifaiClient = new ClarifaiBuilder("{b7aa33dc206c40a4b9cffc09a2e72a9d}").buildSync();
 

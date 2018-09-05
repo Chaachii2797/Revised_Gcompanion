@@ -60,7 +60,7 @@ import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.SectionDataModel;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
-import cabiso.daphny.com.g_companion.Promo.PriceDiscount;
+import cabiso.daphny.com.g_companion.Promo.PriceDiscountActivity;
 import cabiso.daphny.com.g_companion.Promo.PromoActivity;
 
 /**
@@ -90,13 +90,12 @@ public class ViewRelatedDIYS extends AppCompatActivity {
     private ArrayList<DIYnames> ePics = new ArrayList<>();
     private ArrayList<User_Profile> eOwner = new ArrayList<>();
     private ArrayList<String> ePrice = new ArrayList<>();
-    private String loggedInUserName;
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
     private List<Bidders> diyBiddings = new ArrayList<Bidders>();;
     private BiddersAdapter biddersAdapter;
     private RecyclerView recyclerView;
     private RecyclerView lv_bidders;
-
+    private String loggedInUserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,7 +167,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
         textViewPHP = (TextView) findViewById(R.id.textView33);
         tv_bid_xpire = (TextView) findViewById(R.id.et_bidding_expiration);
         tv_bid_price = (TextView) findViewById(R.id.et_bidding_price);
-        tv_bid_comment = (TextView) findViewById(R.id.bidding_cmmnt);
+        tv_bid_comment = (TextView) findViewById(R.id.et_bidding_commnt);
         bidding_winner_amount = (TextView) findViewById(R.id.winner_bid_amount);
         bidding_winner_name = (TextView) findViewById(R.id.winner_bid_owner);
 
@@ -348,6 +347,19 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                             }
                         });
 
+                        loggedInName.child(userID).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
+                                loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
                         userData.addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -417,6 +429,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                         diyQty.setText(message_qty + " " + "piece/s");
 
 
+                        final String finalMessage_price1 = message_price;
                         createMyPromoBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -433,11 +446,13 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                 priceDiscount.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Intent toPriceDiscount = new Intent(ViewRelatedDIYS.this, PriceDiscount.class);
+                                        Intent toPriceDiscount = new Intent(ViewRelatedDIYS.this, PriceDiscountActivity.class);
                                         toPriceDiscount.putExtra("diy_Name",diYnames.getDiyName());
                                         toPriceDiscount.putExtra("diy_ID", diYnames.getProductID());
                                         toPriceDiscount.putExtra("diy_img", diYnames.getDiyUrl());
                                         toPriceDiscount.putExtra("getDBKey", dataSnapshot.getKey());
+                                        toPriceDiscount.putExtra("sellingPrice", finalMessage_price1);
+                                        Log.e("finalMessage_price1", finalMessage_price1);
                                         startActivity(toPriceDiscount);
                                     }
                                 });
@@ -448,6 +463,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                         to_promo.putExtra("diy_Name",diYnames.getDiyName());
                                         to_promo.putExtra("diy_ID", diYnames.getProductID());
                                         to_promo.putExtra("diy_img", diYnames.getDiyUrl());
+                                        to_promo.putExtra("sellingPrice", finalMessage_price1);
                                         Log.e("NAMEEEE", diYnames.getDiyName());
                                         startActivity(to_promo);
                                     }
@@ -518,6 +534,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                         final String diyName = diySellinfo.getDiyName();
                                         final String diyUrl = diySellinfo.getDiyUrl();
                                         final String user_id = diySellinfo.getUser_id();
+                                        final String sellerName = diySellinfo.getLoggedInUser();
                                         final String productID = diySellinfo.getProductID();
                                         String status = diySellinfo.getIdentity();
                                         final String buyerid = userID;
@@ -553,7 +570,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                                     } else {
 
                                                         DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, "Pending", float_this,
-                                                                float_this, buyerid," ");
+                                                                float_this, buyerid, loggedInUserName);
                                                         final String upload_info = pending_reference.push().getKey();
                                                         pending_reference.child(upload_info).setValue(info);
                                                         pending_reference.child(upload_info).child("selling_price").setValue(pendingPrice);
@@ -569,7 +586,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                                         Log.e("userIDDD", userID);
 
                                                         DIYSell buyer = new DIYSell(diyName, diyUrl, user_id, productID, "For Confirmation", float_this,
-                                                                float_this, buyerid, "");
+                                                                float_this, buyerid, sellerName);
                                                         final String uploadBuyerInfo = pendingRefByOwner.child(upload_info).getKey();
                                                         pendingRefByOwner.child(uploadBuyerInfo).setValue(buyer);
                                                         pendingRefByOwner.child(uploadBuyerInfo).child("selling_price").setValue(pendingPrice);
@@ -689,6 +706,18 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                             }
                         });
 
+                        for (DataSnapshot insideDataSnapshot: dataSnapshot.child("bidding").getChildren()) {
+                            DIYBidding biddingItem = insideDataSnapshot.getValue(DIYBidding.class);
+                            tv_bid_xpire.setText(biddingItem.getDate());
+                            tv_bid_price.setText(biddingItem.getIntial_price()+"");
+                            tv_bid_comment.setText(biddingItem.getMessage());
+                        }
+
+                        for (DataSnapshot inside_DataSnapshot: dataSnapshot.child("bidders").getChildren()) {
+                            Bidders biddersItem = inside_DataSnapshot.getValue(Bidders.class);
+                            diyBiddings.add(biddersItem);
+                            biddersAdapter.notifyDataSetChanged();
+                        }
 
 
 
@@ -722,7 +751,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
 
                         RelativeLayout.LayoutParams related = new RelativeLayout.LayoutParams(
                                 RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                        related.topMargin = 1100;
+                        related.topMargin = 1400;
                         related.bottomMargin = 15;
                         related.leftMargin = 20;
                         related.rightMargin = 20;
@@ -891,6 +920,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                         bidMyItemBtn.setVisibility(View.INVISIBLE);
                         createMyPromoBtn.setVisibility(View.INVISIBLE);
                         diyQty.setVisibility(View.INVISIBLE);
+                        cardView9.setVisibility(View.INVISIBLE);
 
                         RelativeLayout.LayoutParams sD = new RelativeLayout.LayoutParams(
                                 RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
@@ -977,6 +1007,19 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                             }
                         });
 
+                        userData.child(userID).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
+                                loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
                         userData.addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -1027,7 +1070,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
 
                             final DIYBidding biddingItem = insideDataSnapshot.getValue(DIYBidding.class);
                             tv_bid_xpire.setText(biddingItem.getXpire_date());
-                            tv_bid_price.setText(biddingItem.getIntial_price()+"");
+                            tv_bid_price.setText("₱: " + biddingItem.getIntial_price());
                             Log.e("initialBid", biddingItem.getIntial_price()+"");
 
                             tv_bid_comment.setText(biddingItem.getMessage());

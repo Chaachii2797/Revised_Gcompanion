@@ -78,16 +78,21 @@
         <activity android:name=".MyProfileActivity" />
         <activity android:name=".MyDiys" />
         <activity android:name=".SellMyDIYs" />
-        <activity android:name=".Pending_Activity" />
-        <activity android:name=".ForMeetUpActivity" />
-        <activity android:name=".Sold_Activity" />
+        <activity android:name=".BuyingProcess.Pending_Activity" />
+        <activity android:name=".BuyingProcess.ForMeetUpActivity" />
+        <activity android:name=".BuyingProcess.Sold_Activity" />
         <activity android:name=".CalendarActivity" />
         <activity android:name=".Search.SearchView" />
         <activity android:name=".Promo.PromoActivity" />
-        <activity android:name=".Promo.PriceDiscount" />
+        <activity android:name=".Promo.PriceDiscountActivity" />
         <activity android:name=".Recommend.Bottle_Recommend" />
         <activity android:name=".EditData.EditDIYDetailsActivity" />
         <activity android:name=".EditData.EditProfileActivity" />
+        <activity android:name=".MainDIYS.ViewMoreDiysSellingActivity" />
+        <activity android:name=".MainDIYS.ViewMoreDiysCommunityActivity" />
+        <activity android:name=".MainDIYS.ViewMoreDiysBidActivity" />
+        <activity android:name=".MainDIYS.ViewMorePromoDIYS" />
+        <activity android:name=".MainDIYS.ViewMoreNewAddedDIYSActivity" />
 
 
         <provider
@@ -142,12 +147,11 @@
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
-
+        </service>]
         <activity android:name=".Promo.ListPromoActivity" />
-        <activity android:name=".Promo.ViewPromo" />
+        <activity android:name=".Promo.ViewPromoActivity" />
         <activity android:name=".notifications.NotificationActivity" />
-        <activity android:name=".Promo.PriceDiscount"></activity>
+        <activity android:name=".Promo.PriceDiscountActivity"></activity>
     </application>
 
 </manifest>

@@ -4,7 +4,7 @@ package cabiso.daphny.com.g_companion;
  * Created by Lenovo on 8/22/2017.
  */
 
-class UserProfileInfo {
+public class UserProfileInfo {
     public String address;
     public String email;
     public String username;

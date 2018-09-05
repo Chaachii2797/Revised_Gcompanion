@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--selling-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:id="@+id/titleTv"
+                android:text="Selling DIY Items"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/viewMoreDiysBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="150dp"
+                android:layout_marginRight="15dp"
+                android:layout_toRightOf="@+id/titleTv"
+                android:background="@color/green_100"
+                android:text="View More"
+                android:textSize="10sp" />
+        </RelativeLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/diyListItems"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="5dp"
+                    tools:listitem="@layout/diys_main_items" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!--bidding-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:id="@+id/titleTvBid"
+                android:text="On Bid DIY Items!"
+                android:layout_below="@+id/diyAllItems"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/viewMoreDiysBtnBid"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="150dp"
+                android:layout_marginRight="15dp"
+                android:layout_toRightOf="@+id/titleTvBid"
+                android:background="@color/green_100"
+                android:text="View More"
+                android:textSize="10sp" />
+
+
+        </RelativeLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/diyListItemsBid"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    tools:listitem="@layout/diys_main_items" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+
+        <!--community-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:id="@+id/titleTvCat"
+                android:text="Free DIY Items"
+                android:layout_below="@+id/diyAllItems"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/viewMoreDiysBtnCommunity"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="165dp"
+                android:layout_marginRight="15dp"
+                android:layout_toRightOf="@+id/titleTvCat"
+                android:background="@color/green_100"
+                android:text="View More"
+                android:textSize="10sp" />
+
+
+        </RelativeLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/diyListItemsCommunity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    tools:listitem="@layout/diys_main_items" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+
+
+        <!--Newly Added Items-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingLeft="15dp"
+                android:paddingTop="10dp"
+                android:id="@+id/titleTvTire"
+                android:text="Newly Added DIYs!"
+                android:layout_below="@+id/diyAllItems"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/viewMoreDiysBtnNew"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="145dp"
+                android:layout_marginRight="15dp"
+                android:layout_toRightOf="@+id/titleTvTire"
+                android:background="@color/green_100"
+                android:text="View More"
+                android:textSize="10sp" />
+
+
+        </RelativeLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/diyListItemsNewAdd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="10dp"
+                    tools:listitem="@layout/diys_main_items" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+

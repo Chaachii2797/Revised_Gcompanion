@@ -2,9 +2,8 @@ package cabiso.daphny.com.g_companion.Promo;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 
 import cabiso.daphny.com.g_companion.DIYDetailViewActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
@@ -58,6 +56,7 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
     private String itemId;
     private String productID;
     private String imgID;
+    private String sellingPrice;
     private EditText mEtPromoQuantity;
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
@@ -141,7 +140,11 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
                 if(userID.equals(diYnames.getUser_id())){
                     if(diYnames.getIdentity().equalsIgnoreCase("selling")){
                         if(!itemId.equals(diYnames.getDiyName())){
+                            Intent intent = getIntent();
+                            sellingPrice = intent.getExtras().getString("sellingPrice");
+
                             promoList.add(diYnames);
+                            promoList.add((DIYnames) diYnames.setSelling_price(Double.parseDouble(sellingPrice)));
                             promo_adapter.notifyDataSetChanged();
                         }
                     }

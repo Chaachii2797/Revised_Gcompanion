@@ -61,7 +61,11 @@ public class SearchActivity extends Activity {
 
         item_list = new ArrayList<>();
 
+        searchAdapter = new SearchAdapter(SearchActivity.this, R.layout.search_item, item_list);
+        recyclerView.setAdapter(searchAdapter);
         search_item.setText(this.searchString);
+        search_item.setSelection(this.searchString.length());
+
 
         String search = this.searchString.toString();
         if(this.searchString.toString().isEmpty()){
@@ -88,7 +92,7 @@ public class SearchActivity extends Activity {
                 if(s.toString().isEmpty()){
                     item_list.clear();
                 } else {
-                    setAdapter(search.substring(1));
+                    setAdapter(search);
                 }
             }
         });
@@ -114,22 +118,31 @@ public class SearchActivity extends Activity {
 
     private void setAdapter(final String diYnames){
 
+        item_list.clear();
+        Log.e("searchKey",diYnames);
         searchReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                item_list.clear();
 
                 for(DataSnapshot snapshot:dataSnapshot.getChildren()){
                     DIYnames diy_names = snapshot.getValue(DIYnames.class);
-                    String name = diy_names.getDiyName();
 
-                    if(name.contains(diYnames)){
+                    Log.e("searchKey",diYnames+" -- "+diy_names.getDiyName());
+                    if(diy_names.getDiyName().toLowerCase().contains(diYnames.toLowerCase())){
                         item_list.add(diy_names);
+                    } else {
+                        for(DataSnapshot snapshot1: snapshot.child("materials").getChildren()){
+                            String materialName = snapshot1.child("name").getValue(String.class);
+                            if(materialName.toLowerCase().contains(diYnames.toLowerCase())){
+                                item_list.add(diy_names);
+                                break;
+                            }
+                        }
                     }
+                    searchAdapter.notifyDataSetChanged();
                 }
 
-                searchAdapter = new SearchAdapter(SearchActivity.this, R.layout.search_item, item_list);
-                recyclerView.setAdapter(searchAdapter);
+
             }
 
             @Override
@@ -137,7 +150,5 @@ public class SearchActivity extends Activity {
 
             }
         });
-
-
     }
 }

@@ -40,6 +40,7 @@ import cabiso.daphny.com.g_companion.MainDIYS.DiysFragment;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.Promo.PromoFragment;
 import cabiso.daphny.com.g_companion.Search.SearchActivity;
+import cabiso.daphny.com.g_companion.UserSalesReport.SalesReport;
 import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;

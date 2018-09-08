@@ -593,7 +593,10 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 //                                dbMaterials.add(new DBMaterial().setName(materials).setQuantity(quantity).setUnit(unit_material));
                                 dbSelling.add(new SellingDIY().setSelling_price(price).setSelling_qty(qty).setSelling_descr(for_descr));
-
+                                SellingDIY sellingDIY = new SellingDIY();
+                                String sellingPrice = String.valueOf(sellingDIY.setSelling_price(price));
+                                String sellingQty = String.valueOf(sellingDIY.setSelling_qty(qty));
+                                String sellingDescr = String.valueOf(sellingDIY.setSelling_descr(for_descr));
 
                                 //push data to Firebase Database - diy_by_tags node
                                 String productID_sell = generateString();
@@ -603,6 +606,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 databaseReference.child(upload).child("materials").setValue(dbMaterials);
                                 databaseReference.child(upload).child("procedures").setValue(itemProcedure);
                                 databaseReference.child(upload).child("DIY Price").setValue(dbSelling);
+//                                databaseReference.child(upload).child("sellingPrice").setValue(sellingPrice);
+//                                databaseReference.child(upload).child("sellingQty").setValue(sellingQty);
+//                                databaseReference.child(upload).child("sellingDescr").setValue(sellingDescr);
                                 databaseReference.child(upload).child("category").setValue(category);
                                 databaseReference.child(upload).child("category_postition").setValue(categoryPos);
                                 databaseReference.child(upload).child("dateAdded").setValue(sdate);
@@ -614,6 +620,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
                                 byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
                                 byuser_Reference.child(upload).child("DIY Price").setValue(dbSelling);
+//                                databaseReference.child(upload).child("sellingPrice").setValue(sellingPrice);
+//                                databaseReference.child(upload).child("sellingQty").setValue(sellingQty);
+//                                databaseReference.child(upload).child("sellingDescr").setValue(sellingDescr);
                                 byuser_Reference.child(upload).child("category").setValue(category);
                                 byuser_Reference.child(upload).child("category_postition").setValue(categoryPos);
                                 byuser_Reference.child(upload).child("dateAdded").setValue(sdate);

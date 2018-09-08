@@ -42,7 +42,7 @@ public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serial
         this.likes = likes;
         this.loggedInUser = loggedInUser;
         this.dbMaterials = new ArrayList<>();
-        this.matchScore = 1;
+        this.matchScore = 0;
         this.matchScoreRate = 0;
         this.totalMaterialItems = 0;
     }

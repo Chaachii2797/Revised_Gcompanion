@@ -1,10 +1,13 @@
-package cabiso.daphny.com.g_companion;
+package cabiso.daphny.com.g_companion.UserSalesReport;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+
+import cabiso.daphny.com.g_companion.MainActivity;
+import cabiso.daphny.com.g_companion.R;
 
 /**
  * Created by Lenovo on 7/31/2017.
@@ -31,8 +34,6 @@ public class SalesReport extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-
 
     }
 }

@@ -199,8 +199,13 @@ public class Bottle_Recommend extends AppCompatActivity {
 //            }
             int score = diyList.get(b).getMatchScore();
             if(dbMaterials.size() > score){
-                matchScoreRate = ((float)score/dbMaterials.size())*100;
-            } else {
+                if(score == 0){
+                    matchScoreRate = 0;
+                } else {
+                    matchScoreRate = ((float) score / dbMaterials.size()) * 100;
+                }
+            }
+            else {
                 matchScoreRate = 100;
             }
 

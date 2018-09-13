@@ -30,7 +30,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import cabiso.daphny.com.g_companion.Model.DIYnames;
-import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Recommendation;
 
 /**
  * Created by Lenovo on 3/31/2018.
@@ -59,7 +59,7 @@ public class RecommendDIYViewDetails extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(   new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),Bottle_Recommend.class));
+                startActivity(new Intent(getApplicationContext(),Recommendation.class));
             }
         });
 

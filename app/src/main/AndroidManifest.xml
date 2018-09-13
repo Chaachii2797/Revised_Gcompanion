@@ -85,7 +85,7 @@
         <activity android:name=".Search.SearchView" />
         <activity android:name=".Promo.PromoActivity" />
         <activity android:name=".Promo.PriceDiscountActivity" />
-        <activity android:name=".Recommend.Bottle_Recommend" />
+        <activity android:name=".Recommend.Recommendation" />
         <activity android:name=".EditData.EditDIYDetailsActivity" />
         <activity android:name=".EditData.EditProfileActivity" />
         <activity android:name=".MainDIYS.ViewMoreDiysSellingActivity" />

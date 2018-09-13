@@ -37,7 +37,7 @@ import cabiso.daphny.com.g_companion.Adapter.ImgRecogSetQtyAdapter;
 import cabiso.daphny.com.g_companion.Adapter.ImgRecogTagAdapter;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.ImgRecogSetQty;
-import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Recommendation;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiResponse;
@@ -167,7 +167,7 @@ public class ImageRecognitionTags extends AppCompatActivity{
         diyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ImageRecognitionTags.this,Bottle_Recommend.class);
+                Intent intent = new Intent(ImageRecognitionTags.this,Recommendation.class);
                 Bundle extra = new Bundle();
                 extra.putSerializable("dbmaterials", dbMaterials);
                 intent.putExtra("dbmaterials", extra);

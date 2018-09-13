@@ -121,7 +121,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
                     final DIYSell info = dataSnapshot.getValue(DIYSell.class);
 
                     if(get_name.equals(diYnames.getDiyName())){
-                        if(diYnames.getIdentity().equals("selling")) {
+                        if(diYnames.getIdentity().equalsIgnoreCase("selling")) {
 
                             diy_sell.setVisibility(View.VISIBLE);
                             user_owner_name.setVisibility(View.VISIBLE);
@@ -225,7 +225,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
                                                             dialogButton.setOnClickListener(new View.OnClickListener() {
                                                                 @Override
                                                                 public void onClick(View v) {
-                                                                    Intent intent = new Intent(Activity_View_Recommend.this, Bottle_Recommend.class);
+                                                                    Intent intent = new Intent(Activity_View_Recommend.this, Recommendation.class);
                                                                     startActivity(intent);
                                                                 }
                                                             });
@@ -249,7 +249,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
                                                             dialogButton.setOnClickListener(new View.OnClickListener() {
                                                                 @Override
                                                                 public void onClick(View v) {
-                                                                    Intent intent = new Intent(Activity_View_Recommend.this, Bottle_Recommend.class);
+                                                                    Intent intent = new Intent(Activity_View_Recommend.this, Recommendation.class);
                                                                     startActivity(intent);
                                                                 }
                                                             });
@@ -379,7 +379,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
 
 
                         }
-                        else if(diYnames.getIdentity().equals("community")) {
+                        else if(diYnames.getIdentity().equalsIgnoreCase("community")) {
 
                             diy_sell.setVisibility(View.INVISIBLE);
                             button_sell.setVisibility(View.INVISIBLE);

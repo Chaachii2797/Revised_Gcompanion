@@ -43,7 +43,7 @@ import cabiso.daphny.com.g_companion.Model.Constants;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.ImgRecogSetQty;
 import cabiso.daphny.com.g_companion.Model.TagClass;
-import cabiso.daphny.com.g_companion.Recommend.Bottle_Recommend;
+import cabiso.daphny.com.g_companion.Recommend.Recommendation;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import clarifai2.api.ClarifaiResponse;
@@ -241,7 +241,7 @@ public class ImageRecognitionForMaterials extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(ImageRecognitionForMaterials.this, "DIY button clicked", Toast.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(ImageRecognitionForMaterials.this,Bottle_Recommend.class);
+                Intent intent = new Intent(ImageRecognitionForMaterials.this,Recommendation.class);
                 Bundle extra = new Bundle();
                 extra.putSerializable("dbmaterials", dbMaterials);
                 intent.putExtra("dbmaterials", extra);

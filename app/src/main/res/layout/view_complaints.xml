@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue_grey_100"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:gravity="center"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="Complaints"
+            app:titleMarginStart="30dp">
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="330dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="16dp"
+        app:cardBackgroundColor="@color/backgroundColor"
+        app:cardCornerRadius="15dp"
+        app:elevation="8dp"
+        android:layout_below="@+id/appBarLayout"
+        android:layout_centerHorizontal="true">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/seller_picture"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/profile"
+            app:civ_border_width="5dp"
+            app:civ_border_color="@color/gen_scheme1"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_below="@+id/appBarLayout"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"/>
+
+
+        <TextView
+            android:id="@+id/tv_sellerName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView12"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="28dp"
+            android:layout_toEndOf="@+id/diy_item_icons"
+            android:layout_toRightOf="@+id/diy_item_icons"
+            android:text="Seller Name:"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_userID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/get_diyName"
+            android:layout_alignStart="@+id/get_diyName"
+            android:layout_below="@+id/get_diyName"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="63dp"
+            android:hint="userID: "
+            android:inputType="textMultiLine|textImeMultiLine"
+            android:textColor="@color/blue_900"
+            android:textSize="13sp" />
+
+
+    </android.support.v7.widget.CardView>
+
+    <ListView
+        android:id="@+id/lvReportedSeller"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/textView11"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="200dp"
+        android:dividerHeight="10dp"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <ToggleButton
+        android:id="@+id/toggleBtnBlok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lvReportedSeller"
+        android:layout_centerHorizontal="true"
+        android:text="User"
+        android:textOn="Block"
+        android:textOff="Unblock"/>
+
+
+</RelativeLayout>

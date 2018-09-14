@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
+import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
@@ -63,6 +64,12 @@ public class Pending_Activity extends AppCompatActivity{
     private DatabaseReference soldReference;
     final ArrayList<String> keyList = new ArrayList<>();
     final ArrayList<String> keyListss = new ArrayList<>();
+    final ArrayList<Integer> buyQtyList = new ArrayList<>();
+    private ArrayList<DIYnames> promoFreeList;
+    final ArrayList<String> hasFree = new ArrayList<>();
+    final ArrayList<String> promokey = new ArrayList<>();
+    final ArrayList<String> hasDiscount = new ArrayList<>();
+
     private String loggedInUserName;
 
     public Pending_Activity() {
@@ -86,30 +93,48 @@ public class Pending_Activity extends AppCompatActivity{
         database = FirebaseDatabase.getInstance();
         pendingReference = FirebaseDatabase.getInstance().getReference().child("DIY Pending Items").child(userID);
         loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
+        promoFreeList = new ArrayList<>();
 
         pendingReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 progressDialog.dismiss();
-                userProfileInfo = dataSnapshot.getValue(UserProfileInfo.class);
+
                 for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Log.e("snapshot", snapshot.getKey());
 
+                    final DIYSell img = snapshot.getValue(DIYSell.class);
+                    sellList.add(img);
+
+                    //get DIY key
                     keyList.add(snapshot.getKey());
                     keyListss.add(snapshot.getKey());
 
                     Log.e("keyList", String.valueOf(keyList));
                     Log.e("keyListss", String.valueOf(keyListss));
 
-                    final DIYSell img = snapshot.getValue(DIYSell.class);
-                    int rate=0;
-                    sellList.add(img);
+                    promokey.add(snapshot.getKey());
+                    Log.e("promokey", String.valueOf(promokey));
+                    Log.e("promoKeySize", String.valueOf(promokey.size()));
 
-                    if (userProfileInfo != null){
-                        userProfileInfo.getUserRating();
-                    }else{
-                        sellList.add(img);
+                    //store key promo that has freeItems in an array
+                    if(snapshot.hasChild("freeItemList") && snapshot.hasChild("freeItemQuantity")){
+                        hasFree.add(snapshot.getKey());
+                        Log.e("Hass", "Yes" + " " + snapshot.getKey());
+                        Log.e("freeSize", String.valueOf(hasFree.size()));
+                    } else{
+                        Log.e("Hass", "No" + " " + snapshot.getKey());
+
                     }
+
+                    if(snapshot.hasChild("percent_discount")){
+                        Log.e("discountHas", "Yes" + " " + snapshot.getKey());
+
+                    }else{
+                        Log.e("discountNO", "No" + " " + snapshot.getKey());
+                    }
+
+
                     //init adapter
                     adapter = new Items_Adapter(Pending_Activity.this, R.layout.pending_item, sellList);
                     //set adapter for listview
@@ -118,15 +143,29 @@ public class Pending_Activity extends AppCompatActivity{
                     registerForContextMenu(lv);
 
 
-
                     lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                             final DIYSell itemRef = adapter.getItem(position);
 
-                            if(itemRef.getIdentity().equals("For Confirmation")){
-                                Toast.makeText(Pending_Activity.this, "This is your item. Contact buyer.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Pending_Activity.this, "Item identity: " + " = " + itemRef.getIdentity(), Toast.LENGTH_SHORT).show();
+                            //get promo free quantity
+                            final Object freeItemQty =  snapshot.child("freeItemQuantity").getValue();
+                            Log.e("freeItemQty", String.valueOf(freeItemQty));
 
+                            final Object itemDiscount =  snapshot.child("percent_discount").getValue();
+                            Log.e("itemDiscount", String.valueOf(itemDiscount));
+
+                            //get promo free item
+                            for (DataSnapshot postSnapshot : snapshot.child("freeItemList").getChildren()) {
+                                DIYnames promoFreeDIY = postSnapshot.getValue(DIYnames.class);
+                                Log.e("promoFreeDIY", String.valueOf(promoFreeDIY.getDiyName()));
+                                promoFreeList.add(promoFreeDIY);
+
+                            }
+
+                            if(itemRef.getIdentity().equalsIgnoreCase("For Confirmation Item")){
+                                Toast.makeText(Pending_Activity.this, "Chat buyer!", Toast.LENGTH_SHORT).show();
                                 Log.e("itemref", itemRef.getBuyerID());
 
                                 final Dialog myDialog = new Dialog(Pending_Activity.this);
@@ -134,10 +173,11 @@ public class Pending_Activity extends AppCompatActivity{
                                 myDialog.setContentView(R.layout.dialog_pending_approval);
                                 final Button chat = (Button) myDialog.findViewById(R.id.dialogBtbChatSeller);
                                 final Button forMeetup = (Button) myDialog.findViewById(R.id.dialogBtnForMeetUp);
-                                final Button sold = (Button) myDialog.findViewById(R.id.dialogBtnSold);
+                                final Button decline = (Button) myDialog.findViewById(R.id.dialogBtnDecline);
                                 TextView textTitle = (TextView) myDialog.findViewById(R.id.textTitle);
-                                TextView textDone = (TextView) myDialog.findViewById(R.id.textDone);
+                                final TextView textDone = (TextView) myDialog.findViewById(R.id.textDone);
 
+                                //chat buyer for some details
                                 chat.setOnClickListener(new View.OnClickListener() {
 
                                     @Override
@@ -146,12 +186,12 @@ public class Pending_Activity extends AppCompatActivity{
                                         startActivity(intent);
                                     }
                                 });
-
+                                //confirm for meet up (only for seller)
                                 forMeetup.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
                                         final Float float_this = Float.valueOf(0);
-
+                                        //push data to ForMeetUp after confirming the pending item
                                         forMeetupReference = FirebaseDatabase.getInstance().getReference()
                                                 .child("Items_ForMeetUp").child(userID);
 
@@ -164,16 +204,156 @@ public class Pending_Activity extends AppCompatActivity{
                                         final double meetup_price = sellList.get(position).getSelling_price();
                                         int meetup_qty = sellList.get(position).getSelling_qty();
                                         String sellerName = sellList.get(position).getLoggedInUser();
+                                        final int buyQty = sellList.get(position).getBuyingQuantity();
+                                        Log.e("buyQtyyy", String.valueOf(buyQty));
 
-
+                                        //push to seller side
                                         DIYSell product = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
-                                                meetup_productID, "For Buyer Meet-up" , float_this, float_this, meetup_buyer, sellerName);
+                                                meetup_productID, "For Buyer Meet-up" , float_this, float_this, meetup_buyer,
+                                                sellerName, buyQty);
 
+                                        //confirm pending DIY, push to meet up (seller side)
                                         final String upload = forMeetupReference.push().getKey();
                                         forMeetupReference.child(upload).setValue(product);
                                         forMeetupReference.child(upload).child("userStatus").setValue("seller");
                                         forMeetupReference.child(upload).child("selling_price").setValue(meetup_price);
                                         forMeetupReference.child(upload).child("selling_qty").setValue(meetup_qty);
+
+                                        //for buyer name
+                                        loggedInName.child(meetup_buyer).addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
+                                                loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                                                Log.e("LoggedUserName", loggedInUserName);
+
+                                                DatabaseReference meetReference = FirebaseDatabase.getInstance().getReference()
+                                                        .child("Items_ForMeetUp").child(meetup_buyer);
+
+                                                DIYSell buyProduct = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
+                                                        meetup_productID, "For Seller Meet-up" , float_this, float_this,
+                                                        meetup_buyer, loggedInUserName, buyQty);
+
+                                                //push to buyer pending DIY, push to meet up (buyer side)
+                                                String buyUpload = meetReference.child(upload).getKey();
+                                                meetReference.child(buyUpload).setValue(buyProduct);
+                                                meetReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                meetReference.child(buyUpload).child("selling_price").setValue(meetup_price);
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+                                            }
+                                        });
+
+
+                                        //remove confirm DIY in listview
+                                        sellList.remove(position);
+                                        adapter.notifyDataSetChanged();
+
+                                        //remove my item and send to For_MeetUp
+                                        DatabaseReference pendReference = FirebaseDatabase.getInstance().getReference()
+                                                .child("DIY Pending Items").child(meetup_buyer);
+
+                                        String penkey = keyList.get(position);
+                                        String penkeys = keyListss.get(position);
+                                        //remove confirm DIY in DB
+                                        pendingReference.child(penkey).removeValue();
+                                        pendReference.child(penkeys).removeValue();
+
+                                    }
+                                });
+                                //decline pending item (seller side)
+                                decline.setOnClickListener(new View.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(View v) {
+                                        String pending_buyer = sellList.get(position).getBuyerID();
+
+                                        //remove decline DIY in listview
+                                        sellList.remove(position);
+                                        adapter.notifyDataSetChanged();
+
+                                        DatabaseReference pendReference = FirebaseDatabase.getInstance().getReference()
+                                                .child("DIY Pending Items").child(pending_buyer);
+
+                                        String penkey = keyList.get(position);
+                                        String penkeys = keyListss.get(position);
+                                        //remove decline DIY in DB
+                                        pendingReference.child(penkey).removeValue();
+                                        pendReference.child(penkeys).removeValue();
+
+
+                                    }
+                                });
+                                textDone.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(Pending_Activity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        myDialog.dismiss();
+                                    }
+                                });
+                                myDialog.show();
+
+                            }
+
+                            else if (itemRef.getIdentity().equalsIgnoreCase("For Confirmation Discount Promo Item")){
+                                Toast.makeText(Pending_Activity.this, "Chat buyer!", Toast.LENGTH_SHORT).show();
+                                Log.e("itemref", itemRef.getBuyerID());
+
+
+                                final Dialog myDialog = new Dialog(Pending_Activity.this);
+                                myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                myDialog.setContentView(R.layout.dialog_pending_approval);
+                                final Button chat = (Button) myDialog.findViewById(R.id.dialogBtbChatSeller);
+                                final Button forMeetup = (Button) myDialog.findViewById(R.id.dialogBtnForMeetUp);
+                                final Button decline = (Button) myDialog.findViewById(R.id.dialogBtnDecline);
+                                TextView textTitle = (TextView) myDialog.findViewById(R.id.textTitle);
+                                final TextView textDone = (TextView) myDialog.findViewById(R.id.textDone);
+
+                                //chat buyer for some details
+                                chat.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(Pending_Activity.this, ChatSplashActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
+                                //confirm for meet up (only for seller)
+                                forMeetup.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        final Float float_this = Float.valueOf(0);
+                                        //push data to ForMeetUp after confirming the pending item
+                                        forMeetupReference = FirebaseDatabase.getInstance().getReference()
+                                                .child("Items_ForMeetUp").child(userID);
+
+                                        final String meetup_diyName = sellList.get(position).getDiyName();
+                                        final String meetup_diyUrl = sellList.get(position).getDiyUrl();
+                                        final String meetup_user_id = sellList.get(position).getUser_id();
+                                        final String meetup_productID = sellList.get(position).getProductID();
+                                        String meetup_status = sellList.get(position).getIdentity();
+                                        final String meetup_buyer = sellList.get(position).getBuyerID();
+                                        final double meetup_price = sellList.get(position).getSelling_price();
+                                        int meetup_qty = sellList.get(position).getSelling_qty();
+                                        String sellerName = sellList.get(position).getLoggedInUser();
+                                        final int buyQty = sellList.get(position).getBuyingQuantity();
+                                        Log.e("buyQtyyy", String.valueOf(buyQty));
+
+                                        //push to seller side
+                                        DIYSell product = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
+                                                meetup_productID, "For Buyer Meet-up Discount Item" , float_this, float_this, meetup_buyer,
+                                                sellerName, buyQty);
+
+                                        //confirm pending DIY, push to meet up (seller side)
+                                        final String upload = forMeetupReference.push().getKey();
+                                        forMeetupReference.child(upload).setValue(product);
+                                        forMeetupReference.child(upload).child("userStatus").setValue("seller");
+                                        forMeetupReference.child(upload).child("selling_price").setValue(meetup_price);
+                                        forMeetupReference.child(upload).child("selling_qty").setValue(meetup_qty);
+                                        forMeetupReference.child(upload).child("percent_discount").setValue(itemDiscount);
 
 
                                         //for buyer name
@@ -187,27 +367,26 @@ public class Pending_Activity extends AppCompatActivity{
                                                 DatabaseReference meetReference = FirebaseDatabase.getInstance().getReference()
                                                         .child("Items_ForMeetUp").child(meetup_buyer);
 
-                                                //DBref for buyer
                                                 DIYSell buyProduct = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
-                                                        meetup_productID, "For Buyer Meet-up" , float_this, float_this,
-                                                        meetup_buyer, loggedInUserName);
+                                                        meetup_productID, "For Seller Meet-up Discount Item" , float_this, float_this,
+                                                        meetup_buyer, loggedInUserName, buyQty);
 
-
+                                                //push to buyer pending DIY, push to meet up (buyer side)
                                                 String buyUpload = meetReference.child(upload).getKey();
                                                 meetReference.child(buyUpload).setValue(buyProduct);
                                                 meetReference.child(buyUpload).child("userStatus").setValue("buyer");
                                                 meetReference.child(buyUpload).child("selling_price").setValue(meetup_price);
+                                                meetReference.child(buyUpload).child("percent_discount").setValue(itemDiscount);
 
                                             }
 
                                             @Override
                                             public void onCancelled(DatabaseError databaseError) {
-
                                             }
                                         });
 
 
-
+                                        //remove confirm DIY in listview
                                         sellList.remove(position);
                                         adapter.notifyDataSetChanged();
 
@@ -217,52 +396,31 @@ public class Pending_Activity extends AppCompatActivity{
 
                                         String penkey = keyList.get(position);
                                         String penkeys = keyListss.get(position);
-
+                                        //remove confirm DIY in DB
                                         pendingReference.child(penkey).removeValue();
                                         pendReference.child(penkeys).removeValue();
 
-
                                     }
                                 });
-
-                                sold.setOnClickListener(new View.OnClickListener() {
+                                //decline pending item (seller side)
+                                decline.setOnClickListener(new View.OnClickListener() {
 
                                     @Override
                                     public void onClick(View v) {
-
-                                        Float float_this = Float.valueOf(0);
-
-                                        soldReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items").child(userID);
-
-                                        String pending_diyName = sellList.get(position).getDiyName();
-                                        String pending_diyUrl = sellList.get(position).getDiyUrl();
-                                        String pending_user_id = sellList.get(position).getUser_id();
-                                        String pending_productID = sellList.get(position).getProductID();
-                                        String pending_status = sellList.get(position).getIdentity();
                                         String pending_buyer = sellList.get(position).getBuyerID();
-                                        double pending_price = sellList.get(position).getSelling_price();
-                                        int pendng_qty = sellList.get(position).getSelling_qty();
-                                        String sellerName = sellList.get(position).getLoggedInUser();
 
-                                        DIYSell product = new DIYSell(pending_diyName, pending_diyUrl, pending_user_id,
-                                                pending_productID, "PURCHASED" , float_this, float_this, pending_buyer, sellerName);
+                                        //remove decline DIY in listview
+                                        sellList.remove(position);
+                                        adapter.notifyDataSetChanged();
 
-                                        String upload = soldReference.push().getKey();
-                                        soldReference.child(upload).setValue(product);
-                                        soldReference.child(upload).child("userStatus").setValue("seller");
-                                        soldReference.child(upload).child("selling_price").setValue(pending_price);
-                                        soldReference.child(upload).child("selling_qty").setValue(pendng_qty);
+                                        DatabaseReference pendReference = FirebaseDatabase.getInstance().getReference()
+                                                .child("DIY Pending Items").child(pending_buyer);
 
-                                        DatabaseReference buyerReference = FirebaseDatabase.getInstance().getReference()
-                                                .child("Sold_Items").child(pending_buyer);
-
-                                        DIYSell buyProduct = new DIYSell(pending_diyName, pending_diyUrl, pending_user_id,
-                                                pending_productID, "PURCHASED" , float_this, float_this, pending_buyer, loggedInUserName);
-
-                                        String buyUpload = buyerReference.child(upload).getKey();
-                                        buyerReference.child(buyUpload).setValue(buyProduct);
-                                        buyerReference.child(buyUpload).child("userStatus").setValue("buyer");
-                                        buyerReference.child(buyUpload).child("selling_price").setValue(pending_price);
+                                        String penkey = keyList.get(position);
+                                        String penkeys = keyListss.get(position);
+                                        //remove decline DIY in DB
+                                        pendingReference.child(penkey).removeValue();
+                                        pendReference.child(penkeys).removeValue();
 
 
                                     }
@@ -271,14 +429,182 @@ public class Pending_Activity extends AppCompatActivity{
                                 textDone.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Intent intent = new Intent(Pending_Activity.this, ForMeetUpActivity.class);
+                                        Intent intent = new Intent(Pending_Activity.this, MainActivity.class);
                                         startActivity(intent);
                                         myDialog.dismiss();
                                     }
                                 });
 
                                 myDialog.show();
+                            }
 
+
+                            else if(itemRef.getIdentity().equalsIgnoreCase("For Confirmation Buy and Take Promo Item")){
+                                Toast.makeText(Pending_Activity.this, "Chat buyer!", Toast.LENGTH_SHORT).show();
+                                Log.e("itemref", itemRef.getBuyerID());
+
+                                final Dialog myDialog = new Dialog(Pending_Activity.this);
+                                myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                myDialog.setContentView(R.layout.dialog_pending_approval);
+                                final Button chat = (Button) myDialog.findViewById(R.id.dialogBtbChatSeller);
+                                final Button forMeetup = (Button) myDialog.findViewById(R.id.dialogBtnForMeetUp);
+                                final Button decline = (Button) myDialog.findViewById(R.id.dialogBtnDecline);
+                                TextView textTitle = (TextView) myDialog.findViewById(R.id.textTitle);
+                                final TextView textDone = (TextView) myDialog.findViewById(R.id.textDone);
+
+                                //chat buyer for some details
+                                chat.setOnClickListener(new View.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(Pending_Activity.this, ChatSplashActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
+                                //confirm for meet up (only for seller)
+                                forMeetup.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        final Float float_this = Float.valueOf(0);
+                                        //push data to ForMeetUp after confirming the pending item
+                                        forMeetupReference = FirebaseDatabase.getInstance().getReference()
+                                                .child("Items_ForMeetUp").child(userID);
+
+                                        final String meetup_diyName = sellList.get(position).getDiyName();
+                                        final String meetup_diyUrl = sellList.get(position).getDiyUrl();
+                                        final String meetup_user_id = sellList.get(position).getUser_id();
+                                        final String meetup_productID = sellList.get(position).getProductID();
+                                        String meetup_status = sellList.get(position).getIdentity();
+                                        final String meetup_buyer = sellList.get(position).getBuyerID();
+                                        final double meetup_price = sellList.get(position).getSelling_price();
+                                        int meetup_qty = sellList.get(position).getSelling_qty();
+                                        String sellerName = sellList.get(position).getLoggedInUser();
+                                        final int buyQty = sellList.get(position).getBuyingQuantity();
+                                        Log.e("buyQtyyy", String.valueOf(buyQty));
+
+                                        //push to seller side
+                                        DIYSell product = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
+                                                meetup_productID, "For Buyer Meet-up Buy and Take Item" , float_this, float_this, meetup_buyer,
+                                                sellerName, buyQty);
+
+                                        //confirm pending DIY, push to meet up (seller side)
+                                        final String upload = forMeetupReference.push().getKey();
+
+                                        //confirm promo DIY, push to meet up
+                                        for (int pos=0; pos < hasFree.size(); pos++) {
+                                            if(promokey.get(position).equals(hasFree.get(pos))){
+                                                Log.e("equalsSilaa", "YESS" + " " + promokey.get(position) + " = " + hasFree.get(pos));
+                                                forMeetupReference.child(upload).setValue(product);
+                                                forMeetupReference.child(upload).child("userStatus").setValue("seller");
+                                                forMeetupReference.child(upload).child("selling_price").setValue(meetup_price);
+                                                forMeetupReference.child(upload).child("selling_qty").setValue(meetup_qty);
+                                                forMeetupReference.child(upload).child("freeItemList").setValue(promoFreeList);
+                                                forMeetupReference.child(upload).child("freeItemQuantity").setValue(freeItemQty);
+
+                                            }else{
+                                                forMeetupReference.child(upload).setValue(product);
+                                                forMeetupReference.child(upload).child("userStatus").setValue("seller");
+                                                forMeetupReference.child(upload).child("selling_price").setValue(meetup_price);
+                                                forMeetupReference.child(upload).child("selling_qty").setValue(meetup_qty);
+
+                                            }
+
+                                        }
+
+                                        //for buyer name
+                                        loggedInName.child(meetup_buyer).addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
+                                                loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                                                Log.e("LoggedUserName", loggedInUserName);
+
+                                                DatabaseReference meetReference = FirebaseDatabase.getInstance().getReference()
+                                                        .child("Items_ForMeetUp").child(meetup_buyer);
+
+                                                DIYSell buyProduct = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
+                                                        meetup_productID, "For Seller Meet-up Buy and Take Item" , float_this, float_this,
+                                                        meetup_buyer, loggedInUserName, buyQty);
+
+                                                //push to buyer pending DIY, push to meet up (buyer side)
+                                                String buyUpload = meetReference.child(upload).getKey();
+
+                                                //confirm pending promo DIY, push to meet up
+                                                for (int post =0; post < hasFree.size(); post++) {
+                                                    if(promokey.get(position).equals(hasFree.get(post))){
+                                                        Log.e("equalsSilaaa", "YESS" + " " + promokey.get(position) + " = " + hasFree.get(post));
+                                                        meetReference.child(buyUpload).setValue(buyProduct);
+                                                        meetReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                        meetReference.child(buyUpload).child("selling_price").setValue(meetup_price);
+                                                        meetReference.child(buyUpload).child("freeItemList").setValue(promoFreeList);
+                                                        meetReference.child(buyUpload).child("freeItemQuantity").setValue(freeItemQty);
+
+                                                    } else{
+                                                        meetReference.child(buyUpload).setValue(buyProduct);
+                                                        meetReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                        meetReference.child(buyUpload).child("selling_price").setValue(meetup_price);
+
+                                                    }
+                                                }
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+                                            }
+                                        });
+
+
+                                        //remove confirm DIY in listview
+                                        sellList.remove(position);
+                                        adapter.notifyDataSetChanged();
+
+                                        //remove my item and send to For_MeetUp
+                                        DatabaseReference pendReference = FirebaseDatabase.getInstance().getReference()
+                                                .child("DIY Pending Items").child(meetup_buyer);
+
+                                        String penkey = keyList.get(position);
+                                        String penkeys = keyListss.get(position);
+                                        //remove confirm DIY in DB
+                                        pendingReference.child(penkey).removeValue();
+                                        pendReference.child(penkeys).removeValue();
+
+                                    }
+                                });
+                                //decline pending item (seller side)
+                                decline.setOnClickListener(new View.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(View v) {
+                                        String pending_buyer = sellList.get(position).getBuyerID();
+
+                                        //remove decline DIY in listview
+                                        sellList.remove(position);
+                                        adapter.notifyDataSetChanged();
+
+                                        DatabaseReference pendReference = FirebaseDatabase.getInstance().getReference()
+                                                .child("DIY Pending Items").child(pending_buyer);
+
+                                        String penkey = keyList.get(position);
+                                        String penkeys = keyListss.get(position);
+                                        //remove decline DIY in DB
+                                        pendingReference.child(penkey).removeValue();
+                                        pendReference.child(penkeys).removeValue();
+
+
+                                    }
+                                });
+
+                                textDone.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(Pending_Activity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        myDialog.dismiss();
+                                    }
+                                });
+
+                                myDialog.show();
                             }
 
                             else {

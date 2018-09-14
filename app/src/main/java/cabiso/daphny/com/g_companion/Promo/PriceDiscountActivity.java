@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.DIYDetailViewActivity;
@@ -28,11 +29,12 @@ import cabiso.daphny.com.g_companion.R;
 
 public class PriceDiscountActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private String diyNameID;
+    private String diyNameID, itemID;
     private String productID;
     private String imgID;
     private String dbKey;
-    private String priceID;
+    private String priceID, quantityID;
+    private String sellerID, sellerName;
 
     private double origPrice;
 
@@ -48,7 +50,7 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
 
     private FirebaseUser mFirebaseUser;
     private String userID;
-    private DatabaseReference dbReferencePrice;
+    private DatabaseReference dbReferencePrice, identityReference, identityReferenceByUser;
     private DatabaseReference dbPromoSale;
 
     @Override
@@ -61,6 +63,11 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
         productID = intent.getExtras().getString("diy_ID");
         dbKey = intent.getExtras().getString("getDBKey");
         priceID = intent.getExtras().getString("sellingPrice");
+        quantityID = intent.getExtras().getString("sellingQuantity");
+        sellerID = intent.getExtras().getString("sellerUserID");
+        sellerName = intent.getExtras().getString("sellerName");
+        itemID = intent.getExtras().getString("itemId");
+        Log.e("buyTakeID", itemID);
 
         imgID = String.valueOf(intent.getExtras().get("diy_img"));
         Log.e("PRICEUUUU", priceID+ "");
@@ -69,7 +76,9 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
         userID = mFirebaseUser.getUid();
 
         dbReferencePrice = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(dbKey);
-        dbPromoSale = FirebaseDatabase.getInstance().getReference();
+        dbPromoSale = FirebaseDatabase.getInstance().getReference().child("promo_sale");
+        identityReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.itemID);
+        identityReferenceByUser = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID).child(this.itemID);
 
         mTvProductName = (TextView) findViewById(R.id.tvProductName);
         mExpiryDate = (TextView) findViewById(R.id.tv_set_expiry_date);
@@ -139,7 +148,22 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
                 Intent back = new Intent(PriceDiscountActivity.this, MainActivity.class);
                 Log.e("PRICEEEEE", String.valueOf(origPrice));
                 startActivity(back);
-                dbPromoSale.child("promo_sale").push().setValue(priceDiscountModel);
+
+                int discountPromoQty = Integer.parseInt((quantityID));
+
+                String upload_info = dbPromoSale.push().getKey();
+                dbPromoSale.child(upload_info).setValue(priceDiscountModel);
+                dbPromoSale.child(upload_info).child("sellerID").setValue(sellerID);
+                dbPromoSale.child(upload_info).child("sellerName").setValue(sellerName);
+                dbPromoSale.child(upload_info).child("sellDIYqty").setValue(discountPromoQty);
+
+                HashMap<String, Object> result = new HashMap<>();
+                result.put("identity", "Promo");
+                identityReference.updateChildren(result);
+                identityReferenceByUser.updateChildren(result);
+                Intent intent = new Intent(PriceDiscountActivity.this,MainActivity.class);
+                startActivity(intent);
+
             }catch (NumberFormatException nFe){
                 nFe.getMessage();
             }

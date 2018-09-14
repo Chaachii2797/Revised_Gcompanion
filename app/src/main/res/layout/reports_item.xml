@@ -11,52 +11,51 @@
     app:cardCornerRadius="15dp"
     app:elevation="8dp">
 
-    <ImageView
-        android:id="@+id/diy_item_icons"
-        android:layout_width="140dp"
-        android:layout_height="90dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/seller_picture"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/profile"
+        app:civ_border_width="5dp"
+        app:civ_border_color="@color/gen_scheme1"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_below="@+id/appBarLayout"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="13dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:scaleType="centerCrop"
-        app:srcCompat="@drawable/bg3" />
+        android:layout_centerHorizontal="true"/>
+
 
     <TextView
-        android:id="@+id/get_diyName"
+        android:id="@+id/tv_sellerName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView12"
-        android:layout_marginLeft="163dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginLeft="120dp"
+        android:layout_marginTop="25dp"
         android:layout_toEndOf="@+id/diy_item_icons"
         android:layout_toRightOf="@+id/diy_item_icons"
-        android:text="DIY Name:"
+        android:text="Seller Name:"
         android:textColor="@android:color/black"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/tv_category"
+        android:id="@+id/tv_userID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/get_diyName"
         android:layout_alignStart="@+id/get_diyName"
         android:layout_below="@+id/get_diyName"
-        android:layout_marginLeft="163dp"
+        android:layout_marginLeft="120dp"
         android:layout_marginTop="60dp"
-        android:hint="category"
+        android:hint="userID"
         android:textColor="@color/blue_900"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        android:textSize="14sp" />
 
-    <ImageView
-        android:id="@+id/promoIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:srcCompat="@drawable/promo_icon" />
+
+
 
 </android.support.v7.widget.CardView>

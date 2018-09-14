@@ -7,6 +7,7 @@
     android:background="@color/gen_scheme3"
     android:orientation="vertical">
 
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -20,28 +21,24 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:gravity="center"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="My Profile"
-            app:titleMarginStart="30dp">
+            android:layout_gravity="center"
+            android:background="?attr/colorPrimary">
 
-            <!--<ImageView-->
-                <!--android:id="@+id/blockUser"-->
-                <!--android:layout_width="35dp"-->
-                <!--android:layout_height="35dp"-->
-                <!--android:layout_gravity="right"-->
-                <!--android:layout_marginRight="15dp"-->
-                <!--android:src="@drawable/block_user"/>-->
+            <ImageView
+                android:id="@+id/blockUser"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="15dp"
+                android:src="@drawable/block_user"/>
 
         </android.support.v7.widget.Toolbar>
-
     </android.support.design.widget.AppBarLayout>
 
 
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_picture"
+        android:id="@+id/other_user_profile_picture"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:src="@drawable/profile"
@@ -57,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/star"
-        android:layout_below="@+id/profile_picture"
+        android:layout_below="@+id/other_user_profile_picture"
         android:layout_toLeftOf="@+id/user_ratings"
         android:layout_toStartOf="@+id/user_ratings"
         android:layout_marginTop="12dp" />
@@ -74,7 +71,7 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/profile_name"
+        android:id="@+id/other_user_profile_name"
         android:layout_width="150dp"
         android:layout_height="35dp"
         android:hint="Username:"
@@ -82,8 +79,8 @@
         android:textColor="@color/black"
         android:textSize="15sp"
         android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/profile_email"
-        android:layout_alignStart="@+id/profile_email" />
+        android:layout_alignLeft="@+id/other_user_profile_email"
+        android:layout_alignStart="@+id/other_user_profile_email" />
 
     <TextView
         android:id="@+id/name"
@@ -95,13 +92,13 @@
         android:textStyle="bold"
         android:layout_marginLeft="72dp"
         android:layout_marginStart="72dp"
-        android:layout_alignBaseline="@+id/profile_name"
-        android:layout_alignBottom="@+id/profile_name"
+        android:layout_alignBaseline="@+id/other_user_profile_name"
+        android:layout_alignBottom="@+id/other_user_profile_name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:id="@+id/profile_email"
+        android:id="@+id/other_user_profile_email"
         android:layout_width="150dp"
         android:layout_height="35dp"
         android:layout_marginTop="14dp"
@@ -109,16 +106,16 @@
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="15sp"
-        android:layout_below="@+id/profile_name"
-        android:layout_alignLeft="@+id/profile_password"
-        android:layout_alignStart="@+id/profile_password" />
+        android:layout_below="@+id/other_user_profile_name"
+        android:layout_alignLeft="@+id/other_user_profile_password"
+        android:layout_alignStart="@+id/other_user_profile_password" />
 
     <TextView
         android:id="@+id/email"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
-        android:layout_alignBaseline="@+id/profile_email"
-        android:layout_alignBottom="@+id/profile_email"
+        android:layout_alignBaseline="@+id/other_user_profile_email"
+        android:layout_alignBottom="@+id/other_user_profile_email"
         android:layout_alignLeft="@+id/name"
         android:layout_alignStart="@+id/name"
         android:hint="Email Address:"
@@ -127,10 +124,10 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/profile_password"
+        android:id="@+id/other_user_profile_password"
         android:layout_width="150dp"
         android:layout_height="35dp"
-        android:layout_below="@+id/profile_email"
+        android:layout_below="@+id/other_user_profile_email"
         android:layout_marginTop="13dp"
         android:layout_toEndOf="@+id/phone"
         android:layout_toRightOf="@+id/phone"
@@ -152,7 +149,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/profile_phone"
+        android:id="@+id/other_user_profile_phone"
         android:layout_width="150dp"
         android:layout_height="35dp"
         android:layout_alignBaseline="@+id/phone"
@@ -171,7 +168,7 @@
         android:layout_height="35dp"
         android:layout_alignLeft="@+id/email"
         android:layout_alignStart="@+id/email"
-        android:layout_below="@+id/profile_password"
+        android:layout_below="@+id/other_user_profile_password"
         android:layout_marginTop="16dp"
         android:hint="Phone number:"
         android:textColor="@color/black"
@@ -179,7 +176,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/profile_address"
+        android:id="@+id/other_user_profile_address"
         android:layout_width="150dp"
         android:layout_height="35dp"
         android:hint="Address:"
@@ -197,7 +194,7 @@
         android:layout_height="35dp"
         android:layout_alignLeft="@+id/password"
         android:layout_alignStart="@+id/password"
-        android:layout_below="@+id/profile_phone"
+        android:layout_below="@+id/other_user_profile_phone"
         android:layout_marginTop="13dp"
         android:hint="Address:"
         android:textColor="@color/black"
@@ -205,19 +202,19 @@
         android:textStyle="bold" />
 
 
-    <Button
-        android:id="@+id/edit_submit"
-        style="@style/LoginStyle"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
-        android:backgroundTint="@color/gen_scheme2"
-        android:onClick="onClick"
-        android:text="EDIT PROFILE"
-        android:textColor="@android:color/background_light" />
+    <!--<Button-->
+        <!--android:id="@+id/edit_submit"-->
+        <!--style="@style/LoginStyle"-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginBottom="15dp"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:backgroundTint="@color/gen_scheme2"-->
+        <!--android:onClick="onClick"-->
+        <!--android:text="EDIT PROFILE"-->
+        <!--android:textColor="@android:color/background_light" />-->
 
 
 </RelativeLayout>

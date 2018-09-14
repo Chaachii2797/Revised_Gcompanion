@@ -4,7 +4,7 @@
     android:layout_height="wrap_content">
 
     <EditText
-        android:id="@+id/buy_quantity"
+        android:id="@+id/quantityInputted"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/dialog_imageview"
@@ -15,17 +15,17 @@
         android:editable="true"
         android:hint="Quantity to buy?"
         android:textColor="@color/gen_scheme4"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/btnQtyDialog"
+        android:id="@+id/btnQtyDialogDone"
         style="@style/LoginStyle"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/buy_quantity"
-        android:layout_alignStart="@+id/buy_quantity"
-        android:layout_below="@+id/buy_quantity"
+        android:layout_alignLeft="@+id/quantityInputted"
+        android:layout_alignStart="@+id/quantityInputted"
+        android:layout_below="@+id/quantityInputted"
         android:layout_marginBottom="20dp"
         android:layout_marginTop="15dp"
         android:backgroundTint="@color/dot_dark_screen2"

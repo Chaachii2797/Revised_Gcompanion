@@ -151,7 +151,7 @@ public class Item_Activity extends AppCompatActivity {
                 String myItem_status = diyList.get(listPosition).getIdentity();
 
                 DIYSell product = new DIYSell(myItem_diyName, myItem_diyUrl, myItem_user_id,
-                        myItem_productID, myItem_status, float_this, float_this, "seller", " ");
+                        myItem_productID, myItem_status, float_this, float_this, "seller", " ", 0);
                 String upload = itemReference.push().getKey();
                 itemReference.child(upload).setValue(product);
 

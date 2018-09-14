@@ -47,8 +47,31 @@ public class Items_Adapter extends ArrayAdapter<DIYSell> {
         TextView tvName = (TextView) v.findViewById(R.id.get_diyName);
         ImageView img = (ImageView) v.findViewById(R.id.diy_item_icons);
         TextView tvcategory = (TextView) v.findViewById(R.id.tv_category);
-        tvcategory.setText(listDIY.get(position).getIdentity());
+        ImageView imgIcon = (ImageView) v.findViewById(R.id.promoIcon);
 
+        if(listDIY.get(position).getIdentity().equalsIgnoreCase("Pending Item")){
+            imgIcon.setVisibility(View.INVISIBLE);
+        }
+        else if (listDIY.get(position).getIdentity().equalsIgnoreCase("For Confirmation Item")){
+            imgIcon.setVisibility(View.INVISIBLE);
+        }
+        else if(listDIY.get(position).getIdentity().equalsIgnoreCase("For Buyer Meet-up")){
+            imgIcon.setVisibility(View.INVISIBLE);
+        }
+        else if(listDIY.get(position).getIdentity().equalsIgnoreCase("For Seller Meet-up")){
+            imgIcon.setVisibility(View.INVISIBLE);
+        }
+        else if(listDIY.get(position).getIdentity().equalsIgnoreCase("DELIVERED")){
+            imgIcon.setVisibility(View.INVISIBLE);
+        }
+        else if(listDIY.get(position).getIdentity().equalsIgnoreCase("PURCHASED")){
+            imgIcon.setVisibility(View.INVISIBLE);
+        }
+        else{
+            imgIcon.setVisibility(View.VISIBLE);
+        }
+
+        tvcategory.setText(listDIY.get(position).getIdentity());
         tvName.setText(listDIY.get(position).getDiyName());
         Glide.with(context).load(listDIY.get(position).getDiyUrl()).into(img);
 

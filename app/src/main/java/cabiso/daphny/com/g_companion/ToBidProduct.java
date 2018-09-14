@@ -105,8 +105,6 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     String set_expiry = year + "-" + String.valueOf(month + 1) + "-" + (dayOfMonth);
-//                    datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-//                    String set_expiry = String.valueOf(month + 1) + "/" + (dayOfMonth) + "/" + year;
                     if (calendar.before(set_expiry)) {
                         Toast.makeText(getApplication(), "YOU CANNOT PICK PASSED WEEKS!", Toast.LENGTH_SHORT).show();
                     } else {

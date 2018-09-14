@@ -35,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import cabiso.daphny.com.g_companion.BuyingProcess.ForMeetUpActivity;
 import cabiso.daphny.com.g_companion.BuyingProcess.Pending_Activity;
 import cabiso.daphny.com.g_companion.BuyingProcess.Sold_Activity;
+import cabiso.daphny.com.g_companion.GCAdmin.AdminActivity;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
 import cabiso.daphny.com.g_companion.MainDIYS.DiysFragment;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
@@ -124,6 +125,11 @@ public class MainActivity extends AppCompatActivity
                     txtProfileName.setText(mUsername);
                     txtAddress.setText(user_profile.getAddress());
 
+                    Log.e("userRole", user_profile.getRole());
+                    if (user_profile.getRole().equalsIgnoreCase("user")){
+                        //invisible admin nav item
+                        hideItem();
+                    }
                     Glide.with(MainActivity.this)
                             .load(user_profile.getUserProfileUrl())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -262,6 +268,12 @@ public class MainActivity extends AppCompatActivity
     public void display(int itemID){
         android.support.v4.app.FragmentTransaction ft;
         switch (itemID){
+
+            case R.id.nav_admin:
+                Intent admin = new Intent(this, AdminActivity.class);
+                startActivity(admin);
+                break;
+
             case R.id.nav_profile:
                 Intent intent2=new Intent(this,MyProfileActivity.class);
                 startActivity(intent2);
@@ -322,5 +334,13 @@ public class MainActivity extends AppCompatActivity
         intent_commu.putExtra("Community Ref", ref.toString());
         startActivity(intent_commu);
     }
+
+    private void hideItem()
+    {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_admin).setVisible(false);
+    }
+
 
 }

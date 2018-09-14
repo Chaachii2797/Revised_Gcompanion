@@ -105,6 +105,9 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".GCAdmin.AdminActivity" />
+        <activity android:name=".GCAdmin.ViewComplaints" />
+        <activity android:name=".OtherUserProfileActivity" />
         <activity android:name=".ProductDetailViewActivity" />
         <activity android:name=".ChatWithSellerActivity" />
         <activity android:name=".Item_Activity" />

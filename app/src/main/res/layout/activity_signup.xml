@@ -11,15 +11,15 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         app:srcCompat="@drawable/new_logo_green1"
+        android:layout_marginTop="12dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp" />
+        android:layout_centerHorizontal="true" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="13dp"
         android:backgroundTintMode="src_over"
         app:srcCompat="@drawable/new_logo_word"
         android:layout_alignTop="@+id/imageView2"
@@ -31,7 +31,7 @@
         android:orientation="vertical"
         android:padding="15dp"
         android:weightSum="1"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="30dp"
         android:id="@+id/linearLayout"
         android:layout_below="@+id/imageView2"
         android:layout_alignParentLeft="true"
@@ -44,7 +44,6 @@
             android:layout_height="40dp"
             android:layout_below="@+id/imageView3"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
             android:layout_weight="0.62"
             android:backgroundTint="@color/gen_scheme3"
             android:ems="10"
@@ -131,6 +130,27 @@
             android:hint="Password"
             android:inputType="textVisiblePassword"
             android:paddingLeft="20dp"
+            android:textColor="@color/bodyTextColor" />
+
+        <EditText
+            android:id="@+id/et_role"
+            style="@style/LoginStyle"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_below="@+id/imageView3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.62"
+            android:backgroundTint="@color/gen_scheme3"
+            android:ems="10"
+            android:hint="Role"
+            android:text="user"
+            android:paddingLeft="20dp"
+            android:inputType="none"
+            android:clickable="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:textColor="@color/bodyTextColor" />
     </LinearLayout>
 

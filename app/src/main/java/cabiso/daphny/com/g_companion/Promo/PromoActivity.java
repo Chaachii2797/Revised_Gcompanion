@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -26,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.DIYDetailViewActivity;
@@ -35,7 +38,7 @@ import cabiso.daphny.com.g_companion.Model.SellingDIY;
 import cabiso.daphny.com.g_companion.R;
 
 public class PromoActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
-    private DatabaseReference promoReference;
+    private DatabaseReference promoReference, identityReference, identityReferenceByUser;
     private DatabaseReference promoAddReference;
 
     private TextView mTvProductName;
@@ -53,10 +56,12 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseUser mFirebaseUser;
     private String userID;
 
-    private String itemId;
+    private String itemName, itemID;
     private String productID;
     private String imgID;
-    private String sellingPrice;
+    private String sellingPrice, sellingQuantity;
+    private String sellerUserID, sellerName;
+
     private EditText mEtPromoQuantity;
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
@@ -67,7 +72,8 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
 
         promoList = new ArrayList<>();
         promoItem = new PromoModel();
-        addPromoReference = FirebaseDatabase.getInstance().getReference();
+
+        addPromoReference = FirebaseDatabase.getInstance().getReference().child("promo_sale");
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
@@ -82,10 +88,21 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
 //        mBtntForCheck = (ImageView) findViewById(R.id.img_for_checked);
 
         Intent intent = getIntent();
-        itemId = intent.getExtras().getString("diy_Name");
+        itemName = intent.getExtras().getString("diy_Name");
         productID = intent.getExtras().getString("diy_ID");
+        sellerUserID = intent.getExtras().getString("sellerUserID");
+        sellerName = intent.getExtras().getString("sellerName");
+        sellingPrice = intent.getExtras().getString("sellingPrice");
+        sellingQuantity = intent.getExtras().getString("sellingQuantity");
+        itemID = intent.getExtras().getString("itemId");
+        Log.e("buyTakeID", itemID);
+
+        identityReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.itemID);
+        identityReferenceByUser = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID).child(this.itemID);
+
         imgID = String.valueOf(intent.getExtras().get("diy_img"));
-        mTvProductName.setText(itemId);
+
+        mTvProductName.setText(itemName);
 
         mTvExpiry.setOnClickListener(this);
         mIbBack.setOnClickListener(new View.OnClickListener() {
@@ -103,16 +120,31 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
                     if (promoItem != null) {
                         try {
                             promoItem.setPromo_id(productID);
-                            promoItem.setPromo_diyName(itemId);
+                            promoItem.setPromo_diyName(itemName);
                             promoItem.setPromo_image(imgID);
                             promoItem.setPromo_details(mTvProductDesc.getText() + "");
                             promoItem.setPromo_expiry(mTvExpiry.getText() + "");
                             promoItem.setPromo_createdDate(sdate);
                             promoItem.setBuy_counts(mEtPromoQuantity.getText() + "");
                             promoItem.setStatus("wholesale");
-//                        promoList.add(promoItem);
+                            promoItem.setPromo_createdDate(sdate);
 
-                            addPromoReference.child("promo_sale").push().setValue(promoItem);
+                            //DIY price
+                            float promoPrice = Float.parseFloat((sellingPrice));
+                            int promoQty = Integer.parseInt((sellingQuantity));
+
+                            String upload_info = addPromoReference.push().getKey();
+                            addPromoReference.child(upload_info).setValue(promoItem);
+                            addPromoReference.child(upload_info).child("sellerID").setValue(sellerUserID);
+                            addPromoReference.child(upload_info).child("sellerName").setValue(sellerName);
+                            addPromoReference.child(upload_info).child("promoPrice").setValue(promoPrice);
+                            addPromoReference.child(upload_info).child("promoQuantity").setValue(promoQty);
+
+                            HashMap<String, Object> result = new HashMap<>();
+                            result.put("identity", "Promo");
+                            identityReference.updateChildren(result);
+                            identityReferenceByUser.updateChildren(result);
+
                             Intent back = new Intent(PromoActivity.this, MainActivity.class);
                             startActivity(back);
                             Toast.makeText(getApplicationContext(),"Succesfully created a new promo",Toast.LENGTH_SHORT).show();
@@ -129,7 +161,7 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
         promo_adapter = new PromoAdapterForList(PromoActivity.this, R.layout.promo_item, promoList,promoItem);
         mListviewPromo.setAdapter(promo_adapter);
 
-        promoAddReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(itemId).getRef();
+        promoAddReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(itemName).getRef();
         promoReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
         promoReference.addChildEventListener(new ChildEventListener() {
             @Override
@@ -139,12 +171,31 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
 
                 if(userID.equals(diYnames.getUser_id())){
                     if(diYnames.getIdentity().equalsIgnoreCase("selling")){
-                        if(!itemId.equals(diYnames.getDiyName())){
-                            Intent intent = getIntent();
-                            sellingPrice = intent.getExtras().getString("sellingPrice");
+                        if(!itemName.equals(diYnames.getDiyName())){
 
+                            String message_price="";
+                            String message_qty = "";
+                            List<String> message_Price = new ArrayList<String>();
+                            List<String> message_Qty = new ArrayList<String>();
+                            for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
+                                double price = postSnapshot.child("selling_price").getValue(double.class);
+                                int qty = postSnapshot.child("selling_qty").getValue(int.class);
+                                message_qty += qty;
+                                message_Qty.add(message_qty);
+                                message_price += price;
+                                message_Price.add(message_price);
+
+                            }
+
+                            //DIY price
+                            float freePromoPrice = Float.parseFloat((message_price));
+                            int freePromoQty = Integer.parseInt((message_qty));
+
+                            //for free promo item
                             promoList.add(diYnames);
-                            promoList.add((DIYnames) diYnames.setSelling_price(Double.parseDouble(sellingPrice)));
+                            promoList.add((DIYnames) diYnames.setSelling_price(freePromoPrice));
+                            promoList.add((DIYnames) diYnames.setSelling_qty(freePromoQty));
+
                             promo_adapter.notifyDataSetChanged();
                         }
                     }

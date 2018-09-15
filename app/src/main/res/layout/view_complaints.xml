@@ -106,7 +106,7 @@
         tools:layout_editor_absoluteY="0dp" />
 
     <ToggleButton
-        android:id="@+id/toggleBtnBlok"
+        android:id="@+id/toggleBtnBlock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/lvReportedSeller"

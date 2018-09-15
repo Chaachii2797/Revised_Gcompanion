@@ -89,8 +89,6 @@ public class AdminActivity extends AppCompatActivity {
         reportsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e("dataSnapKey", dataSnapshot.getKey());
-
                 progressDialog.dismiss();
 
                 for (final DataSnapshot reportSnapshot : dataSnapshot.getChildren()) {

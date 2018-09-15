@@ -65,7 +65,10 @@ public class ForMeetUpActivity extends AppCompatActivity {
     final ArrayList<String> hasFreename = new ArrayList<>();
     final ArrayList<String> freeKeyxDIY = new ArrayList<>();
 
-    private ArrayList<PromoModel> promoList = new ArrayList<>();
+    private ArrayList<PromoModel> buyTakeList = new ArrayList<>();
+    private ArrayList<PriceDiscountModel> discountList = new ArrayList<>();
+
+    final ArrayList<String> discountPromokey = new ArrayList<>();
     final ArrayList<String> promoSalekey = new ArrayList<>();
 
     @Override
@@ -327,18 +330,203 @@ public class ForMeetUpActivity extends AppCompatActivity {
                             else if (itemRef.getIdentity().equalsIgnoreCase("For Buyer Meet-up Discount Item")){
                                 Toast.makeText(ForMeetUpActivity.this, "DIY name: " + itemRef.getDiyName() + " = " + position, Toast.LENGTH_SHORT).show();
 
+
                                 promoReference.addChildEventListener(new ChildEventListener() {
                                     @Override
-                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                        for(final DataSnapshot promoDiscountSnap : dataSnapshot.getChildren()){
-                                            PriceDiscountModel promoDiscount = promoDiscountSnap.getValue(PriceDiscountModel.class);
-                                            Log.e("promoPrice", promoDiscount.getPromo_diyName());
+                                    public void onChildAdded(final DataSnapshot discountSnapshot, String s) {
 
-                                            Log.e("discountKey", promoDiscountSnap.getKey());
+                                        final PriceDiscountModel discountSnap = discountSnapshot.getValue(PriceDiscountModel.class);
 
-                                            //dapat if unsay i click na item sa lv, ma equal sa name sa promo_sale node, nya adto
-                                            // isulod ang keyList
-                                        }
+                                        discountList.add(discountSnap);
+                                        Log.e("discountList", String.valueOf(discountSnap.getPromo_diyName()));
+
+
+                                        diyReference.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                for(final DataSnapshot snaps : dataSnapshot.getChildren()){
+                                                    final DIYSell diySellinfo = snaps.getValue(DIYSell.class);
+                                                    Log.e("diySellinfoID", diySellinfo.getProductID()); //tanan prodID sa DIY sa DB
+
+
+                                                    if(item != null){
+
+                                                        if(discountSnap.getPromo_diyName().equals(item.getDiyName())){
+                                                            Log.e("plsssTawn", "Yes" + discountSnap.getPromo_diyName() + " = " + item.getDiyName());
+
+                                                            discountPromokey.add(discountSnapshot.getKey());
+                                                            Log.e("discountPromokey", discountSnapshot.getKey());
+
+                                                        }else{
+                                                            Log.e("plsssTawn", " NO " + discountSnap.getPromo_diyName() + " = " + item.getDiyName());
+                                                        }
+
+
+                                                        if(item.getProductID().equals(diySellinfo.getProductID())){
+                                                            Log.e("itemProdID", item.getProductID()); //kaning item kay items na naa sa lv
+                                                            Log.e("diySellPRodeID", diySellinfo.getProductID()); //prodID sa DB na ni equal sa LV
+
+                                                            snapKey.add(snaps.getKey()); //get key sa diy  na naa sa diy_by_tags na ni equal sa forMeetUp items
+                                                            Log.e("keyyDIYName", snaps.getKey() );
+
+
+                                                            AlertDialog.Builder ab = new AlertDialog.Builder(ForMeetUpActivity.this, R.style.MyAlertDialogStyle);
+                                                            ab.setTitle("Approval Meet-up");
+                                                            ab.setMessage("Are you done meeting with the buyer?");
+
+                                                            ab.setPositiveButton("DONE", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    final Float float_this = Float.valueOf(0);
+                                                                    //ika done, maadto siya sa sold item, nya ari mabutang ang counter para sa qty
+                                                                    soldReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items").child(userID);
+
+                                                                    final String sold_diyName = meetUpList.get(position).getDiyName();
+                                                                    final String sold_diyUrl = meetUpList.get(position).getDiyUrl();
+                                                                    final String sold_user_id = meetUpList.get(position).getUser_id();
+                                                                    final String sold_productID = meetUpList.get(position).getProductID();
+                                                                    String sold_status = meetUpList.get(position).getIdentity();
+                                                                    final String sold_buyer = meetUpList.get(position).getBuyerID();
+                                                                    final double sold_price = meetUpList.get(position).getSelling_price();
+                                                                    String sellerName = meetUpList.get(position).getLoggedInUser();
+                                                                    int sold_qty = meetUpList.get(position).getSelling_qty();
+                                                                    final int buyQty = meetUpList.get(position).getBuyingQuantity();
+
+                                                                    DIYSell product = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
+                                                                            sold_productID, "Delivered Discount Item", float_this, float_this,
+                                                                            sold_buyer, sellerName, buyQty);
+
+                                                                    final String upload = soldReference.push().getKey();
+                                                                    soldReference.child(upload).setValue(product);
+                                                                    soldReference.child(upload).child("userStatus").setValue("seller");
+                                                                    soldReference.child(upload).child("selling_price").setValue(sold_price);
+                                                                    soldReference.child(upload).child("selling_qty").setValue(sold_qty);
+                                                                    soldReference.child(upload).child("percent_discount").setValue(itemDiscount);
+
+                                                                    loggedInName.child(sold_buyer).addValueEventListener(new ValueEventListener() {
+                                                                        @Override
+                                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                            loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
+                                                                            loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+
+                                                                            //DBref for buyer
+                                                                            DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
+                                                                                    .child("Sold_Items").child(sold_buyer);
+
+                                                                            DIYSell buyProduct = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
+                                                                                    sold_productID, "Purchased Discount Item", float_this, float_this,
+                                                                                    sold_buyer, loggedInUserName, buyQty);
+
+                                                                            String buyUpload = soldReference.child(upload).getKey();
+                                                                            soldReference.child(buyUpload).setValue(buyProduct);
+                                                                            soldReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                                            soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
+                                                                            soldReference.child(buyUpload).child("percent_discount").setValue(itemDiscount);
+
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onCancelled(DatabaseError databaseError) {
+                                                                        }
+                                                                    });
+
+                                                                    DatabaseReference meetReference = FirebaseDatabase.getInstance().getReference()
+                                                                            .child("Items_ForMeetUp").child(sold_buyer);
+                                                                    //remove my item and send to SOLD_Items
+                                                                    String key = meetupKey.get(position);
+                                                                    String keys = meetupKeyyy.get(position);
+
+                                                                    meetUpRef.child(key).removeValue();
+                                                                    meetReference.child(keys).removeValue();
+
+                                                                    //get DIY total quantity sa DB
+                                                                    int meetUpQty = meetUpList.get(position).getSelling_qty();
+                                                                    Log.e("meetUpQty", String.valueOf(meetUpQty));
+
+                                                                    String message_price="";
+                                                                    String message_qty = "";
+                                                                    String message_dsc = "";
+                                                                    List<String> message_Price = new ArrayList<String>();
+                                                                    List<String> message_Qty = new ArrayList<String>();
+                                                                    final List<String> message_Dsc = new ArrayList<String>();
+//
+                                                                    //get price key
+                                                                    for(DataSnapshot priceSnap : snaps.child("DIY Price").getChildren()){
+                                                                        Log.e("priceSnap", String.valueOf(priceSnap));
+                                                                        Log.e("priceSnapKey", priceSnap.getKey());
+                                                                        double price = priceSnap.child("selling_price").getValue(double.class);
+                                                                        int qty = priceSnap.child("selling_qty").getValue(int.class);
+                                                                        String dsc = priceSnap.child("selling_descr").getValue(String.class);
+
+                                                                        message_qty += qty;
+                                                                        message_Qty.add(message_qty);
+
+                                                                        message_price += price;
+                                                                        message_Price.add(message_price);
+
+                                                                        message_dsc +=dsc;
+                                                                        message_Dsc.add(message_dsc);
+
+                                                                        Log.e("message_qty","" +  message_qty);
+                                                                        Log.e("message_price", "" + message_price);
+
+                                                                        prices.add(message_qty);
+                                                                        Log.e("pricess", String.valueOf(prices));
+
+                                                                        //decrease quantity
+                                                                        int quantityCountMeetUp = meetUpQty - buyQty; //if dli promo
+                                                                        Log.e("quantityCountMeetUp", String.valueOf(quantityCountMeetUp));
+
+                                                                        //update quantity count
+                                                                        String penkey = snapKey.get(position);
+                                                                        Log.e("penKey", penkey);
+
+                                                                        String dscKey = discountPromokey.get(position);
+                                                                        Log.e("dscKey", dscKey);
+//
+                                                                        HashMap<String, Object> results = new HashMap<>();
+                                                                        results.put("selling_qty", quantityCountMeetUp);
+                                                                        diyReference.child(penkey).child("DIY Price")
+                                                                                .child(priceSnap.getKey()).updateChildren(results);
+
+                                                                        soldReference.child(upload).updateChildren(results);
+
+
+                                                                        HashMap<String, Object> dscResults = new HashMap<>();
+                                                                        dscResults.put("sellDIYqty", quantityCountMeetUp);
+
+                                                                        promoReference.child(dscKey).updateChildren(dscResults);
+
+                                                                        Intent intent = new Intent(ForMeetUpActivity.this, MainActivity.class);
+                                                                        startActivity(intent);
+                                                                    }
+                                                                }
+                                                            });
+                                                            ab.setNegativeButton("NOT YET", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    dialog.dismiss();
+                                                                }
+                                                            });
+                                                            ab.create().show();
+                                                        }
+
+                                                    }
+
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+
+                                        });
+
+
+
+
                                     }
 
                                     @Override
@@ -362,165 +550,9 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                     }
                                 });
 
-                                diyReference.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                        for(final DataSnapshot snaps : dataSnapshot.getChildren()){
-                                            final DIYSell diySellinfo = snaps.getValue(DIYSell.class);
-                                            Log.e("diySellinfoID", diySellinfo.getProductID()); //tanan prodID sa DIY sa DB
 
-                                            if(item != null){
-                                                if(item.getProductID().equals(diySellinfo.getProductID())){
-                                                    Log.e("itemProdID", item.getProductID()); //kaning item kay items na naa sa lv
-                                                    Log.e("diySellPRodeID", diySellinfo.getProductID()); //prodID sa DB na ni equal sa LV
 
-                                                    snapKey.add(snaps.getKey()); //get key sa diy  na naa sa diy_by_tags na ni equal sa forMeetUp items
-                                                    Log.e("keyyDIYName", snaps.getKey() );
-
-                                                    AlertDialog.Builder ab = new AlertDialog.Builder(ForMeetUpActivity.this, R.style.MyAlertDialogStyle);
-                                                    ab.setTitle("Approval Meet-up");
-                                                    ab.setMessage("Are you done meeting with the buyer?");
-
-                                                    ab.setPositiveButton("DONE", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            final Float float_this = Float.valueOf(0);
-                                                            //ika done, maadto siya sa sold item, nya ari mabutang ang counter para sa qty
-                                                            soldReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items").child(userID);
-
-                                                            final String sold_diyName = meetUpList.get(position).getDiyName();
-                                                            final String sold_diyUrl = meetUpList.get(position).getDiyUrl();
-                                                            final String sold_user_id = meetUpList.get(position).getUser_id();
-                                                            final String sold_productID = meetUpList.get(position).getProductID();
-                                                            String sold_status = meetUpList.get(position).getIdentity();
-                                                            final String sold_buyer = meetUpList.get(position).getBuyerID();
-                                                            final double sold_price = meetUpList.get(position).getSelling_price();
-                                                            String sellerName = meetUpList.get(position).getLoggedInUser();
-                                                            int sold_qty = meetUpList.get(position).getSelling_qty();
-                                                            final int buyQty = meetUpList.get(position).getBuyingQuantity();
-
-                                                            DIYSell product = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
-                                                                    sold_productID, "Delivered Discount Item", float_this, float_this,
-                                                                    sold_buyer, sellerName, buyQty);
-
-                                                            final String upload = soldReference.push().getKey();
-                                                            soldReference.child(upload).setValue(product);
-                                                            soldReference.child(upload).child("userStatus").setValue("seller");
-                                                            soldReference.child(upload).child("selling_price").setValue(sold_price);
-                                                            soldReference.child(upload).child("selling_qty").setValue(sold_qty);
-                                                            soldReference.child(upload).child("percent_discount").setValue(itemDiscount);
-
-                                                            loggedInName.child(sold_buyer).addValueEventListener(new ValueEventListener() {
-                                                                @Override
-                                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                    loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
-                                                                    loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
-
-                                                                    //DBref for buyer
-                                                                    DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
-                                                                            .child("Sold_Items").child(sold_buyer);
-
-                                                                    DIYSell buyProduct = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
-                                                                            sold_productID, "Purchased Discount Item", float_this, float_this,
-                                                                            sold_buyer, loggedInUserName, buyQty);
-
-                                                                    String buyUpload = soldReference.child(upload).getKey();
-                                                                    soldReference.child(buyUpload).setValue(buyProduct);
-                                                                    soldReference.child(buyUpload).child("userStatus").setValue("buyer");
-                                                                    soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
-                                                                    soldReference.child(buyUpload).child("percent_discount").setValue(itemDiscount);
-
-                                                                }
-
-                                                                @Override
-                                                                public void onCancelled(DatabaseError databaseError) {
-                                                                }
-                                                            });
-
-                                                            DatabaseReference meetReference = FirebaseDatabase.getInstance().getReference()
-                                                                    .child("Items_ForMeetUp").child(sold_buyer);
-                                                            //remove my item and send to SOLD_Items
-                                                            String key = meetupKey.get(position);
-                                                            String keys = meetupKeyyy.get(position);
-
-                                                            meetUpRef.child(key).removeValue();
-                                                            meetReference.child(keys).removeValue();
-
-                                                            //get DIY total quantity sa DB
-                                                            int meetUpQty = meetUpList.get(position).getSelling_qty();
-                                                            Log.e("meetUpQty", String.valueOf(meetUpQty));
-
-                                                            String message_price="";
-                                                            String message_qty = "";
-                                                            String message_dsc = "";
-                                                            List<String> message_Price = new ArrayList<String>();
-                                                            List<String> message_Qty = new ArrayList<String>();
-                                                            final List<String> message_Dsc = new ArrayList<String>();
-//
-                                                            //get price key
-                                                            for(DataSnapshot priceSnap : snaps.child("DIY Price").getChildren()){
-                                                                Log.e("priceSnap", String.valueOf(priceSnap));
-                                                                Log.e("priceSnapKey", priceSnap.getKey());
-                                                                double price = priceSnap.child("selling_price").getValue(double.class);
-                                                                int qty = priceSnap.child("selling_qty").getValue(int.class);
-                                                                String dsc = priceSnap.child("selling_descr").getValue(String.class);
-
-                                                                message_qty += qty;
-                                                                message_Qty.add(message_qty);
-
-                                                                message_price += price;
-                                                                message_Price.add(message_price);
-
-                                                                message_dsc +=dsc;
-                                                                message_Dsc.add(message_dsc);
-
-                                                                Log.e("message_qty","" +  message_qty);
-                                                                Log.e("message_price", "" + message_price);
-
-                                                                prices.add(message_qty);
-                                                                Log.e("pricess", String.valueOf(prices));
-
-                                                                //decrease quantity
-                                                                int quantityCountMeetUp = meetUpQty - buyQty; //if dli promo
-                                                                Log.e("quantityCountMeetUp", String.valueOf(quantityCountMeetUp));
-
-                                                                //update quantity count
-                                                                String penkey = snapKey.get(position);
-                                                                Log.e("penKey", penkey);
-
-                                                                HashMap<String, Object> results = new HashMap<>();
-                                                                results.put("selling_qty", quantityCountMeetUp);
-                                                                diyReference.child(penkey).child("DIY Price")
-                                                                        .child(priceSnap.getKey()).updateChildren(results);
-
-                                                                soldReference.child(upload).updateChildren(results);
-
-                                                                Intent intent = new Intent(ForMeetUpActivity.this, MainActivity.class);
-                                                                startActivity(intent);
-                                                            }
-                                                        }
-                                                    });
-                                                    ab.setNegativeButton("NOT YET", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            dialog.dismiss();
-                                                        }
-                                                    });
-                                                    ab.create().show();
-                                                }
-
-                                            }
-
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-
-                                });
 
                             }
 
@@ -532,15 +564,269 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                 final DIYSell promoFreeItem = promoFreeList.get(position);
                                 Log.e("freeItemP", promoFreeItem.getDiyName());
 
+
                                 promoReference.addChildEventListener(new ChildEventListener() {
                                     @Override
-                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                        for(final DataSnapshot promoBuyTakeSnap : dataSnapshot.getChildren()){
-                                            PromoModel buytakePromo = promoBuyTakeSnap.getValue(PromoModel.class);
-                                            Log.e("buytakePromo", buytakePromo.getPromo_diyName());
+                                    public void onChildAdded(final DataSnapshot buyTakeSnapshot, String s) {
 
-                                            Log.e("buyTakeKey", promoBuyTakeSnap.getKey());
-                                        }
+                                        final PromoModel buyTakeSnap = buyTakeSnapshot.getValue(PromoModel.class);
+
+                                        buyTakeList.add(buyTakeSnap);
+                                        Log.e("buyTakeList", String.valueOf(buyTakeSnap.getPromo_diyName()));
+
+
+
+                                        diyReference.addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                for(final DataSnapshot snaps : dataSnapshot.getChildren()){
+                                                    final DIYSell diySellinfo = snaps.getValue(DIYSell.class);
+                                                    Log.e("diySellinfoID", diySellinfo.getProductID()); //tanan prodID sa DIY sa DB
+
+                                                    if(item != null){
+
+                                                        if(buyTakeSnap.getPromo_diyName().equals(item.getDiyName())){
+                                                            Log.e("hoyyTawn", "Yes" + buyTakeSnap.getPromo_diyName() + " = " + item.getDiyName());
+
+                                                            promoSalekey.add(buyTakeSnapshot.getKey());
+                                                            Log.e("promoSalekey", buyTakeSnapshot.getKey());
+
+                                                        }else{
+                                                            Log.e("hoyyTawn", " NO " + buyTakeSnap.getPromo_diyName() + " = " + item.getDiyName());
+                                                        }
+
+
+                                                        if (promoFreeItem.getDiyName().equals(diySellinfo.getDiyName())){
+                                                            Log.e("Equalss?", promoFreeItem.getDiyName() + " = " + diySellinfo.getDiyName());
+                                                            freeKeyxDIY.add(snaps.getKey()); //gi sud ang key sa free promo item
+                                                            Log.e("freeKeyxDIY", snaps.getKey());
+
+                                                            Log.e("proomoFreeQty", promoFreeItem.getSelling_price() + " = " + promoFreeItem.getSelling_qty());
+                                                        }
+
+                                                        if(item.getProductID().equals(diySellinfo.getProductID())){
+                                                            Log.e("itemProdID", item.getProductID()); //kaning item kay items na naa sa lv
+                                                            Log.e("diySellPRodeID", diySellinfo.getProductID()); //prodID sa DB na ni equal sa LV
+
+                                                            snapKey.add(snaps.getKey()); //get key sa diy  na naa sa diy_by_tags na ni equal sa forMeetUp items
+                                                            Log.e("keyyDIYName", snaps.getKey() );
+
+
+                                                            AlertDialog.Builder ab = new AlertDialog.Builder(ForMeetUpActivity.this, R.style.MyAlertDialogStyle);
+                                                            ab.setTitle("Approval Meet-up");
+                                                            ab.setMessage("Are you done meeting with the buyer?");
+
+                                                            ab.setPositiveButton("DONE", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    final Float float_this = Float.valueOf(0);
+
+                                                                    //ika done, maadto siya sa sold item, nya ari mabutang ang counter para sa qty
+                                                                    soldReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items").child(userID);
+
+                                                                    final String sold_diyName = meetUpList.get(position).getDiyName();
+                                                                    final String sold_diyUrl = meetUpList.get(position).getDiyUrl();
+                                                                    final String sold_user_id = meetUpList.get(position).getUser_id();
+                                                                    final String sold_productID = meetUpList.get(position).getProductID();
+                                                                    String sold_status = meetUpList.get(position).getIdentity();
+                                                                    final String sold_buyer = meetUpList.get(position).getBuyerID();
+                                                                    final double sold_price = meetUpList.get(position).getSelling_price();
+                                                                    String sellerName = meetUpList.get(position).getLoggedInUser();
+                                                                    int sold_qty = meetUpList.get(position).getSelling_qty();
+                                                                    final int buyQty = meetUpList.get(position).getBuyingQuantity();
+
+                                                                    DIYSell product = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
+                                                                            sold_productID, "Delivered Buy and Take Item", float_this, float_this,
+                                                                            sold_buyer, sellerName, buyQty);
+//
+                                                                    final String upload = soldReference.push().getKey();
+                                                                    soldReference.child(upload).setValue(product);
+                                                                    soldReference.child(upload).child("userStatus").setValue("seller");
+                                                                    soldReference.child(upload).child("selling_price").setValue(sold_price);
+                                                                    soldReference.child(upload).child("selling_qty").setValue(sold_qty);
+
+                                                                    //confirm promo DIY, push to meet up
+                                                                    for (int pos=0; pos < hasFree.size(); pos++) {
+                                                                        if(promokey.get(position).equals(hasFree.get(pos))){
+                                                                            Log.e("equalsSilaa", "YESS" + " " + promokey.get(position) + " = " + hasFree.get(pos));
+
+                                                                            soldReference.child(upload).setValue(product);
+                                                                            soldReference.child(upload).child("userStatus").setValue("seller");
+                                                                            soldReference.child(upload).child("selling_price").setValue(sold_price);
+                                                                            soldReference.child(upload).child("selling_qty").setValue(sold_qty);
+                                                                            soldReference.child(upload).child("freeItemList").setValue(promoFreeList);
+                                                                            soldReference.child(upload).child("freeItemQuantity").setValue(freeItemQty);
+
+                                                                        }else{
+                                                                            soldReference.child(upload).setValue(product);
+                                                                            soldReference.child(upload).child("userStatus").setValue("seller");
+                                                                            soldReference.child(upload).child("selling_price").setValue(sold_price);
+                                                                            soldReference.child(upload).child("selling_qty").setValue(sold_qty);
+                                                                        }
+
+                                                                    }
+
+
+                                                                    loggedInName.child(sold_buyer).addValueEventListener(new ValueEventListener() {
+                                                                        @Override
+                                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                            loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
+                                                                            loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+
+                                                                            //DBref for buyer
+                                                                            DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
+                                                                                    .child("Sold_Items").child(sold_buyer);
+
+                                                                            DIYSell buyProduct = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
+                                                                                    sold_productID, "Purchased Buy and Take Item", float_this, float_this,
+                                                                                    sold_buyer, loggedInUserName, buyQty);
+//
+                                                                            String buyUpload = soldReference.child(upload).getKey();
+                                                                            soldReference.child(buyUpload).setValue(buyProduct);
+                                                                            soldReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                                            soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
+
+                                                                            //confirm pending promo DIY, push to meet up
+                                                                            for (int post =0; post < hasFree.size(); post++) {
+                                                                                if(promokey.get(position).equals(hasFree.get(post))){
+                                                                                    Log.e("equalsSilaaa", "YESS" + " " + promokey.get(position) + " = " + hasFree.get(post));
+
+                                                                                soldReference.child(buyUpload).setValue(buyProduct);
+                                                                                soldReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                                                soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
+                                                                                soldReference.child(buyUpload).child("freeItemList").setValue(promoFreeList);
+                                                                                soldReference.child(buyUpload).child("freeItemQuantity").setValue(freeItemQty);
+                                                                                }
+                                                                                else{
+                                                                                soldReference.child(buyUpload).setValue(buyProduct);
+                                                                                soldReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                                                soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                                        }
+                                                                    });
+
+
+                                                                    DatabaseReference meetReference = FirebaseDatabase.getInstance().getReference()
+                                                                            .child("Items_ForMeetUp").child(sold_buyer);
+
+                                                                    //remove my item and send to SOLD_Items
+                                                                    String key = meetupKey.get(position);
+                                                                    String keys = meetupKeyyy.get(position);
+
+                                                                    meetUpRef.child(key).removeValue();
+                                                                    meetReference.child(keys).removeValue();
+
+                                                                    //get DIY total quantity sa DB sa promo Item
+                                                                    int meetUpQty = meetUpList.get(position).getSelling_qty();
+                                                                    Log.e("meetUpQty", String.valueOf(meetUpQty));
+
+                                                                    //free quantity sa promo item
+                                                                    int freeQty = Integer.parseInt(String.valueOf(freeItemQty));
+                                                                    Log.e("freeQty", String.valueOf(freeQty));
+
+                                                                    String message_price="";
+                                                                    String message_qty = "";
+                                                                    String message_dsc = "";
+                                                                    List<String> message_Price = new ArrayList<String>();
+                                                                    List<String> message_Qty = new ArrayList<String>();
+                                                                    final List<String> message_Dsc = new ArrayList<String>();
+//
+                                                                    //get price key
+                                                                    for(DataSnapshot priceSnap : snaps.child("DIY Price").getChildren()){
+                                                                        Log.e("priceSnap", String.valueOf(priceSnap));
+                                                                        Log.e("priceSnapKey", priceSnap.getKey());
+                                                                        double price = priceSnap.child("selling_price").getValue(double.class);
+                                                                        int qty = priceSnap.child("selling_qty").getValue(int.class);
+                                                                        String dsc = priceSnap.child("selling_descr").getValue(String.class);
+
+                                                                        message_qty += qty;
+                                                                        message_Qty.add(message_qty);
+
+                                                                        message_price += price;
+                                                                        message_Price.add(message_price);
+
+                                                                        message_dsc +=dsc;
+                                                                        message_Dsc.add(message_dsc);
+
+                                                                        Log.e("message_qty","" +  message_qty);
+                                                                        Log.e("message_price", "" + message_price);
+
+                                                                        prices.add(message_qty);
+                                                                        Log.e("pricess", String.valueOf(prices));
+
+                                                                        //decrease quantity sa promo Item
+                                                                        int quantityCountMeetUp = meetUpQty - buyQty; //if dli promo
+                                                                        Log.e("quantityCountMeetUp", String.valueOf(quantityCountMeetUp));
+
+                                                                        //decrease quantity sa free item
+                                                                        int promoQtyCountMeetUp = promoFreeItem.getSelling_qty() - freeQty;
+                                                                        Log.e("promoQtyCountMeetUp", String.valueOf(promoQtyCountMeetUp));
+
+                                                                        //update quantity count
+                                                                        String penkey = snapKey.get(position);
+                                                                        Log.e("penKey", penkey);
+
+                                                                        String promKey = freeKeyxDIY.get(position);
+                                                                        Log.e("promKey", promKey);
+
+                                                                        String buyTakeKey = promoSalekey.get(position);
+                                                                        Log.e("buyTakeKey",buyTakeKey);
+
+                                                                        HashMap<String, Object> results = new HashMap<>();
+                                                                        results.put("selling_qty", quantityCountMeetUp);
+                                                                        diyReference.child(penkey).child("DIY Price")
+                                                                                .child(priceSnap.getKey()).updateChildren(results);
+
+                                                                        HashMap<String, Object> freeResults = new HashMap<>();
+                                                                        freeResults.put("selling_qty", promoQtyCountMeetUp);
+                                                                        diyReference.child(promKey).child("DIY Price")
+                                                                                .child(priceSnap.getKey()).updateChildren(freeResults);
+
+                                                                        soldReference.child(upload).updateChildren(results);
+
+                                                                        HashMap<String, Object> buyTakeResults = new HashMap<>();
+                                                                        buyTakeResults.put("promoQuantity", quantityCountMeetUp);
+                                                                        promoReference.child(buyTakeKey).updateChildren(buyTakeResults);
+
+                                                                        Intent intent = new Intent(ForMeetUpActivity.this, MainActivity.class);
+                                                                        startActivity(intent);
+
+                                                                    }
+
+                                                                }
+                                                            });
+
+                                                            ab.setNegativeButton("NOT YET", new DialogInterface.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    dialog.dismiss();
+                                                                }
+                                                            });
+
+                                                            ab.create().show();
+                                                        }
+
+
+
+                                                    }
+
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+
+                                        });
+
                                     }
 
                                     @Override
@@ -565,252 +851,6 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                 });
 
 
-                                diyReference.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                        for(final DataSnapshot snaps : dataSnapshot.getChildren()){
-                                            final DIYSell diySellinfo = snaps.getValue(DIYSell.class);
-                                            Log.e("diySellinfoID", diySellinfo.getProductID()); //tanan prodID sa DIY sa DB
-
-                                            if(item != null){
-
-                                                if (promoFreeItem.getDiyName().equals(diySellinfo.getDiyName())){
-                                                    Log.e("Equalss?", promoFreeItem.getDiyName() + " = " + diySellinfo.getDiyName());
-                                                    freeKeyxDIY.add(snaps.getKey()); //gi sud ang key sa free promo item
-                                                    Log.e("freeKeyxDIY", snaps.getKey());
-
-                                                    Log.e("proomoFreeQty", promoFreeItem.getSelling_price() + " = " + promoFreeItem.getSelling_qty());
-                                                }
-
-                                                if(item.getProductID().equals(diySellinfo.getProductID())){
-                                                    Log.e("itemProdID", item.getProductID()); //kaning item kay items na naa sa lv
-                                                    Log.e("diySellPRodeID", diySellinfo.getProductID()); //prodID sa DB na ni equal sa LV
-
-                                                    snapKey.add(snaps.getKey()); //get key sa diy  na naa sa diy_by_tags na ni equal sa forMeetUp items
-                                                    Log.e("keyyDIYName", snaps.getKey() );
-
-
-                                                    AlertDialog.Builder ab = new AlertDialog.Builder(ForMeetUpActivity.this, R.style.MyAlertDialogStyle);
-                                                    ab.setTitle("Approval Meet-up");
-                                                    ab.setMessage("Are you done meeting with the buyer?");
-
-                                                    ab.setPositiveButton("DONE", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            final Float float_this = Float.valueOf(0);
-
-                                                            //ika done, maadto siya sa sold item, nya ari mabutang ang counter para sa qty
-                                                            soldReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items").child(userID);
-
-                                                            final String sold_diyName = meetUpList.get(position).getDiyName();
-                                                            final String sold_diyUrl = meetUpList.get(position).getDiyUrl();
-                                                            final String sold_user_id = meetUpList.get(position).getUser_id();
-                                                            final String sold_productID = meetUpList.get(position).getProductID();
-                                                            String sold_status = meetUpList.get(position).getIdentity();
-                                                            final String sold_buyer = meetUpList.get(position).getBuyerID();
-                                                            final double sold_price = meetUpList.get(position).getSelling_price();
-                                                            String sellerName = meetUpList.get(position).getLoggedInUser();
-                                                            int sold_qty = meetUpList.get(position).getSelling_qty();
-                                                            final int buyQty = meetUpList.get(position).getBuyingQuantity();
-
-                                                            DIYSell product = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
-                                                                    sold_productID, "Delivered Buy and Take Item", float_this, float_this,
-                                                                    sold_buyer, sellerName, buyQty);
-
-                                                            final String upload = soldReference.push().getKey();
-                                                            soldReference.child(upload).setValue(product);
-                                                            soldReference.child(upload).child("userStatus").setValue("seller");
-                                                            soldReference.child(upload).child("selling_price").setValue(sold_price);
-                                                            soldReference.child(upload).child("selling_qty").setValue(sold_qty);
-
-                                                            //confirm promo DIY, push to meet up
-                                                            for (int pos=0; pos < hasFree.size(); pos++) {
-                                                                if(promokey.get(position).equals(hasFree.get(pos))){
-                                                                    Log.e("equalsSilaa", "YESS" + " " + promokey.get(position) + " = " + hasFree.get(pos));
-                                                                    soldReference.child(upload).setValue(product);
-                                                                    soldReference.child(upload).child("userStatus").setValue("seller");
-                                                                    soldReference.child(upload).child("selling_price").setValue(sold_price);
-                                                                    soldReference.child(upload).child("selling_qty").setValue(sold_qty);
-                                                                    soldReference.child(upload).child("freeItemList").setValue(promoFreeList);
-                                                                    soldReference.child(upload).child("freeItemQuantity").setValue(freeItemQty);
-
-                                                                    freeSnapKey.add(snaps.getKey()); //get key sa diy_by_tags na ni equal sa key sa freeItem
-                                                                    Log.e("freeSnapKey", snaps.getKey());//key ni siya sa item sa promo jud, dli free, DAPAT SULOD PAS FREEITEMLIST
-
-                                                                    //get DIY TOTAL quantity sa free item promo
-                                                                    int freeMeetUpQty = meetUpList.get(position).getSelling_qty();
-                                                                    Log.e("freeMeetUpQty", String.valueOf(freeMeetUpQty));
-
-                                                                    //get ang quantity nga free sa promo
-                                                                    int freeDIYItemQty = Integer.parseInt(String.valueOf(freeItemQty));
-                                                                    Log.e("freeDIYItemQty", String.valueOf(freeDIYItemQty));
-
-                                                                    //minus freeItemList selling_qty ug freeItemQuantity
-                                                                    int freeQtyCounter = freeMeetUpQty - freeDIYItemQty;
-                                                                    Log.e("freeQtyCounter", String.valueOf(freeQtyCounter));
-
-                                                                }else{
-                                                                    soldReference.child(upload).setValue(product);
-                                                                    soldReference.child(upload).child("userStatus").setValue("seller");
-                                                                    soldReference.child(upload).child("selling_price").setValue(sold_price);
-                                                                    soldReference.child(upload).child("selling_qty").setValue(sold_qty);
-                                                                }
-
-                                                            }
-
-
-                                                            loggedInName.child(sold_buyer).addValueEventListener(new ValueEventListener() {
-                                                                @Override
-                                                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                                                    loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
-                                                                    loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
-
-                                                                    //DBref for buyer
-                                                                    DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
-                                                                            .child("Sold_Items").child(sold_buyer);
-
-                                                                    DIYSell buyProduct = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
-                                                                            sold_productID, "Purchased Buy and Take Item", float_this, float_this,
-                                                                            sold_buyer, loggedInUserName, buyQty);
-
-                                                                    String buyUpload = soldReference.child(upload).getKey();
-                                                                    soldReference.child(buyUpload).setValue(buyProduct);
-                                                                    soldReference.child(buyUpload).child("userStatus").setValue("buyer");
-                                                                    soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
-
-                                                                    //confirm pending promo DIY, push to meet up
-                                                                    for (int post =0; post < hasFree.size(); post++) {
-                                                                        if(promokey.get(position).equals(hasFree.get(post))){
-                                                                            Log.e("equalsSilaaa", "YESS" + " " + promokey.get(position) + " = " + hasFree.get(post));
-
-                                                                            soldReference.child(buyUpload).setValue(buyProduct);
-                                                                            soldReference.child(buyUpload).child("userStatus").setValue("buyer");
-                                                                            soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
-                                                                            soldReference.child(buyUpload).child("freeItemList").setValue(promoFreeList);
-                                                                            soldReference.child(buyUpload).child("freeItemQuantity").setValue(freeItemQty);
-                                                                        } else{
-                                                                            soldReference.child(buyUpload).setValue(buyProduct);
-                                                                            soldReference.child(buyUpload).child("userStatus").setValue("buyer");
-                                                                            soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
-                                                                        }
-                                                                    }
-                                                                }
-
-                                                                @Override
-                                                                public void onCancelled(DatabaseError databaseError) {
-
-                                                                }
-                                                            });
-
-
-                                                            DatabaseReference meetReference = FirebaseDatabase.getInstance().getReference()
-                                                                    .child("Items_ForMeetUp").child(sold_buyer);
-
-                                                            //remove my item and send to SOLD_Items
-                                                            String key = meetupKey.get(position);
-                                                            String keys = meetupKeyyy.get(position);
-
-                                                            meetUpRef.child(key).removeValue();
-                                                            meetReference.child(keys).removeValue();
-
-                                                            //get DIY total quantity sa DB sa promo Item
-                                                            int meetUpQty = meetUpList.get(position).getSelling_qty();
-                                                            Log.e("meetUpQty", String.valueOf(meetUpQty));
-
-                                                            //free quantity sa promo item
-                                                            int freeQty = Integer.parseInt(String.valueOf(freeItemQty));
-                                                            Log.e("freeQty", String.valueOf(freeQty));
-
-                                                            String message_price="";
-                                                            String message_qty = "";
-                                                            String message_dsc = "";
-                                                            List<String> message_Price = new ArrayList<String>();
-                                                            List<String> message_Qty = new ArrayList<String>();
-                                                            final List<String> message_Dsc = new ArrayList<String>();
-//
-                                                            //get price key
-                                                            for(DataSnapshot priceSnap : snaps.child("DIY Price").getChildren()){
-                                                                Log.e("priceSnap", String.valueOf(priceSnap));
-                                                                Log.e("priceSnapKey", priceSnap.getKey());
-                                                                double price = priceSnap.child("selling_price").getValue(double.class);
-                                                                int qty = priceSnap.child("selling_qty").getValue(int.class);
-                                                                String dsc = priceSnap.child("selling_descr").getValue(String.class);
-
-                                                                message_qty += qty;
-                                                                message_Qty.add(message_qty);
-
-                                                                message_price += price;
-                                                                message_Price.add(message_price);
-
-                                                                message_dsc +=dsc;
-                                                                message_Dsc.add(message_dsc);
-
-                                                                Log.e("message_qty","" +  message_qty);
-                                                                Log.e("message_price", "" + message_price);
-
-                                                                prices.add(message_qty);
-                                                                Log.e("pricess", String.valueOf(prices));
-
-                                                                //decrease quantity sa promo Item
-                                                                int quantityCountMeetUp = meetUpQty - buyQty; //if dli promo
-                                                                Log.e("quantityCountMeetUp", String.valueOf(quantityCountMeetUp));
-
-                                                                //decrease quantity sa free item
-                                                                int promoQtyCountMeetUp = promoFreeItem.getSelling_qty() - freeQty;
-                                                                Log.e("promoQtyCountMeetUp", String.valueOf(promoQtyCountMeetUp));
-
-                                                                //update quantity count
-                                                                String penkey = snapKey.get(position);
-                                                                Log.e("penKey", penkey);
-
-                                                                String promKey = freeKeyxDIY.get(position);
-                                                                Log.e("promKey", promKey);
-
-                                                                HashMap<String, Object> results = new HashMap<>();
-                                                                results.put("selling_qty", quantityCountMeetUp);
-                                                                diyReference.child(penkey).child("DIY Price")
-                                                                        .child(priceSnap.getKey()).updateChildren(results);
-
-                                                                HashMap<String, Object> freeResults = new HashMap<>();
-                                                                freeResults.put("selling_qty", promoQtyCountMeetUp);
-                                                                diyReference.child(promKey).child("DIY Price")
-                                                                        .child(priceSnap.getKey()).updateChildren(freeResults);
-
-
-                                                                soldReference.child(upload).updateChildren(results);
-
-                                                                Intent intent = new Intent(ForMeetUpActivity.this, MainActivity.class);
-                                                                startActivity(intent);
-
-                                                            }
-
-                                                        }
-                                                    });
-
-                                                    ab.setNegativeButton("NOT YET", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            dialog.dismiss();
-                                                        }
-                                                    });
-
-                                                    ab.create().show();
-                                                }
-
-
-
-                                            }
-
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-
-                                });
 
                             }
 

@@ -1,7 +1,9 @@
 package cabiso.daphny.com.g_companion.GCAdmin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -38,7 +40,7 @@ public class ViewComplaints extends AppCompatActivity {
     private ListView lvRreports;
     private ArrayList<String> listComplains = new ArrayList<>();
     ViewReportsAdapter arrayAdapter;
-    boolean status;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +65,12 @@ public class ViewComplaints extends AppCompatActivity {
         tv_sellerName = (TextView) findViewById(R.id.tv_sellerName);
         seller_picture = (CircleImageView) findViewById(R.id.seller_picture);
         lvRreports = (ListView) findViewById(R.id.lvReportedSeller);
-        block_unblok = (ToggleButton) findViewById(R.id.toggleBtnBlok);
+        block_unblok = (ToggleButton) findViewById(R.id.toggleBtnBlock);
 
         final String get_name = getIntent().getStringExtra("reportUserID");
         tv_userID.setText(get_name);
 
 
-        
         reportsReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -97,21 +98,34 @@ public class ViewComplaints extends AppCompatActivity {
                         arrayAdapter = new ViewReportsAdapter(ViewComplaints.this, R.layout.complains_item, listComplains);
                         lvRreports.setAdapter(arrayAdapter);
 
+                        block_unblok.setTextOn("Block"); // displayed text of the Switch whenever it is in checked or on state
+                        block_unblok.setTextOff("Unblock");
+
 
                         block_unblok.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Toast.makeText(ViewComplaints.this, "Clicked: " + block_unblok.getText() + " " + tv_sellerName.getText(), Toast.LENGTH_SHORT).show();
-                                if (block_unblok.isChecked()){
-                                    status = true;
-                                    Toast.makeText(ViewComplaints.this, "Block user!",Toast.LENGTH_SHORT).show();
-                                }
-                                else {
-                                    status = false;
-                                    Toast.makeText(ViewComplaints.this, "Unblock user!", Toast.LENGTH_SHORT).show();
-                                }
+
+                                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(ViewComplaints.this).edit();
+                                editor.putBoolean("service_status", block_unblok.isChecked());
+                                editor.commit();
+
+                                Toast.makeText(ViewComplaints.this, block_unblok.getText() + " " + tv_sellerName.getText(), Toast.LENGTH_SHORT).show();
+
                             }
                         });
+
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ViewComplaints.this);
+                        boolean switchState = prefs.getBoolean("service_status", false);
+
+                        if(switchState){
+                            //Do your work for service is selected on
+                            block_unblok.setChecked(true);
+                        } else {
+                            //Code for service off
+                            block_unblok.setChecked(false);
+                        }
+
 
                     }
 
@@ -143,4 +157,6 @@ public class ViewComplaints extends AppCompatActivity {
 
 
     }
+
+
 }

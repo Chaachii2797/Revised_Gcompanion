@@ -5,8 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -24,12 +22,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,13 +32,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import cabiso.daphny.com.g_companion.BuyingProcess.ForMeetUpActivity;
 import cabiso.daphny.com.g_companion.BuyingProcess.Pending_Activity;
 import cabiso.daphny.com.g_companion.BuyingProcess.Sold_Activity;
 import cabiso.daphny.com.g_companion.GCAdmin.AdminActivity;
+import cabiso.daphny.com.g_companion.GCAdmin.LogsOfAllTransactionsActivity;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
 import cabiso.daphny.com.g_companion.MainDIYS.DiysFragment;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
@@ -294,6 +284,11 @@ public class MainActivity extends AppCompatActivity
                 startActivity(admin);
                 break;
 
+            case R.id.nav_logs:
+                Intent logs = new Intent(this, LogsOfAllTransactionsActivity.class);
+                startActivity(logs);
+                break;
+
             case R.id.nav_profile:
                 Intent intent2=new Intent(this,MyProfileActivity.class);
                 startActivity(intent2);
@@ -360,6 +355,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
         nav_Menu.findItem(R.id.nav_admin).setVisible(false);
+        nav_Menu.findItem(R.id.nav_logs).setVisible(false);
+
     }
 
 

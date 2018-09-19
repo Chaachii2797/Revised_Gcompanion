@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -105,8 +106,10 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <activity android:name=".GCAdmin.ViewTransactionsActivity" />
+        <activity android:name=".GCAdmin.LogsOfAllTransactionsActivity" />
         <activity android:name=".GCAdmin.AdminActivity" />
-        <activity android:name=".GCAdmin.ViewComplaints" />
+        <activity android:name=".GCAdmin.ViewComplaintsActivity" />
         <activity android:name=".OtherUserProfileActivity" />
         <activity android:name=".ProductDetailViewActivity" />
         <activity android:name=".ChatWithSellerActivity" />

@@ -685,6 +685,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                                                     pending_reference.child(upload_info).setValue(info);
                                                                     pending_reference.child(upload_info).child("selling_price").setValue(pendingPrice);
                                                                     pending_reference.child(upload_info).child("userStatus").setValue("buyer");
+                                                                    pending_reference.child(upload_info).child("dateAdded").setValue(sdate);
 
                                                                     //DBref for buyer
                                                                     final DatabaseReference pendingRefByOwner = FirebaseDatabase.getInstance().getReference("DIY Pending Items")
@@ -701,6 +702,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                                                     pendingRefByOwner.child(uploadBuyerInfo).child("selling_price").setValue(pendingPrice);
                                                                     pendingRefByOwner.child(uploadBuyerInfo).child("selling_qty").setValue(pendingQty);
                                                                     pendingRefByOwner.child(uploadBuyerInfo).child("userStatus").setValue("seller");
+                                                                    pendingRefByOwner.child(uploadBuyerInfo).child("dateAdded").setValue(sdate);
 
 
                                                                     final Dialog dialog = new Dialog(ViewRelatedDIYS.this);

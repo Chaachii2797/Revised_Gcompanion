@@ -35,11 +35,16 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.jetbrains.annotations.NotNull;
+
+import cabiso.daphny.com.g_companion.Model.User_Profile;
 
 public class Login extends AppCompatActivity implements View.OnClickListener, GoogleApiClient.OnConnectionFailedListener{
 
@@ -62,8 +67,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
     private boolean isPasswordValid;
 
     public static final String PREFS_NAME = "MyPrefsFile";
-
-
+    DatabaseReference userInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +76,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
 
-//        mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        userID = mFirebaseUser.getUid();
+        userInfo = FirebaseDatabase.getInstance().getReference().child("userdata");
 
 //        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0); // 0 - for private mode
 //        SharedPreferences.Editor editor = settings.edit();
@@ -151,8 +154,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         });
         login.setEnabled(false); // default state should be disabled mBtnLogin.setOnClickListener(this);
 
-
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -162,14 +163,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                     Intent intent = new Intent(Login.this, MainActivity.class);
                     Log.e("USERID", userID+"");
                     startActivity(intent);
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     String token= FirebaseInstanceId.getInstance().getToken();
                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("userdata");
                     ref.child(user.getUid()).child("access_token").setValue(token);
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
-                    Toast.makeText(Login.this,"Login Error!", Toast.LENGTH_SHORT).show();
                 }
                 // ...
             }
@@ -233,8 +233,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
     }
 
     public void signin(){
-        String em = email.getText().toString().trim();
-        String pass = password.getText().toString().trim();
+        final String em = email.getText().toString().trim();
+        final String pass = password.getText().toString().trim();
         showProgressDialog();
 
         if(TextUtils.isEmpty(em) && TextUtils.isEmpty(pass)){
@@ -249,7 +249,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                             Log.d(TAG,"Signin with email: onComplete" + task.isSuccessful());
                             if(!task.isSuccessful()){
                                 Log.d(TAG,"Signin email: failed!" + task.getException());
-                                Toast.makeText(Login.this, "Logging in failed!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(Login.this, "Login failed!", Toast.LENGTH_SHORT).show();
                                 hideProgressDialog();
                             }
                             else if (task.isSuccessful()){
@@ -257,6 +257,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                                 Intent intent = new Intent(Login.this, MainActivity.class);
                                 Toast.makeText(Login.this, "Logging in...", Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
+
+
+
+
+                            }
+                            else{
+                                hideProgressDialog();
                             }
                         }
                     });
@@ -284,7 +291,58 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         if (v==login){
 //            Intent intent = new Intent(Login.this, MainActivity.class);
 //            startActivity(intent);
-            signin();
+
+            userInfo.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Log.e("dataSnap", dataSnapshot.getKey());
+                    for(DataSnapshot datas : dataSnapshot.getChildren()){
+                        Log.e("datss", datas.getKey());
+                        User_Profile userss = dataSnapshot.getValue(User_Profile.class);
+                        Log.e("userrs", userss.getF_name());
+
+                        if(userss.getEmail().equals(email.getText().toString())){
+                            Log.e("userName", userss.getEmail() + " = " + email.getText().toString());
+                            if(userss.getPassword().equals(password.getText().toString())){
+                                Log.e("userPass", userss.getPassword() + " = " + password.getText().toString());
+
+                                if(userss.getReport_status().equalsIgnoreCase("Unblock")){
+                                    Log.e("userStatuss", userss.getReport_status());
+
+                                    signin();
+
+                                } else{
+                                    Toast.makeText(Login.this, "You have been blocked. Contact admin.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
         }else if(v==signup){
             Intent intent = new Intent(Login.this, Signup.class);
             startActivity(intent);

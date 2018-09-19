@@ -20,33 +20,31 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.MainActivity;
-import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
 
 /**
- * Created by Lenovo on 9/13/2018.
+ * Created by Lenovo on 9/17/2018.
  */
 
-public class AdminActivity extends AppCompatActivity {
+public class LogsOfAllTransactionsActivity extends AppCompatActivity {
 
-    private ArrayList<User_Profile> reportList = new ArrayList<>();
-    private ListView lvReports;
-    ReportUserListAdapter arrayAdapter;
+    private ArrayList<String> logList = new ArrayList<>();
+    private ListView lvLogs;
+    TransactionListAdapter arrayAdapter;
     private ProgressDialog progressDialog;
     private FirebaseDatabase database;
     private String userID;
     private FirebaseUser mFirebaseUser;
-    private DatabaseReference reportsReference;
+    private DatabaseReference logsReference;
 
-    public AdminActivity() {
+    public LogsOfAllTransactionsActivity() {
 
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.admin_activity);
-
+        setContentView(R.layout.log_transaction_activity);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,15 +62,15 @@ public class AdminActivity extends AppCompatActivity {
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
 
-        lvReports = (ListView) findViewById(R.id.lvReportedSeller);
+        lvLogs = (ListView) findViewById(R.id.lvLogs);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Please Wait...");
         progressDialog.show();
 
-        reportsReference = FirebaseDatabase.getInstance().getReference().child("reportedSeller");
+        logsReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items");
 
-        reportsReference.addValueEventListener(new ValueEventListener() {
+        logsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 progressDialog.dismiss();
@@ -80,16 +78,11 @@ public class AdminActivity extends AppCompatActivity {
                 for (final DataSnapshot reportSnapshot : dataSnapshot.getChildren()) {
                     Log.e("snapshot", reportSnapshot.getKey());
 
-                    User_Profile userInfo = reportSnapshot.child("user_info").getValue(User_Profile.class);
-                    Log.e("childd", userInfo.getF_name());
-
-                    reportList.add(userInfo);
-                    arrayAdapter = new ReportUserListAdapter(AdminActivity.this, R.layout.reported_keys, reportList);
-                    lvReports.setAdapter(arrayAdapter);
-
+                    logList.add(reportSnapshot.getKey());
+                    arrayAdapter = new TransactionListAdapter(LogsOfAllTransactionsActivity.this, R.layout.transaction_user_keys, logList);
+                    lvLogs.setAdapter(arrayAdapter);
 
                 }
-
             }
 
             @Override
@@ -98,7 +91,10 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
+
+
 }
+
+

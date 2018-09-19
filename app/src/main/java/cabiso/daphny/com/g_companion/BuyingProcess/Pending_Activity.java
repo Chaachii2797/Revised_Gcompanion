@@ -25,7 +25,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
@@ -69,6 +72,7 @@ public class Pending_Activity extends AppCompatActivity{
     final ArrayList<String> hasFree = new ArrayList<>();
     final ArrayList<String> promokey = new ArrayList<>();
     final ArrayList<String> hasDiscount = new ArrayList<>();
+    String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
     private String loggedInUserName;
 
@@ -218,6 +222,7 @@ public class Pending_Activity extends AppCompatActivity{
                                         forMeetupReference.child(upload).child("userStatus").setValue("seller");
                                         forMeetupReference.child(upload).child("selling_price").setValue(meetup_price);
                                         forMeetupReference.child(upload).child("selling_qty").setValue(meetup_qty);
+                                        forMeetupReference.child(upload).child("dateAdded").setValue(sdate);
 
                                         //for buyer name
                                         loggedInName.child(meetup_buyer).addValueEventListener(new ValueEventListener() {
@@ -239,6 +244,7 @@ public class Pending_Activity extends AppCompatActivity{
                                                 meetReference.child(buyUpload).setValue(buyProduct);
                                                 meetReference.child(buyUpload).child("userStatus").setValue("buyer");
                                                 meetReference.child(buyUpload).child("selling_price").setValue(meetup_price);
+                                                meetReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                             }
 
@@ -354,7 +360,7 @@ public class Pending_Activity extends AppCompatActivity{
                                         forMeetupReference.child(upload).child("selling_price").setValue(meetup_price);
                                         forMeetupReference.child(upload).child("selling_qty").setValue(meetup_qty);
                                         forMeetupReference.child(upload).child("percent_discount").setValue(itemDiscount);
-
+                                        forMeetupReference.child(upload).child("dateAdded").setValue(sdate);
 
                                         //for buyer name
                                         loggedInName.child(meetup_buyer).addValueEventListener(new ValueEventListener() {
@@ -377,6 +383,7 @@ public class Pending_Activity extends AppCompatActivity{
                                                 meetReference.child(buyUpload).child("userStatus").setValue("buyer");
                                                 meetReference.child(buyUpload).child("selling_price").setValue(meetup_price);
                                                 meetReference.child(buyUpload).child("percent_discount").setValue(itemDiscount);
+                                                meetReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                             }
 
@@ -500,12 +507,14 @@ public class Pending_Activity extends AppCompatActivity{
                                                 forMeetupReference.child(upload).child("selling_qty").setValue(meetup_qty);
                                                 forMeetupReference.child(upload).child("freeItemList").setValue(promoFreeList);
                                                 forMeetupReference.child(upload).child("freeItemQuantity").setValue(freeItemQty);
+                                                forMeetupReference.child(upload).child("dateAdded").setValue(sdate);
 
                                             }else{
                                                 forMeetupReference.child(upload).setValue(product);
                                                 forMeetupReference.child(upload).child("userStatus").setValue("seller");
                                                 forMeetupReference.child(upload).child("selling_price").setValue(meetup_price);
                                                 forMeetupReference.child(upload).child("selling_qty").setValue(meetup_qty);
+                                                forMeetupReference.child(upload).child("dateAdded").setValue(sdate);
 
                                             }
 
@@ -538,11 +547,13 @@ public class Pending_Activity extends AppCompatActivity{
                                                         meetReference.child(buyUpload).child("selling_price").setValue(meetup_price);
                                                         meetReference.child(buyUpload).child("freeItemList").setValue(promoFreeList);
                                                         meetReference.child(buyUpload).child("freeItemQuantity").setValue(freeItemQty);
+                                                        meetReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                                     } else{
                                                         meetReference.child(buyUpload).setValue(buyProduct);
                                                         meetReference.child(buyUpload).child("userStatus").setValue("buyer");
                                                         meetReference.child(buyUpload).child("selling_price").setValue(meetup_price);
+                                                        meetReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                                     }
                                                 }

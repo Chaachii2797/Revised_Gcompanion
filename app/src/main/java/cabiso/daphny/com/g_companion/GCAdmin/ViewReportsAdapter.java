@@ -13,19 +13,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import cabiso.daphny.com.g_companion.Model.ReportsModel;
 import cabiso.daphny.com.g_companion.R;
 
 /**
  * Created by Lenovo on 9/14/2018.
  */
 
-public class ViewReportsAdapter extends ArrayAdapter<String> {
+public class ViewReportsAdapter extends ArrayAdapter<ReportsModel> {
 
     private Activity context;
     private int resource;
-    private List<String> list_reports;
+    private List<ReportsModel> list_reports;
 
-    public ViewReportsAdapter(@NonNull Activity context, @LayoutRes int resource, @NonNull ArrayList<String> objects) {
+    public ViewReportsAdapter(@NonNull Activity context, @LayoutRes int resource, @NonNull ArrayList<ReportsModel> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -41,9 +42,12 @@ public class ViewReportsAdapter extends ArrayAdapter<String> {
         View v = inflater.inflate(resource, null);
 
         TextView get_complains = (TextView) v.findViewById(R.id.get_complains);
-        TextView tvUserID = (TextView) v.findViewById(R.id.tv_complain);
+        TextView tvCustomerName = (TextView) v.findViewById(R.id.get_customer_name);
+        TextView tvDate = (TextView) v.findViewById(R.id.tv_report_date);
 
-        get_complains.setText(list_reports.get(position));
+        get_complains.setText(list_reports.get(position).getComplaint());
+        tvCustomerName.setText(list_reports.get(position).getReportedBy());
+        tvDate.setText(list_reports.get(position).getReportDate());
 
         return v;
     }

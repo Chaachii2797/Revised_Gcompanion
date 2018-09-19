@@ -152,7 +152,7 @@ public class Signup extends AppCompatActivity implements View.OnClickListener{
                     }else{
                         User_Profile user_profile = new User_Profile(add, contct, f_name, l_name, emails, pass, userID,
                                 new SharedPrefUtil(getApplication()).getString(MessagingContants.ARG_FIREBASE_TOKEN),
-                                "userProfielPic", 0f, "user");
+                                "userProfielPic", 0f, "user", "Unblock");
                         register(user_profile);
 //                        startActivity(ob);
                     }   // commit the values

@@ -17,6 +17,7 @@ public class User_Profile {
     String userProfileUrl;
     Float userRating;
     String role;
+    String report_status;
     String access_token;
 
 
@@ -24,7 +25,7 @@ public class User_Profile {
     }
 
     public User_Profile(String address, String contact_no, String f_name, String l_name, String email, String password,
-                        String userID, String firebaseToken, String userProfileUrl, Float userRating, String role) {
+                        String userID, String firebaseToken, String userProfileUrl, Float userRating, String role, String report_status) {
         this.address = address;
         this.contact_no = contact_no;
         this.f_name = f_name;
@@ -37,8 +38,9 @@ public class User_Profile {
         this.userProfileUrl = userProfileUrl;
         this.userRating = userRating;
         this.role = role;
-
+        this.report_status = report_status;
     }
+
 
     public String getAccess_token() {
         return access_token;
@@ -142,6 +144,14 @@ public class User_Profile {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getReport_status() {
+        return report_status;
+    }
+
+    public void setReport_status(String report_status) {
+        this.report_status = report_status;
     }
 
     public String getAndroid_id() {

@@ -42,7 +42,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
 
+import cabiso.daphny.com.g_companion.Model.ReportsModel;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -57,7 +59,7 @@ public class OtherUserProfileActivity extends AppCompatActivity implements Ratin
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabaseReference;
-    private DatabaseReference reportUserReference, userDBReference;
+    private DatabaseReference reportUserReference, userDBReference, reportsReference;
     private String userID;
     private User_Profile userProfileInfo;
     private FirebaseStorage mStorage;
@@ -72,6 +74,7 @@ public class OtherUserProfileActivity extends AppCompatActivity implements Ratin
     private Uri profilePictureUri;
     private String profileUserId, profileUserFName, profileUserLName, profileEmailAdd, profileNumber, profileAddress,
             profilePicture, profileRatings, reportedBy, customerID;
+    String reportDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
     final String[] reports = {"It's a scam.", "I haven't received my order.", "The seller doesn't respond to my chat/text/call.",
             "I want refund.", "I want to return the item."};
@@ -115,6 +118,7 @@ public class OtherUserProfileActivity extends AppCompatActivity implements Ratin
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         reportUserReference = FirebaseDatabase.getInstance().getReference().child("reportedSeller").child(profileUserId);
+            reportsReference = FirebaseDatabase.getInstance().getReference().child("reportedSeller").child(profileUserId).child("reports");
 
         mStorage = FirebaseStorage.getInstance();
         storageReference = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/" +
@@ -158,13 +162,12 @@ public class OtherUserProfileActivity extends AppCompatActivity implements Ratin
 
                                 User_Profile sellerReport = new User_Profile(profileAddress, profileNumber, profileUserFName,
                                         profileUserLName, profileEmailAdd, "*******", profileUserId, " ", profilePicture,
-                                        ratingss, "user");
+                                        ratingss, "user", "Unblock");
 
-                                final String upload = reportUserReference.push().getKey();
-                                reportUserReference.child(upload).setValue(sellerReport);
-                                reportUserReference.child(upload).child("complaint").setValue(reports[reason]);
-                                reportUserReference.child(upload).child("reportedBy").setValue(reportedBy);
-                                reportUserReference.child(upload).child("customerID").setValue(customerID);
+                                ReportsModel reportsModel = new ReportsModel(reportedBy, reports[reason], customerID, reportDate);
+
+                                reportUserReference.child("user_info").setValue(sellerReport);
+                                reportUserReference.child("reports").push().setValue(reportsModel);
 
                                 Intent intent = new Intent(OtherUserProfileActivity.this, MainActivity.class);
                                 startActivity(intent);

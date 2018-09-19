@@ -1,0 +1,46 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="330dp"
+    android:layout_height="110dp"
+    android:layout_marginTop="16dp"
+    app:cardBackgroundColor="@color/backgroundColor"
+    app:cardCornerRadius="15dp"
+    app:elevation="8dp"
+    android:layout_below="@+id/appBarLayout"
+    android:layout_centerHorizontal="true">
+
+    <TextView
+        android:id="@+id/tv_userID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/get_diyName"
+        android:layout_alignStart="@+id/get_diyName"
+        android:layout_below="@+id/get_diyName"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="15dp"
+        android:hint="Seller ID: "
+        android:inputType="textMultiLine|textImeMultiLine"
+        android:textColor="@color/blue_900"
+        android:textSize="15sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/getSellerID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView12"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_toEndOf="@+id/diy_item_icons"
+        android:layout_toRightOf="@+id/diy_item_icons"
+        android:text="Seller ID:"
+        android:layout_marginBottom="15dp"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+
+
+
+
+</android.support.v7.widget.CardView>

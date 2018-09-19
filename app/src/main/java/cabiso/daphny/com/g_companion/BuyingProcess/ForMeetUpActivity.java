@@ -21,9 +21,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.MainActivity;
@@ -70,6 +73,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
     final ArrayList<String> discountPromokey = new ArrayList<>();
     final ArrayList<String> promoSalekey = new ArrayList<>();
+    String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -218,6 +222,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                             soldReference.child(upload).child("userStatus").setValue("seller");
                                                             soldReference.child(upload).child("selling_price").setValue(sold_price);
                                                             soldReference.child(upload).child("selling_qty").setValue(sold_qty);
+                                                            soldReference.child(upload).child("dateAdded").setValue(sdate);
 
                                                             loggedInName.child(sold_buyer).addValueEventListener(new ValueEventListener() {
                                                                 @Override
@@ -235,6 +240,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                     soldReference.child(buyUpload).setValue(buyProduct);
                                                                     soldReference.child(buyUpload).child("userStatus").setValue("buyer");
                                                                     soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
+                                                                    soldReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                                                 }
                                                                 @Override
@@ -403,6 +409,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                     soldReference.child(upload).child("selling_price").setValue(sold_price);
                                                                     soldReference.child(upload).child("selling_qty").setValue(sold_qty);
                                                                     soldReference.child(upload).child("percent_discount").setValue(itemDiscount);
+                                                                    soldReference.child(upload).child("dateAdded").setValue(sdate);
 
                                                                     loggedInName.child(sold_buyer).addValueEventListener(new ValueEventListener() {
                                                                         @Override
@@ -423,6 +430,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             soldReference.child(buyUpload).child("userStatus").setValue("buyer");
                                                                             soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
                                                                             soldReference.child(buyUpload).child("percent_discount").setValue(itemDiscount);
+                                                                            soldReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                                                         }
 
@@ -645,6 +653,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                     soldReference.child(upload).child("userStatus").setValue("seller");
                                                                     soldReference.child(upload).child("selling_price").setValue(sold_price);
                                                                     soldReference.child(upload).child("selling_qty").setValue(sold_qty);
+                                                                    soldReference.child(upload).child("dateAdded").setValue(sdate);
 
                                                                     //confirm promo DIY, push to meet up
                                                                     for (int pos=0; pos < hasFree.size(); pos++) {
@@ -657,12 +666,15 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             soldReference.child(upload).child("selling_qty").setValue(sold_qty);
                                                                             soldReference.child(upload).child("freeItemList").setValue(promoFreeList);
                                                                             soldReference.child(upload).child("freeItemQuantity").setValue(freeItemQty);
+                                                                            soldReference.child(upload).child("dateAdded").setValue(sdate);
 
                                                                         }else{
                                                                             soldReference.child(upload).setValue(product);
                                                                             soldReference.child(upload).child("userStatus").setValue("seller");
                                                                             soldReference.child(upload).child("selling_price").setValue(sold_price);
                                                                             soldReference.child(upload).child("selling_qty").setValue(sold_qty);
+                                                                            soldReference.child(upload).child("dateAdded").setValue(sdate);
+
                                                                         }
 
                                                                     }
@@ -686,22 +698,27 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             soldReference.child(buyUpload).setValue(buyProduct);
                                                                             soldReference.child(buyUpload).child("userStatus").setValue("buyer");
                                                                             soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
+                                                                            soldReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                                                             //confirm pending promo DIY, push to meet up
                                                                             for (int post =0; post < hasFree.size(); post++) {
                                                                                 if(promokey.get(position).equals(hasFree.get(post))){
                                                                                     Log.e("equalsSilaaa", "YESS" + " " + promokey.get(position) + " = " + hasFree.get(post));
 
-                                                                                soldReference.child(buyUpload).setValue(buyProduct);
-                                                                                soldReference.child(buyUpload).child("userStatus").setValue("buyer");
-                                                                                soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
-                                                                                soldReference.child(buyUpload).child("freeItemList").setValue(promoFreeList);
-                                                                                soldReference.child(buyUpload).child("freeItemQuantity").setValue(freeItemQty);
+                                                                                    soldReference.child(buyUpload).setValue(buyProduct);
+                                                                                    soldReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                                                    soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
+                                                                                    soldReference.child(buyUpload).child("freeItemList").setValue(promoFreeList);
+                                                                                    soldReference.child(buyUpload).child("freeItemQuantity").setValue(freeItemQty);
+                                                                                    soldReference.child(buyUpload).child("dateAdded").setValue(sdate);
+
                                                                                 }
                                                                                 else{
-                                                                                soldReference.child(buyUpload).setValue(buyProduct);
-                                                                                soldReference.child(buyUpload).child("userStatus").setValue("buyer");
-                                                                                soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
+                                                                                    soldReference.child(buyUpload).setValue(buyProduct);
+                                                                                    soldReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                                                    soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
+                                                                                    soldReference.child(buyUpload).child("dateAdded").setValue(sdate);
+
                                                                                 }
                                                                             }
                                                                         }

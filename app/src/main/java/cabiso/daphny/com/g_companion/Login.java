@@ -35,6 +35,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -148,6 +151,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
         });
         login.setEnabled(false); // default state should be disabled mBtnLogin.setOnClickListener(this);
 
+
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -157,6 +162,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                     Intent intent = new Intent(Login.this, MainActivity.class);
                     Log.e("USERID", userID+"");
                     startActivity(intent);
+                    String token= FirebaseInstanceId.getInstance().getToken();
+                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("userdata");
+                    ref.child(user.getUid()).child("access_token").setValue(token);
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out

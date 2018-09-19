@@ -136,21 +136,16 @@
         <activity android:name=".InstantMessaging.ui.activities.UserListingActivity" />
         <activity android:name=".InstantMessaging.ui.activities.ChatActivity" />
 
-        <service android:name=".InstantMessaging.fcm.MyFirebaseMessagingService">
+        <service android:name=".notifications.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".InstantMessaging.fcm.MyFirebaseInstanceIDService">
+        <service android:name=".notifications.FirebaseIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".FCMService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>]
         <activity android:name=".Promo.ListPromoActivity" />
         <activity android:name=".Promo.ViewPromoActivity" />
         <activity android:name=".notifications.NotificationActivity" />

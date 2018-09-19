@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -22,6 +24,12 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +39,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import cabiso.daphny.com.g_companion.BuyingProcess.ForMeetUpActivity;
 import cabiso.daphny.com.g_companion.BuyingProcess.Pending_Activity;
@@ -43,6 +54,8 @@ import cabiso.daphny.com.g_companion.Promo.PromoFragment;
 import cabiso.daphny.com.g_companion.Search.SearchActivity;
 import cabiso.daphny.com.g_companion.UserSalesReport.SalesReport;
 import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
+import cabiso.daphny.com.g_companion.notifications.PushNotification;
+import cabiso.daphny.com.g_companion.notifications.VolleyApp;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -80,6 +93,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        VolleyApp volleyApp = new VolleyApp();
         this.searchString = "";
 
         itemReference =  FirebaseDatabase.getInstance().getReference("diy_by_tags");
@@ -113,13 +128,18 @@ public class MainActivity extends AppCompatActivity
         final TextView txtProfileName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.user_userName);
         final CircleImageView txtProfileImg = (CircleImageView) navigationView.getHeaderView(0).findViewById(R.id.user_prof_pic);
         final RatingBar ratingBar = (RatingBar) navigationView.getHeaderView(0).findViewById(R.id.ratingBar);
-
         databaseReference = FirebaseDatabase.getInstance().getReference();
         user_reference = databaseReference.child("userdata");
         user_reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+
+                PushNotification pushNotification = new PushNotification(getApplicationContext());
+                pushNotification.method("POST").title("Test").message("heyhey").accessToken(user_profile.getAccess_token());
+                pushNotification.send();
+
+
                 if(userID.equals(user_profile.getUserID())){
                     mUsername = user_profile.getF_name()+" "+user_profile.getL_name();
                     txtProfileName.setText(mUsername);

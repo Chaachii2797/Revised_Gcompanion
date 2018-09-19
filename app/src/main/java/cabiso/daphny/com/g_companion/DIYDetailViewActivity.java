@@ -268,7 +268,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                 final DIYSell info = itemSnapshot.getValue(DIYSell.class);
                 identityReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(itemSnapshot.getKey());
 
-
                 final String category = itemSnapshot.child("category").getValue().toString();
                 Log.e("categoryInDB", category);
 
@@ -1098,7 +1097,6 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     });
 
                     boolean isExpired = false;
-
                     for(DataSnapshot saleSnapshot:itemSnapshot.child("itemPromo").getChildren()){
                         CreatePromo createPromo = saleSnapshot.getValue(CreatePromo.class);
 

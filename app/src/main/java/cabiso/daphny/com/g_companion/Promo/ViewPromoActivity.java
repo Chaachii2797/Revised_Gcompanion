@@ -26,11 +26,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
+import cabiso.daphny.com.g_companion.Model.CreatePromo;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
@@ -41,6 +47,7 @@ public class ViewPromoActivity extends AppCompatActivity {
     private TextView viewPromoName, viewPromoPrice, buyCounts, freeItems, freeItemName, tvSellerName, tvExpiration, buyText, gettText, promo_qty;
     private ImageView buyThisImageView, freeImageView, freeIcon;
     private DatabaseReference promoReference, userData, diyByTagsReference, pending_reference, loggedInName;
+    private DatabaseReference expirationReference, identityReferenceWholesale;
     private List<PromoModel> mPromoModels;
     private List<PriceDiscountModel> mDiscountModels;
     private LinearLayout freeLayout;
@@ -51,6 +58,7 @@ public class ViewPromoActivity extends AppCompatActivity {
     private FirebaseUser mFirebaseUser;
     private String loggedInUserName;
     private ArrayList<DIYnames> promoList;
+    String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +86,7 @@ public class ViewPromoActivity extends AppCompatActivity {
         promo_qty = (TextView) findViewById(R.id.promoQty);
 
         promoReference = FirebaseDatabase.getInstance().getReference().child("promo_sale");
+        expirationReference = FirebaseDatabase.getInstance().getReference().child("promo_sale");
         userData = FirebaseDatabase.getInstance().getReference().child("userdata");
         diyByTagsReference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
         pending_reference = FirebaseDatabase.getInstance().getReference("DIY Pending Items").child(userID);
@@ -89,12 +98,41 @@ public class ViewPromoActivity extends AppCompatActivity {
         Log.e("getPromoName", get_name);
         viewPromoName.setText(get_name);
 
+//        expirationReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                final PromoModel promoDiys = dataSnapshot.getValue(PromoModel.class);
+//                boolean isExpired = false;
+//                try{
+//                    // check expiry
+//                    Date strDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(promoDiys.getPromo_expiry());
+//                    if (new Date().after(strDate)) {
+//                        isExpired = true;
+//                        Log.e("EXPIRATION", isExpired+"");
+//                    }
+//                } catch(ParseException e){
+//                    Log.e("expiryException",e.getMessage());
+//                }
+//
+//                if(isExpired){
+//                    HashMap<String, Object> result = new HashMap<>();
+//                    result.put("status", "Selling");
+//                    promoReference.updateChildren(result);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
         promoReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 final PromoModel promoDiys = dataSnapshot.getValue(PromoModel.class);
                 final PriceDiscountModel discountDiys = dataSnapshot.getValue(PriceDiscountModel.class);
+//                identityReferenceDiscount = FirebaseDatabase.getInstance().getReference().child(dataSnapshot.getKey());
 
                 Log.e("promoDiysName", promoDiys.getPromo_diyName());
                 Log.e("discountDiysName", discountDiys.getPromo_diyName());
@@ -125,6 +163,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                             String free = freeSnapshot.getValue().toString();
                             freeItems.setText(free);
                         }
+
 
                         //for getting freeItems promo
                         for (DataSnapshot imageSnapshot : dataSnapshot.child("freeItemList").getChildren()) {
@@ -201,7 +240,6 @@ public class ViewPromoActivity extends AppCompatActivity {
 
                                 }
                             });
-
 
                             buyPromoBtn.setOnClickListener(new View.OnClickListener() {
                                 @Override

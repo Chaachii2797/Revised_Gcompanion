@@ -17,6 +17,7 @@ public class User_Profile {
     String userProfileUrl;
     Float userRating;
     String role;
+    String access_token;
 
 
     public User_Profile() {
@@ -36,9 +37,16 @@ public class User_Profile {
         this.userProfileUrl = userProfileUrl;
         this.userRating = userRating;
         this.role = role;
+
     }
 
+    public String getAccess_token() {
+        return access_token;
+    }
 
+    public void setAccess_token(String access_token) {
+        this.access_token = access_token;
+    }
 
     public String getAddress() {
         return address;

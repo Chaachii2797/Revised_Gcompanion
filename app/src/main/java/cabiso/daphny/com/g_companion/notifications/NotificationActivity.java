@@ -17,9 +17,8 @@ public class NotificationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
-
-        MyFirebaseInstanceIDService myFirebaseInstanceIDService = new MyFirebaseInstanceIDService();
-        MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
+//        MyFirebaseInstanceIDService myFirebaseInstanceIDService = new MyFirebaseInstanceIDService();
+//        MyFirebaseMessagingService myFirebaseMessagingService = new MyFirebaseMessagingService();
 
     }
 

@@ -34,6 +34,7 @@ public class PromoCardListAdapter extends RecyclerView.Adapter<PromoCardListAdap
     String itemDetails;
     private DatabaseReference promoReference;
     private PriceDiscountModel priceDiscountModel = new PriceDiscountModel();
+    private ArrayList<String> statusKey = new ArrayList<>();
 
     public PromoCardListAdapter(Context context, List<PromoModel> promoModels, List<DIYnames> diYnamesList){
         this.mContext = context;
@@ -54,6 +55,7 @@ public class PromoCardListAdapter extends RecyclerView.Adapter<PromoCardListAdap
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         promoReference = FirebaseDatabase.getInstance().getReference().child("promo_sale");
+        boolean isExpired = false;
 
         final PromoModel item = mPromoModels.get(position);
 
@@ -78,7 +80,65 @@ public class PromoCardListAdapter extends RecyclerView.Adapter<PromoCardListAdap
 
         }
 
+//        try{
+//            // check expiry
+//            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+//            Date strDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(item.promo_expiry);
+//            if (new Date().after(strDate)) {
+//                isExpired = true;
+//            }
+//        } catch(ParseException e){
+//            Log.e("expiryException",e.getMessage());
+//        }
+//        Log.e("CHECKEXPIRATION",isExpired+"" + " = " + item.getPromo_diyName());
 
+//        if(isExpired) {
+//            promoReference.addChildEventListener(new ChildEventListener() {
+//                @Override
+//                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                    Log.e("keysss", dataSnapshot.getKey());
+//
+//                    PriceDiscountModel diyPrice = dataSnapshot.getValue(PriceDiscountModel.class);
+//                    Log.e("diyPricee", diyPrice.getPromo_diyName());
+//
+//                    if (item.getPromo_diyName().equals(diyPrice.getPromo_diyName())) {
+//                        Log.e("equalss", item.getPromo_diyName() + " = " + diyPrice.getPromo_diyName());
+//
+//                        statusKey.add(dataSnapshot.getKey());
+//                        Log.e("statusKeyy", dataSnapshot.getKey());
+//
+//                        HashMap<String, Object> promoresult = new HashMap<>();
+//                        promoresult.put("status", "Selling");
+//                        promoReference.child(dataSnapshot.getKey()).updateChildren(promoresult);
+//
+//                        mPromoModels.remove(position);
+//                        pendingReference.child(dataSnapshot.getKey()).removeValue();
+//
+//                    }
+//
+//                }
+//
+//                @Override
+//                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//                }
+//
+//                @Override
+//                public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//                }
+//
+//                @Override
+//                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
+//        }
 
     }
 

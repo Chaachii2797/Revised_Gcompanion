@@ -36,7 +36,6 @@ import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
-import cabiso.daphny.com.g_companion.Model.CreatePromo;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
@@ -46,7 +45,7 @@ public class ViewPromoActivity extends AppCompatActivity {
 
     private TextView viewPromoName, viewPromoPrice, buyCounts, freeItems, freeItemName, tvSellerName, tvExpiration, buyText, gettText, promo_qty;
     private ImageView buyThisImageView, freeImageView, freeIcon;
-    private DatabaseReference promoReference, userData, diyByTagsReference, pending_reference, loggedInName;
+    private DatabaseReference promoReference, userData, diyByTagsReference, pending_reference, loggedInName, diyByTagsUpdate;
     private DatabaseReference expirationReference, identityReferenceWholesale;
     private List<PromoModel> mPromoModels;
     private List<PriceDiscountModel> mDiscountModels;
@@ -59,6 +58,8 @@ public class ViewPromoActivity extends AppCompatActivity {
     private String loggedInUserName;
     private ArrayList<DIYnames> promoList;
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+    private ArrayList<PriceDiscountModel> discountNames = new ArrayList<>();
+    private ArrayList<String> statusKey = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,7 @@ public class ViewPromoActivity extends AppCompatActivity {
         diyByTagsReference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
         pending_reference = FirebaseDatabase.getInstance().getReference("DIY Pending Items").child(userID);
         loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
+        diyByTagsUpdate = FirebaseDatabase.getInstance().getReference("diy_by_tags");
 
         promoList = new ArrayList<>();
 
@@ -98,34 +100,6 @@ public class ViewPromoActivity extends AppCompatActivity {
         Log.e("getPromoName", get_name);
         viewPromoName.setText(get_name);
 
-//        expirationReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                final PromoModel promoDiys = dataSnapshot.getValue(PromoModel.class);
-//                boolean isExpired = false;
-//                try{
-//                    // check expiry
-//                    Date strDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(promoDiys.getPromo_expiry());
-//                    if (new Date().after(strDate)) {
-//                        isExpired = true;
-//                        Log.e("EXPIRATION", isExpired+"");
-//                    }
-//                } catch(ParseException e){
-//                    Log.e("expiryException",e.getMessage());
-//                }
-//
-//                if(isExpired){
-//                    HashMap<String, Object> result = new HashMap<>();
-//                    result.put("status", "Selling");
-//                    promoReference.updateChildren(result);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
 
         promoReference.addChildEventListener(new ChildEventListener() {
             @Override
@@ -137,10 +111,15 @@ public class ViewPromoActivity extends AppCompatActivity {
                 Log.e("promoDiysName", promoDiys.getPromo_diyName());
                 Log.e("discountDiysName", discountDiys.getPromo_diyName());
 
+                boolean isExpired = false;
+
                 if(get_name.equalsIgnoreCase(promoDiys.getPromo_diyName())){
 
                     if(promoDiys.getStatus().equalsIgnoreCase("wholesale")){
                         Log.e("wholesaleDetails", promoDiys.getPromo_details() + " = " + promoDiys.getPromo_id());
+
+                        discountNames.add(discountDiys);
+                        Log.e("discountKayee", String.valueOf(discountNames));
 
                         buyCounts.setText(promoDiys.buy_counts);
                         Glide.with(getApplicationContext()).load(promoDiys.getPromo_image()).into(buyThisImageView);
@@ -154,9 +133,116 @@ public class ViewPromoActivity extends AppCompatActivity {
                         final int promoQty = dataSnapshot.child("promoQuantity").getValue(int.class);
                         String promoExpiry = dataSnapshot.child("promo_expiry").getValue().toString();
 
+
                         viewPromoPrice.setText("Promo Price: " + " " + promoPrice);
                         tvExpiration.setText("Promo expires on: " + " " + promoExpiry  + " !");
                         promo_qty.setText(promoQty + " " + "pieces left");
+
+
+                        try{
+                            // check expiry
+                            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+                            Date strDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(promoExpiry);
+                            if (new Date().after(strDate)) {
+                                isExpired = true;
+                            }
+                        } catch(ParseException e){
+                            Log.e("expiryException",e.getMessage());
+                        }
+                        Log.e("CHECKEXPIRATION",isExpired+"" + " = " + viewPromoName.getText());
+
+
+                        if(isExpired){
+
+                            expirationReference.addChildEventListener(new ChildEventListener() {
+                                    @Override
+                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    Log.e("keysss", dataSnapshot.getKey());
+
+                                    PriceDiscountModel diyPrice = dataSnapshot.getValue(PriceDiscountModel.class);
+                                    Log.e("diyPricee", diyPrice.getPromo_diyName());
+
+                                    if (get_name.equals(diyPrice.getPromo_diyName())){
+                                        Log.e("equalss", get_name + " = " + diyPrice.getPromo_diyName());
+
+                                        statusKey.add(dataSnapshot.getKey());
+                                        Log.e("statusKeyy", dataSnapshot.getKey());
+
+                                        HashMap<String, Object> promoresult = new HashMap<>();
+                                        promoresult.put("status", "Selling");
+                                        expirationReference.child(dataSnapshot.getKey()).updateChildren(promoresult);
+
+                                        expirationReference.child(dataSnapshot.getKey()).removeValue();
+
+                                    }
+
+                                }
+
+                                @Override
+                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                            diyByTagsUpdate.addChildEventListener(new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    Log.e("keyssOfLife", dataSnapshot.getKey());
+
+                                    DIYSell sellUpdate = dataSnapshot.getValue(DIYSell.class);
+                                    Log.e("sellUpdate", sellUpdate.getDiyName());
+
+                                    if(get_name.equals(sellUpdate.getDiyName())){
+                                        Log.e("equalsBa", get_name + " = " + sellUpdate.getDiyName());
+                                        statusKey.add(dataSnapshot.getKey());
+                                        Log.e("statusKeyy", dataSnapshot.getKey());
+
+                                        HashMap<String, Object> result = new HashMap<>();
+                                        result.put("identity", "Selling");
+                                        diyByTagsReference.child(dataSnapshot.getKey()).updateChildren(result);
+
+                                    }
+                                }
+
+                                @Override
+                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+                            tvExpiration.setVisibility(View.INVISIBLE);
+                        }
 
                         for (DataSnapshot freeSnapshot : dataSnapshot.child("freeItemQuantity").getChildren()) {
                             Log.e("freeSnapsht", String.valueOf(freeSnapshot.getValue()));
@@ -396,6 +482,111 @@ public class ViewPromoActivity extends AppCompatActivity {
                         viewPromoPrice.setText("New Price: " + " " + discountDiys.getPromo_newPrice());
                         tvExpiration.setText("Promo expires on: " + " " + promoExpiry + " !");
                         promo_qty.setText(totalDIYQty + " " + "pieces left");
+
+                        try{
+                            // check expiry
+                            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+                            Date strDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(promoExpiry);
+                            if (new Date().after(strDate)) {
+                                isExpired = true;
+                            }
+                        } catch(ParseException e){
+                            Log.e("expiryException",e.getMessage());
+                        }
+                        Log.e("CHECKEXPIRATION",isExpired+"" + " = " +viewPromoName.getText());
+
+
+                        if(isExpired){
+
+                            expirationReference.addChildEventListener(new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    Log.e("keysss", dataSnapshot.getKey());
+
+                                    PriceDiscountModel diyPrice = dataSnapshot.getValue(PriceDiscountModel.class);
+                                    Log.e("diyPricee", diyPrice.getPromo_diyName());
+
+                                    if (get_name.equals(diyPrice.getPromo_diyName())){
+                                        Log.e("equalss", get_name + " = " + diyPrice.getPromo_diyName());
+
+                                        statusKey.add(dataSnapshot.getKey());
+                                        Log.e("statusKeyy", dataSnapshot.getKey());
+
+                                        HashMap<String, Object> promoresult = new HashMap<>();
+                                        promoresult.put("status", "Selling");
+                                        expirationReference.child(dataSnapshot.getKey()).updateChildren(promoresult);
+
+                                        expirationReference.child(dataSnapshot.getKey()).removeValue();
+
+                                    }
+
+                                }
+
+                                @Override
+                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                            diyByTagsUpdate.addChildEventListener(new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    Log.e("keyssOfLife", dataSnapshot.getKey());
+
+                                    DIYSell sellUpdate = dataSnapshot.getValue(DIYSell.class);
+                                    Log.e("sellUpdate", sellUpdate.getDiyName());
+
+                                    if(get_name.equals(sellUpdate.getDiyName())){
+                                        Log.e("equalsBa", get_name + " = " + sellUpdate.getDiyName());
+                                        statusKey.add(dataSnapshot.getKey());
+                                        Log.e("statusKeyy", dataSnapshot.getKey());
+
+                                        HashMap<String, Object> result = new HashMap<>();
+                                        result.put("identity", "Selling");
+                                        diyByTagsReference.child(dataSnapshot.getKey()).updateChildren(result);
+
+                                    }
+                                }
+
+                                @Override
+                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
+                            tvExpiration.setVisibility(View.INVISIBLE);
+                        }
 
                         freeItemName.setText(discountDiys.getPercent_discount() + " " + "off");
                         Glide.with(getApplicationContext()).load(discountDiys.getPromo_image()).into(buyThisImageView);

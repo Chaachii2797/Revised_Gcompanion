@@ -60,6 +60,7 @@ public class RecommendDIYAdapter extends ArrayAdapter<DIYnames> {
 
     @Override
     public View getView(final int position, @Nullable final View convertView, @NonNull final ViewGroup parent) {
+
         final LayoutInflater inflater = context.getLayoutInflater();
        // View row = super.getView(position, convertView, parent);
 

@@ -133,8 +133,6 @@ public class DIYSCardListAdapter extends RecyclerView.Adapter<DIYSCardListAdapte
                     if(item.getIdentity().equalsIgnoreCase("community")) {
                         holder.tvDIYMainPrice.setText("Free");
                     }
-
-
                         if(item.getProductID().equals(diysell.getProductID())){
                             kkey.add(dataSnapshot.getKey());
                             Log.e("keyy", dataSnapshot.getKey() );
@@ -148,7 +146,6 @@ public class DIYSCardListAdapter extends RecyclerView.Adapter<DIYSCardListAdapte
                             final List<String> message_Dsc = new ArrayList<String>();
 
                             for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
-
                                 double price = postSnapshot.child("selling_price").getValue(double.class);
                                 int qty = postSnapshot.child("selling_qty").getValue(int.class);
                                 String dsc = postSnapshot.child("selling_descr").getValue(String.class);

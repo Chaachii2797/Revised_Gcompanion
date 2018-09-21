@@ -14,33 +14,6 @@
     android:paddingTop="10dp">
 
     <LinearLayout
-        android:id="@+id/lvreportabove"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="26dp">
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="5dp"
-            android:text="DIY Name"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tv_report_diyName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DIY Name:"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-    <LinearLayout
         android:id="@+id/lvreportabove2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,50 +32,6 @@
 
         <TextView
             android:id="@+id/tv_report_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0.00"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lvreportabove4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="245dp"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="Unsold"
-            android:textSize="12sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tv_report_unsold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="0.00"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_report_total_unsold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:text="0.00"
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_report_overall_unsold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0.00"
@@ -133,7 +62,17 @@
             android:layout_height="wrap_content"
             android:text="0.00"
             android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_marginBottom="5dp" />
+
+        <TextView
+            android:id="@+id/tv_report_qty_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:layout_marginBottom="5dp"/>
 
     </LinearLayout>
 
@@ -155,7 +94,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tv_report_sold"
+            android:id="@+id/tv_report_qty_sold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
@@ -164,17 +103,88 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tv_report_total_sold"
+            android:id="@+id/tv_report_total_qty_sold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:text="0.00"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lvreportabove"
+        android:layout_width="103dp"
+        android:layout_height="74dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:weightSum="1">
+
         <TextView
-            android:id="@+id/tv_report_overall_sold"
+            android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp"
+            android:text="DIY Name"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_report_diyName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1.40"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="DIY Name:"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lvreportabove4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="245dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Unsold"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_report_qty_unsold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="0.00"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_report_total_qty_unsold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="0.00"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/report_total_overall"
+            android:layout_width="83dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
             android:text="0.00"
             android:textColor="@android:color/black"
             android:textSize="16sp" />

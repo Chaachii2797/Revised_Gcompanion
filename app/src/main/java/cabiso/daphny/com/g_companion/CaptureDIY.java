@@ -583,6 +583,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 final String for_descr = etDescription.getText().toString();
                                 final float price = Float.parseFloat((for_price));
                                 final int qty = Integer.parseInt(for_qty);
+                                final int total_qty = Integer.parseInt(for_qty);
 
                                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                 Float float_this = Float.valueOf(0);
@@ -592,23 +593,22 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 Random random = new Random();
                                 String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 //                                dbMaterials.add(new DBMaterial().setName(materials).setQuantity(quantity).setUnit(unit_material));
-                                dbSelling.add(new SellingDIY().setSelling_price(price).setSelling_qty(qty).setSelling_descr(for_descr));
+                                dbSelling.add(new SellingDIY().setSelling_price(price).setSelling_qty(qty)
+                                        .setSelling_descr(for_descr).setTotal_qty(qty));
                                 SellingDIY sellingDIY = new SellingDIY();
                                 String sellingPrice = String.valueOf(sellingDIY.setSelling_price(price));
                                 String sellingQty = String.valueOf(sellingDIY.setSelling_qty(qty));
+                                String sellingTotalQty = String.valueOf(sellingDIY.setTotal_qty(qty));
                                 String sellingDescr = String.valueOf(sellingDIY.setSelling_descr(for_descr));
 
                                 //push data to Firebase Database - diy_by_tags node
-                                String productID_sell = generateString();
+                                String productID_sell = upload;
                                 databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "Selling",
                                         float_this, float_this, "none", loggedInUserName, 0));
                                 databaseReference.child(upload).child("materials").setValue(dbMaterials);
                                 databaseReference.child(upload).child("procedures").setValue(itemProcedure);
                                 databaseReference.child(upload).child("DIY Price").setValue(dbSelling);
-//                                databaseReference.child(upload).child("sellingPrice").setValue(sellingPrice);
-//                                databaseReference.child(upload).child("sellingQty").setValue(sellingQty);
-//                                databaseReference.child(upload).child("sellingDescr").setValue(sellingDescr);
                                 databaseReference.child(upload).child("category").setValue(category);
                                 databaseReference.child(upload).child("category_postition").setValue(categoryPos);
                                 databaseReference.child(upload).child("dateAdded").setValue(sdate);

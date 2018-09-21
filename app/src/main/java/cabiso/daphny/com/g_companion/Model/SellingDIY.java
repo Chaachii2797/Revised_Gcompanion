@@ -7,6 +7,7 @@ package cabiso.daphny.com.g_companion.Model;
 public class SellingDIY {
     double selling_price;
     int selling_qty;
+    int total_qty;
     String selling_descr;
 
     public double getSelling_price() {
@@ -29,6 +30,15 @@ public class SellingDIY {
 
     public String getSelling_descr() {
         return selling_descr;
+    }
+
+    public int getTotal_qty() {
+        return total_qty;
+    }
+
+    public SellingDIY setTotal_qty(int total_qty) {
+        this.total_qty = total_qty;
+        return this;
     }
 
     public SellingDIY setSelling_descr(String selling_descr) {

@@ -395,8 +395,23 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                     });
 
                                     Log.e("user_owner_name", user_name);
-                                    sellers_address.setText(user_profile.getAddress());
                                     sellers_contact_no.setText(user_profile.getContact_no());
+                                    sellers_address.setText(user_profile.getAddress());
+
+                                    sellers_address.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Toast.makeText(ViewRelatedDIYS.this, "Owner Address: " + user_profile.getAddress(),
+                                                    Toast.LENGTH_SHORT).show();
+
+                                            Intent addressIntent = new Intent(ViewRelatedDIYS.this, MapsActivity.class);
+                                            addressIntent.putExtra("userLocation", sellers_address.getText().toString());
+                                            Log.e("sellerAdd", sellers_address.getText().toString());
+                                            startActivity(addressIntent);
+                                        }
+                                    });
+
+
                                 }
                                 if(diYnames.user_id.equals(userID)){
                                     buyBtn.setVisibility(View.INVISIBLE);

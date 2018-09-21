@@ -95,7 +95,6 @@
         <activity android:name=".MainDIYS.ViewMorePromoDIYS" />
         <activity android:name=".MainDIYS.ViewMoreNewAddedDIYSActivity" />
 
-
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="cabiso.daphny.com.g_companion"
@@ -149,10 +148,26 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <activity android:name=".Promo.ListPromoActivity" />
         <activity android:name=".Promo.ViewPromoActivity" />
         <activity android:name=".notifications.NotificationActivity" />
-        <activity android:name=".Promo.PriceDiscountActivity"></activity>
+        <activity android:name=".Promo.PriceDiscountActivity" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBL2z1Wo8n8AgRcPsbMdHlaUSg6N21g4VI"/>
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>

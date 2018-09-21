@@ -44,7 +44,7 @@ import cabiso.daphny.com.g_companion.R;
 public class ViewPromoActivity extends AppCompatActivity {
 
     private TextView viewPromoName, viewPromoPrice, buyCounts, freeItems, freeItemName, tvSellerName, tvExpiration, buyText, gettText, promo_qty;
-    private ImageView buyThisImageView, freeImageView, freeIcon;
+    private ImageView buyThisImageView, freeImageView, freeIcon, soldOutItem;
     private DatabaseReference promoReference, userData, diyByTagsReference, pending_reference, loggedInName, diyByTagsUpdate;
     private DatabaseReference expirationReference, identityReferenceWholesale;
     private List<PromoModel> mPromoModels;
@@ -85,6 +85,7 @@ public class ViewPromoActivity extends AppCompatActivity {
         buyText = (TextView) findViewById(R.id.buyText);
         gettText = (TextView) findViewById(R.id.gettText);
         promo_qty = (TextView) findViewById(R.id.promoQty);
+        soldOutItem = (ImageView) findViewById(R.id.sold_out_sign);
 
         promoReference = FirebaseDatabase.getInstance().getReference().child("promo_sale");
         expirationReference = FirebaseDatabase.getInstance().getReference().child("promo_sale");
@@ -117,6 +118,7 @@ public class ViewPromoActivity extends AppCompatActivity {
 
                     if(promoDiys.getStatus().equalsIgnoreCase("wholesale")){
                         Log.e("wholesaleDetails", promoDiys.getPromo_details() + " = " + promoDiys.getPromo_id());
+                        soldOutItem.setVisibility(View.INVISIBLE);
 
                         discountNames.add(discountDiys);
                         Log.e("discountKayee", String.valueOf(discountNames));
@@ -138,6 +140,9 @@ public class ViewPromoActivity extends AppCompatActivity {
                         tvExpiration.setText("Promo expires on: " + " " + promoExpiry  + " !");
                         promo_qty.setText(promoQty + " " + "pieces left");
 
+                        if(promoQty == 0){
+                            soldOutItem.setVisibility(View.VISIBLE);
+                        }
 
                         try{
                             // check expiry
@@ -471,6 +476,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                         freeImageView.setVisibility(View.INVISIBLE);
                         buyText.setVisibility(View.INVISIBLE);
                         gettText.setVisibility(View.INVISIBLE);
+                        soldOutItem.setVisibility(View.INVISIBLE);
 
                         final String discountSellerID = dataSnapshot.child("sellerID").getValue().toString();
                         final String totalDIYQty = dataSnapshot.child("sellDIYqty").getValue().toString();
@@ -482,6 +488,12 @@ public class ViewPromoActivity extends AppCompatActivity {
                         viewPromoPrice.setText("New Price: " + " " + discountDiys.getPromo_newPrice());
                         tvExpiration.setText("Promo expires on: " + " " + promoExpiry + " !");
                         promo_qty.setText(totalDIYQty + " " + "pieces left");
+
+                        int qtyLeft = Integer.parseInt(totalDIYQty);
+
+                        if(qtyLeft == 0){
+                            soldOutItem.setVisibility(View.VISIBLE);
+                        }
 
                         try{
                             // check expiry

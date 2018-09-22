@@ -102,19 +102,19 @@ public class DiysFragment extends Fragment {
         diy_recycler_new_added = (RecyclerView) view.findViewById(R.id.diyListItemsNewAdd);
 
         //selling recycler view
-        diys_recycler_selling.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false));
+        diys_recycler_selling.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
         diys_recycler_selling.setNestedScrollingEnabled(true);
 
         //on bid recycler view
-        diy_recycler_bidCategory.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false));
+        diy_recycler_bidCategory.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
         diy_recycler_bidCategory.setNestedScrollingEnabled(true);
 
         //community recycler view
-        diy_recycler_community.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false));
+        diy_recycler_community.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
         diy_recycler_community.setNestedScrollingEnabled(true);
 
         //tire catgory recycler view
-        diy_recycler_new_added.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false));
+        diy_recycler_new_added.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
         diy_recycler_new_added.setNestedScrollingEnabled(true);
 
 
@@ -129,10 +129,10 @@ public class DiysFragment extends Fragment {
         }
 
         //DIYSCardListAdapter
-        mDIYSRecyclerViewAdapter = new DIYSCardListAdapter(view.getContext(),diysSellingList);
-        mDIYSOnBidAdapter = new DIYSCardListAdapter(view.getContext(),diysOnBidList);
-        mDIYSCommunityAdapter = new DIYSCardListAdapter(view.getContext(),diysComunityList);
-        mDIYSNewAddedAdapter = new DIYSCardListAdapter(view.getContext(),diysNewAddedList);
+        mDIYSRecyclerViewAdapter = new DIYSCardListAdapter(view.getContext(), diysSellingList);
+        mDIYSOnBidAdapter = new DIYSCardListAdapter(view.getContext(), diysOnBidList);
+        mDIYSCommunityAdapter = new DIYSCardListAdapter(view.getContext(), diysComunityList);
+        mDIYSNewAddedAdapter = new DIYSCardListAdapter(view.getContext(), diysNewAddedList);
 
 
         moreDiysBtn.setOnClickListener(new View.OnClickListener() {
@@ -184,19 +184,17 @@ public class DiysFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 final DIYnames diysModel = dataSnapshot.getValue(DIYnames.class);
 
-                if(diysModel.getIdentity().equalsIgnoreCase("selling")){
+                if (diysModel.getIdentity().equalsIgnoreCase("selling")) {
                     diysSellingList.add(diysModel);
                     Log.e("sell_Diys", String.valueOf(diysModel.getDiyName()));
 
                     mDIYSRecyclerViewAdapter.notifyDataSetChanged();
-                }
-                else if(diysModel.getIdentity().equalsIgnoreCase("on bid!")){
+                } else if (diysModel.getIdentity().equalsIgnoreCase("on bid!")) {
                     diysOnBidList.add(diysModel);
                     Log.e("bid_Diyss", String.valueOf(diysModel.getDiyName()));
 
                     mDIYSOnBidAdapter.notifyDataSetChanged();
-                }
-                else if(diysModel.getIdentity().equalsIgnoreCase("community")){
+                } else if (diysModel.getIdentity().equalsIgnoreCase("community")) {
                     diysComunityList.add(diysModel);
                     Log.e("com_Diysss", String.valueOf(diysModel.getDiyName()));
 
@@ -204,11 +202,10 @@ public class DiysFragment extends Fragment {
                 }
 
 
-
                 final String diyDate = dataSnapshot.child("dateAdded").getValue().toString();
                 Log.e("diyDate", diyDate + " = " + diysModel.getDiyName());
 
-                if(diyDate.equals("2018-09-02")) {
+                if (diyDate.equals("2018-09-02")) {
                     diysNewAddedList.add(diysModel);
                     Log.e("date_diys", String.valueOf(diysModel.getDiyName()));
                     mDIYSNewAddedAdapter.notifyDataSetChanged();
@@ -241,13 +238,12 @@ public class DiysFragment extends Fragment {
         });
 
 
-
         return view;
     }
 
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         Toast.makeText(getActivity(), "Hi! Welcome to G-Companion version 2.0", Toast.LENGTH_SHORT).show();
 
@@ -287,24 +283,24 @@ public class DiysFragment extends Fragment {
 //
 //    }
 
-        @Override
-        public void onAttach(Context context) {
-            super.onAttach(context);
-            if(context instanceof DiysFragment.OnListFragmentInteractionListener){
-                diys_Listener = (DiysFragment.OnListFragmentInteractionListener) context;
-            }else{
-                throw new RuntimeException(context.toString()
-                        + " must implement OnListFragmentInteractionListener");
-            }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof DiysFragment.OnListFragmentInteractionListener) {
+            diys_Listener = (DiysFragment.OnListFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
         }
+    }
 
-        @Override
-        public void onDetach() {
-            super.onDetach();
-            diys_Listener = null;
-        }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        diys_Listener = null;
+    }
 
-        public interface OnListFragmentInteractionListener {
-            void onListFragmentInteractionListener(DatabaseReference ref);
-        }
+    public interface OnListFragmentInteractionListener {
+        void onListFragmentInteractionListener(DatabaseReference ref);
+    }
 }

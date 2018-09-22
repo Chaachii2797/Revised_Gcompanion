@@ -31,6 +31,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.BuyingProcess.ForMeetUpActivity;
 import cabiso.daphny.com.g_companion.BuyingProcess.Pending_Activity;
@@ -63,6 +66,8 @@ public class MainActivity extends AppCompatActivity
     private DatabaseReference user_reference;
     private DatabaseReference databaseReference;
     private DatabaseReference itemReference, ratingReference;
+
+    private User_Profile loggedInUser = null;
     private String mUsername;
     private String mPhotoUrl;
     private TextView name;
@@ -71,6 +76,7 @@ public class MainActivity extends AppCompatActivity
 
     private ViewPager mViewPager;
     private ViewPagerAdapter mViewPagerAdapter;
+    private ArrayList<User_Profile> list_user_profile;
     private TabLayout mTabLayout;
     private String searchString;
     private ImageView image;
@@ -120,44 +126,48 @@ public class MainActivity extends AppCompatActivity
         final RatingBar ratingBar = (RatingBar) navigationView.getHeaderView(0).findViewById(R.id.ratingBar);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         user_reference = databaseReference.child("userdata");
+        user_reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                loggedInUser = dataSnapshot.getValue(User_Profile.class);
+                mUsername = loggedInUser.getF_name()+" "+loggedInUser.getL_name();
+                txtProfileName.setText(mUsername);
+                txtAddress.setText(loggedInUser.getAddress());
+
+                Log.e("userRole", loggedInUser.getRole());
+                if (loggedInUser.getRole().equalsIgnoreCase("user")){
+                    //invisible admin nav item
+                    hideItem();
+                }
+                Glide.with(MainActivity.this)
+                        .load(loggedInUser.getUserProfileUrl())
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .fitCenter().crossFade()
+                        .into(txtProfileImg);
+
+                Log.e("userProfff", "" + loggedInUser.getUserProfileUrl());
+
+                ratingBar.setRating(loggedInUser.getUserRating());
+                Log.e("userRate", String.valueOf(loggedInUser.getUserRating()));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         user_reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-
-                PushNotification pushNotification = new PushNotification(getApplicationContext());
-                pushNotification.method("POST").title("Test").message("heyhey").accessToken(user_profile.getAccess_token());
-                pushNotification.send();
-
-
-                if(userID.equals(user_profile.getUserID())){
-                    mUsername = user_profile.getF_name()+" "+user_profile.getL_name();
-                    txtProfileName.setText(mUsername);
-                    txtAddress.setText(user_profile.getAddress());
-
-                    Log.e("userRole", user_profile.getRole());
-                    if (user_profile.getRole().equalsIgnoreCase("user")){
-                        //invisible admin nav item
-                        hideItem();
-                    }
-                    Glide.with(MainActivity.this)
-                            .load(user_profile.getUserProfileUrl())
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .fitCenter().crossFade()
-                            .into(txtProfileImg);
-
-                    Log.e("userProfff", "" + user_profile.getUserProfileUrl());
-
-                    ratingBar.setRating(user_profile.getUserRating());
-                    Log.e("userRate", String.valueOf(user_profile.getUserRating()));
-
+                if(loggedInUser!=null){
+                    PushNotification pushNotification = new PushNotification(getApplicationContext());
+                    pushNotification.title("Notification")
+                            .message(loggedInUser.getF_name()+" "+loggedInUser.getL_name()+" is now active!")
+                            .accessToken(user_profile.getAccess_token())
+                            .send();
                 }
-                else if(uid.equals(user_profile.getUserID())){
-                    Log.e("UID",uid);
-                    Log.e("GOOGLENAME",name);
-                    txtProfileName.setText(name);
-                }
-
             }
 
             @Override

@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -25,7 +28,9 @@ import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.DIYDetailViewActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
+import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
+import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 public class PriceDiscountActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -52,6 +57,8 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
     private String userID;
     private DatabaseReference dbReferencePrice, identityReference, identityReferenceByUser;
     private DatabaseReference dbPromoSale;
+    private DatabaseReference user_reference;
+    private User_Profile loggedInUser = null; //for notification
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +86,7 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
         dbPromoSale = FirebaseDatabase.getInstance().getReference().child("promo_sale");
         identityReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.itemID);
         identityReferenceByUser = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID).child(this.itemID);
+        user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
         mTvProductName = (TextView) findViewById(R.id.tvProductName);
         mExpiryDate = (TextView) findViewById(R.id.tv_set_expiry_date);
@@ -161,8 +169,47 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
                 result.put("identity", "Promo");
                 identityReference.updateChildren(result);
                 identityReferenceByUser.updateChildren(result);
+
+                //Notification
+                user_reference.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+//                        if(loggedInUser!=null){
+                            PushNotification pushNotification = new PushNotification(getApplicationContext());
+                            pushNotification.title("On Sale Notification")
+                                    .message(diyNameID + " is now " + mPriceDiscount.getText() + ""+"%" + " discount!")
+                                    .accessToken(user_profile.getAccess_token())
+                                    .send();
+//                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
                 Intent intent = new Intent(PriceDiscountActivity.this,MainActivity.class);
                 startActivity(intent);
+
+
+
 
             }catch (NumberFormatException nFe){
                 nFe.getMessage();

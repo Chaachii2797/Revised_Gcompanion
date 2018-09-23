@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        //Notification
         user_reference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -190,6 +191,8 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+
     }
 
     private void getCurrentUser(){

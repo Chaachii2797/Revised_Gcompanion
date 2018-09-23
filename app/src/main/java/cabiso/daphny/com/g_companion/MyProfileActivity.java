@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +40,7 @@ import java.util.Date;
 
 import cabiso.daphny.com.g_companion.EditData.EditProfileActivity;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
+import cabiso.daphny.com.g_companion.notifications.PushNotification;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static cabiso.daphny.com.g_companion.R.id.user_ratings;
@@ -64,6 +66,7 @@ public class MyProfileActivity extends AppCompatActivity{
 
     private CircleImageView profile_picture;
     private Uri profilePictureUri;
+    private DatabaseReference user_reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +99,7 @@ public class MyProfileActivity extends AppCompatActivity{
         userStorageReference = storageReference.child("UserStorage"+"/"+userID);
 
         userDBReference = FirebaseDatabase.getInstance().getReference().child("userdata").child(userID);
+        user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
         final TextView profile_username = (TextView) findViewById(R.id.profile_name);
         final TextView profile_email = (TextView) findViewById(R.id.profile_email);
@@ -150,6 +154,40 @@ public class MyProfileActivity extends AppCompatActivity{
                     rate.setText(userProfileInfo.getUserRating().toString());
                     Log.e("userratee", String.valueOf(userProfileInfo.getUserRating()));
 
+                    //Notification
+                    user_reference.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                            if(userProfileInfo!=null){
+                                PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                pushNotification.title("Profile Notification")
+                                        .message(userProfileInfo.getF_name()+" "+userProfileInfo.getL_name()+" is viewing profile")
+                                        .accessToken(user_profile.getAccess_token())
+                                        .send();
+                            }
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                     if(userProfileInfo.getUserProfileUrl() == null) {
                         profile_picture.setImageDrawable(getResources().getDrawable(R.drawable.add));

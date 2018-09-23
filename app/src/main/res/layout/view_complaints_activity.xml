@@ -47,14 +47,31 @@
 
     <Button
         android:id="@+id/blockUnblockBtn"
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="17dp"
+        android:layout_marginBottom="12dp"
         android:text="Block User ?"
         style="@style/LoginStyle"
-        android:background="@color/gen_scheme1"/>
+        android:background="@color/gen_scheme1"
+        android:layout_marginRight="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/lvReportedSeller"
+        android:layout_alignEnd="@+id/lvReportedSeller" />
+
+    <Button
+        android:id="@+id/warnUserBtn"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Warn User"
+        style="@style/LoginStyle"
+        android:background="@color/gen_scheme1"
+        android:layout_alignBaseline="@+id/blockUnblockBtn"
+        android:layout_alignBottom="@+id/blockUnblockBtn"
+        android:layout_alignLeft="@+id/lvReportedSeller"
+        android:layout_alignStart="@+id/lvReportedSeller"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp" />
 
 
 </RelativeLayout>

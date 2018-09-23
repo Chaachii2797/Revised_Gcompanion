@@ -62,6 +62,7 @@ import cabiso.daphny.com.g_companion.Model.SectionDataModel;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.Promo.PriceDiscountActivity;
 import cabiso.daphny.com.g_companion.Promo.PromoActivity;
+import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 /**
  * Created by Lenovo on 7/5/2018.
@@ -81,7 +82,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
     private ImageView outside_view;
     private Button buyBtn, contactSellerBtn, bidMyItemBtn, buyerBidBtn, createMyPromoBtn, editDIYBtn, btn_bidders;
     private DatabaseReference relatedDiyReference, userData, pendingReference, loggedInName, relatedRelatedReference,
-            biddersReference, biddingRef, pending_reference;
+            biddersReference, biddingRef, pending_reference, user_reference;
     private FirebaseUser mFirebaseUser;
     final Context context = this;
 
@@ -96,6 +97,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView lv_bidders;
     private String loggedInUserName;
+    private User_Profile loggedInUser = null; //for notification
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
         relatedRelatedReference  = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
         loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
         pending_reference = FirebaseDatabase.getInstance().getReference("DIY Pending Items").child(userID);
+        user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
         /* Toolbar Configurations */
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -214,6 +217,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                         cardView7.setVisibility(View.INVISIBLE); //buyers bid
                         buyerBidBtn.setVisibility(View.INVISIBLE);
                         cardView9.setVisibility(View.INVISIBLE);//display bidding winner
+
 
                         RelativeLayout.LayoutParams nlp = new RelativeLayout.LayoutParams(
                                 RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
@@ -618,8 +622,9 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                 relatedDiyReference.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        final Float float_this = Float.valueOf(0);
 
+
+                                        final Float float_this = Float.valueOf(0);
                                         //DIY price
                                         final float pendingPrice = Float.parseFloat((finalMessage_price));
                                         final int pendingQty = Integer.parseInt((finalMessage_qty));
@@ -691,6 +696,41 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                                                     Toast.makeText(context, "Not enough total DIY quantity. We only have " + " " + buyItemCount
                                                                             + " DIY " + diyName + ".", Toast.LENGTH_LONG).show();
                                                                 } else{
+
+                                                                    //Notification
+                                                                    user_reference.addChildEventListener(new ChildEventListener() {
+                                                                        @Override
+                                                                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                                                            User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                                                            if(loggedInUserName!=null){
+                                                                                PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                                                                pushNotification.title("Buyer Notification")
+                                                                                        .message(loggedInUserName +" buy your item!")
+                                                                                        .accessToken(user_profile.getAccess_token())
+                                                                                        .send();
+                                                                            }
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                                        }
+                                                                    });
 
                                                                     int buyQty = Integer.parseInt(qtyInputted.getText().toString());
 
@@ -767,6 +807,17 @@ public class ViewRelatedDIYS extends AppCompatActivity {
 
                                     }
                                 });
+                            }
+                        });
+
+                        bidMyItemBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent item = new Intent(ViewRelatedDIYS.this,ToBidProduct.class);
+                                item.putExtra("itemId", dataSnapshot.getKey());
+                                item.putExtra("sellerName", loggedInUserName);
+                                Log.e("sellerNameBid", loggedInUserName);
+                                startActivity(item);
                             }
                         });
 
@@ -1346,6 +1397,41 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                                     biddersReference.push().setValue(new Bidders(bidders_value.getText().toString()
                                                             , userID, loggedInUserName, sdate));
 
+                                                    //Notification
+                                                    user_reference.addChildEventListener(new ChildEventListener() {
+                                                        @Override
+                                                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                                            User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                                            if(loggedInUserName!=null){
+                                                                PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                                                pushNotification.title("Bidders Notification")
+                                                                        .message(loggedInUserName +" bid " + bidders_value.getText().toString() + " on your item.")
+                                                                        .accessToken(user_profile.getAccess_token())
+                                                                        .send();
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                                        }
+
+                                                        @Override
+                                                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                                        }
+
+                                                        @Override
+                                                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+
                                                     Intent intent = new Intent(ViewRelatedDIYS.this, MainActivity.class);
                                                     startActivity(intent);
                                                 }
@@ -1379,7 +1465,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                 for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
                                     Log.e("childSnapshot", String.valueOf(childSnapshot));
 
-                                    Bidders biddersss = childSnapshot.getValue(Bidders.class);
+                                    final Bidders biddersss = childSnapshot.getValue(Bidders.class);
                                     Log.e("bidPrices", biddersss.getBid_price());
                                     String Key = childSnapshot.getKey();
                                     Log.e("Keyssss", Key);
@@ -1387,6 +1473,41 @@ public class ViewRelatedDIYS extends AppCompatActivity {
 
                                     bidding_winner_amount.setText("₱ :" + " " +biddersss.getBid_price());
                                     bidding_winner_name.setText(biddersss.getUser_name());
+
+                                    //Notification
+                                    user_reference.addChildEventListener(new ChildEventListener() {
+                                        @Override
+                                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                            User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                            if(loggedInUserName!=null){
+                                                PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                                pushNotification.title("Bidding Notification")
+                                                        .message(bidding_winner_name + " is the bidding winner!" )
+                                                        .accessToken(user_profile.getAccess_token())
+                                                        .send();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                        }
+
+                                        @Override
+                                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                        }
+
+                                        @Override
+                                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
 
                                 }
                             }
@@ -1443,6 +1564,8 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                             public void onClick(View v) {
                                 Intent item = new Intent(ViewRelatedDIYS.this,ToBidProduct.class);
                                 item.putExtra("itemId", dataSnapshot.getKey());
+                                item.putExtra("sellerName", loggedInUserName);
+                                Log.e("sellerNameBid", loggedInUserName);
                                 startActivity(item);
                             }
                         });
@@ -1511,6 +1634,20 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                     Log.e("user_owner_name", user_name);
                                     sellers_address.setText(user_profile.getAddress());
                                     sellers_contact_no.setText(user_profile.getContact_no());
+
+                                    sellers_address.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Toast.makeText(ViewRelatedDIYS.this, "Owner Address: " + user_profile.getAddress(),
+                                                    Toast.LENGTH_SHORT).show();
+
+                                            Intent addressIntent = new Intent(ViewRelatedDIYS.this, MapsActivity.class);
+                                            addressIntent.putExtra("userLocation", sellers_address.getText().toString());
+                                            Log.e("sellerAdd", sellers_address.getText().toString());
+                                            startActivity(addressIntent);
+                                        }
+                                    });
+
                                 }
                             }
 

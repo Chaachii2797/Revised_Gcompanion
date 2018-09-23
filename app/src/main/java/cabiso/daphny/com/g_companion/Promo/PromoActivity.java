@@ -35,7 +35,9 @@ import cabiso.daphny.com.g_companion.DIYDetailViewActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.SellingDIY;
+import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
+import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 public class PromoActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
     private DatabaseReference promoReference, identityReference, identityReferenceByUser;
@@ -64,6 +66,8 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
 
     private EditText mEtPromoQuantity;
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+    private DatabaseReference user_reference;
+    private User_Profile loggedInUser = null; //for Notification
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +103,7 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
 
         identityReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.itemID);
         identityReferenceByUser = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID).child(this.itemID);
+        user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
         imgID = String.valueOf(intent.getExtras().get("diy_img"));
 
@@ -145,9 +150,48 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
                             identityReference.updateChildren(result);
                             identityReferenceByUser.updateChildren(result);
 
+                            //Notification
+                            user_reference.addChildEventListener(new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+//                                    if(loggedInUser!=null){
+                                        PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                        pushNotification.title("On Sale Notification")
+                                                .message(itemName + " is on sale!")
+                                                .accessToken(user_profile.getAccess_token())
+                                                .send();
+//                                    }
+                                }
+
+                                @Override
+                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                }
+
+                                @Override
+                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+
                             Intent back = new Intent(PromoActivity.this, MainActivity.class);
                             startActivity(back);
                             Toast.makeText(getApplicationContext(),"Succesfully created a new promo",Toast.LENGTH_SHORT).show();
+
+
+
                         } catch (DatabaseException de) {
                             de.printStackTrace();
                         }

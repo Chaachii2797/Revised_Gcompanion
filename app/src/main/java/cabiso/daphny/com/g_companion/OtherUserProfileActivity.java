@@ -26,6 +26,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
@@ -46,6 +49,7 @@ import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Model.ReportsModel;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
+import cabiso.daphny.com.g_companion.notifications.PushNotification;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static cabiso.daphny.com.g_companion.R.id.user_ratings;
@@ -75,6 +79,7 @@ public class OtherUserProfileActivity extends AppCompatActivity implements Ratin
     private String profileUserId, profileUserFName, profileUserLName, profileEmailAdd, profileNumber, profileAddress,
             profilePicture, profileRatings, reportedBy, customerID;
     String reportDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+    private DatabaseReference user_reference;
 
     final String[] reports = {"It's a scam.", "I haven't received my order.", "The seller doesn't respond to my chat/text/call.",
             "I want refund.", "I want to return the item."};
@@ -118,7 +123,8 @@ public class OtherUserProfileActivity extends AppCompatActivity implements Ratin
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         reportUserReference = FirebaseDatabase.getInstance().getReference().child("reportedSeller").child(profileUserId);
-            reportsReference = FirebaseDatabase.getInstance().getReference().child("reportedSeller").child(profileUserId).child("reports");
+        reportsReference = FirebaseDatabase.getInstance().getReference().child("reportedSeller").child(profileUserId).child("reports");
+        user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
         mStorage = FirebaseStorage.getInstance();
         storageReference = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/" +
@@ -168,6 +174,42 @@ public class OtherUserProfileActivity extends AppCompatActivity implements Ratin
 
                                 reportUserReference.child("user_info").setValue(sellerReport);
                                 reportUserReference.child("reports").push().setValue(reportsModel);
+
+                                //Notification
+                                user_reference.addChildEventListener(new ChildEventListener() {
+                                    @Override
+                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                        User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+//                                        if(loggedInUser!=null){
+                                            PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                            pushNotification.title("Report Notification")
+                                                    .message("Someone reported you! Watch your action.")
+                                                    .accessToken(user_profile.getAccess_token())
+                                                    .send();
+//                                        }
+                                    }
+
+                                    @Override
+                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                    }
+
+                                    @Override
+                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                    }
+
+                                    @Override
+                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+
 
                                 Intent intent = new Intent(OtherUserProfileActivity.this, MainActivity.class);
                                 startActivity(intent);

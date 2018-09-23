@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,8 +37,10 @@ import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
+import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
 import cabiso.daphny.com.g_companion.UserProfileInfo;
+import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 /**
  * Created by cicctuser on 10/03/2017.
@@ -73,8 +76,8 @@ public class Pending_Activity extends AppCompatActivity{
     final ArrayList<String> promokey = new ArrayList<>();
     final ArrayList<String> hasDiscount = new ArrayList<>();
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-
     private String loggedInUserName;
+    private DatabaseReference user_reference;
 
     public Pending_Activity() {
 
@@ -97,6 +100,8 @@ public class Pending_Activity extends AppCompatActivity{
         database = FirebaseDatabase.getInstance();
         pendingReference = FirebaseDatabase.getInstance().getReference().child("DIY Pending Items").child(userID);
         loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
+        user_reference = FirebaseDatabase.getInstance().getReference().child("userdata"); // for notification
+
         promoFreeList = new ArrayList<>();
 
         pendingReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -207,7 +212,7 @@ public class Pending_Activity extends AppCompatActivity{
                                         final String meetup_buyer = sellList.get(position).getBuyerID();
                                         final double meetup_price = sellList.get(position).getSelling_price();
                                         int meetup_qty = sellList.get(position).getSelling_qty();
-                                        String sellerName = sellList.get(position).getLoggedInUser();
+                                        final String sellerName = sellList.get(position).getLoggedInUser();
                                         final int buyQty = sellList.get(position).getBuyingQuantity();
                                         Log.e("buyQtyyy", String.valueOf(buyQty));
 
@@ -268,6 +273,43 @@ public class Pending_Activity extends AppCompatActivity{
                                         pendingReference.child(penkey).removeValue();
                                         pendReference.child(penkeys).removeValue();
 
+
+                                        //Notification
+                                        user_reference.addChildEventListener(new ChildEventListener() {
+                                            @Override
+                                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                                if(loggedInUserName!=null){
+                                                    PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                                    pushNotification.title("Pending Item Notification")
+                                                            .message(sellerName + " place your pending item " +  meetup_diyName + "  for meet-up!")
+                                                            .accessToken(user_profile.getAccess_token())
+                                                            .send();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                            }
+
+                                            @Override
+                                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                            }
+
+                                            @Override
+                                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+
                                     }
                                 });
                                 //decline pending item (seller side)
@@ -276,6 +318,8 @@ public class Pending_Activity extends AppCompatActivity{
                                     @Override
                                     public void onClick(View v) {
                                         String pending_buyer = sellList.get(position).getBuyerID();
+                                        final String sellerName = sellList.get(position).getLoggedInUser();
+                                        final String meetup_diyName = sellList.get(position).getDiyName();
 
                                         //remove decline DIY in listview
                                         sellList.remove(position);
@@ -290,6 +334,40 @@ public class Pending_Activity extends AppCompatActivity{
                                         pendingReference.child(penkey).removeValue();
                                         pendReference.child(penkeys).removeValue();
 
+                                        //Notification
+                                        user_reference.addChildEventListener(new ChildEventListener() {
+                                            @Override
+                                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                                if(loggedInUserName!=null){
+                                                    PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                                    pushNotification.title("Pending Item Notification")
+                                                            .message(sellerName + " decline your pending item " +  meetup_diyName + "!")
+                                                            .accessToken(user_profile.getAccess_token())
+                                                            .send();
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                            }
+
+                                            @Override
+                                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                            }
+
+                                            @Override
+                                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
 
                                     }
                                 });

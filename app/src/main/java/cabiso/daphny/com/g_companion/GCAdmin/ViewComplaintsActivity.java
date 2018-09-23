@@ -25,6 +25,7 @@ import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.ReportsModel;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
+import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 /**
  * Created by Lenovo on 9/13/2018.
@@ -36,7 +37,8 @@ public class ViewComplaintsActivity extends AppCompatActivity {
     private ListView lvRreports;
     private ArrayList<ReportsModel> listComplains = new ArrayList<>();
     ViewReportsAdapter arrayAdapter;
-    Button blockUnblock;
+    Button blockUnblock, warnUserBtn;
+    private DatabaseReference user_reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,10 +59,11 @@ public class ViewComplaintsActivity extends AppCompatActivity {
 
         reportsReference = FirebaseDatabase.getInstance().getReference().child("reportedSeller");
         userReportStatusRef = FirebaseDatabase.getInstance().getReference().child("userdata");
+        user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
         lvRreports = (ListView) findViewById(R.id.lvReportedSeller);
         blockUnblock = (Button) findViewById(R.id.blockUnblockBtn);
-
+        warnUserBtn = (Button) findViewById(R.id.warnUserBtn);
 
         final String get_name = getIntent().getStringExtra("reportUserID");
 
@@ -83,6 +86,70 @@ public class ViewComplaintsActivity extends AppCompatActivity {
                         lvRreports.setAdapter(arrayAdapter);
 
                     }
+
+                    warnUserBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ViewComplaintsActivity.this);
+                            builder.setTitle("Warn user: ");
+                            builder.setMessage("Are you sure? ");
+                            builder.setCancelable(false);
+                            builder.setPositiveButton("Yes, I'm sure", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(ViewComplaintsActivity.this, "User Warn!", Toast.LENGTH_SHORT).show();
+
+                                    //Notification
+                                    user_reference.addChildEventListener(new ChildEventListener() {
+                                        @Override
+                                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                            User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+//                                            if(loggedInUser!=null){
+                                                PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                                pushNotification.title("Warning!")
+                                                        .message("You are warned by the admin for having 3 reports from your buyers!")
+                                                        .accessToken(user_profile.getAccess_token())
+                                                        .send();
+//                                            }
+                                        }
+
+                                        @Override
+                                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                        }
+
+                                        @Override
+                                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                        }
+
+                                        @Override
+                                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+                                    Intent intent = new Intent(ViewComplaintsActivity.this, MainActivity.class);
+                                    startActivity(intent);
+
+                                }
+                            });
+
+                            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            builder.show();
+                        }
+                    });
 
                     User_Profile infoo = dataSnapshot.child("user_info").getValue(User_Profile.class);
                     Log.e("infoo", infoo.getF_name());

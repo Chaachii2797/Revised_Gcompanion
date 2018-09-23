@@ -31,10 +31,12 @@ import java.util.Locale;
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
+import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.Promo.PriceDiscountModel;
 import cabiso.daphny.com.g_companion.Promo.PromoModel;
 import cabiso.daphny.com.g_companion.R;
 import cabiso.daphny.com.g_companion.UserProfileInfo;
+import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 /**
  * Created by Lenovo on 8/20/2018.
@@ -74,6 +76,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
     final ArrayList<String> discountPromokey = new ArrayList<>();
     final ArrayList<String> promoSalekey = new ArrayList<>();
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+    private DatabaseReference user_reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +96,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
         meetUpRef = FirebaseDatabase.getInstance().getReference().child("Items_ForMeetUp").child(userID);
         diyReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags"); //para sa item sa lv
         promoReference = FirebaseDatabase.getInstance().getReference().child("promo_sale");
+        user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
         Log.e("diyReference", String.valueOf(diyReference));
         loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
@@ -209,7 +213,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                             String sold_status = meetUpList.get(position).getIdentity();
                                                             final String sold_buyer = meetUpList.get(position).getBuyerID();
                                                             final double sold_price = meetUpList.get(position).getSelling_price();
-                                                            String sellerName = meetUpList.get(position).getLoggedInUser();
+                                                            final String sellerName = meetUpList.get(position).getLoggedInUser();
                                                             int sold_qty = meetUpList.get(position).getSelling_qty();
                                                             final int buyQty = meetUpList.get(position).getBuyingQuantity();
 
@@ -306,6 +310,41 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                                 soldReference.child(upload).updateChildren(results);
 
+                                                                //Notification
+                                                                user_reference.addChildEventListener(new ChildEventListener() {
+                                                                    @Override
+                                                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                                                        User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                                                        if(loggedInUserName!=null){
+                                                                            PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                                                            pushNotification.title("Completed")
+                                                                                    .message(sellerName + " already delivered your item " +  sold_diyName + ". Rate seller now!")
+                                                                                    .accessToken(user_profile.getAccess_token())
+                                                                                    .send();
+                                                                        }
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                                    }
+                                                                });
+
                                                                 Intent intent = new Intent(ForMeetUpActivity.this, MainActivity.class);
                                                                 startActivity(intent);
 
@@ -395,7 +434,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                     String sold_status = meetUpList.get(position).getIdentity();
                                                                     final String sold_buyer = meetUpList.get(position).getBuyerID();
                                                                     final double sold_price = meetUpList.get(position).getSelling_price();
-                                                                    String sellerName = meetUpList.get(position).getLoggedInUser();
+                                                                    final String sellerName = meetUpList.get(position).getLoggedInUser();
                                                                     int sold_qty = meetUpList.get(position).getSelling_qty();
                                                                     final int buyQty = meetUpList.get(position).getBuyingQuantity();
 
@@ -505,6 +544,42 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                         dscResults.put("sellDIYqty", quantityCountMeetUp);
 
                                                                         promoReference.child(dscKey).updateChildren(dscResults);
+
+                                                                        //Notification
+                                                                        user_reference.addChildEventListener(new ChildEventListener() {
+                                                                            @Override
+                                                                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                                                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                                                                if(loggedInUserName!=null){
+                                                                                    PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                                                                    pushNotification.title("Completed")
+                                                                                            .message(sellerName + " already delivered your item " +  sold_diyName + ". Rate seller now!")
+                                                                                            .accessToken(user_profile.getAccess_token())
+                                                                                            .send();
+                                                                                }
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onCancelled(DatabaseError databaseError) {
+
+                                                                            }
+                                                                        });
+
 
                                                                         Intent intent = new Intent(ForMeetUpActivity.this, MainActivity.class);
                                                                         startActivity(intent);
@@ -640,7 +715,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                     String sold_status = meetUpList.get(position).getIdentity();
                                                                     final String sold_buyer = meetUpList.get(position).getBuyerID();
                                                                     final double sold_price = meetUpList.get(position).getSelling_price();
-                                                                    String sellerName = meetUpList.get(position).getLoggedInUser();
+                                                                    final String sellerName = meetUpList.get(position).getLoggedInUser();
                                                                     int sold_qty = meetUpList.get(position).getSelling_qty();
                                                                     final int buyQty = meetUpList.get(position).getBuyingQuantity();
 
@@ -811,6 +886,42 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                         HashMap<String, Object> buyTakeResults = new HashMap<>();
                                                                         buyTakeResults.put("promoQuantity", quantityCountMeetUp);
                                                                         promoReference.child(buyTakeKey).updateChildren(buyTakeResults);
+
+                                                                        //Notification
+                                                                        user_reference.addChildEventListener(new ChildEventListener() {
+                                                                            @Override
+                                                                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                                                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                                                                if(loggedInUserName!=null){
+                                                                                    PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                                                                    pushNotification.title("Completed")
+                                                                                            .message(sellerName + " already delivered your item " +  sold_diyName + ". Rate seller now!")
+                                                                                            .accessToken(user_profile.getAccess_token())
+                                                                                            .send();
+                                                                                }
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onCancelled(DatabaseError databaseError) {
+
+                                                                            }
+                                                                        });
+
 
                                                                         Intent intent = new Intent(ForMeetUpActivity.this, MainActivity.class);
                                                                         startActivity(intent);

@@ -14,6 +14,9 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -24,6 +27,8 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Model.DIYBidding;
+import cabiso.daphny.com.g_companion.Model.User_Profile;
+import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 public class ToBidProduct extends Activity implements View.OnClickListener {
 
@@ -33,11 +38,13 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
     private EditText mEtExpiryDate;
     private TextView mTvDateToday;
     private String userID;
-    private String itemId;
+    private String itemId, sellerName;
     private Button mBtnAddBid;
     private DatabaseReference itemReference;
     private DatabaseReference identityReference, itemReferenceByUser;
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+    private DatabaseReference user_reference;
+    private User_Profile loggedInUser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +62,8 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
         Intent intent = getIntent();
         itemId = intent.getExtras().getString("itemId");
         Log.e("itemId", itemId);
-
+        sellerName = intent.getExtras().getString("sellerName");
+        Log.e("sellerName", sellerName);
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
@@ -66,6 +74,7 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
         identityReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.itemId);
         itemReferenceByUser = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID).child(this.itemId);
         Log.e("itemReferenecByUser", String.valueOf(itemReferenceByUser));
+        user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
         mBtnAddBid.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,8 +87,48 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
                 result.put("identity", "ON BID!");
                 identityReference.updateChildren(result);
                 itemReferenceByUser.updateChildren(result);
+
+                //Notification
+                user_reference.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                        if(sellerName!=null){
+                            PushNotification pushNotification = new PushNotification(getApplicationContext());
+                            pushNotification.title("Bidding Notification")
+                                    .message(sellerName + " uploaded DIY for bidding!")
+                                    .accessToken(user_profile.getAccess_token())
+                                    .send();
+                        }
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
                 Intent intent = new Intent(ToBidProduct.this,MainActivity.class);
                 startActivity(intent);
+
+
+
             }
         });
     }

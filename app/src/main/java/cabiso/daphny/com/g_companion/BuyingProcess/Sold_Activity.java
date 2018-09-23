@@ -36,7 +36,9 @@ import java.util.Locale;
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
+import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
+import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 /**
  * Created by Lenovo on 7/31/2017.
@@ -61,6 +63,8 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
     int count;
     float curRate;
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+    private DatabaseReference user_reference;
+    private User_Profile loggedInUser = null; //for notification
 
 
     public Sold_Activity() {
@@ -83,6 +87,7 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
 
         soldItemReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items").child(userID);
         userdataReference = FirebaseDatabase.getInstance().getReference().child("userdata");
+        user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
         soldItemReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -196,6 +201,43 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
 
                     userdataReference.child(diYs.getUser_id()).updateChildren(result);
                     Log.e("ratee", String.valueOf(curRate));
+
+
+                    //Notification
+                    user_reference.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                            User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+//                            if(loggedInUser!=null){
+                                PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                pushNotification.title("Rate")
+                                        .message(diYs.getLoggedInUser() + " rated you!")
+                                        .accessToken(user_profile.getAccess_token())
+                                        .send();
+//                            }
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
 
                 }
             }

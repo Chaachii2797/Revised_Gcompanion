@@ -215,7 +215,7 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
 
                 if(userID.equals(diYnames.getUser_id())){
                     if(diYnames.getIdentity().equalsIgnoreCase("selling")){
-                        if(!itemName.equals(diYnames.getDiyName())){
+//                        if(!itemName.equals(diYnames.getDiyName())){
 
                             String message_price="";
                             String message_qty = "";
@@ -236,11 +236,11 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
 
                             //for free promo item
 //                            promoList.add(diYnames);
-                            promoList.add((DIYnames) diYnames.setSelling_price(freePromoPrice));
-                            promoList.add((DIYnames) diYnames.setSelling_qty(freePromoQty));
+                            promoList.add((DIYnames) diYnames.setSelling_price(freePromoPrice).setSelling_qty(freePromoQty));
+//                            promoList.add((DIYnames) diYnames.setSelling_qty(freePromoQty));
 
                             promo_adapter.notifyDataSetChanged();
-                        }
+//                        }
                     }
                 }
 

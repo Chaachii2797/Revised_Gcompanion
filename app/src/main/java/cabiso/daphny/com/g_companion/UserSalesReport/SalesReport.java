@@ -75,8 +75,10 @@ public class SalesReport extends AppCompatActivity {
                     Log.e("USERIDDDD", userID+" "+diYnames.getUser_id());
                     Log.e("DIYNAMESS", diYnames.getDiyName());
 
-                    sales_diylist.add(diYnames);
-                    salesReportAdapterforList.notifyDataSetChanged();
+                    if(!diYnames.getIdentity().equalsIgnoreCase("community")){
+                        sales_diylist.add(diYnames);
+                        salesReportAdapterforList.notifyDataSetChanged();
+                    }
                 }
             }
 

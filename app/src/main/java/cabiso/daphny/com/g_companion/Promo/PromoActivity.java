@@ -228,7 +228,6 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
                                 message_Qty.add(message_qty);
                                 message_price += price;
                                 message_Price.add(message_price);
-
                             }
 
                             //DIY price
@@ -236,7 +235,7 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
                             int freePromoQty = Integer.parseInt((message_qty));
 
                             //for free promo item
-                            promoList.add(diYnames);
+//                            promoList.add(diYnames);
                             promoList.add((DIYnames) diYnames.setSelling_price(freePromoPrice));
                             promoList.add((DIYnames) diYnames.setSelling_qty(freePromoQty));
 

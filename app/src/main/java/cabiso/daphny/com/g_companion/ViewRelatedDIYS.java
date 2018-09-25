@@ -52,6 +52,7 @@ import java.util.Locale;
 import cabiso.daphny.com.g_companion.Adapter.BiddersAdapter;
 import cabiso.daphny.com.g_companion.Adapter.RecyclerViewDataAdapter;
 import cabiso.daphny.com.g_companion.EditData.EditDIYDetailsActivity;
+import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatActivity;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
 import cabiso.daphny.com.g_companion.Model.Bidders;
 import cabiso.daphny.com.g_companion.Model.CreatePromo;
@@ -98,6 +99,8 @@ public class ViewRelatedDIYS extends AppCompatActivity {
     private RecyclerView lv_bidders;
     private String loggedInUserName;
     private User_Profile loggedInUser = null; //for notification
+
+    private User_Profile relOwner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,15 +203,26 @@ public class ViewRelatedDIYS extends AppCompatActivity {
         final String get_name = getIntent().getStringExtra("Nname");
         sview_diyName.setText(get_name);
 
-
         relatedDiyReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(final DataSnapshot dataSnapshot, String s) {
                 final DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
                 final DIYSell diySellinfo = dataSnapshot.getValue(DIYSell.class);
 
+
                 if(get_name.equalsIgnoreCase(diYnames.getDiyName())){
                     if(diYnames.getIdentity().equalsIgnoreCase("selling")){
+                        user_reference.child(diYnames.getUser_id()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                relOwner = dataSnapshot.getValue(User_Profile.class);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                         textViewpromo.setVisibility(View.INVISIBLE);
                         promoPrice.setVisibility(View.INVISIBLE); //promo price
                         cardview2.setVisibility(View.INVISIBLE); //materials
@@ -286,7 +300,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                 DIYnames diy = dataSnapshot.getValue(DIYnames.class);
-                                User_Profile relOwner = dataSnapshot.getValue(User_Profile.class);
+
                                 Log.e("relOwner", "" + String.valueOf(relOwner));
 
                                 if(diYnames.diyName != diy.diyName){
@@ -840,9 +854,12 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                         //get seller
 //                                    if(diyInfo.getUser_id())
 //                                    if(diyInfo.getUser_id().equals(loggedInName.getKey())){
-                                        Intent intent = new Intent(ViewRelatedDIYS.this, ChatSplashActivity.class);
-                                        startActivity(intent);
-                                        Log.e("DATAKEY",loggedInName.getKey());
+//                                        Intent intent = new Intent(ViewRelatedDIYS.this, ChatSplashActivity.class);
+//                                        startActivity(intent);
+//                                        Log.e("DATAKEY",loggedInName.getKey());
+
+                                        Log.e("CHAAAAATTTTTT",relOwner.getEmail());
+                                        ChatActivity.startActivity(getApplicationContext(),relOwner.getEmail(),relOwner.getUserID(), relOwner.getAccess_token());
 //                                    }
                                     }
                                 });

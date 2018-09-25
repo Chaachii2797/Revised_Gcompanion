@@ -62,6 +62,7 @@ import java.util.Locale;
 import cabiso.daphny.com.g_companion.Adapter.BiddersAdapter;
 import cabiso.daphny.com.g_companion.Adapter.RecyclerViewDataAdapter;
 import cabiso.daphny.com.g_companion.EditData.EditDIYDetailsActivity;
+import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatActivity;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
 import cabiso.daphny.com.g_companion.Model.Bidders;
 import cabiso.daphny.com.g_companion.Model.CreatePromo;
@@ -77,11 +78,11 @@ import cabiso.daphny.com.g_companion.Promo.PromoActivity;
  * Created by Lenovo on 11/2/2017.
  */
 
-public class DIYDetailViewActivity extends AppCompatActivity{
+public class DIYDetailViewActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
-    private TextView diy_name, diy_materials, diy_procedures, diy_sell, php, user_owner_name,txtBy, diy_qty;
+    private TextView diy_name, diy_materials, diy_procedures, diy_sell, php, user_owner_name, txtBy, diy_qty;
     private Button button_buy, contact_seller, create_promo, bid_item, want_to_bid, edit_diy_btn;
     private String user_name;
     private CardView selling_price, seller_info, bid_info, cardview0, cardview00, cardview05, cardview06, cardview07, cardview08;
@@ -106,7 +107,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
     final Context context = this;
     List<String> item = new ArrayList<>();
-    private List<Bidders> diyBiddings = new ArrayList<Bidders>();;
+    private List<Bidders> diyBiddings = new ArrayList<Bidders>();
+    ;
     private BiddersAdapter biddersAdapter;
 
     private DIYImagesViewPagerAdapter diyImagesViewPagerAdapter;
@@ -137,7 +139,10 @@ public class DIYDetailViewActivity extends AppCompatActivity{
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
     String get_materials, get_procedures;
-    public int quantityCount=0;
+    public int quantityCount = 0;
+
+
+    User_Profile relOwner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +160,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
         itemReference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
         promoReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
-        relatedReference  = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
+        relatedReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags");
         diyByUserReference = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID);
 
         //related DIYS
@@ -172,7 +177,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -237,7 +242,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         cardview08 = (CardView) findViewById(R.id.cardView8); //Bidding Winner
 
         /* Bidding Lists */
-        biddersAdapter = new BiddersAdapter(DIYDetailViewActivity.this,diyBiddings);
+        biddersAdapter = new BiddersAdapter(DIYDetailViewActivity.this, diyBiddings);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -283,10 +288,10 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         DIYnames diy = dataSnapshot.getValue(DIYnames.class);
-                        User_Profile relOwner = dataSnapshot.getValue(User_Profile.class);
+                        relOwner = dataSnapshot.getValue(User_Profile.class);
                         Log.e("relOwner", "" + String.valueOf(relOwner));
 
-                        if(diyInfo.diyName != diy.diyName){
+                        if (diyInfo.diyName != diy.diyName) {
 
                             Log.e("catStatusss", diy.diyName + " = " + String.valueOf(dataSnapshot.getChildrenCount()));
 
@@ -295,7 +300,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                             Toast.makeText(DIYDetailViewActivity.this, "Loading Related DIYS...", Toast.LENGTH_SHORT).show();//
 
-                            String message_prices="";
+                            String message_prices = "";
                             String message_qtys = "";
                             List<String> message_Prices = new ArrayList<String>();
                             List<String> message_Qtys = new ArrayList<String>();
@@ -348,7 +353,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                 });
 
 
-                if(diyInfo.getIdentity().equals("community")){
+                if (diyInfo.getIdentity().equals("community")) {
                     diy_sell.setVisibility(View.INVISIBLE);
                     button_buy.setVisibility(View.INVISIBLE);
                     diy_qty.setVisibility(View.INVISIBLE);
@@ -398,14 +403,15 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                            if(diyInfo.user_id.equals(user_profile.getUserID())){
-                                user_name = user_profile.getF_name()+" "+user_profile.getL_name();
+                            if (diyInfo.user_id.equals(user_profile.getUserID())) {
+                                user_name = user_profile.getF_name() + " " + user_profile.getL_name();
                                 user_owner_name.setText(user_name);
                                 Log.e("user_owner_name", user_name);
 
-                            }if(diyInfo.user_id.equals(userID)){
+                            }
+                            if (diyInfo.user_id.equals(userID)) {
                                 edit_diy_btn.setVisibility(View.VISIBLE);
-                            } else{
+                            } else {
                                 edit_diy_btn.setVisibility(View.INVISIBLE);
                             }
 
@@ -461,7 +467,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         Long material_qty = postSnapshot.child("quantity").getValue(Long.class);
                         String material_unit = postSnapshot.child("unit").getValue(String.class);
                         Log.e("message", "" + material_name);
-                        messageMat += "\n" +  material_qty + " " + material_unit+ " " + material_name ;
+                        messageMat += "\n" + material_qty + " " + material_unit + " " + material_name;
                         messageMaterials.add(material_name);
                         count++;
                     }
@@ -497,7 +503,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         public void onClick(View v) {
                             Toast.makeText(context, "Community Edit Button Clicked", Toast.LENGTH_SHORT).show();
 
-                            Intent item = new Intent(DIYDetailViewActivity.this,EditDIYDetailsActivity.class);
+                            Intent item = new Intent(DIYDetailViewActivity.this, EditDIYDetailsActivity.class);
                             item.putExtra("diyKey", itemSnapshot.getKey());
                             item.putExtra("diyName", diyInfo.diyName);
                             item.putExtra("diyOwner", user_name);
@@ -520,9 +526,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         diyImagesViewPagerAdapter = new DIYImagesViewPagerAdapter(getBaseContext(), diyInfo.diyUrl);
                         diyImagesViewPager.setAdapter(diyImagesViewPagerAdapter);
                     }
-                }
-
-                else if(diyInfo.getIdentity().equalsIgnoreCase("selling")){
+                } else if (diyInfo.getIdentity().equalsIgnoreCase("selling")) {
 
                     diy_sell.setVisibility(View.VISIBLE);
                     user_owner_name.setVisibility(View.VISIBLE);
@@ -602,12 +606,12 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     final int categoryPosition = Integer.parseInt(itemSnapshot.child("category_postition").getValue().toString());
                     Log.e("categoryPosition", String.valueOf(categoryPosition));
 
-                    Log.e("userDataID",userID);
+                    Log.e("userDataID", userID);
                     loggedInName.child(userID).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
-                            loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                            loggedInUserName += " " + dataSnapshot.child("l_name").getValue(String.class);
                         }
 
                         @Override
@@ -620,19 +624,19 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                            if(diyInfo.user_id.equals(user_profile.getUserID())){
-                                user_name = user_profile.getF_name()+" "+user_profile.getL_name();
+                            if (diyInfo.user_id.equals(user_profile.getUserID())) {
+                                user_name = user_profile.getF_name() + " " + user_profile.getL_name();
                                 user_owner_name.setText(user_name);
                                 sellers_address.setText(user_profile.getAddress());
                                 sellers_contact_no.setText(user_profile.getContact_no());
                             }
-                            if(diyInfo.user_id.equals(userID)){
+                            if (diyInfo.user_id.equals(userID)) {
                                 button_buy.setVisibility(View.INVISIBLE);
                                 contact_seller.setVisibility(View.INVISIBLE);
                                 create_promo.setVisibility(View.VISIBLE);
                                 bid_item.setVisibility(View.VISIBLE);
                                 edit_diy_btn.setVisibility(View.VISIBLE);
-                            }else{
+                            } else {
                                 button_buy.setVisibility(View.VISIBLE);
                                 contact_seller.setVisibility(View.VISIBLE);
                                 edit_diy_btn.setVisibility(View.INVISIBLE);
@@ -679,13 +683,16 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                 public void onClick(View v) {
                                     Toast.makeText(DIYDetailViewActivity.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
 
+//                                    Intent intent = new Intent(DIYDetailViewActivity.this, ChatSplashActivity.class);
+//                                    startActivity(intent);
+//                                    sendNotification();
+
+//                                    ChatActivity.startActivity(getApplicationContext(),relOwner.getEmail(),relOwner.getUserID(), relOwner.getAccess_token());
                                     //get seller
 //                                    if(diyInfo.getUser_id())
 //                                    if(diyInfo.getUser_id().equals(loggedInName.getKey())){
-                                        Intent intent = new Intent(DIYDetailViewActivity.this, ChatSplashActivity.class);
-                                        startActivity(intent);
-                                        sendNotification();
-                                        Log.e("DATAKEY",loggedInName.getKey());
+
+                                    Log.e("DATAKEY", loggedInName.getKey());
 //                                    }
                                 }
                             });
@@ -707,7 +714,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                                     String phone = sellers_contact_no.getText().toString();
                                     Intent smsMsgAppVar = new Intent(Intent.ACTION_VIEW);
-                                    smsMsgAppVar.setData(Uri.parse("sms:" +  phone));
+                                    smsMsgAppVar.setData(Uri.parse("sms:" + phone));
                                     smsMsgAppVar.putExtra("sms_body", "Hi, Good Day! ");
                                     startActivity(smsMsgAppVar);
                                 }
@@ -735,20 +742,20 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     });
 
 
-                    for (DataSnapshot insideDataSnapshot: itemSnapshot.child("bidding").getChildren()) {
+                    for (DataSnapshot insideDataSnapshot : itemSnapshot.child("bidding").getChildren()) {
                         DIYBidding biddingItem = insideDataSnapshot.getValue(DIYBidding.class);
                         tv_bid_xpire.setText(biddingItem.getDate());
-                        tv_bid_price.setText(biddingItem.getIntial_price()+"");
+                        tv_bid_price.setText(biddingItem.getIntial_price() + "");
                         tv_ownr_cmmnt.setText(biddingItem.getMessage());
                     }
 
-                    for (DataSnapshot inside_DataSnapshot: itemSnapshot.child("bidders").getChildren()) {
+                    for (DataSnapshot inside_DataSnapshot : itemSnapshot.child("bidders").getChildren()) {
                         Bidders biddersItem = inside_DataSnapshot.getValue(Bidders.class);
                         diyBiddings.add(biddersItem);
                         biddersAdapter.notifyDataSetChanged();
                     }
 
-                    String message_price="";
+                    String message_price = "";
                     String message_qty = "";
                     String message_dsc = "";
 
@@ -767,7 +774,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         message_price += price;
                         message_Price.add(message_price);
 
-                        message_dsc +=dsc;
+                        message_dsc += dsc;
                         message_Dsc.add(message_dsc);
                     }
 
@@ -791,7 +798,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         public void onClick(View v) {
                             Toast.makeText(context, "Selling Edit Button Clicked", Toast.LENGTH_SHORT).show();
 
-                            Intent item = new Intent(DIYDetailViewActivity.this,EditDIYDetailsActivity.class);
+                            Intent item = new Intent(DIYDetailViewActivity.this, EditDIYDetailsActivity.class);
                             item.putExtra("diyKey", itemSnapshot.getKey());
                             item.putExtra("diyName", diyInfo.diyName);
                             item.putExtra("diyOwner", user_name);
@@ -803,7 +810,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                             Log.e("diyPrice", finalMessage_price1);
                             Log.e("diyQuantity", finalMessage_qty);
-                            Log.e("diyDescription",finalMessage_dsc1);
+                            Log.e("diyDescription", finalMessage_dsc1);
 
                             startActivity(item);
                         }
@@ -826,7 +833,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                     final int pendingQty = Integer.parseInt((finalMessage_qty1));
 
                                     //Seller Info -> buyer side ni
-                                    DIYSell productInfo =  dataSnapshot.getValue(DIYSell.class);
+                                    DIYSell productInfo = dataSnapshot.getValue(DIYSell.class);
                                     final String diyName = productInfo.getDiyName();
                                     final String diyUrl = productInfo.getDiyUrl();
                                     final String user_id = productInfo.getUser_id();
@@ -910,11 +917,12 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                                     dialog.show();
                                                 }
                                             }
+
                                             @Override
                                             public void onCancelled(DatabaseError databaseError) {
                                             }
                                         });
-                                    }else if(userID.equals(info.getUser_id())) {
+                                    } else if (userID.equals(info.getUser_id())) {
                                         Log.e("pending_same", String.valueOf("" + userID.equals(info.getUser_id())));
                                         Toast.makeText(DIYDetailViewActivity.this, "It's your own product!", Toast.LENGTH_SHORT).show();
                                     }
@@ -947,7 +955,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                 @Override
                                 public void onClick(View v) {
                                     Intent toPriceDiscount = new Intent(DIYDetailViewActivity.this, PriceDiscountActivity.class);
-                                    toPriceDiscount.putExtra("diy_Name",diyInfo.getDiyName());
+                                    toPriceDiscount.putExtra("diy_Name", diyInfo.getDiyName());
                                     toPriceDiscount.putExtra("diy_ID", diyInfo.getProductID());
                                     toPriceDiscount.putExtra("diy_img", diyInfo.getDiyUrl());
                                     toPriceDiscount.putExtra("getDBKey", itemSnapshot.getKey());
@@ -957,8 +965,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                             buyTakeDiscount.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent to_promo = new Intent(DIYDetailViewActivity.this,PromoActivity.class);
-                                    to_promo.putExtra("diy_Name",diyInfo.getDiyName());
+                                    Intent to_promo = new Intent(DIYDetailViewActivity.this, PromoActivity.class);
+                                    to_promo.putExtra("diy_Name", diyInfo.getDiyName());
                                     to_promo.putExtra("diy_ID", diyInfo.getProductID());
                                     to_promo.putExtra("diy_img", diyInfo.getDiyUrl());
                                     Log.e("NAMEEEE", diyInfo.getDiyName());
@@ -980,15 +988,13 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     bid_item.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent item = new Intent(DIYDetailViewActivity.this,ToBidProduct.class);
+                            Intent item = new Intent(DIYDetailViewActivity.this, ToBidProduct.class);
                             item.putExtra("itemId", itemSnapshot.getKey());
                             startActivity(item);
                         }
                     });
 
-                }
-
-                else if(diyInfo.getIdentity().equalsIgnoreCase("on sale!")){
+                } else if (diyInfo.getIdentity().equalsIgnoreCase("on sale!")) {
                     diy_sell.setVisibility(View.VISIBLE);
                     user_owner_name.setVisibility(View.VISIBLE);
                     diy_qty.setVisibility(View.VISIBLE);
@@ -1057,20 +1063,20 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                            if(diyInfo.user_id.equals(user_profile.getUserID())){
-                                user_name = user_profile.getF_name()+" "+user_profile.getL_name();
+                            if (diyInfo.user_id.equals(user_profile.getUserID())) {
+                                user_name = user_profile.getF_name() + " " + user_profile.getL_name();
                                 user_owner_name.setText(user_name);
                                 sellers_address.setText(user_profile.getAddress());
                                 sellers_contact_no.setText(user_profile.getContact_no());
 
                             }
-                            if(diyInfo.user_id.equals(userID)){
+                            if (diyInfo.user_id.equals(userID)) {
                                 button_buy.setVisibility(View.VISIBLE);
                                 contact_seller.setVisibility(View.VISIBLE);
                                 edit_diy_btn.setVisibility(View.VISIBLE);
                                 bid_item.setVisibility(View.INVISIBLE);
                                 create_promo.setVisibility(View.INVISIBLE);
-                            }else {
+                            } else {
                                 edit_diy_btn.setVisibility(View.INVISIBLE);
                             }
                         }
@@ -1097,22 +1103,22 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     });
 
                     boolean isExpired = false;
-                    for(DataSnapshot saleSnapshot:itemSnapshot.child("itemPromo").getChildren()){
+                    for (DataSnapshot saleSnapshot : itemSnapshot.child("itemPromo").getChildren()) {
                         CreatePromo createPromo = saleSnapshot.getValue(CreatePromo.class);
 
-                        try{
+                        try {
                             // check expiry
-                            Date strDate = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).parse(createPromo.getPromo_ends());
+                            Date strDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(createPromo.getPromo_ends());
                             if (new Date().after(strDate)) {
                                 isExpired = true;
                             }
-                        } catch(ParseException e){
-                            Log.e("expiryException",e.getMessage());
+                        } catch (ParseException e) {
+                            Log.e("expiryException", e.getMessage());
                         }
 
                     }
 
-                    if(isExpired){
+                    if (isExpired) {
                         HashMap<String, Object> result = new HashMap<>();
                         result.put("identity", "Selling");
                         identityReference.updateChildren(result);
@@ -1141,10 +1147,13 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                     Toast.makeText(DIYDetailViewActivity.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
 
 //                                    if(diyInfo.getUser_id().equals(loggedInName.getKey())){
-                                        Intent chat = new Intent(DIYDetailViewActivity.this, ChatSplashActivity.class);
-                                        startActivity(chat);
-                                        sendNotification();
-                                        Log.e("DATAKEY",loggedInName.getKey());
+                                    Intent chat = new Intent(DIYDetailViewActivity.this, ChatSplashActivity.class);
+                                    chat.putExtra("ChatID", diyInfo.getUser_id());
+                                    Log.e("CHAAAATID", diyInfo.user_id);
+                                    startActivity(chat);
+
+                                    sendNotification();
+                                    Log.e("DATAKEY", loggedInName.getKey());
 //                                    }
 
                                     sendNotification();
@@ -1168,7 +1177,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                                     String phone = sellers_contact_no.getText().toString();
                                     Intent smsMsgAppVar = new Intent(Intent.ACTION_VIEW);
-                                    smsMsgAppVar.setData(Uri.parse("sms:" +  phone));
+                                    smsMsgAppVar.setData(Uri.parse("sms:" + phone));
                                     smsMsgAppVar.putExtra("sms_body", "Hi, Good Day! ");
                                     startActivity(smsMsgAppVar);
                                 }
@@ -1194,13 +1203,13 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         }
                     });
 
-                    for(DataSnapshot insideDataSnapshot: itemSnapshot.child("itemPromo").getChildren()){
+                    for (DataSnapshot insideDataSnapshot : itemSnapshot.child("itemPromo").getChildren()) {
                         CreatePromo createPromo = insideDataSnapshot.getValue(CreatePromo.class);
                         promo_price.setText(createPromo.getPromo_price());
                         outside_view.setImageResource(R.drawable.horizontal_line);
                     }
 
-                    String message_price="";
+                    String message_price = "";
                     String message_qty = "";
                     List<String> message_Price = new ArrayList<String>();
                     List<String> message_Qty = new ArrayList<String>();
@@ -1223,7 +1232,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         public void onClick(View v) {
                             Toast.makeText(context, "ON SALE Edit Button Clicked", Toast.LENGTH_SHORT).show();
 
-                            Intent item = new Intent(DIYDetailViewActivity.this,EditDIYDetailsActivity.class);
+                            Intent item = new Intent(DIYDetailViewActivity.this, EditDIYDetailsActivity.class);
                             item.putExtra("diyKey", itemSnapshot.getKey());
                             item.putExtra("diyName", diyInfo.diyName);
                             item.putExtra("diyOwner", user_name);
@@ -1300,9 +1309,8 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                 }
 
 
-
                 //BIDDDDDDDDDINGGGGGGGGGGGGGG
-                else if(diyInfo.getIdentity().equalsIgnoreCase("on bid!")){
+                else if (diyInfo.getIdentity().equalsIgnoreCase("on bid!")) {
                     diy_sell.setVisibility(View.VISIBLE);
                     user_owner_name.setVisibility(View.VISIBLE);
                     diy_qty.setVisibility(View.INVISIBLE);
@@ -1370,13 +1378,14 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     Log.e("categoryPosition", String.valueOf(categoryPosition));
 
 
-                    Log.e("userDataID",userID);
+                    Log.e("userDataID", userID);
                     user_data.child(userID).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
-                            loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                            loggedInUserName += " " + dataSnapshot.child("l_name").getValue(String.class);
                         }
+
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
 
@@ -1387,17 +1396,16 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                            if(diyInfo.user_id.equals(user_profile.getUserID())){
-                                user_name = user_profile.getF_name()+" "+user_profile.getL_name();
+                            if (diyInfo.user_id.equals(user_profile.getUserID())) {
+                                user_name = user_profile.getF_name() + " " + user_profile.getL_name();
                                 user_owner_name.setText(user_name);
-                                Log.e("","IIDIDD"+diyInfo.user_id+" "+"equals"+" "+user_profile.getUserID());
+                                Log.e("", "IIDIDD" + diyInfo.user_id + " " + "equals" + " " + user_profile.getUserID());
                                 sellers_contact_no.setText(user_profile.getContact_no());
                                 sellers_address.setText(user_profile.getAddress());
                             }
-                            if(diyInfo.user_id.equals(userID)){
+                            if (diyInfo.user_id.equals(userID)) {
                                 edit_diy_btn.setVisibility(View.VISIBLE);
-                            }
-                            else{
+                            } else {
                                 bid_item.setVisibility(View.INVISIBLE);
                                 create_promo.setVisibility(View.INVISIBLE);
                                 edit_diy_btn.setVisibility(View.INVISIBLE);
@@ -1425,7 +1433,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         }
                     });
 
-                    String message_price="";
+                    String message_price = "";
                     String message_qty = "";
                     List<String> message_Price = new ArrayList<String>();
                     List<String> message_Qty = new ArrayList<String>();
@@ -1440,26 +1448,26 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     }
 
                     //bidding expiration
-                    for (final DataSnapshot insideDataSnapshot: itemSnapshot.child("bidding").getChildren()) {
+                    for (final DataSnapshot insideDataSnapshot : itemSnapshot.child("bidding").getChildren()) {
 
                         final DIYBidding biddingItem = insideDataSnapshot.getValue(DIYBidding.class);
                         tv_bid_xpire.setText(biddingItem.getXpire_date());
-                        tv_bid_price.setText(biddingItem.getIntial_price()+"");
-                        Log.e("initialBid", biddingItem.getIntial_price()+"");
+                        tv_bid_price.setText(biddingItem.getIntial_price() + "");
+                        Log.e("initialBid", biddingItem.getIntial_price() + "");
 
                         tv_ownr_cmmnt.setText(biddingItem.getMessage());
-                        Log.e("expiryDate",biddingItem.getXpire_date());
-                        try{
+                        Log.e("expiryDate", biddingItem.getXpire_date());
+                        try {
                             // check expiry
                             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
-                            Date strDate = new SimpleDateFormat("yyyy-MM-dd",Locale.getDefault()).parse(biddingItem.getXpire_date());
+                            Date strDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(biddingItem.getXpire_date());
                             if (new Date().after(strDate)) {
                                 isExpired = true;
                             }
-                        } catch(ParseException e){
-                            Log.e("expiryException",e.getMessage());
+                        } catch (ParseException e) {
+                            Log.e("expiryException", e.getMessage());
                         }
-                        Log.e("CHECKEXPIRATION",isExpired+"");
+                        Log.e("CHECKEXPIRATION", isExpired + "");
 
 
                         //EDIT DIY (ON BID)
@@ -1468,7 +1476,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                             public void onClick(View v) {
                                 Toast.makeText(context, "ON BID Edit Button Clicked", Toast.LENGTH_SHORT).show();
 
-                                Intent item = new Intent(DIYDetailViewActivity.this,EditDIYDetailsActivity.class);
+                                Intent item = new Intent(DIYDetailViewActivity.this, EditDIYDetailsActivity.class);
                                 item.putExtra("diyKey", itemSnapshot.getKey());
                                 item.putExtra("diyKeyInside", insideDataSnapshot.getKey());
                                 Log.e("diyKeyInside", insideDataSnapshot.getKey());
@@ -1479,11 +1487,11 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                 item.putExtra("diyImage", diyInfo.diyUrl);
 
                                 //bidding info
-                                item.putExtra("diyBidInitialPrice", biddingItem.getIntial_price()+"");
+                                item.putExtra("diyBidInitialPrice", biddingItem.getIntial_price() + "");
                                 item.putExtra("diyBidExpiry", biddingItem.getXpire_date());
                                 item.putExtra("diyBidComment", biddingItem.getMessage());
 
-                                Log.e("diyBidInitialPrice", "" + biddingItem.getIntial_price()+"");
+                                Log.e("diyBidInitialPrice", "" + biddingItem.getIntial_price() + "");
                                 Log.e("diyBidExpiry", "" + biddingItem.getXpire_date());
                                 Log.e("diyBidComment", "" + biddingItem.getMessage());
 
@@ -1495,9 +1503,9 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                         want_to_bid.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if(diyInfo.user_id.equals(userID)){
-                                    Toast.makeText(DIYDetailViewActivity.this,"THIS IS YOUR ITEM!!!", Toast.LENGTH_SHORT).show();
-                                }else {
+                                if (diyInfo.user_id.equals(userID)) {
+                                    Toast.makeText(DIYDetailViewActivity.this, "THIS IS YOUR ITEM!!!", Toast.LENGTH_SHORT).show();
+                                } else {
                                     biddersReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(itemSnapshot.getKey())
                                             .child("bidders");
 
@@ -1514,24 +1522,24 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                             String inputBid = bidders_value.getText().toString();
                                             int initialBidAmount = biddingItem.getIntial_price();
 
-                                             if(inputBid.equals(" ")){
-                                                 inputBid="0";
-                                             }
+                                            if (inputBid.equals(" ")) {
+                                                inputBid = "0";
+                                            }
 
-                                             if (inputBid.isEmpty()) {
-                                                 Log.e("EmptyAmount", "Please enter bid amount.");
-                                                 Toast.makeText(context, "Please enter bid amount." + "", Toast.LENGTH_SHORT).show();
-                                             } else if(Integer.valueOf(inputBid) <= initialBidAmount){
-                                                 Log.e("NotEnoughAmount", "NotEnoughAmount");
-                                                 Toast.makeText(context, "Bid amount must be equal or greater than " +
-                                                         "the set minimum bid amount by the seller." + "", Toast.LENGTH_LONG).show();
-                                             } else{
-                                                 biddersReference.push().setValue(new Bidders(bidders_value.getText().toString()
-                                                         , userID, loggedInUserName, sdate));
+                                            if (inputBid.isEmpty()) {
+                                                Log.e("EmptyAmount", "Please enter bid amount.");
+                                                Toast.makeText(context, "Please enter bid amount." + "", Toast.LENGTH_SHORT).show();
+                                            } else if (Integer.valueOf(inputBid) <= initialBidAmount) {
+                                                Log.e("NotEnoughAmount", "NotEnoughAmount");
+                                                Toast.makeText(context, "Bid amount must be equal or greater than " +
+                                                        "the set minimum bid amount by the seller." + "", Toast.LENGTH_LONG).show();
+                                            } else {
+                                                biddersReference.push().setValue(new Bidders(bidders_value.getText().toString()
+                                                        , userID, loggedInUserName, sdate));
 
-                                                 Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
-                                                 startActivity(intent);
-                                             }
+                                                Intent intent = new Intent(DIYDetailViewActivity.this, MainActivity.class);
+                                                startActivity(intent);
+                                            }
                                         }
                                     });
                                     dialog.show();
@@ -1559,7 +1567,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     biddingRef.orderByChild("bid_price").limitToLast(1).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
-                            for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                            for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                                 Log.e("childSnapshot", String.valueOf(childSnapshot));
 
                                 Bidders biddersss = childSnapshot.getValue(Bidders.class);
@@ -1568,7 +1576,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                                 Log.e("Keyssss", Key);
                                 Toast.makeText(context, "Max bid" + " = " + biddersss.getBid_price(), Toast.LENGTH_SHORT).show();
 
-                                bidding_winner_amount.setText("₱ :" + " " +biddersss.getBid_price());
+                                bidding_winner_amount.setText("₱ :" + " " + biddersss.getBid_price());
                                 bidding_winner_name.setText(biddersss.getUser_name());
 
                             }
@@ -1581,7 +1589,7 @@ public class DIYDetailViewActivity extends AppCompatActivity{
                     });
 
                     //invisible views when bidding iss expired
-                    if(isExpired){
+                    if (isExpired) {
                         want_to_bid.setVisibility(View.INVISIBLE);
                         cardview06.setVisibility(View.INVISIBLE);
                         recyclerView.setVisibility(View.INVISIBLE);
@@ -1607,25 +1615,23 @@ public class DIYDetailViewActivity extends AppCompatActivity{
 
                     }
 
-                    for (DataSnapshot inside_DataSnapshot: itemSnapshot.child("bidders").getChildren()) {
+                    for (DataSnapshot inside_DataSnapshot : itemSnapshot.child("bidders").getChildren()) {
                         Bidders biddersItem = inside_DataSnapshot.getValue(Bidders.class);
                         Log.e("biddersItem", String.valueOf(biddersItem));
 
                         String bidds = inside_DataSnapshot.child("bid_price").getValue(String.class);
                         Log.e("bidds", String.valueOf(bidds));
-                        Log.e(" biddsssss",biddersItem.getBid_price());
+                        Log.e(" biddsssss", biddersItem.getBid_price());
 
                         diyBiddings.add(biddersItem);
                         biddersAdapter.notifyDataSetChanged();
                     }
 
 
-
-
                     bid_item.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent item = new Intent(DIYDetailViewActivity.this,ToBidProduct.class);
+                            Intent item = new Intent(DIYDetailViewActivity.this, ToBidProduct.class);
                             item.putExtra("itemId", itemSnapshot.getKey());
                             startActivity(item);
                         }
@@ -1739,23 +1745,23 @@ public class DIYDetailViewActivity extends AppCompatActivity{
         }
     }
 
-    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
+    public static class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
         private EditText text;
 
-        public DatePickerFragment(){
+        public DatePickerFragment() {
 
         }
 
 
         @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState){
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Calendar calendar = Calendar.getInstance();
             int start_year = calendar.get(Calendar.YEAR);
             int start_month = calendar.get(Calendar.MONTH);
             int start_day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog dpd = new DatePickerDialog(getActivity(),this,start_year,start_month,start_day);
-            return  dpd;
+            DatePickerDialog dpd = new DatePickerDialog(getActivity(), this, start_year, start_month, start_day);
+            return dpd;
         }
 
         @Override

@@ -152,7 +152,6 @@
         <activity android:name=".Promo.ListPromoActivity" />
         <activity android:name=".Promo.ViewPromoActivity" />
         <activity android:name=".notifications.NotificationActivity" />
-        <activity android:name=".Promo.PriceDiscountActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").

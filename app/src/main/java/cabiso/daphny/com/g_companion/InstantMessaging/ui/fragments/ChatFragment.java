@@ -15,6 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -27,7 +32,9 @@ import cabiso.daphny.com.g_companion.InstantMessaging.events.PushNotificationEve
 import cabiso.daphny.com.g_companion.InstantMessaging.models.Chat;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.adapters.ChatRecyclerAdapter;
 import cabiso.daphny.com.g_companion.InstantMessaging.utils.MessagingContants;
+import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
+import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 /**
  * Created by Lenovo on 7/21/2018.
@@ -43,6 +50,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
     private ChatRecyclerAdapter mChatRecyclerAdapter;
 
     private ChatPresenter mChatPresenter;
+    private DatabaseReference user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
     public static ChatFragment newInstance(String receiver,
                                            String receiverUid,
@@ -113,7 +121,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         String message = mETxtMessage.getText().toString();
         String receiver = getArguments().getString(MessagingContants.ARG_RECEIVER);
         String receiverUid = getArguments().getString(MessagingContants.ARG_RECEIVER_UID);
-        String sender = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        final String sender = FirebaseAuth.getInstance().getCurrentUser().getEmail();
         String senderUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         String receiverFirebaseToken = getArguments().getString(MessagingContants.ARG_FIREBASE_TOKEN);
         Chat chat = new Chat(sender,
@@ -125,6 +133,27 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
         mChatPresenter.sendMessage(getActivity().getApplicationContext(),
                 chat,
                 receiverFirebaseToken);
+
+
+        //Notification
+        user_reference.child(receiverUid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                PushNotification pushNotification = new PushNotification(getContext());
+                pushNotification.title("Chat Notification")
+                        .message(user_profile.getF_name() + " " + user_profile.getL_name() +" chatted you!")
+                        .accessToken(user_profile.getAccess_token())
+                        .send();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
     }
 
     @Override

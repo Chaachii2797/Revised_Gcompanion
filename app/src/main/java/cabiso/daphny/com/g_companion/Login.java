@@ -312,7 +312,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener, Go
                                     signin();
 
                                 } else{
-                                    Toast.makeText(Login.this, "You have been blocked. Contact admin.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Login.this, "You have been blocked by the system for violating some policies.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         }

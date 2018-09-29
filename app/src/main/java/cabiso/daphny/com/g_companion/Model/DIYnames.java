@@ -29,10 +29,10 @@ public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serial
     public int totalMaterialItems;
     private static DIYnames diyInfo = null;
     private ArrayList<DBMaterial> dbMaterials = new ArrayList<>();
-
+    private String diyVideo;
 
     public DIYnames(String diyName, String diyUrl, String user_id, String productID, String identity,
-                    Float bookmarks, Float likes, String loggedInUser){
+                    Float bookmarks, Float likes, String loggedInUser, String diyVideo){
         this.diyName = diyName;
         this.diyUrl = diyUrl;
         this.user_id = user_id;
@@ -45,6 +45,7 @@ public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serial
         this.matchScore = 0;
         this.matchScoreRate = 0;
         this.totalMaterialItems = 0;
+        this.diyVideo = diyVideo;
     }
 
     public DIYnames() {
@@ -118,6 +119,14 @@ public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serial
     public DIYnames setUser_id(String user_id) {
         this.user_id = user_id;
         return this;
+    }
+
+    public String getDiyVideo() {
+        return diyVideo;
+    }
+
+    public void setDiyVideo(String diyVideo) {
+        this.diyVideo = diyVideo;
     }
 
     public String getProductID() {

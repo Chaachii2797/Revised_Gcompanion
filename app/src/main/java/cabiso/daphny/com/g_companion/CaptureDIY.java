@@ -1,15 +1,18 @@
 package cabiso.daphny.com.g_companion;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -35,9 +38,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.MediaController;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.cunoraz.tagview.Tag;
 import com.cunoraz.tagview.TagView;
@@ -99,7 +104,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     private FirebaseAuth mFirebaseAuth;
 
     private FirebaseStorage mStorage;
-    private StorageReference storageReference, imageRef;
+    private StorageReference storageReference, imageRef, videoStorageRef;
 
     private StorageReference storageRef, imgRef;
 
@@ -110,6 +115,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     private Uri diyPictureUri;
 
     static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 11;
+    static final int CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE = 1;
     private List<String> tags = new ArrayList<>();
     private List<String> extras = new ArrayList<>();
     private List<String> validWords = new ArrayList<>();
@@ -132,7 +138,8 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     private CommunityAdapter pAdapter;
     private CommunityAdapter mAdapter;
     private Spinner categorySpinner;
-
+    private TextView tvClickUploadVid;
+    private VideoView mVideoView;
     //for bidding
     private EditText mEtPriceMin;
     private EditText mEtPriceMessage;
@@ -173,6 +180,21 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     File photoFile;
     public final String APP_TAG = "diy_by_tags";
 
+    public String videoFileName = "diy_by_tags_vid";
+    File videoFile;
+    private Uri selectedVideo;
+    public final String APP_TAGS = "diy_by_tags_vid";
+    private MediaController mMediaController;
+    private Uri picUri;
+    private String[] permissions = {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
+
+    private String[] permission2 = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -188,6 +210,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         storageReference = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("diy_by_tags");
         storageRef = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("diy_by_tags");
         loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
+        videoStorageRef = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("diy_by_tags").child("diy_videos");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarAddDIY);
         setSupportActionBar(toolbar);
@@ -220,6 +243,22 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         quantity = getResources().getStringArray(R.array.qty);
         qAdapter=new SpinnerAdapter1(getApplicationContext());
 
+        tvClickUploadVid = (TextView) findViewById(R.id.tvClickUploadVid);
+        mVideoView = (VideoView) findViewById(R.id.videoView);
+
+        if(mMediaController == null){
+            mMediaController = new MediaController(this);
+        }
+
+        tvClickUploadVid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                dispatchTakeVideoIntent();
+
+                Intent videoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(videoIntent, 1);
+            }
+        });
 
         material.addTextChangedListener(new TextWatcher() {
             @Override
@@ -300,6 +339,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         getWordBank();
         prepareTags();
 
+
 // ADD DIY TO THE COMMUNITY
         btnAddMaterial.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -323,6 +363,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
                     sp_for_unit.setAdapter(umAdapter);
                     sp_for_qty.setAdapter(qAdapter);
+
 
                     sp_for_unit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override
@@ -444,7 +485,9 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 progressDialog.show();
                 progressDialog.setCancelable(false);
 
-                //starting upload
+
+
+                //starting upload image
                 uploadTask = imageRef.putFile(Uri.fromFile(photoFile));
                 // Observe state change events such as progress, pause, and resume
                 uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -466,48 +509,61 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        Float float_this = Float.valueOf(0);
-
-                        String upload = databaseReference.push().getKey();
-                        String productID = generateString();
-
-                        //push data to Firebase Database - diy_by_tags node
-                        databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
-                                taskSnapshot.getDownloadUrl().toString(), userID, productID, "community",
-                                float_this, float_this, loggedInUserName));
-                        databaseReference.child(upload).child("materials").setValue(dbMaterials);
-                        databaseReference.child(upload).child("procedures").setValue(itemProcedure);
-                        databaseReference.child(upload).child("category").setValue(category);
-                        databaseReference.child(upload).child("category_postition").setValue(categoryPos);
-                        databaseReference.child(upload).child("dateAdded").setValue(sdate);
-
-                        //push data to Firebase Database - diy_by_user node
-                        byuser_Reference.child(upload).setValue(new DIYnames(name.getText().toString(),
-                                taskSnapshot.getDownloadUrl().toString(), userID, productID, "community",
-                                float_this, float_this, loggedInUserName));
-                        byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
-                        byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
-                        byuser_Reference.child(upload).child("category").setValue(category);
-                        byuser_Reference.child(upload).child("category_postition").setValue(categoryPos);
-                        byuser_Reference.child(upload).child("dateAdded").setValue(sdate);
+                        final Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                        final Float float_this = Float.valueOf(0);
 
 
-                        Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                        final UploadTask uploadTaskVideo = videoStorageRef.child(selectedVideo.toString()).putFile(selectedVideo);
 
-                        // Alert Dialog for finished uploaing DIYs
-                        AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this, R.style.MyAlertDialogStyle);
-                        ab.setMessage("Thank you for contributing to the DIY Community!");
-                        ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        uploadTaskVideo.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent in = new Intent(CaptureDIY.this, MainActivity.class);
-                                startActivity(in);
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                final Uri downloadUrlVideo = taskSnapshot.getDownloadUrl();
+
+                                String upload = databaseReference.push().getKey();
+                                String productID = generateString();
+
+                                //push data to Firebase Database - diy_by_tags node
+                                databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
+                                        downloadUrl.toString(), userID, productID, "community",
+                                        float_this, float_this, loggedInUserName, downloadUrlVideo.toString()));
+                                databaseReference.child(upload).child("materials").setValue(dbMaterials);
+                                databaseReference.child(upload).child("procedures").setValue(itemProcedure);
+                                databaseReference.child(upload).child("category").setValue(category);
+                                databaseReference.child(upload).child("category_postition").setValue(categoryPos);
+                                databaseReference.child(upload).child("dateAdded").setValue(sdate);
+
+                                //push data to Firebase Database - diy_by_user node
+                                byuser_Reference.child(upload).setValue(new DIYnames(name.getText().toString(),
+                                        downloadUrl.toString(), userID, productID, "community",
+                                        float_this, float_this, loggedInUserName, downloadUrlVideo.toString()));
+                                byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
+                                byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
+                                byuser_Reference.child(upload).child("category").setValue(category);
+                                byuser_Reference.child(upload).child("category_postition").setValue(categoryPos);
+                                byuser_Reference.child(upload).child("dateAdded").setValue(sdate);
+
+
+                                Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
+
+                                // Alert Dialog for finished uploaing DIYs
+                                AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this, R.style.MyAlertDialogStyle);
+                                ab.setMessage("Thank you for contributing to the DIY Community!");
+                                ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent in = new Intent(CaptureDIY.this, MainActivity.class);
+                                        startActivity(in);
+                                    }
+                                });
+
+                                ab.create().show();
+                                progressDialog.dismiss();
+
                             }
                         });
 
-                        ab.create().show();
-                        progressDialog.dismiss();
+
                     }
                 });
 
@@ -836,31 +892,6 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
             openContextMenu(diy_Button);
         }
 
-        //for bidding calendar
-//        if (v == mEtExpiryDate) {
-//            final Calendar calendar = Calendar.getInstance();
-//            int year = calendar.get(Calendar.YEAR);
-//            int month = calendar.get(Calendar.MONTH);
-//            int date = calendar.get(Calendar.DAY_OF_MONTH);
-//
-//            Toast.makeText(this, "Dateeeeeeeeee", Toast.LENGTH_SHORT).show();
-//            final DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-//                @Override
-//                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                    Toast.makeText(CaptureDIY.this, "Expiryy", Toast.LENGTH_SHORT).show();
-//                    String set_expiry = year + "-" + String.valueOf(month + 1) + "-" + (dayOfMonth);
-////                    datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-////                    String set_expiry = String.valueOf(month + 1) + "/" + (dayOfMonth) + "/" + year;
-//                    if (calendar.before(set_expiry)) {
-//                        Toast.makeText(getApplication(), "YOU CANNOT PICK PASSED WEEKS!", Toast.LENGTH_SHORT).show();
-//                    } else {
-//                        mEtExpiryDate.setText(set_expiry);
-//                    }
-//                }
-//            }, year, month, date);
-//            datePickerDialog.show();
-////        }
-//        }
     }
 
 
@@ -1009,6 +1040,32 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
     }
 
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 707:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent pickIntent = new Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                        File file = getOutputMediaFile(1);
+                        if (file != null) {
+                            picUri = Uri.fromFile(file);
+                            pickIntent.putExtra(MediaStore.EXTRA_OUTPUT, picUri);
+                        }
+                    } else {
+                        File file = new File(getOutputMediaFile(1).getPath());
+                        Uri photoUri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider", file);
+                        pickIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                    }
+                } else {
+                    Toast.makeText(this, "Permissions not granted!", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+        }
+    }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -1031,7 +1088,11 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
+
+
+
     }
+
 
     // Returns the File for a photo stored on disk given the fileName
     public File getPhotoFileUri(String fileName) {
@@ -1043,6 +1104,54 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
             Log.e(APP_TAG, "failed to create directory");
+        }
+
+        // Return the file target for the photo based on filename
+        File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+
+        return file;
+    }
+
+
+    private File getOutputMediaFile(int type) {
+
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DCIM), "/GCompanion");
+
+
+        if (!mediaStorageDir.exists()) {
+            Log.d("sample!213", "no folder!");
+            mediaStorageDir.mkdirs();
+        } else {
+            Log.d("sample!213", "naa folder!");
+
+        }
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile;
+        if (type == 1) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                    "IMG_" + timeStamp + ".png");
+        } else if (type == 2) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator + "VID_" + timeStamp + ".mp4");
+        } else {
+            return null;
+        }
+
+        return mediaFile;
+    }
+
+
+    // Returns the File for a video stored on disk given the fileName
+    public File getVideoFileUri(String fileName) {
+        // Get safe storage directory for photos
+        // Use `getExternalFilesDir` on Context to access package-specific directories.
+        // This way, we don't need to request external read/write runtime permissions.
+        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAGS);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+            Log.e(APP_TAGS, "failed to create directory");
         }
 
         // Return the file target for the photo based on filename
@@ -1099,9 +1208,31 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
 
             }else{
                 Toast.makeText(this, "NOT NULL IMAGE", Toast.LENGTH_SHORT).show();
+
+
             }
 
-        } else { // Result was a failure
+        }
+        else if(requestCode == CAPTURE_VIDEO_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK){
+
+            try{
+                mVideoView.setMediaController(mMediaController);
+                selectedVideo = data.getData();
+                Log.e("selectedVid", String.valueOf(selectedVideo));
+                tvClickUploadVid.setText(selectedVideo.toString());
+                mVideoView.setVideoURI(selectedVideo);
+                mMediaController.setAnchorView(mVideoView);
+
+            }
+            catch (Exception e){
+                Log.e("videoError", e.getMessage());
+                e.printStackTrace();
+            }
+
+
+        }
+
+        else { // Result was a failure
             Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
 
 //                diyPictureUri = data.getData();

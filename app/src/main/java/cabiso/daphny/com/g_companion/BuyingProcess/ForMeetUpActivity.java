@@ -658,7 +658,6 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                         Log.e("buyTakeList", String.valueOf(buyTakeSnap.getPromo_diyName()));
 
 
-
                                         diyReference.addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -888,9 +887,10 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                         promoReference.child(buyTakeKey).updateChildren(buyTakeResults);
 
                                                                         //Notification
-                                                                        user_reference.addChildEventListener(new ChildEventListener() {
+                                                                        Log.e("buyerID", sold_buyer);
+                                                                        user_reference.child(sold_buyer).addListenerForSingleValueEvent(new ValueEventListener() {
                                                                             @Override
-                                                                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                                                            public void onDataChange(DataSnapshot dataSnapshot) {
                                                                                 User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
                                                                                 if(loggedInUserName!=null){
                                                                                     PushNotification pushNotification = new PushNotification(getApplicationContext());
@@ -899,21 +899,6 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                                             .accessToken(user_profile.getAccess_token())
                                                                                             .send();
                                                                                 }
-                                                                            }
-
-                                                                            @Override
-                                                                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                                                            }
-
-                                                                            @Override
-                                                                            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                                                            }
-
-                                                                            @Override
-                                                                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
                                                                             }
 
                                                                             @Override

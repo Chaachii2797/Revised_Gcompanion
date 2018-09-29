@@ -93,6 +93,7 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
     private DatabaseReference databaseReference;
     private DatabaseReference byuser_Reference;
     private DatabaseReference biddingReference;
+    private DatabaseReference donebiddingReference;
 
     private FirebaseStorage mStorage;
     private FirebaseDatabase database;
@@ -131,7 +132,7 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
     private TextView mTvDateToday;
     private String diyName, diyOwner, diyKey, diyPrice, diyQty, diyDsc, diyBidInitialPrice, diyBidExpiry,
             diyBidComment, diyKeyInside, diyImage;
-    private Button mBtnAddBid;
+    private Button mBtnAddBid, mDeleteDIYBtn;
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
     Calendar myCalendar = Calendar.getInstance();
 
@@ -201,6 +202,8 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
         byuser_Reference = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID).child(this.diyKey);
         biddingReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.diyKey)
                 .child("bidding");
+
+        donebiddingReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.diyKey);
 
         mStorage = FirebaseStorage.getInstance();
         storageReference = mStorage.getReferenceFromUrl("gs://g-companion-v2.appspot.com/").child("diy_by_tags");
@@ -312,6 +315,7 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
         proceduresList = (ListView) findViewById(R.id.proceduresList);
         btnAddMaterial = (ImageButton) findViewById(R.id.btnMaterial);
         btnAddProcedure = (ImageButton) findViewById(R.id.btnProcedure);
+        mDeleteDIYBtn = (Button) findViewById(R.id.deleteDIYBn);
 
         itemMaterial = new ArrayList<>();
         itemProcedure = new ArrayList<>();
@@ -336,6 +340,43 @@ public class EditDIYDetailsActivity extends AppCompatActivity implements View.On
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter("INTENT_NAME"));
 
+        mDeleteDIYBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(EditDIYDetailsActivity.this);
+                builder.setTitle("Delete DIY: ");
+                builder.setMessage("Are you sure? ");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Yes, I'm sure", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(EditDIYDetailsActivity.this, "User Unblock!", Toast.LENGTH_SHORT).show();
+
+                        HashMap<String, Object> bidDone = new HashMap<>();
+                        bidDone.put("identity", "Done Bidding");
+                        donebiddingReference.updateChildren(bidDone);
+
+                        HashMap<String, Object> bidDoneByUser = new HashMap<>();
+                        bidDoneByUser.put("identity", "Done Bidding");
+                        byuser_Reference.updateChildren(bidDoneByUser);
+
+                        Intent intent = new Intent(EditDIYDetailsActivity.this, MainActivity.class);
+                        startActivity(intent);
+
+                    }
+                });
+
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.show();
+            }
+        });
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override

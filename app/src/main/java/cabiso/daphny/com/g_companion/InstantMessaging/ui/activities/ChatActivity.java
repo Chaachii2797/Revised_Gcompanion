@@ -79,7 +79,7 @@ public class ChatActivity extends AppCompatActivity implements DateTimePicker.On
                 calIntent.putExtra(CalendarContract.Events.EVENT_LOCATION, "At the mall");
                 calIntent.putExtra(CalendarContract.Events.DESCRIPTION, "Get my DIY.");
 
-                GregorianCalendar calDate = new GregorianCalendar(2018, 7, 1);
+                GregorianCalendar calDate = new GregorianCalendar(2018, 9, 28);
                 calIntent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
                 calIntent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,
                         calDate.getTimeInMillis());

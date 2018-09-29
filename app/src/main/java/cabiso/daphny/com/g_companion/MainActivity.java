@@ -26,7 +26,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -47,7 +46,6 @@ import cabiso.daphny.com.g_companion.Promo.PromoFragment;
 import cabiso.daphny.com.g_companion.Search.SearchActivity;
 import cabiso.daphny.com.g_companion.UserSalesReport.SalesReport;
 import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
-import cabiso.daphny.com.g_companion.notifications.PushNotification;
 import cabiso.daphny.com.g_companion.notifications.VolleyApp;
 import clarifai2.api.ClarifaiBuilder;
 import clarifai2.api.ClarifaiClient;
@@ -157,40 +155,40 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        //Notification
-        user_reference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                if(loggedInUser!=null){
-                    PushNotification pushNotification = new PushNotification(getApplicationContext());
-                    pushNotification.title("Notification")
-                            .message(loggedInUser.getF_name()+" "+loggedInUser.getL_name()+" is now active!")
-                            .accessToken(user_profile.getAccess_token())
-                            .send();
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        //Notification
+//        user_reference.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+//                if(loggedInUser!=null){
+//                    PushNotification pushNotification = new PushNotification(getApplicationContext());
+//                    pushNotification.title("Notification")
+//                            .message(loggedInUser.getF_name()+" "+loggedInUser.getL_name()+" is now active!")
+//                            .accessToken(user_profile.getAccess_token())
+//                            .send();
+//                }
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
     }

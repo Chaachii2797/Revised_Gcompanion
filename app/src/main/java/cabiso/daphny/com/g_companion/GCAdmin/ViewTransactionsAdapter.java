@@ -101,19 +101,6 @@ public class ViewTransactionsAdapter extends ArrayAdapter<DIYSell> {
                                     User_Profile userNames = userSnaps.getValue(User_Profile.class);
                                     Log.e("userNames", userNames.getF_name());
 
-//                                    if(userStatusList.get(position).equals("seller")){
-//                                        Log.e("userStatusList", "SELLER KO " +list_diys_logs.get(position).getBuyerID()); //if seller, kuhaon ang buyerID (sa buyer)
-//                                        sellerIDs = list_diys_logs.get(position).getBuyerID();
-//                                        Log.e("sellerIDs", sellerIDs);
-//
-//                                        if(sellerIDs.equals(userNames.getUserID())){
-//                                            get_who.setText("Buyer: ");
-//                                            get_transac_buyer_name.setText(userNames.getF_name() + " " + userNames.getL_name());
-//
-//                                        }
-//
-//                                    }
-//                                    else
                                         if(userStatusList.get(position).equals("buyer")) {
                                         Log.e("userStatusList", "BUYER KO " + list_diys_logs.get(position).getUser_id()); //if buyer, kuhaon ang userID (sa seller na)
                                         buyerID = list_diys_logs.get(position).getUser_id();
@@ -178,19 +165,6 @@ public class ViewTransactionsAdapter extends ArrayAdapter<DIYSell> {
                                         }
 
                                     }
-//                                    else if(userStatusList.get(position).equals("buyer")) {
-//                                        Log.e("userStatusList", "BUYER KO " + list_diys_logs.get(position).getUser_id()); //if buyer, kuhaon ang userID (sa seller na)
-//                                        buyerID = list_diys_logs.get(position).getUser_id();
-//                                        Log.e("buyerID", buyerID);
-//
-//                                        if(buyerID.equals(userNames.getUserID())){
-//                                            get_who.setText("Seller: ");
-//                                            get_transac_buyer_name.setText(userNames.getF_name() + " " + userNames.getL_name());
-//
-//                                        }
-//
-//                                    }
-
 
                                 }
                             }

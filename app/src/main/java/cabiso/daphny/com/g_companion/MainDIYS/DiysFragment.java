@@ -202,7 +202,7 @@ public class DiysFragment extends Fragment {
                 }
 
 
-                final String diyDate = dataSnapshot.child("dateAdded").getValue().toString();
+                Object diyDate = dataSnapshot.child("dateAdded").getValue();
                 Log.e("diyDate", diyDate + " = " + diysModel.getDiyName());
 
                 if (diyDate.equals("2018-09-02")) {

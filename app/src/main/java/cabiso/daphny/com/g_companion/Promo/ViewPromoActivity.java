@@ -34,12 +34,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
+import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
+import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 public class ViewPromoActivity extends AppCompatActivity {
 
@@ -60,6 +61,8 @@ public class ViewPromoActivity extends AppCompatActivity {
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
     private ArrayList<PriceDiscountModel> discountNames = new ArrayList<>();
     private ArrayList<String> statusKey = new ArrayList<>();
+    private DatabaseReference user_reference;
+    private User_Profile relOwner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,7 @@ public class ViewPromoActivity extends AppCompatActivity {
         pending_reference = FirebaseDatabase.getInstance().getReference("DIY Pending Items").child(userID);
         loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
         diyByTagsUpdate = FirebaseDatabase.getInstance().getReference("diy_by_tags");
+        user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
         promoList = new ArrayList<>();
 
@@ -117,6 +121,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                 if(get_name.equalsIgnoreCase(promoDiys.getPromo_diyName())){
 
                     if(promoDiys.getStatus().equalsIgnoreCase("wholesale")){
+
                         Log.e("wholesaleDetails", promoDiys.getPromo_details() + " = " + promoDiys.getPromo_id());
                         soldOutItem.setVisibility(View.INVISIBLE);
 
@@ -128,8 +133,21 @@ public class ViewPromoActivity extends AppCompatActivity {
 
                         final String sellerName = dataSnapshot.child("sellerName").getValue().toString();
                         final String promoSellerID = dataSnapshot.child("sellerID").getValue().toString();
+                        Log.e("sellerID", promoSellerID);
                         Log.e("sellerNameeee", sellerName);
                         tvSellerName.setText("By:" + " " + sellerName);
+
+                        user_reference.child(promoSellerID).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                relOwner = dataSnapshot.getValue(User_Profile.class);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
 
                         final double promoPrice = dataSnapshot.child("promoPrice").getValue(double.class);
                         final int promoQty = dataSnapshot.child("promoQuantity").getValue(int.class);
@@ -164,7 +182,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                     Log.e("keysss", dataSnapshot.getKey());
 
-                                    PriceDiscountModel diyPrice = dataSnapshot.getValue(PriceDiscountModel.class);
+                                    final PriceDiscountModel diyPrice = dataSnapshot.getValue(PriceDiscountModel.class);
                                     Log.e("diyPricee", diyPrice.getPromo_diyName());
 
                                     if (get_name.equals(diyPrice.getPromo_diyName())){
@@ -179,6 +197,41 @@ public class ViewPromoActivity extends AppCompatActivity {
 
                                         expirationReference.child(dataSnapshot.getKey()).removeValue();
 
+
+                                        //Notification
+                                        user_reference.addChildEventListener(new ChildEventListener() {
+                                            @Override
+                                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+//                                    if(loggedInUserName!=null){
+                                                PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                                pushNotification.title("Expire On Sale Item Notification")
+                                                        .message("On sale " + diyPrice.getPromo_diyName() + " is now expire!")
+                                                        .accessToken(user_profile.getAccess_token())
+                                                        .send();
+//                                    }
+                                            }
+
+                                            @Override
+                                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                            }
+
+                                            @Override
+                                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                            }
+
+                                            @Override
+                                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
                                     }
 
                                 }
@@ -244,6 +297,7 @@ public class ViewPromoActivity extends AppCompatActivity {
 
                                 }
                             });
+
 
 
                             tvExpiration.setVisibility(View.INVISIBLE);
@@ -484,6 +538,19 @@ public class ViewPromoActivity extends AppCompatActivity {
                         Log.e("sellerNameeee", sellerName);
                         tvSellerName.setText("By: " + " " + sellerName);
                         String promoExpiry = dataSnapshot.child("promo_expiry").getValue().toString();
+
+                        Log.e("discountSellerID", discountSellerID);
+                        user_reference.child(discountSellerID).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                relOwner = dataSnapshot.getValue(User_Profile.class);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
 
                         viewPromoPrice.setText("New Price: " + " " + discountDiys.getPromo_newPrice());
                         tvExpiration.setText("Promo expires on: " + " " + promoExpiry + " !");
@@ -891,8 +958,9 @@ public class ViewPromoActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Toast.makeText(ViewPromoActivity.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(ViewPromoActivity.this, ChatSplashActivity.class);
-                        startActivity(intent);
+                        Log.e("CHAAAAATTTTTT",relOwner.getEmail());
+                        ChatActivity.startActivity(getApplicationContext(),relOwner.getEmail(),relOwner.getUserID(), relOwner.getAccess_token());
+
                     }
                 });
                 call.setOnClickListener(new View.OnClickListener() {

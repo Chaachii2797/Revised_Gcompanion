@@ -25,67 +25,273 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="60dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/new_logo_green1"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="What is G-Companion?"
+                android:textColor="@android:color/black"
+                android:textSize="23sp"
+                android:fontFamily="sans-serif-condensed"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="0.503"
+                app:layout_constraintBottom_toTopOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                app:layout_constraintVertical_bias="1.0"
+                android:layout_below="@+id/imageView"
+                android:layout_centerHorizontal="true" />
 
 
-        <TextView
-            android:id="@+id/textView6"
-            android:layout_width="350dp"
-            android:layout_height="100dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:gravity="center"
-            android:text="G-Companion is a mobile application where you can create and sell DIY recycled materials."
-            android:textSize="22sp"
-            android:fontFamily="sans-serif-condensed"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="124dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/carviewAbout"
+                android:layout_width="340dp"
+                android:layout_height="100dp"
+                android:layout_below="@+id/textView9"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="11dp"
+                app:cardBackgroundColor="@color/backgroundColor"
+                app:cardCornerRadius="15dp"
+                app:elevation="8dp">
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:text="What is G-Companion?"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            android:fontFamily="sans-serif-condensed"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0.504"
-            android:layout_marginBottom="6dp"
-            app:layout_constraintBottom_toTopOf="@+id/textView6"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.911"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="330dp"
+                    android:layout_height="70dp"
+                    android:layout_below="@+id/imageView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="  G-Companion is a mobile application where you can create and sell DIY recycled materials."
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
 
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="165dp"
-            android:layout_height="179dp"
-            app:srcCompat="@drawable/new_logo_green1"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="94dp"
-            app:layout_constraintHorizontal_bias="0.502"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp" />
+            </android.support.v7.widget.CardView>
 
-    </android.support.constraint.ConstraintLayout>
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/carviewService"
+                android:layout_width="340dp"
+                android:layout_height="145dp"
+                android:layout_below="@+id/carviewAbout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="11dp"
+                app:cardBackgroundColor="@color/backgroundColor"
+                app:cardCornerRadius="15dp"
+                app:elevation="8dp">
+
+                <TextView
+                    android:id="@+id/tvService"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageView"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Our service "
+                    android:textSize="18sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvOurService"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageView"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="  G-Companion helps you discover and do what you love. To do that, we show you things we think will be relevant, interesting and personal to you based on your onsite and offsite activity."
+                    android:textSize="18sp"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginLeft="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/carviewPosting"
+                android:layout_width="340dp"
+                android:layout_height="140dp"
+                android:layout_below="@+id/carviewService"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="11dp"
+                app:cardBackgroundColor="@color/backgroundColor"
+                app:cardCornerRadius="15dp"
+                app:elevation="8dp">
+
+                <TextView
+                    android:id="@+id/tvPost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageView"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Posting content "
+                    android:textSize="18sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/black"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvWhatToPOst"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageView"
+                    android:layout_centerHorizontal="true"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text=" G-Companion allows you to post DIYs, including photos, videos, DIY materials, DIY procedures, DIY price(if for selling), DIY promo details (if it is for promo DIY)."
+                    android:textSize="18sp"
+                    android:layout_marginTop="35dp"
+                    android:layout_marginLeft="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="340dp"
+                android:layout_height="310dp"
+                app:cardBackgroundColor="@color/backgroundColor"
+                app:cardCornerRadius="15dp"
+                app:elevation="8dp"
+                android:id="@+id/cardviewSellPolicy"
+                android:layout_below="@+id/carviewPosting"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="11dp">
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="Selling Practices Policy"
+                    android:textSize="18sp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/tvSellingPolicy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="  By keeping some basic selling practices in mind, you’ll be able to create a great experience for your buyers.."
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="  Be very clear and thorough about the terms of the transaction and include information about the forms of payment you accept, any taxes or other applicable fees, shipping and handling, and your return policy. Being upfront and honest about these terms helps build trust and provides a positive buying experience for your customers."
+                    android:layout_marginTop="110dp"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="18sp"
+                    android:layout_marginRight="15dp"/>
+
+
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/carviewReport"
+                android:layout_width="340dp"
+                android:layout_height="150dp"
+                android:layout_below="@+id/cardviewSellPolicy"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="11dp"
+                app:cardBackgroundColor="@color/backgroundColor"
+                app:cardCornerRadius="15dp"
+                android:layout_marginBottom="15dp"
+                app:elevation="8dp">
+
+                <TextView
+                    android:id="@+id/tvHow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/black"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="How can I report a specific bad user?"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvReport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageView"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="  To report a bad user, go to his/her item and click the seller name, you will be directed to his/her profile. Click the report button and choose what kind of policy he/she violated. This report will be received by the Admin."
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent" />
+
+            </android.support.v7.widget.CardView>
+
+        </RelativeLayout>
+    </ScrollView>
+
 </RelativeLayout>

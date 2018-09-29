@@ -18,8 +18,10 @@ import com.google.firebase.messaging.RemoteMessage;
 import cabiso.daphny.com.g_companion.BuyingProcess.ForMeetUpActivity;
 import cabiso.daphny.com.g_companion.BuyingProcess.Pending_Activity;
 import cabiso.daphny.com.g_companion.BuyingProcess.Sold_Activity;
+import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.MainDIYS.ViewMoreDiysBidActivity;
+import cabiso.daphny.com.g_companion.MainDIYS.ViewMorePromoDIYS;
 import cabiso.daphny.com.g_companion.MyProfileActivity;
 import cabiso.daphny.com.g_companion.R;
 
@@ -260,6 +262,46 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         else if (remoteMessage.getNotification().getTitle().equals("On Sale Notification")){
             Intent intent = new Intent(this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+            Uri defaultSoundUri2 = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.new_logo_green1)
+                    .setContentTitle(remoteMessage.getNotification().getTitle())
+                    .setContentText(remoteMessage.getNotification().getBody())
+                    .setSound(defaultSoundUri2)
+                    .setPriority(android.app.Notification.PRIORITY_MAX)
+                    .setVibrate(new long[android.app.Notification.DEFAULT_VIBRATE])
+                    .setCategory(android.app.Notification.CATEGORY_CALL)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true);
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            notificationManager.notify(0 /* ID of notification */, mBuilder.build());
+        }
+
+        else if (remoteMessage.getNotification().getTitle().equals("Expire On Sale Item Notification")){
+            Intent intent = new Intent(this, ViewMorePromoDIYS.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+            Uri defaultSoundUri2 = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.new_logo_green1)
+                    .setContentTitle(remoteMessage.getNotification().getTitle())
+                    .setContentText(remoteMessage.getNotification().getBody())
+                    .setSound(defaultSoundUri2)
+                    .setPriority(android.app.Notification.PRIORITY_MAX)
+                    .setVibrate(new long[android.app.Notification.DEFAULT_VIBRATE])
+                    .setCategory(android.app.Notification.CATEGORY_CALL)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true);
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            notificationManager.notify(0 /* ID of notification */, mBuilder.build());
+        }
+
+        else if (remoteMessage.getNotification().getTitle().equals("Chat Notification")){
+            Intent intent = new Intent(this, ChatActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 

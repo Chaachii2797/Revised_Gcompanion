@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -75,9 +76,37 @@ public class ViewComplaintsActivity extends AppCompatActivity {
                 if(get_name.equals(dataSnapshot.getKey())){
                     Log.e("byUserReport", get_name + " = " + dataSnapshot.getKey());
 
+                    Log.e("reportsCount", String.valueOf(dataSnapshot.child("reports").getChildrenCount()));
+
+                    if(dataSnapshot.child("reports").getChildrenCount() == 3){
+                        //Notification
+                        user_reference.child(get_name).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+
+                                PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                pushNotification.title("Warning!")
+                                        .message("You are warned by the admin for having 3 reports from your buyers!")
+                                        .accessToken(user_profile.getAccess_token())
+                                        .send();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+                    else if(dataSnapshot.child("reports").getChildrenCount() == 5){
+                        reportsReference.child(get_name).child("user_info").child("report_status").setValue("Block");
+                        userReportStatusRef.child(get_name).child("report_status").setValue("Block");
+                    }
+
+
                     for(DataSnapshot reportSnap : dataSnapshot.child("reports").getChildren()){
                         Log.e("reportSnap", reportSnap.getKey());
-
                         ReportsModel viewReports = reportSnap.getValue(ReportsModel.class);
                         Log.e("viewReports", viewReports.complaint);
 
@@ -87,6 +116,7 @@ public class ViewComplaintsActivity extends AppCompatActivity {
 
                     }
 
+                    //if 3 na ka reports, i warn na siya sa system thru notif
                     warnUserBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

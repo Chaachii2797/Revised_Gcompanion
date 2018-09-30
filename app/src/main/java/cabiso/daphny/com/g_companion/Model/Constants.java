@@ -193,7 +193,8 @@ public class Constants {
             "{\"name\": \"Tire\", \"code\": \"TI\"}, \n" +
             "{\"name\": \"T-shirt\", \"code\": \"TS\"}, \n" +
             "{\"name\": \"Telephone\", \"code\": \"TE\"}, \n" +
-            "{\"name\": \"Toilet paper\", \"code\": \"TO\"}, \n" +
+            "{\"name\": \"Toilet Paper\", \"code\": \"TO\"}, \n" +
+            "{\"name\": \"Toilet Paper Roll\", \"code\": \"TO\"}, \n" +
             "{\"name\": \"Toothbrush \", \"code\": \"TT\"}, \n" +
             "{\"name\": \"Toolbox \", \"code\": \"TB\"}, \n" +
             "{\"name\": \"Umbrella\", \"code\": \"UM\"}, \n" +
@@ -206,7 +207,6 @@ public class Constants {
             "{\"name\": \"Wire\", \"code\": \"WR\"}, \n" +
             "{\"name\": \"Solid Wire\", \"code\": \"SO\"}, \n" +
             "{\"name\": \"StrandedWire\", \"code\": \"SW\"}, \n" +
-            "{\"name\": \"Wire\", \"code\": \"WR\"}, \n" +
             "{\"name\": \"Nylon\", \"code\": \"WR\"}, \n" +
             "{\"name\": \"Electrical Wire\", \"code\": \"EW\"}, \n" +
             "{\"name\": \"Wine\", \"code\": \"WI\"}, \n" +
@@ -232,6 +232,7 @@ public class Constants {
             "{\"name\": \"Maple Wood\", \"code\": \"PW\"}, \n" +
             "{\"name\": \"Oak Wood\", \"code\": \"OW\"}, \n" +
             "{\"name\": \"Wrapping Paper\", \"code\": \"WR\"}, \n" +
+            "{\"name\": \"Yogurt Cup\", \"code\": \"YC\"}, \n" +
             "{\"name\": \"Yogurt Pot\", \"code\": \"YO\"} \n" +
 
 

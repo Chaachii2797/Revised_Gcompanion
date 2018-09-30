@@ -27,7 +27,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.MainActivity;
@@ -876,6 +875,8 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                                         Log.e("db_income_count1", db_income_count+"");
                                                                         Log.e("buyQty1", buyQty+"");
+
+                                                                        //if same ang promo ug gi free na item
                                                                         if(promoFreeItem.getDiyName().equals(buyTakeSnap.getPromo_diyName())){
                                                                             Log.e("samePromoFree", promoFreeItem.getDiyName() + " = " + buyTakeSnap.getPromo_diyName());
                                                                             Log.e("samePromoFreeQTYY", freeItemQty + " = " + buyTakeSnap.getBuy_counts());
@@ -905,10 +906,18 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             diyReference.child(penkey).updateChildren(incomeCountResult);
 
                                                                             HashMap<String, Object> buyTakeResults = new HashMap<>();
-                                                                            buyTakeResults.put("promoQuantity", quantityCountMeetUp);
+                                                                            buyTakeResults.put("promoQuantity", quantityCountSame);
                                                                             promoReference.child(buyTakeKey).updateChildren(buyTakeResults);
 
-                                                                        }else if(!promoFreeItem.getDiyName().equals(buyTakeSnap.getPromo_diyName())){
+                                                                            HashMap<String, Object> buyTakeFreeResult = new HashMap<>();
+                                                                            buyTakeFreeResult.put("selling_qty", quantityCountSame);
+                                                                            promoReference.child(buyTakeKey).child("freeItemList").child(priceSnap.getKey())
+                                                                                    .updateChildren(buyTakeFreeResult);
+
+
+                                                                        }
+                                                                        //if dli same ang promo ug gi free
+                                                                        else if(!promoFreeItem.getDiyName().equals(buyTakeSnap.getPromo_diyName())){
                                                                             int minusQty_nonFree = (db_income_count + buyQty);
                                                                             Log.e("minusQty_nonFree3", minusQty_nonFree+"");
                                                                             Log.e("db_income_count3", db_income_count+"");
@@ -937,6 +946,12 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             HashMap<String, Object> buyTakeResults = new HashMap<>();
                                                                             buyTakeResults.put("promoQuantity", quantityCountMeetUp);
                                                                             promoReference.child(buyTakeKey).updateChildren(buyTakeResults);
+
+                                                                            HashMap<String, Object> buyTakeFreeResult = new HashMap<>();
+                                                                            buyTakeFreeResult.put("selling_qty", promoQtyCountMeetUp);
+                                                                            promoReference.child(buyTakeKey).child("freeItemList").child(priceSnap.getKey())
+                                                                                    .updateChildren(buyTakeFreeResult);
+
                                                                         }
 
 

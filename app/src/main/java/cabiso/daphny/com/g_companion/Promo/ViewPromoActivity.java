@@ -153,8 +153,9 @@ public class ViewPromoActivity extends AppCompatActivity {
                         final int promoQty = dataSnapshot.child("promoQuantity").getValue(int.class);
                         String promoExpiry = dataSnapshot.child("promo_expiry").getValue().toString();
 
+                        Double priceXBuy = promoPrice * Double.parseDouble(promoDiys.buy_counts);
 
-                        viewPromoPrice.setText("Promo Price: " + " " + promoPrice);
+                        viewPromoPrice.setText("Promo Price: " + " " + priceXBuy);
                         tvExpiration.setText("Promo expires on: " + " " + promoExpiry  + " !");
                         promo_qty.setText(promoQty + " " + "pieces left");
 
@@ -551,7 +552,9 @@ public class ViewPromoActivity extends AppCompatActivity {
                             }
                         });
 
-                        viewPromoPrice.setText("New Price: " + " " + discountDiys.getPromo_newPrice());
+                        Double priceXBuy = Double.parseDouble(discountDiys.getPromo_newPrice()) * Double.parseDouble(promoDiys.buy_counts);
+
+                        viewPromoPrice.setText("New Price: " + " " + priceXBuy);
                         tvExpiration.setText("Promo expires on: " + " " + promoExpiry + " !");
                         promo_qty.setText(totalDIYQty + " " + "pieces left");
 

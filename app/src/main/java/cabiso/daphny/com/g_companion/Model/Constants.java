@@ -10,12 +10,12 @@ public class Constants {
             "{\"name\": \"Acrylic Paint\", \"code\": \"AP\"}, \n" +
             "{\"name\": \"Acrylic Paint (Various Color)\", \"code\": \"AP\"}, \n" +
             "{\"name\": \"Aluminum\", \"code\": \"AL\"}, \n" +
-            "{\"name\": \"Aerosol Cans\", \"code\": \"AE\"}, \n" +
+            "{\"name\": \"Aerosol Can\", \"code\": \"AE\"}, \n" +
             "{\"name\": \"Aluminium Foil\", \"code\": \"AF\"}, \n" +
             "{\"name\": \"Aluminium Bottle\", \"code\": \"AB\"}, \n" +
-            "{\"name\": \"Bags\", \"code\": \"BA\"}, \n" +
+            "{\"name\": \"Bag\", \"code\": \"BA\"}, \n" +
             "{\"name\": \"Ballpen\", \"code\": \"BP\"}, \n" +
-            "{\"name\": \"Beads\", \"code\": \"BE\"}, \n" +
+            "{\"name\": \"Bead\", \"code\": \"BE\"}, \n" +
             "{\"name\": \"Beer Bottle\", \"code\": \"BB\"}, \n" +
             "{\"name\": \"Bond Paper\", \"code\": \"BP\"}, \n" +
             "{\"name\": \"Newsprint Paper\", \"code\": \"NW\"}, \n" +
@@ -29,10 +29,11 @@ public class Constants {
             "{\"name\": \"Vellum Paper\", \"code\": \"VP\"}, \n" +
             "{\"name\": \"Ledger Paper\", \"code\": \"LP\"}, \n" +
             "{\"name\": \"Manila Paper\", \"code\": \"MP\"}, \n" +
-            "{\"name\": \"Sketching Papers\", \"code\": \"SP\"}, \n" +
+            "{\"name\": \"Sketching Paper\", \"code\": \"SP\"}, \n" +
             "{\"name\": \"Wrapping Paper\", \"code\": \"WP\"}, \n" +
             "{\"name\": \"Wallpaper\", \"code\": \"WL\"}, \n" +
             "{\"name\": \"Scratch Paper\", \"code\": \"SC\"}, \n" +
+            "{\"name\": \"Balloon\", \"code\": \"BA\"}, \n" +
             "{\"name\": \"Book\", \"code\": \"BO\"}, \n" +
             "{\"name\": \"Bottle\", \"code\": \"BT\"}, \n" +
             "{\"name\": \"Bottle (Shampoo)\", \"code\": \"BT\"}, \n" +
@@ -45,23 +46,23 @@ public class Constants {
             "{\"name\": \"Ballot Box\", \"code\": \"BL\"}, \n" +
             "{\"name\": \"Soapbox\", \"code\": \"BP\"}, \n" +
             "{\"name\": \"Broom\", \"code\": \"BR\"}, \n" +
-            "{\"name\": \"Buttons\", \"code\": \"BU\"}, \n" +
+            "{\"name\": \"Button\", \"code\": \"BU\"}, \n" +
             "{\"name\": \"CalendarActivity Paper\", \"code\": \"CP\"}, \n" +
             "{\"name\": \"CalendarActivity\", \"code\": \"CA\"}, \n" +
-            "{\"name\": \"Cans (Small)\", \"code\": \"CA\"}, \n" +
-            "{\"name\": \"Cans (Medium)\", \"code\": \"CA\"}, \n" +
-            "{\"name\": \"Cans (Large)\", \"code\": \"CA\"}, \n" +
+            "{\"name\": \"Can (Small)\", \"code\": \"CA\"}, \n" +
+            "{\"name\": \"Can (Medium)\", \"code\": \"CA\"}, \n" +
+            "{\"name\": \"Can (Large)\", \"code\": \"CA\"}, \n" +
             "{\"name\": \"Canvas\", \"code\": \"CA\"}, \n" +
-            "{\"name\": \"Caps\", \"code\": \"CP\"}, \n" +
+            "{\"name\": \"Cap\", \"code\": \"CP\"}, \n" +
             "{\"name\": \"Card\", \"code\": \"CR\"}, \n" +
             "{\"name\": \"Cardboard\", \"code\": \"CB\"}, \n" +
             "{\"name\": \"Carton\", \"code\": \"CT\"}, \n" +
-            "{\"name\": \"Catalogs\", \"code\": \"CL\"}, \n" +
+            "{\"name\": \"Catalog\", \"code\": \"CL\"}, \n" +
             "{\"name\": \"CD\", \"code\": \"CD\"}, \n" +
             "{\"name\": \"Chair\", \"code\": \"CH\"}, \n" +
             "{\"name\": \"Clip\", \"code\": \"CL\"}, \n" +
             "{\"name\": \"Clock\", \"code\": \"CO\"}, \n" +
-            "{\"name\": \"Clothes\", \"code\": \"CH\"}, \n" +
+            "{\"name\": \"Clothe\", \"code\": \"CH\"}, \n" +
             "{\"name\": \"Codd-neck Bottle\", \"code\": \"CB\"}, \n" +
             "{\"name\": \"Curtain\", \"code\": \"CU\"}, \n" +
             "{\"name\": \"Colored Paper\", \"code\": \"CP\"}, \n" +
@@ -70,16 +71,16 @@ public class Constants {
             "{\"name\": \"Container\", \"code\": \"CN\"}, \n" +
             "{\"name\": \"Cord\", \"code\": \"KO\"}, \n" +
             "{\"name\": \"Chord\", \"code\": \"KO\"}, \n" +
-            "{\"name\": \"Corks\", \"code\": \"CK\"}, \n" +
+            "{\"name\": \"Cork\", \"code\": \"CK\"}, \n" +
             "{\"name\": \"Crayons\", \"code\": \"CY\"}, \n" +
             "{\"name\": \"Cube\", \"code\": \"CU\"}, \n" +
             "{\"name\": \"Cup\", \"code\": \"KU\"}, \n" +
             "{\"name\": \"Cutter\", \"code\": \"CT\"}, \n" +
-            "{\"name\": \"Coins\", \"code\": \"CS\"}, \n" +
+            "{\"name\": \"Coin\", \"code\": \"CS\"}, \n" +
             "{\"name\": \"Disc\", \"code\": \"DI\"}, \n" +
             "{\"name\": \"Dustpan\", \"code\": \"DU\"}, \n" +
             "{\"name\": \"Envelope\", \"code\": \"EN\"}, \n" +
-            "{\"name\": \"Egg Shells\", \"code\": \"EG\"}, \n" +
+            "{\"name\": \"Egg Shell\", \"code\": \"EG\"}, \n" +
             "{\"name\": \"Fan\", \"code\": \"FA\"}, \n" +
             "{\"name\": \"Fastener\", \"code\": \"FS\"}, \n" +
             "{\"name\": \"Foam\", \"code\": \"FO\"}, \n" +
@@ -104,33 +105,35 @@ public class Constants {
             "{\"name\": \"Glass (Coated)\", \"code\": \"CG\"}, \n" +
             "{\"name\": \"Glass (Tinted)\", \"code\": \"TG\"}, \n" +
             "{\"name\": \"Glitter Glue\", \"code\": \"GU\"}, \n" +
-            "{\"name\": \"Glitters\", \"code\": \"GI\"}, \n" +
+            "{\"name\": \"Glitter\", \"code\": \"GI\"}, \n" +
             "{\"name\": \"Glue\", \"code\": \"GL\"}, \n" +
             "{\"name\": \"Glue Gun\", \"code\": \"GG\"}, \n" +
+            "{\"name\": \"Glue Stick\", \"code\": \"GS\"}, \n" +
             "{\"name\": \"Hangers\", \"code\": \"HA\"}, \n" +
             "{\"name\": \"Handkerchief\", \"code\": \"HK\"}, \n" +
             "{\"name\": \"Irons\", \"code\": \"IR\"}, \n" +
             "{\"name\": \"Ink/Toner Cartridges\", \"code\": \"IN\"}, \n" +
-            "{\"name\": \"Jars\", \"code\": \"JA\"}, \n" +
+            "{\"name\": \"Jar\", \"code\": \"JA\"}, \n" +
             "{\"name\": \"Jewel\", \"code\": \"JE\"}, \n" +
-            "{\"name\": \"Jugs\", \"code\": \"JU\"}, \n" +
+            "{\"name\": \"Jug\", \"code\": \"JU\"}, \n" +
             "{\"name\": \"Key\", \"code\": \"KE\"}, \n" +
             "{\"name\": \"Knife\", \"code\": \"KN\"}, \n" +
             "{\"name\": \"Laptop\", \"code\": \"LA\"}, \n" +
-            "{\"name\": \"Lightbulbs\", \"code\": \"LI\"}, \n" +
+            "{\"name\": \"Lightbulb\", \"code\": \"LI\"}, \n" +
             "{\"name\": \"Leaves\", \"code\": \"LE\"}, \n" +
             "{\"name\": \"Leather Glue\", \"code\": \"LG\"}, \n" +
             "{\"name\": \"Matchbox\", \"code\": \"MB\"}, \n" +
             "{\"name\": \"Marker\", \"code\": \"MB\"}, \n" +
+            "{\"name\": \"Measuring Tape\", \"code\": \"ME\"}, \n" +
             "{\"name\": \"Metal\", \"code\": \"ME\"}, \n" +
             "{\"name\": \"Metal Nail\", \"code\": \"MN\"}, \n" +
             "{\"name\": \"Mouse\", \"code\": \"MO\"}, \n" +
-            "{\"name\": \"Magazines\", \"code\": \"MA\"}, \n" +
+            "{\"name\": \"Magazine\", \"code\": \"MA\"}, \n" +
             "{\"name\": \"Mattress\", \"code\": \"MT\"}, \n" +
-            "{\"name\": \"Mobile Phones\", \"code\": \"MB\"}, \n" +
+            "{\"name\": \"Mobile Phone\", \"code\": \"MB\"}, \n" +
             "{\"name\": \"Napkin\", \"code\": \"NA\"}, \n" +
             "{\"name\": \"Notebook\", \"code\": \"NO\"}, \n" +
-            "{\"name\": \"Newspapers\", \"code\": \"NE\"}, \n" +
+            "{\"name\": \"Newspaper\", \"code\": \"NE\"}, \n" +
             "{\"name\": \"Nail Polish\", \"code\": \"NI\"}, \n" +
             "{\"name\": \"Oil\", \"code\": \"OI\"}, \n" +
             "{\"name\": \"Paintbrush\", \"code\": \"PA\"}, \n" +
@@ -141,18 +144,20 @@ public class Constants {
             "{\"name\": \"Pencil\", \"code\": \"PN\"}, \n" +
             "{\"name\": \"Phone\", \"code\": \"PH\"}, \n" +
             "{\"name\": \"Picture Frame\", \"code\": \"PI\"}, \n" +
+            "{\"name\": \"Pin\", \"code\": \"PI\"}, \n" +
             "{\"name\": \"Pillow\", \"code\": \"PL\"}, \n" +
             "{\"name\": \"Plywood\", \"code\": \"PW\"}, \n" +
             "{\"name\": \"Bottle (Plastic)\", \"code\": \"PS\"}, \n" +
-            "{\"name\": \"Plates\", \"code\": \"PL\"}, \n" +
+            "{\"name\": \"Plate\", \"code\": \"PL\"}, \n" +
             "{\"name\": \"Paint\", \"code\": \"PA\"}, \n" +
             "{\"name\": \"Oil-based Paint\", \"code\": \"OP\"}, \n" +
             "{\"name\": \"Water-based Paint\", \"code\": \"WP\"}, \n" +
             "{\"name\": \"Primer\", \"code\": \"PI\"}, \n" +
+            "{\"name\": \"Paper Cup\", \"code\": \"PE\"}, \n" +
             "{\"name\": \"Paint pen\", \"code\": \"PE\"}, \n" +
-            "{\"name\": \"Plastics\", \"code\": \"PL\"}, \n" +
+            "{\"name\": \"Plastic\", \"code\": \"PL\"}, \n" +
             "{\"name\": \"Pizza Box\", \"code\": \"PZ\"}, \n" +
-            "{\"name\": \"Plastic Bags\", \"code\": \"PC\"}, \n" +
+            "{\"name\": \"Plastic Bag\", \"code\": \"PC\"}, \n" +
             "{\"name\": \"Pottery\", \"code\": \"PO\"}, \n" +
             "{\"name\": \"Rubber\", \"code\": \"RU\"}, \n" +
             "{\"name\": \"Rug\", \"code\": \"RG\"}, \n" +
@@ -177,11 +182,12 @@ public class Constants {
             "{\"name\": \"Stick\", \"code\": \"SI\"}, \n" +
             "{\"name\": \"Straw\", \"code\": \"SW\"}, \n" +
             "{\"name\": \"String\", \"code\": \"SR\"}, \n" +
+            "{\"name\": \"Super Glue\", \"code\": \"SG\"}, \n" +
             "{\"name\": \"Ring\", \"code\": \"RI\"}, \n" +
             "{\"name\": \"Rope\", \"code\": \"RO\"}, \n" +
             "{\"name\": \"Styro\", \"code\": \"SY\"}, \n" +
             "{\"name\": \"Sunglass\", \"code\": \"SU\"}, \n" +
-            "{\"name\": \"Stamps\", \"code\": \"SM\"}, \n" +
+            "{\"name\": \"Stamp\", \"code\": \"SM\"}, \n" +
             "{\"name\": \"Scrap metal\", \"code\": \"SP\"}, \n" +
             "{\"name\": \"Synthetic Leather\", \"code\": \"SL\"}, \n" +
             "{\"name\": \"Tire\", \"code\": \"TI\"}, \n" +
@@ -191,10 +197,10 @@ public class Constants {
             "{\"name\": \"Toothbrush \", \"code\": \"TT\"}, \n" +
             "{\"name\": \"Toolbox \", \"code\": \"TB\"}, \n" +
             "{\"name\": \"Umbrella\", \"code\": \"UM\"}, \n" +
-            "{\"name\": \"Vases\", \"code\": \"VA\"}, \n" +
-            "{\"name\": \"Vending Cups\", \"code\": \"VE\"}, \n" +
-            "{\"name\": \"Cups (Plastic)\", \"code\": \"VE\"}, \n" +
-            "{\"name\": \"Cups (Glass)\", \"code\": \"VE\"}, \n" +
+            "{\"name\": \"Vase\", \"code\": \"VA\"}, \n" +
+            "{\"name\": \"Vending Cup\", \"code\": \"VE\"}, \n" +
+            "{\"name\": \"Cup (Plastic)\", \"code\": \"VE\"}, \n" +
+            "{\"name\": \"Cup (Glass)\", \"code\": \"VE\"}, \n" +
             "{\"name\": \"Video Cassettes\", \"code\": \"VI\"}, \n" +
             "{\"name\": \"Watch\", \"code\": \"WA\"}, \n" +
             "{\"name\": \"Wire\", \"code\": \"WR\"}, \n" +
@@ -218,6 +224,7 @@ public class Constants {
             "{\"name\": \"Plywood\", \"code\": \"PW\"}, \n" +
             "{\"name\": \"Fire Wood\", \"code\": \"FW\"}, \n" +
             "{\"name\": \"Pine Wood\", \"code\": \"PW\"}, \n" +
+            "{\"name\": \"Ruler\", \"code\": \"RU\"}, \n" +
             "{\"name\": \"Redwood\", \"code\": \"RW\"}, \n" +
             "{\"name\": \"Cedar Wood\", \"code\": \"CW\"}, \n" +
             "{\"name\": \"Birch Wood\", \"code\": \"BW\"}, \n" +
@@ -225,7 +232,7 @@ public class Constants {
             "{\"name\": \"Maple Wood\", \"code\": \"PW\"}, \n" +
             "{\"name\": \"Oak Wood\", \"code\": \"OW\"}, \n" +
             "{\"name\": \"Wrapping Paper\", \"code\": \"WR\"}, \n" +
-            "{\"name\": \"Yogurt Pots\", \"code\": \"YO\"} \n" +
+            "{\"name\": \"Yogurt Pot\", \"code\": \"YO\"} \n" +
 
 
             "]";

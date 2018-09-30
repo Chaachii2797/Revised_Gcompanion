@@ -684,6 +684,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                             freeKeyxDIY.add(snaps.getKey()); //gi sud ang key sa free promo item
                                                             Log.e("freeKeyxDIY", snaps.getKey());
 
+
                                                             Log.e("proomoFreeQty", promoFreeItem.getSelling_price() + " = " + promoFreeItem.getSelling_qty());
                                                         }
 
@@ -804,6 +805,8 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                     });
 
 
+
+
                                                                     DatabaseReference meetReference = FirebaseDatabase.getInstance().getReference()
                                                                             .child("Items_ForMeetUp").child(sold_buyer);
 
@@ -870,21 +873,46 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                         String buyTakeKey = promoSalekey.get(position);
                                                                         Log.e("buyTakeKey",buyTakeKey);
 
-                                                                        HashMap<String, Object> results = new HashMap<>();
-                                                                        results.put("selling_qty", quantityCountMeetUp);
-                                                                        diyReference.child(penkey).child("DIY Price")
-                                                                                .child(priceSnap.getKey()).updateChildren(results);
+                                                                        if(promoFreeItem.getDiyName().equals(buyTakeSnap.getPromo_diyName())){
+                                                                            Log.e("samePromoFree", promoFreeItem.getDiyName() + " = " + buyTakeSnap.getPromo_diyName());
+                                                                            Log.e("samePromoFreeQTYY", freeItemQty + " = " + buyTakeSnap.getBuy_counts());
+                                                                            int buyTakeQty = Integer.parseInt(buyTakeSnap.buy_counts);
+                                                                            int freeSameQty = Integer.parseInt(String.valueOf(freeItemQty));
+                                                                            int plusQTy = freeSameQty + buyTakeQty;
+                                                                            Log.e("plusQTY", String.valueOf(plusQTy));
 
-                                                                        HashMap<String, Object> freeResults = new HashMap<>();
-                                                                        freeResults.put("selling_qty", promoQtyCountMeetUp);
-                                                                        diyReference.child(promKey).child("DIY Price")
-                                                                                .child(priceSnap.getKey()).updateChildren(freeResults);
+                                                                            int quantityCountSame = meetUpQty - plusQTy; //if same ang free ug ang gi promo
 
-                                                                        soldReference.child(upload).updateChildren(results);
+                                                                            HashMap<String, Object> resultSame = new HashMap<>();
+                                                                            resultSame.put("selling_qty", quantityCountSame);
+                                                                            diyReference.child(penkey).child("DIY Price")
+                                                                                    .child(priceSnap.getKey()).updateChildren(resultSame);
 
-                                                                        HashMap<String, Object> buyTakeResults = new HashMap<>();
-                                                                        buyTakeResults.put("promoQuantity", quantityCountMeetUp);
-                                                                        promoReference.child(buyTakeKey).updateChildren(buyTakeResults);
+                                                                            HashMap<String, Object> buyTakeResults = new HashMap<>();
+                                                                            buyTakeResults.put("promoQuantity", quantityCountMeetUp);
+                                                                            promoReference.child(buyTakeKey).updateChildren(buyTakeResults);
+
+                                                                        }else{
+
+                                                                            HashMap<String, Object> results = new HashMap<>();
+                                                                            results.put("selling_qty", quantityCountMeetUp);
+                                                                            diyReference.child(penkey).child("DIY Price")
+                                                                                    .child(priceSnap.getKey()).updateChildren(results);
+
+                                                                            HashMap<String, Object> freeResults = new HashMap<>();
+                                                                            freeResults.put("selling_qty", promoQtyCountMeetUp);
+                                                                            diyReference.child(promKey).child("DIY Price")
+                                                                                    .child(priceSnap.getKey()).updateChildren(freeResults);
+
+                                                                            soldReference.child(upload).updateChildren(results);
+
+                                                                            HashMap<String, Object> buyTakeResults = new HashMap<>();
+                                                                            buyTakeResults.put("promoQuantity", quantityCountMeetUp);
+                                                                            promoReference.child(buyTakeKey).updateChildren(buyTakeResults);
+
+
+                                                                        }
+
 
                                                                         //Notification
                                                                         Log.e("buyerID", sold_buyer);

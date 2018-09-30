@@ -116,15 +116,18 @@
         <item>Fork</item>
         <item>Furniture</item>
         <item>Glass</item>
+        <item>Jar</item>
         <item>Metal</item>
         <item>Paper</item>
         <item>Plastic</item>
         <item>Pot</item>
         <item>Rubber</item>
+        <item>Stick</item>
         <item>Spoon</item>
         <item>Steel</item>
         <item>String</item>
         <item>Tire</item>
+        <item>Toilet Paper Roll</item>
         <item>Wire</item>
         <item>Wood</item>
     </string-array>

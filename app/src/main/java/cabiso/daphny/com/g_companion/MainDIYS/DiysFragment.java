@@ -94,12 +94,12 @@ public class DiysFragment extends Fragment {
         moreDiysBtn = (Button) view.findViewById(R.id.viewMoreDiysBtn);
         moreBtnBid = (Button) view.findViewById(R.id.viewMoreDiysBtnBid);
         moreBtnCommunity = (Button) view.findViewById(R.id.viewMoreDiysBtnCommunity);
-        moreBtnNewAdded = (Button) view.findViewById(R.id.viewMoreDiysBtnNew);
+//        moreBtnNewAdded = (Button) view.findViewById(R.id.viewMoreDiysBtnNew);
 
         diys_recycler_selling = (RecyclerView) view.findViewById(R.id.diyListItems);
         diy_recycler_bidCategory = (RecyclerView) view.findViewById(R.id.diyListItemsBid);
         diy_recycler_community = (RecyclerView) view.findViewById(R.id.diyListItemsCommunity);
-        diy_recycler_new_added = (RecyclerView) view.findViewById(R.id.diyListItemsNewAdd);
+//        diy_recycler_new_added = (RecyclerView) view.findViewById(R.id.diyListItemsNewAdd);
 
         //selling recycler view
         diys_recycler_selling.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -114,8 +114,8 @@ public class DiysFragment extends Fragment {
         diy_recycler_community.setNestedScrollingEnabled(true);
 
         //tire catgory recycler view
-        diy_recycler_new_added.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
-        diy_recycler_new_added.setNestedScrollingEnabled(true);
+//        diy_recycler_new_added.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
+//        diy_recycler_new_added.setNestedScrollingEnabled(true);
 
 
         SimpleDateFormat curFormater = new SimpleDateFormat("EEEE, MMMM dd, yyyy");
@@ -132,7 +132,7 @@ public class DiysFragment extends Fragment {
         mDIYSRecyclerViewAdapter = new DIYSCardListAdapter(view.getContext(), diysSellingList);
         mDIYSOnBidAdapter = new DIYSCardListAdapter(view.getContext(), diysOnBidList);
         mDIYSCommunityAdapter = new DIYSCardListAdapter(view.getContext(), diysComunityList);
-        mDIYSNewAddedAdapter = new DIYSCardListAdapter(view.getContext(), diysNewAddedList);
+//        mDIYSNewAddedAdapter = new DIYSCardListAdapter(view.getContext(), diysNewAddedList);
 
 
         moreDiysBtn.setOnClickListener(new View.OnClickListener() {
@@ -162,21 +162,21 @@ public class DiysFragment extends Fragment {
             }
         });
 
-        moreBtnNewAdded.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "Clicked View More New Added", Toast.LENGTH_SHORT).show();
-                Intent newIntent = new Intent(getActivity(), ViewMoreNewAddedDIYSActivity.class);
-                startActivity(newIntent);
-            }
-        });
+//        moreBtnNewAdded.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getActivity(), "Clicked View More New Added", Toast.LENGTH_SHORT).show();
+//                Intent newIntent = new Intent(getActivity(), ViewMoreNewAddedDIYSActivity.class);
+//                startActivity(newIntent);
+//            }
+//        });
 
         Toast.makeText(getActivity(), "Hi! Welcome to G-Companion version 2.0", Toast.LENGTH_SHORT).show();
 
         diys_recycler_selling.setAdapter(mDIYSRecyclerViewAdapter);
         diy_recycler_bidCategory.setAdapter(mDIYSOnBidAdapter);
         diy_recycler_community.setAdapter(mDIYSCommunityAdapter);
-        diy_recycler_new_added.setAdapter(mDIYSNewAddedAdapter);
+//        diy_recycler_new_added.setAdapter(mDIYSNewAddedAdapter);
 
 
         diysReference.addChildEventListener(new ChildEventListener() {
@@ -202,16 +202,16 @@ public class DiysFragment extends Fragment {
                 }
 
 
-                Object diyDate = dataSnapshot.child("dateAdded").getValue();
-                Log.e("diyDate", diyDate + " = " + diysModel.getDiyName());
-
-                if (diyDate.equals("2018-09-02")) {
-                    diysNewAddedList.add(diysModel);
-                    Log.e("date_diys", String.valueOf(diysModel.getDiyName()));
-                    mDIYSNewAddedAdapter.notifyDataSetChanged();
-
-
-                }
+//                Object diyDate = dataSnapshot.child("dateAdded").getValue();
+//                Log.e("diyDate", diyDate + " = " + diysModel.getDiyName());
+//
+//                if (diyDate.equals("2018-09-02")) {
+//                    diysNewAddedList.add(diysModel);
+//                    Log.e("date_diys", String.valueOf(diysModel.getDiyName()));
+//                    mDIYSNewAddedAdapter.notifyDataSetChanged();
+//
+//
+//                }
 
 
             }

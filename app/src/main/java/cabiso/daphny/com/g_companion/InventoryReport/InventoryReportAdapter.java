@@ -1,4 +1,4 @@
-package cabiso.daphny.com.g_companion.UserSalesReport;
+package cabiso.daphny.com.g_companion.InventoryReport;
 
 import android.app.Activity;
 import android.support.annotation.LayoutRes;
@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,7 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.R;
@@ -28,14 +26,14 @@ import cabiso.daphny.com.g_companion.R;
  * Created by cicctuser on 9/7/2018.
  */
 
-public class SalesReportAdapterforList extends ArrayAdapter<DIYnames>{
+public class InventoryReportAdapter extends ArrayAdapter<DIYnames>{
 
     private Activity context;
     private int resource;
     private ArrayList<DIYnames> list_diynames;
     private DatabaseReference priceRef;
 
-    public SalesReportAdapterforList(@NonNull Activity context, @LayoutRes int resource, @NonNull ArrayList<DIYnames> objects) {
+    public InventoryReportAdapter(@NonNull Activity context, @LayoutRes int resource, @NonNull ArrayList<DIYnames> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;

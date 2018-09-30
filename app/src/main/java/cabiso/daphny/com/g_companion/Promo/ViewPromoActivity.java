@@ -39,8 +39,8 @@ import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
+import cabiso.daphny.com.g_companion.PushNotification;
 import cabiso.daphny.com.g_companion.R;
-import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 public class ViewPromoActivity extends AppCompatActivity {
 
@@ -196,7 +196,6 @@ public class ViewPromoActivity extends AppCompatActivity {
                                         expirationReference.child(dataSnapshot.getKey()).updateChildren(promoresult);
 
                                         expirationReference.child(dataSnapshot.getKey()).removeValue();
-
 
                                         //Notification
                                         user_reference.addChildEventListener(new ChildEventListener() {
@@ -454,7 +453,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                                                         int buyItemCount = Integer.parseInt(promoDiys.buy_counts);
 
                                                                         DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, "Pending Buy and Take Promo Item", float_this,
-                                                                                float_this, buyerid, loggedInUserName, buyItemCount);
+                                                                                float_this, buyerid, loggedInUserName, buyItemCount,0 ,0);
                                                                         final String upload_info = pending_reference.push().getKey();
                                                                         pending_reference.child(upload_info).setValue(info);
                                                                         pending_reference.child(upload_info).child("selling_price").setValue(promoPrice);
@@ -472,7 +471,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                                                         Log.e("userIDDD", userID);
 
                                                                         DIYSell buyer = new DIYSell(diyName, diyUrl, user_id, productID, "For Confirmation Buy and Take Promo Item", float_this,
-                                                                                float_this, buyerid, sellerName, buyItemCount);
+                                                                                float_this, buyerid, sellerName, buyItemCount,0 ,0);
                                                                         final String uploadBuyerInfo = pendingRefByOwner.child(upload_info).getKey();
                                                                         pendingRefByOwner.child(uploadBuyerInfo).setValue(buyer);
                                                                         pendingRefByOwner.child(uploadBuyerInfo).child("selling_price").setValue(promoPrice);
@@ -827,7 +826,7 @@ public class ViewPromoActivity extends AppCompatActivity {
 
 
                                                                                 DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, "Pending Discount Promo Item", float_this,
-                                                                                        float_this, buyerid, loggedInUserName, buyQty);
+                                                                                        float_this, buyerid, loggedInUserName, buyQty,0 ,0);
 
                                                                                 final String upload_info = pending_reference.push().getKey();
                                                                                 pending_reference.child(upload_info).setValue(info);
@@ -845,7 +844,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                                                                 Log.e("userIDDD", userID);
 
                                                                                 DIYSell buyer = new DIYSell(diyName, diyUrl, user_id, productID, "For Confirmation Discount Promo Item", float_this,
-                                                                                        float_this, buyerid, sellerName, buyQty);
+                                                                                        float_this, buyerid, sellerName, buyQty,0 ,0);
                                                                                 final String uploadBuyerInfo = pendingRefByOwner.child(upload_info).getKey();
                                                                                 pendingRefByOwner.child(uploadBuyerInfo).setValue(buyer);
                                                                                 pendingRefByOwner.child(uploadBuyerInfo).child("selling_price").setValue(Double.parseDouble(promoPrice));

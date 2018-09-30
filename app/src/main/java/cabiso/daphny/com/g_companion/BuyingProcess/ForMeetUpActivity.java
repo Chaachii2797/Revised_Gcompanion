@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import cabiso.daphny.com.g_companion.Adapter.Items_Adapter;
 import cabiso.daphny.com.g_companion.MainActivity;
@@ -34,9 +35,9 @@ import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.Promo.PriceDiscountModel;
 import cabiso.daphny.com.g_companion.Promo.PromoModel;
+import cabiso.daphny.com.g_companion.PushNotification;
 import cabiso.daphny.com.g_companion.R;
 import cabiso.daphny.com.g_companion.UserProfileInfo;
-import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 /**
  * Created by Lenovo on 8/20/2018.
@@ -55,7 +56,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
     private String userID;
     private FirebaseUser mFirebaseUser;
     private UserProfileInfo userProfileInfo;
-    private DatabaseReference userdataReference, meetUpRef, soldReference, diyReference, loggedInName, promoReference;
+    private DatabaseReference userdataReference, meetUpRef, soldReference, diyReference, loggedInName, promoReference, incomeCountRef;
     int count;
     private ArrayList<String> prices = new ArrayList<>();
     private ArrayList<DIYSell> diyNames = new ArrayList<>();
@@ -95,6 +96,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
         userdataReference = FirebaseDatabase.getInstance().getReference().child("userdata");
         meetUpRef = FirebaseDatabase.getInstance().getReference().child("Items_ForMeetUp").child(userID);
         diyReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags"); //para sa item sa lv
+        incomeCountRef = FirebaseDatabase.getInstance().getReference().child("diy_by_tags"); //para sa item sa lv
         promoReference = FirebaseDatabase.getInstance().getReference().child("promo_sale");
         user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
@@ -219,7 +221,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                             DIYSell product = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
                                                                     sold_productID, "DELIVERED", float_this, float_this,
-                                                                    sold_buyer, sellerName, buyQty);
+                                                                    sold_buyer, sellerName, buyQty, 0, 0);
 
                                                             final String upload = soldReference.push().getKey();
                                                             soldReference.child(upload).setValue(product);
@@ -239,7 +241,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                                     DIYSell buyProduct = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
                                                                             sold_productID, "PURCHASED", float_this, float_this,
-                                                                            sold_buyer, loggedInUserName, buyQty);
+                                                                            sold_buyer, loggedInUserName, buyQty, 0, 0);
                                                                     String buyUpload = soldReference.child(upload).getKey();
                                                                     soldReference.child(buyUpload).setValue(buyProduct);
                                                                     soldReference.child(buyUpload).child("userStatus").setValue("buyer");
@@ -440,7 +442,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                                     DIYSell product = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
                                                                             sold_productID, "Delivered Discount Item", float_this, float_this,
-                                                                            sold_buyer, sellerName, buyQty);
+                                                                            sold_buyer, sellerName, buyQty, 0, 0);
 
                                                                     final String upload = soldReference.push().getKey();
                                                                     soldReference.child(upload).setValue(product);
@@ -462,7 +464,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                                             DIYSell buyProduct = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
                                                                                     sold_productID, "Purchased Discount Item", float_this, float_this,
-                                                                                    sold_buyer, loggedInUserName, buyQty);
+                                                                                    sold_buyer, loggedInUserName, buyQty, 0, 0);
 
                                                                             String buyUpload = soldReference.child(upload).getKey();
                                                                             soldReference.child(buyUpload).setValue(buyProduct);
@@ -721,7 +723,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                                     DIYSell product = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
                                                                             sold_productID, "Delivered Buy and Take Item", float_this, float_this,
-                                                                            sold_buyer, sellerName, buyQty);
+                                                                            sold_buyer, sellerName, buyQty, 0, 0);
 //
                                                                     final String upload = soldReference.push().getKey();
                                                                     soldReference.child(upload).setValue(product);
@@ -767,7 +769,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                                             DIYSell buyProduct = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
                                                                                     sold_productID, "Purchased Buy and Take Item", float_this, float_this,
-                                                                                    sold_buyer, loggedInUserName, buyQty);
+                                                                                    sold_buyer, loggedInUserName, buyQty, 0, 0);
 //
                                                                             String buyUpload = soldReference.child(upload).getKey();
                                                                             soldReference.child(buyUpload).setValue(buyProduct);
@@ -803,9 +805,6 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                                         }
                                                                     });
-
-
-
 
                                                                     DatabaseReference meetReference = FirebaseDatabase.getInstance().getReference()
                                                                             .child("Items_ForMeetUp").child(sold_buyer);
@@ -872,7 +871,11 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                                         String buyTakeKey = promoSalekey.get(position);
                                                                         Log.e("buyTakeKey",buyTakeKey);
+//                                                                        int meetUpQty = meetUpList.get(position).getSelling_qty();
+                                                                        int db_income_count = meetUpList.get(position).getIncomeCount();
 
+                                                                        Log.e("db_income_count1", db_income_count+"");
+                                                                        Log.e("buyQty1", buyQty+"");
                                                                         if(promoFreeItem.getDiyName().equals(buyTakeSnap.getPromo_diyName())){
                                                                             Log.e("samePromoFree", promoFreeItem.getDiyName() + " = " + buyTakeSnap.getPromo_diyName());
                                                                             Log.e("samePromoFreeQTYY", freeItemQty + " = " + buyTakeSnap.getBuy_counts());
@@ -882,17 +885,34 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             Log.e("plusQTY", String.valueOf(plusQTy));
 
                                                                             int quantityCountSame = meetUpQty - plusQTy; //if same ang free ug ang gi promo
+                                                                            int updateIncomeCount = (db_income_count+quantityCountSame);
+
+                                                                            Log.e("minusQty_nonFree2", updateIncomeCount+"");
+                                                                            Log.e("db_income_count2", db_income_count+"");
+                                                                            Log.e("buyQty2", buyQty+"");
 
                                                                             HashMap<String, Object> resultSame = new HashMap<>();
                                                                             resultSame.put("selling_qty", quantityCountSame);
                                                                             diyReference.child(penkey).child("DIY Price")
                                                                                     .child(priceSnap.getKey()).updateChildren(resultSame);
 
+//                                                                            HashMap<String, Object> income_count_same = new HashMap<>();
+//                                                                            income_count_same.put("incomeCount", updateIncomeCount);
+//                                                                            incomeCountRef.child(penkey).updateChildren(income_count_same);
+
+                                                                            HashMap<String, Object> incomeCountResult = new HashMap<>();
+                                                                            incomeCountResult.put("incomeCount", buyQty);
+                                                                            diyReference.child(penkey).updateChildren(incomeCountResult);
+
                                                                             HashMap<String, Object> buyTakeResults = new HashMap<>();
                                                                             buyTakeResults.put("promoQuantity", quantityCountMeetUp);
                                                                             promoReference.child(buyTakeKey).updateChildren(buyTakeResults);
 
-                                                                        }else{
+                                                                        }else if(!promoFreeItem.getDiyName().equals(buyTakeSnap.getPromo_diyName())){
+                                                                            int minusQty_nonFree = (db_income_count + buyQty);
+                                                                            Log.e("minusQty_nonFree3", minusQty_nonFree+"");
+                                                                            Log.e("db_income_count3", db_income_count+"");
+                                                                            Log.e("buyQty3", buyQty+"");
 
                                                                             HashMap<String, Object> results = new HashMap<>();
                                                                             results.put("selling_qty", quantityCountMeetUp);
@@ -904,13 +924,19 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             diyReference.child(promKey).child("DIY Price")
                                                                                     .child(priceSnap.getKey()).updateChildren(freeResults);
 
+                                                                            HashMap<String, Object> incomeCountResult = new HashMap<>();
+                                                                            incomeCountResult.put("incomeCount", minusQty_nonFree);
+                                                                            incomeCountRef.child(penkey).updateChildren(incomeCountResult);
+
+//                                                                            HashMap<String, Object> incomeCount_notSame = new HashMap<>();
+//                                                                            incomeCount_notSame.put("incomeCount", minusQty_nonFree);
+//                                                                            incomeCountRef.child(promKey).updateChildren(incomeCount_notSame);
+
                                                                             soldReference.child(upload).updateChildren(results);
 
                                                                             HashMap<String, Object> buyTakeResults = new HashMap<>();
                                                                             buyTakeResults.put("promoQuantity", quantityCountMeetUp);
                                                                             promoReference.child(buyTakeKey).updateChildren(buyTakeResults);
-
-
                                                                         }
 
 

@@ -38,7 +38,7 @@ import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
-import cabiso.daphny.com.g_companion.notifications.PushNotification;
+import cabiso.daphny.com.g_companion.PushNotification;
 
 /**
  * Created by Lenovo on 7/31/2017.

@@ -1,4 +1,4 @@
-package cabiso.daphny.com.g_companion;
+package cabiso.daphny.com.g_companion.Bidding;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -26,9 +26,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
-import cabiso.daphny.com.g_companion.Model.DIYBidding;
+import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
-import cabiso.daphny.com.g_companion.notifications.PushNotification;
+import cabiso.daphny.com.g_companion.R;
+import cabiso.daphny.com.g_companion.PushNotification;
 
 public class ToBidProduct extends Activity implements View.OnClickListener {
 
@@ -93,7 +94,7 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                        if(sellerName!=null){
+                        if (sellerName != null) {
                             PushNotification pushNotification = new PushNotification(getApplicationContext());
                             pushNotification.title("Bidding Notification")
                                     .message(sellerName + " uploaded DIY for bidding!")
@@ -124,20 +125,20 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
                 });
 
 
-                Intent intent = new Intent(ToBidProduct.this,MainActivity.class);
+                Intent intent = new Intent(ToBidProduct.this, MainActivity.class);
                 startActivity(intent);
-
 
 
             }
         });
     }
 
-    private DIYBidding getFormInput(){
+    private DIYBidding getFormInput() {
         return new DIYBidding()
                 .setBidder(this.userID)
-                .setMessage(this.mEtPriceMessage.getText()+"")
-                .setInitialPrice(Integer.parseInt(this.mEtPriceMin.getText()+""))
+                .setMessage(this.mEtPriceMessage.getText() + "")
+                .setInitialPrice(Integer.parseInt(this.mEtPriceMin.getText() + ""))
+                .setQuantity(1)
                 .setDate(sdate)
                 .setXpire_date(mEtExpiryDate.getText().toString());
     }

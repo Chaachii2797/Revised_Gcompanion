@@ -1,4 +1,4 @@
-package cabiso.daphny.com.g_companion.Model;
+package cabiso.daphny.com.g_companion.Bidding;
 
 /**
  * Created by cicctuser on 6/26/2018.
@@ -6,6 +6,7 @@ package cabiso.daphny.com.g_companion.Model;
 
 public class DIYBidding {
     private int intial_price;
+    private int quantity;
     private String date;
     private String xpire_date;
     private String bidder;
@@ -21,6 +22,15 @@ public class DIYBidding {
 
     public DIYBidding setInitialPrice(int intial_price) {
         this.intial_price = intial_price;
+        return this;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public DIYBidding setQuantity(int quantity) {
+        this.quantity = quantity;
         return this;
     }
 

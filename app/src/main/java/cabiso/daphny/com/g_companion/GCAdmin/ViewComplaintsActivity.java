@@ -26,7 +26,7 @@ import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.ReportsModel;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
-import cabiso.daphny.com.g_companion.notifications.PushNotification;
+import cabiso.daphny.com.g_companion.PushNotification;
 
 /**
  * Created by Lenovo on 9/13/2018.

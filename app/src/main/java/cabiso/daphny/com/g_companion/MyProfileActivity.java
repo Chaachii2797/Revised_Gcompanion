@@ -40,7 +40,6 @@ import java.util.Date;
 
 import cabiso.daphny.com.g_companion.EditData.EditProfileActivity;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
-import cabiso.daphny.com.g_companion.notifications.PushNotification;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static cabiso.daphny.com.g_companion.R.id.user_ratings;

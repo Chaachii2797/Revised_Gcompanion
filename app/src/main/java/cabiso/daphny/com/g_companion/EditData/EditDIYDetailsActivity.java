@@ -77,7 +77,7 @@ import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.Constants;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
-import cabiso.daphny.com.g_companion.Model.DIYBidding;
+import cabiso.daphny.com.g_companion.Bidding.DIYBidding;
 import cabiso.daphny.com.g_companion.Model.QuantityItem;
 import cabiso.daphny.com.g_companion.Model.SellingDIY;
 import cabiso.daphny.com.g_companion.Model.TagClass;

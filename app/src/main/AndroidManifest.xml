@@ -73,7 +73,8 @@
         <activity android:name=".Search.SearchActivity" />
         <activity android:name=".Calendar" />
         <activity android:name=".Wishlists" />
-        <activity android:name=".UserSalesReport.SalesReport" />
+        <activity android:name=".InventoryReport.InventoryReport" />
+        <activity android:name=".SalesReport.SalesReport"/>
         <activity android:name=".About" />
         <activity android:name=".CaptureDIY" />
         <activity android:name=".MyProfileActivity" />
@@ -130,7 +131,7 @@
         <activity android:name=".Recommend.Activity_View_Recommend" />
         <activity android:name=".Recommend.PendingView_Activity" />
         <activity android:name=".ImageRecognitionForMaterials" />
-        <activity android:name=".ToBidProduct" />
+        <activity android:name=".Bidding.ToBidProduct" />
         <activity android:name=".InstantMessaging.Messaging" />
         <activity android:name=".InstantMessaging.ui.activities.ChatSplashActivity" />
         <activity android:name=".InstantMessaging.ui.activities.LoginActivity" />
@@ -162,11 +163,8 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBL2z1Wo8n8AgRcPsbMdHlaUSg6N21g4VI"/>
+            android:value="AIzaSyBL2z1Wo8n8AgRcPsbMdHlaUSg6N21g4VI" />
 
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
     </application>
 
 </manifest>

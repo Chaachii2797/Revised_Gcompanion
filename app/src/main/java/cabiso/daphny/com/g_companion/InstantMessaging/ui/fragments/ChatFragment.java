@@ -33,8 +33,8 @@ import cabiso.daphny.com.g_companion.InstantMessaging.models.Chat;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.adapters.ChatRecyclerAdapter;
 import cabiso.daphny.com.g_companion.InstantMessaging.utils.MessagingContants;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
+import cabiso.daphny.com.g_companion.PushNotification;
 import cabiso.daphny.com.g_companion.R;
-import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 /**
  * Created by Lenovo on 7/21/2018.
@@ -134,7 +134,6 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
                 chat,
                 receiverFirebaseToken);
 
-
         //Notification
         user_reference.child(receiverUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -142,7 +141,7 @@ public class ChatFragment extends Fragment implements ChatContract.View, TextVie
                 User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
                 PushNotification pushNotification = new PushNotification(getContext());
                 pushNotification.title("Chat Notification")
-                        .message(user_profile.getF_name() + " " + user_profile.getL_name() +" chatted you!")
+                        .message(user_profile.getF_name() + " " + user_profile.getL_name() + " chatted you!")
                         .accessToken(user_profile.getAccess_token())
                         .send();
             }

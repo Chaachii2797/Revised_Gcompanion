@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
@@ -37,7 +38,7 @@ import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.SellingDIY;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
-import cabiso.daphny.com.g_companion.notifications.PushNotification;
+import cabiso.daphny.com.g_companion.PushNotification;
 
 public class PromoActivity extends AppCompatActivity implements View.OnClickListener, Serializable {
     private DatabaseReference promoReference, identityReference, identityReferenceByUser;

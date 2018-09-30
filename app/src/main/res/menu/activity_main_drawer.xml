@@ -55,6 +55,11 @@
             android:title="Sales Report" />
 
         <item
+            android:id="@+id/nav_inventory"
+            android:icon="@drawable/inventory"
+            android:title="Item Inventory" />
+
+        <item
             android:id="@+id/nav_about"
             android:icon="@drawable/about_icon"
             android:title="About" />

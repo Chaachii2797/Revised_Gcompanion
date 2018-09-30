@@ -49,7 +49,6 @@ import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Model.ReportsModel;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
-import cabiso.daphny.com.g_companion.notifications.PushNotification;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static cabiso.daphny.com.g_companion.R.id.user_ratings;

@@ -21,9 +21,11 @@ public class DIYSell extends SellingDIY implements Comparable<DIYSell>, Serializ
     public int materialMatches;
     public String loggedInUser;
     public int buyingQuantity;
+    public int incomeCount;
+    public int expenseCount;
 
-    public DIYSell(String diyName, String diyUrl, String user_id, String productID, String identity,
-                    Float bookmarks, Float likes, String buyerID, String loggedInUser, int buyingQuantity){
+    public DIYSell(String diyName, String diyUrl, String user_id, String productID, String identity,Float bookmarks, Float likes,
+                   String buyerID, String loggedInUser, int buyingQuantity, int incomeCount, int expenseCount){
         this.diyName = diyName;
         this.diyUrl = diyUrl;
         this.user_id = user_id;
@@ -34,6 +36,8 @@ public class DIYSell extends SellingDIY implements Comparable<DIYSell>, Serializ
         this.buyerID = buyerID;
         this.loggedInUser = loggedInUser;
         this.buyingQuantity =buyingQuantity;
+        this.incomeCount = incomeCount;
+        this.expenseCount = expenseCount;
     }
 
     public DIYSell(){
@@ -93,6 +97,22 @@ public class DIYSell extends SellingDIY implements Comparable<DIYSell>, Serializ
 
     public void setBuyingQuantity(int buyingQuantity) {
         this.buyingQuantity = buyingQuantity;
+    }
+
+    public int getIncomeCount() {
+        return incomeCount;
+    }
+
+    public void setIncomeCount(int incomeCount) {
+        this.incomeCount = incomeCount;
+    }
+
+    public int getExpenseCount() {
+        return expenseCount;
+    }
+
+    public void setExpenseCount(int expenseCount) {
+        this.expenseCount = expenseCount;
     }
 
     public Float getBookmarks() {

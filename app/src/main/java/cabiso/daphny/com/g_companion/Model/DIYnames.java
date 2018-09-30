@@ -27,6 +27,8 @@ public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serial
     public int matchScoreRate;
     public int materialMatches;
     public int totalMaterialItems;
+    public int incomeCount;
+    public int expenseCount;
     private static DIYnames diyInfo = null;
     private ArrayList<DBMaterial> dbMaterials = new ArrayList<>();
     private String diyVideo;
@@ -112,6 +114,10 @@ public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serial
         return matchScore;
     }
 
+    public void setMatchScore(int matchScore) {
+        this.matchScore = matchScore;
+    }
+
     public String getUser_id() {
         return user_id;
     }
@@ -172,6 +178,22 @@ public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serial
     public DIYnames setLoggedInUser(String loggedInUser) {
         this.loggedInUser = loggedInUser;
         return this;
+    }
+
+    public int getIncomeCount() {
+        return incomeCount;
+    }
+
+    public void setIncomeCount(int incomeCount) {
+        this.incomeCount = incomeCount;
+    }
+
+    public int getExpenseCount() {
+        return expenseCount;
+    }
+
+    public void setExpenseCount(int expenseCount) {
+        this.expenseCount = expenseCount;
     }
 
     public DIYnames addDbMaterial(DBMaterial dbMaterial){

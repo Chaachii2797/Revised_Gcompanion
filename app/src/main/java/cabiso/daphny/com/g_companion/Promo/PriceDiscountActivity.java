@@ -30,7 +30,7 @@ import cabiso.daphny.com.g_companion.DIYDetailViewActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
-import cabiso.daphny.com.g_companion.notifications.PushNotification;
+import cabiso.daphny.com.g_companion.PushNotification;
 
 public class PriceDiscountActivity extends AppCompatActivity implements View.OnClickListener{
 

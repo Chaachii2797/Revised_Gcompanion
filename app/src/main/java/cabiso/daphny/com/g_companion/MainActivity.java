@@ -40,11 +40,12 @@ import cabiso.daphny.com.g_companion.BuyingProcess.Sold_Activity;
 import cabiso.daphny.com.g_companion.GCAdmin.AdminActivity;
 import cabiso.daphny.com.g_companion.GCAdmin.LogsOfAllTransactionsActivity;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
+import cabiso.daphny.com.g_companion.SalesReport.SalesReport;
 import cabiso.daphny.com.g_companion.MainDIYS.DiysFragment;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.Promo.PromoFragment;
 import cabiso.daphny.com.g_companion.Search.SearchActivity;
-import cabiso.daphny.com.g_companion.UserSalesReport.SalesReport;
+import cabiso.daphny.com.g_companion.InventoryReport.InventoryReport;
 import cabiso.daphny.com.g_companion.YouItemsFragment.OnListFragmentInteractionListener;
 import cabiso.daphny.com.g_companion.notifications.VolleyApp;
 import clarifai2.api.ClarifaiBuilder;
@@ -331,6 +332,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_report:
                 Intent sales = new Intent(MainActivity.this,SalesReport.class);
                 startActivity(sales);
+                break;
+            case R.id.nav_inventory:
+                Intent inventory = new Intent(MainActivity.this,InventoryReport.class);
+                startActivity(inventory);
                 break;
             case R.id.nav_about:
                 Intent about = new Intent(MainActivity.this,About.class);

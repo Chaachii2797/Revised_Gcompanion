@@ -53,18 +53,18 @@ import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Adapter.BiddersAdapter;
 import cabiso.daphny.com.g_companion.Adapter.RecyclerViewDataAdapter;
+import cabiso.daphny.com.g_companion.Bidding.ToBidProduct;
 import cabiso.daphny.com.g_companion.EditData.EditDIYDetailsActivity;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatActivity;
 import cabiso.daphny.com.g_companion.Model.Bidders;
 import cabiso.daphny.com.g_companion.Model.CreatePromo;
-import cabiso.daphny.com.g_companion.Model.DIYBidding;
+import cabiso.daphny.com.g_companion.Bidding.DIYBidding;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.SectionDataModel;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.Promo.PriceDiscountActivity;
 import cabiso.daphny.com.g_companion.Promo.PromoActivity;
-import cabiso.daphny.com.g_companion.notifications.PushNotification;
 
 /**
  * Created by Lenovo on 7/5/2018.
@@ -729,7 +729,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                                                     int buyQty = Integer.parseInt(qtyInputted.getText().toString());
 
                                                                     DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, "Pending Item", float_this,
-                                                                            float_this, buyerid, loggedInUserName, buyQty);
+                                                                            float_this, buyerid, loggedInUserName, buyQty,0 ,0);
                                                                     final String upload_info = pending_reference.push().getKey();
                                                                     pending_reference.child(upload_info).setValue(info);
                                                                     pending_reference.child(upload_info).child("selling_price").setValue(pendingPrice);
@@ -745,7 +745,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                                                     Log.e("userIDDD", userID);
 
                                                                     DIYSell buyer = new DIYSell(diyName, diyUrl, user_id, productID, "For Confirmation Item", float_this,
-                                                                            float_this, buyerid, sellerName, buyQty);
+                                                                            float_this, buyerid, sellerName, buyQty,0 ,0);
                                                                     final String uploadBuyerInfo = pendingRefByOwner.child(upload_info).getKey();
                                                                     pendingRefByOwner.child(uploadBuyerInfo).setValue(buyer);
                                                                     pendingRefByOwner.child(uploadBuyerInfo).child("selling_price").setValue(pendingPrice);

@@ -40,7 +40,7 @@ import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
 import cabiso.daphny.com.g_companion.UserProfileInfo;
-import cabiso.daphny.com.g_companion.notifications.PushNotification;
+import cabiso.daphny.com.g_companion.PushNotification;
 
 /**
  * Created by cicctuser on 10/03/2017.
@@ -219,7 +219,7 @@ public class Pending_Activity extends AppCompatActivity{
                                         //push to seller side
                                         DIYSell product = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
                                                 meetup_productID, "For Buyer Meet-up" , float_this, float_this, meetup_buyer,
-                                                sellerName, buyQty);
+                                                sellerName, buyQty,0 ,0);
 
                                         //confirm pending DIY, push to meet up (seller side)
                                         final String upload = forMeetupReference.push().getKey();
@@ -242,7 +242,7 @@ public class Pending_Activity extends AppCompatActivity{
 
                                                 DIYSell buyProduct = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
                                                         meetup_productID, "For Seller Meet-up" , float_this, float_this,
-                                                        meetup_buyer, loggedInUserName, buyQty);
+                                                        meetup_buyer, loggedInUserName, buyQty,0 ,0);
 
                                                 //push to buyer pending DIY, push to meet up (buyer side)
                                                 String buyUpload = meetReference.child(upload).getKey();
@@ -429,7 +429,7 @@ public class Pending_Activity extends AppCompatActivity{
                                         //push to seller side
                                         DIYSell product = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
                                                 meetup_productID, "For Buyer Meet-up Discount Item" , float_this, float_this, meetup_buyer,
-                                                sellerName, buyQty);
+                                                sellerName, buyQty,0 ,0);
 
                                         //confirm pending DIY, push to meet up (seller side)
                                         final String upload = forMeetupReference.push().getKey();
@@ -453,7 +453,7 @@ public class Pending_Activity extends AppCompatActivity{
 
                                                 DIYSell buyProduct = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
                                                         meetup_productID, "For Seller Meet-up Discount Item" , float_this, float_this,
-                                                        meetup_buyer, loggedInUserName, buyQty);
+                                                        meetup_buyer, loggedInUserName, buyQty,0 ,0);
 
                                                 //push to buyer pending DIY, push to meet up (buyer side)
                                                 String buyUpload = meetReference.child(upload).getKey();
@@ -570,7 +570,7 @@ public class Pending_Activity extends AppCompatActivity{
                                         //push to seller side
                                         DIYSell product = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
                                                 meetup_productID, "For Buyer Meet-up Buy and Take Item" , float_this, float_this, meetup_buyer,
-                                                sellerName, buyQty);
+                                                sellerName, buyQty,0 ,0);
 
                                         //confirm pending DIY, push to meet up (seller side)
                                         final String upload = forMeetupReference.push().getKey();
@@ -611,7 +611,7 @@ public class Pending_Activity extends AppCompatActivity{
 
                                                 DIYSell buyProduct = new DIYSell(meetup_diyName, meetup_diyUrl, meetup_user_id,
                                                         meetup_productID, "For Seller Meet-up Buy and Take Item" , float_this, float_this,
-                                                        meetup_buyer, loggedInUserName, buyQty);
+                                                        meetup_buyer, loggedInUserName, buyQty,0 ,0);
 
                                                 //push to buyer pending DIY, push to meet up (buyer side)
                                                 String buyUpload = meetReference.child(upload).getKey();

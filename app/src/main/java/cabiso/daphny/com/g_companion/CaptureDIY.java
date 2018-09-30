@@ -77,10 +77,10 @@ import java.util.Random;
 import java.util.UUID;
 
 import cabiso.daphny.com.g_companion.Adapter.CommunityAdapter;
+import cabiso.daphny.com.g_companion.Bidding.DIYBidding;
 import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.Constants;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
-import cabiso.daphny.com.g_companion.Model.DIYBidding;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.QuantityItem;
@@ -661,7 +661,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 String productID_sell = upload;
                                 databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "Selling",
-                                        float_this, float_this, "none", loggedInUserName, 0));
+                                        float_this, float_this, "none", loggedInUserName, 0, 0, 0));
                                 databaseReference.child(upload).child("materials").setValue(dbMaterials);
                                 databaseReference.child(upload).child("procedures").setValue(itemProcedure);
                                 databaseReference.child(upload).child("DIY Price").setValue(dbSelling);
@@ -672,7 +672,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 //push data to Firebase Database - diy_by_user node
                                 byuser_Reference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "Selling",
-                                        float_this, float_this, "none", loggedInUserName, 0));
+                                        float_this, float_this, "none", loggedInUserName, 0, 0, 0));
                                 byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
                                 byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
                                 byuser_Reference.child(upload).child("DIY Price").setValue(dbSelling);
@@ -824,7 +824,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 String productID_sell = generateString();
                                 databaseReference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "ON BID!",
-                                        float_this, float_this, "none", loggedInUserName, 0));
+                                        float_this, float_this, "none", loggedInUserName, 0, 0, 0));
                                 databaseReference.child(upload).child("materials").setValue(dbMaterials);
                                 databaseReference.child(upload).child("procedures").setValue(itemProcedure);
                                 databaseReference.child(upload).child("category").setValue(category);
@@ -835,7 +835,7 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                                 //push data to Firebase Database - diy_by_user node
                                 byuser_Reference.child(upload).setValue(new DIYSell(name.getText().toString(),
                                         taskSnapshot.getDownloadUrl().toString(), userID, productID_sell, "ON BID!",
-                                        float_this, float_this, "none", loggedInUserName, 0));
+                                        float_this, float_this, "none", loggedInUserName, 0, 0, 0));
                                 byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
                                 byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
                                 byuser_Reference.child(upload).child("category").setValue(category);

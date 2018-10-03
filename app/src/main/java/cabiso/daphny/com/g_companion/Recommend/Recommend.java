@@ -26,19 +26,19 @@ public class Recommend {
     private String userId;
     private boolean isMatched;
 
-    public Recommend (ArrayList<DBMaterial> dbMaterials,String userId){
+    public Recommend(ArrayList<DBMaterial> dbMaterials, String userId) {
         this.imgRecogMaterials = dbMaterials;
         this.userId = userId;
         this.recommendedItems = new ArrayList<>();
         this.proccess();
     }
 
-    public Recommend setRecommendedItems(ArrayList<DIYnames> recommendedItems){
+    public Recommend setRecommendedItems(ArrayList<DIYnames> recommendedItems) {
         this.recommendedItems = recommendedItems;
         return this;
     }
 
-    public Recommend setAdapter(RecommendDIYAdapter adapter){
+    public Recommend setAdapter(RecommendDIYAdapter adapter) {
         this.adapter = adapter;
         return this;
     }
@@ -59,7 +59,7 @@ public class Recommend {
                             String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
                             long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
                             if (dbMaterialName.equals(irMaterial.getName())) {
-                                if (irMaterial.getQuantity() >= dbMaterialQuantity) {
+                                if (irMaterial.getQuantity() <= dbMaterialQuantity) {
                                     if (dbMaterialUnit.equals(irMaterial.getUnit())) {
                                         score++;
                                         isMatched = true;
@@ -68,22 +68,23 @@ public class Recommend {
                             }
                         }
                     }
-                }
-                if (isMatched) {
-                    isMatched = false;
-                    double scoreRate = ((float)score/(float)imgRecogMaterials.size())*100;
-                    toBeRecommendedDIY.setMatchScore(score);
-                    toBeRecommendedDIY.setMatchScoreRate((int) scoreRate);
-                    Log.e("RecommendItem",toBeRecommendedDIY.getDiyName()+" = "+score+" = "+scoreRate);
-                    if(scoreRate >= 60) {
-                        Log.e("AccRecommendItem",toBeRecommendedDIY.getDiyName()+" = "+score+" = "+scoreRate);
-                        recommendedItems.add(toBeRecommendedDIY);
-                        sort();
-                        if (adapter != null) {
-                            adapter.notifyDataSetChanged();
+                    if (isMatched) {
+                        isMatched = false;
+                        double scoreRate = ((float) score / (float) imgRecogMaterials.size()) * 100;
+                        toBeRecommendedDIY.setMatchScore(score);
+                        toBeRecommendedDIY.setMatchScoreRate((int) scoreRate);
+                        Log.e("RecommendItem", toBeRecommendedDIY.getDiyName() + " = " + score + " = " + scoreRate);
+                        if (scoreRate >= 60) {
+                            Log.e("AccRecommendItem", toBeRecommendedDIY.getDiyName() + " = " + score + " = " + scoreRate);
+                            recommendedItems.add(toBeRecommendedDIY);
+                            sort();
+                            if (adapter != null) {
+                                adapter.notifyDataSetChanged();
+                            }
                         }
                     }
                 }
+
             }
 
             @Override
@@ -108,26 +109,26 @@ public class Recommend {
         });
     }
 
-    public void sort(){
-        for(int x = 0; x < recommendedItems.size(); x++){
-            for(int y = 0; y < (recommendedItems.size()-x)-1; y++){
-                if(recommendedItems.get(y).getMatchScoreRate() < recommendedItems.get(y+1).getMatchScoreRate()){
+    public void sort() {
+        for (int x = 0; x < recommendedItems.size(); x++) {
+            for (int y = 0; y < (recommendedItems.size() - x) - 1; y++) {
+                if (recommendedItems.get(y).getMatchScoreRate() < recommendedItems.get(y + 1).getMatchScoreRate()) {
                     DIYnames holder = recommendedItems.get(y);
-                    recommendedItems.set(y,recommendedItems.get(y+1));
-                    recommendedItems.set(y+1,holder);
+                    recommendedItems.set(y, recommendedItems.get(y + 1));
+                    recommendedItems.set(y + 1, holder);
                 }
             }
         }
     }
 
-    public ArrayList<DIYnames> get(){
+    public ArrayList<DIYnames> get() {
         return recommendedItems;
     }
 
-    public String toString(){
+    public String toString() {
         String response = "";
-        for(DIYnames item : recommendedItems){
-            response+= item.getDiyName()+" -- ";
+        for (DIYnames item : recommendedItems) {
+            response += item.getDiyName() + " -- ";
         }
         return response;
     }

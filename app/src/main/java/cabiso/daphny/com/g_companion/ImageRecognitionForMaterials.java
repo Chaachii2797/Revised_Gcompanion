@@ -301,7 +301,7 @@ public class ImageRecognitionForMaterials extends AppCompatActivity {
     public void printTags() {
         String results = "";
 
-        dbMaterials.clear();
+//        dbMaterials.clear();
         for (int in = 0; in < 2; in++) {
             for (int ci = 0; ci < validWords.size(); ci++) {
                 if (tags.get(in).contains(validWords.get(ci))) {
@@ -309,7 +309,7 @@ public class ImageRecognitionForMaterials extends AppCompatActivity {
                     etAddMaterial.setText(results);
                     // anotherMaterialSetQties.add(new ImgRecogSetQty().setName(results));
 //                    addMaterial.setText(results);
-                    Log.e("imageRecogItem", results);
+                    Log.e("imageResultss", results);
                     //dbMaterials.add(new DBMaterial().setName(tags.get(in)));
                 } else {
                     //invalid words
@@ -406,12 +406,13 @@ public class ImageRecognitionForMaterials extends AppCompatActivity {
                             final List<Concept> predictedTags = predictions.get(0).data();
                             for(int i = 0; i < predictedTags.size(); i++) {
                                 tags.add(predictedTags.get(i).name());
+                                Log.e("reultss", predictedTags.get(i).name());
                                 extras.add(String.valueOf(predictedTags.get(i).value()));
 //                                ImgRecogSetQty imgRecogSetQty = new ImgRecogSetQty();
 //                                imgRecogSetQty.setName(predictedTags.get(i).name());
 //                                anotherMaterialSetQties.add(imgRecogSetQty);
                             }
-                            //printTags();
+                            printTags();
 
                         }catch (ClarifaiException ex){
                             ex.getMessage();

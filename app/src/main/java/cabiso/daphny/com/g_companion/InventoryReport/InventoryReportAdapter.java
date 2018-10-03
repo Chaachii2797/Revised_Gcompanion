@@ -17,7 +17,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.R;
@@ -46,20 +48,20 @@ public class InventoryReportAdapter extends ArrayAdapter<DIYnames>{
         final LayoutInflater inflater = context.getLayoutInflater();
 
         final View view = inflater.inflate(resource, null);
-        TextView report_diy_name = (TextView) view.findViewById(R.id.tv_report_diyName);
-        final TextView report_diy_price = (TextView) view.findViewById(R.id.tv_report_price);
-        final TextView report_diy_qty = (TextView) view.findViewById(R.id.tv_report_qty);
-        final TextView report_qty_total = (TextView) view.findViewById(R.id.tv_report_qty_total);
+        TextView inventory_diy_name = (TextView) view.findViewById(R.id.tv_report_diyName);
+        final TextView inventory_diy_price = (TextView) view.findViewById(R.id.tv_report_price);
+        final TextView inventory_diy_qty = (TextView) view.findViewById(R.id.tv_report_qty);
+        final TextView inventory_qty_total = (TextView) view.findViewById(R.id.tv_report_qty_total);
 
-        final TextView report_diy_qty_unsold = (TextView) view.findViewById(R.id.tv_report_qty_unsold);
-        final TextView report_total_qty_unsold = (TextView) view.findViewById(R.id.tv_report_total_qty_unsold);
+        final TextView inventory_diy_qty_unsold = (TextView) view.findViewById(R.id.tv_report_qty_unsold);
+        final TextView inventory_total_qty_unsold = (TextView) view.findViewById(R.id.tv_report_total_qty_unsold);
 
-        final TextView report_diy_qty_sold = (TextView) view.findViewById(R.id.tv_report_qty_sold);
+        final TextView inventory_diy_qty_sold = (TextView) view.findViewById(R.id.tv_report_qty_sold);
         final TextView report_total_qty_sold = (TextView) view.findViewById(R.id.tv_report_total_qty_sold);
 
-        final TextView report_total_overall = (TextView) view.findViewById(R.id.report_total_overall);
+        final TextView inventory_total_overall = (TextView) view.findViewById(R.id.report_total_overall);
 
-        report_diy_name.setText(list_diynames.get(position).getDiyName());
+        inventory_diy_name.setText(list_diynames.get(position).getDiyName());
 
         priceRef = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(list_diynames.get(position).getProductID());
         priceRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -96,17 +98,26 @@ public class InventoryReportAdapter extends ArrayAdapter<DIYnames>{
                     int qty_unsold = (stock_qty);
                     int total_qty_unsold = (fixed_price*qty_unsold);
 
-                    report_diy_price.setText(""+ fixed_price);
-                    report_diy_qty.setText(""+total_qty);
-                    report_qty_total.setText(""+(fixed_price*total_qty));
+                    int qty_total = (fixed_price*total_qty);
+                    int total_overall = (total_qty_sold+total_qty_unsold);
 
-                    report_diy_qty_sold.setText(""+qty_sold);
-                    report_diy_qty_unsold.setText(""+qty_unsold);
+                    String formatted_fixed_price = NumberFormat.getNumberInstance(Locale.US).format(fixed_price);
+                    String formatted_qty_total = NumberFormat.getNumberInstance(Locale.US).format(qty_total);
+                    String formatted_total_qty_sold = NumberFormat.getNumberInstance(Locale.US).format(total_qty_sold);
+                    String formatted_total_qty_unsold = NumberFormat.getNumberInstance(Locale.US).format(total_qty_unsold);
+                    String formatted_total_overall = NumberFormat.getNumberInstance(Locale.US).format(total_overall);
 
-                    report_total_qty_sold.setText(""+total_qty_sold);
-                    report_total_qty_unsold.setText(""+total_qty_unsold);
+                    inventory_diy_price.setText("₱ "+formatted_fixed_price);
+                    inventory_diy_qty.setText(total_qty+"");
+                    inventory_qty_total.setText(formatted_qty_total+"");
 
-                    report_total_overall.setText(""+(total_qty_sold+total_qty_unsold));
+                    inventory_diy_qty_sold.setText(qty_sold+"");
+                    inventory_diy_qty_unsold.setText(qty_unsold+"");
+
+                    report_total_qty_sold.setText(formatted_total_qty_sold+"");
+                    inventory_total_qty_unsold.setText(formatted_total_qty_unsold+"");
+
+                    inventory_total_overall.setText("₱ "+formatted_total_overall);
                 }catch (NullPointerException nPe){
                     nPe.getMessage();
                 }

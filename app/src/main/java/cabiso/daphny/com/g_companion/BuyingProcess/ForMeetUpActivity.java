@@ -125,21 +125,21 @@ public class ForMeetUpActivity extends AppCompatActivity {
                     Log.e("promoKeySize", String.valueOf(promokey.size()));
 
                     //store key promo that has freeItems in an array
-                    if(snapshot.hasChild("freeItemList") && snapshot.hasChild("freeItemQuantity")){
+                    if (snapshot.hasChild("freeItemList") && snapshot.hasChild("freeItemQuantity")) {
                         hasFree.add(snapshot.getKey());
                         Log.e("Hass", "Yes" + " " + snapshot.getKey());
                         Log.e("freeSize", String.valueOf(hasFree.size()));
-                    } else{
+                    } else {
                         Log.e("Hass", "No" + " " + snapshot.getKey());
                     }
 
-                    if(snapshot.hasChild("percent_discount")){
+                    if (snapshot.hasChild("percent_discount")) {
                         Log.e("naayDiscount", "Yes" + " " + snapshot.getKey());
-                    }else{
+                    } else {
                         Log.e("naayDiscount", "No" + " " + snapshot.getKey());
                     }
 
-                    final Object itemDiscount =  snapshot.child("percent_discount").getValue();
+                    final Object itemDiscount = snapshot.child("percent_discount").getValue();
                     Log.e("itemDiscountt", String.valueOf(itemDiscount));
 
                     //init adapter
@@ -171,30 +171,30 @@ public class ForMeetUpActivity extends AppCompatActivity {
                             }
 
 
-
                             //get promo free quantity
-                            final Object freeItemQty =  snapshot.child("freeItemQuantity").getValue();
+                            final Object freeItemQty = snapshot.child("freeItemQuantity").getValue();
                             Log.e("freeItemQty", String.valueOf(freeItemQty));
 
                             //Selling Item
-                            if(itemRef.getIdentity().equalsIgnoreCase("For Buyer Meet-up")) {
+                            if (itemRef.getIdentity().equalsIgnoreCase("For Buyer Meet-up")) {
                                 Toast.makeText(ForMeetUpActivity.this, "DIY name: " + itemRef.getDiyName() + " = " + position, Toast.LENGTH_SHORT).show();
-
+                                Log.e("ITEMREF", String.valueOf(itemRef.getIncomeCount()));
                                 diyReference.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
+                                        Log.e("INCOMECOUNT", dataSnapshot.child("incomeCount").getChildren()+"");
 
-                                        for(final DataSnapshot snaps : dataSnapshot.getChildren()){
+                                        for (final DataSnapshot snaps : dataSnapshot.getChildren()) {
                                             final DIYSell diySellinfo = snaps.getValue(DIYSell.class);
                                             Log.e("diySellinfoID", diySellinfo.getProductID()); //tanan prodID sa DIY sa DB
 
-                                            if(item != null){
-                                                if(item.getProductID().equals(diySellinfo.getProductID())){
+                                            if (item != null) {
+                                                if (item.getProductID().equals(diySellinfo.getProductID())) {
                                                     Log.e("itemProdID", item.getProductID()); //kaning item kay items na naa sa lv
                                                     Log.e("diySellPRodeID", diySellinfo.getProductID()); //prodID sa DB na ni equal sa LV
 
                                                     snapKey.add(snaps.getKey()); //get key sa diy  na naa sa diy_by_tags na ni equal sa forMeetUp items
-                                                    Log.e("keyyDIYName", snaps.getKey() );
+                                                    Log.e("keyyDIYName", snaps.getKey());
 
                                                     AlertDialog.Builder ab = new AlertDialog.Builder(ForMeetUpActivity.this, R.style.MyAlertDialogStyle);
                                                     ab.setTitle("Approval Meet-up");
@@ -233,7 +233,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                 @Override
                                                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                                                     loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
-                                                                    loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                                                                    loggedInUserName += " " + dataSnapshot.child("l_name").getValue(String.class);
                                                                     //DBref for buyer
                                                                     DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
                                                                             .child("Sold_Items").child(sold_buyer);
@@ -248,6 +248,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                     soldReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                                                 }
+
                                                                 @Override
                                                                 public void onCancelled(DatabaseError databaseError) {
                                                                 }
@@ -266,7 +267,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                             int meetUpQty = meetUpList.get(position).getSelling_qty();
                                                             Log.e("meetUpQty", String.valueOf(meetUpQty));
 
-                                                            String message_price="";
+                                                            String message_price = "";
                                                             String message_qty = "";
                                                             String message_dsc = "";
                                                             List<String> message_Price = new ArrayList<String>();
@@ -274,7 +275,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                             final List<String> message_Dsc = new ArrayList<String>();
 //
                                                             //get price key
-                                                            for(DataSnapshot priceSnap : snaps.child("DIY Price").getChildren()){
+                                                            for (DataSnapshot priceSnap : snaps.child("DIY Price").getChildren()) {
                                                                 Log.e("priceSnap", String.valueOf(priceSnap));
                                                                 Log.e("priceSnapKey", priceSnap.getKey());
                                                                 double price = priceSnap.child("selling_price").getValue(double.class);
@@ -287,10 +288,10 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                 message_price += price;
                                                                 message_Price.add(message_price);
 
-                                                                message_dsc +=dsc;
+                                                                message_dsc += dsc;
                                                                 message_Dsc.add(message_dsc);
 
-                                                                Log.e("message_qty","" +  message_qty);
+                                                                Log.e("message_qty", "" + message_qty);
                                                                 Log.e("message_price", "" + message_price);
 
                                                                 prices.add(message_qty);
@@ -316,10 +317,10 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                     @Override
                                                                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                                                         User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                                                                        if(loggedInUserName!=null){
+                                                                        if (loggedInUserName != null) {
                                                                             PushNotification pushNotification = new PushNotification(getApplicationContext());
                                                                             pushNotification.title("Completed")
-                                                                                    .message(sellerName + " already delivered your item " +  sold_diyName + ". Rate seller now!")
+                                                                                    .message(sellerName + " already delivered your item " + sold_diyName + ". Rate seller now!")
                                                                                     .accessToken(user_profile.getAccess_token())
                                                                                     .send();
                                                                         }
@@ -365,6 +366,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                         }
                                     }
+
                                     @Override
                                     public void onCancelled(DatabaseError databaseError) {
                                     }
@@ -373,7 +375,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                             }
                             //Discount Promo
-                            else if (itemRef.getIdentity().equalsIgnoreCase("For Buyer Meet-up Discount Item")){
+                            else if (itemRef.getIdentity().equalsIgnoreCase("For Buyer Meet-up Discount Item")) {
                                 Toast.makeText(ForMeetUpActivity.this, "DIY name: " + itemRef.getDiyName() + " = " + position, Toast.LENGTH_SHORT).show();
 
 
@@ -391,30 +393,30 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                                for(final DataSnapshot snaps : dataSnapshot.getChildren()){
+                                                for (final DataSnapshot snaps : dataSnapshot.getChildren()) {
                                                     final DIYSell diySellinfo = snaps.getValue(DIYSell.class);
                                                     Log.e("diySellinfoID", diySellinfo.getProductID()); //tanan prodID sa DIY sa DB
 
 
-                                                    if(item != null){
+                                                    if (item != null) {
 
-                                                        if(discountSnap.getPromo_diyName().equals(item.getDiyName())){
+                                                        if (discountSnap.getPromo_diyName().equals(item.getDiyName())) {
                                                             Log.e("plsssTawn", "Yes" + discountSnap.getPromo_diyName() + " = " + item.getDiyName());
 
                                                             discountPromokey.add(discountSnapshot.getKey());
                                                             Log.e("discountPromokey", discountSnapshot.getKey());
 
-                                                        }else{
+                                                        } else {
                                                             Log.e("plsssTawn", " NO " + discountSnap.getPromo_diyName() + " = " + item.getDiyName());
                                                         }
 
 
-                                                        if(item.getProductID().equals(diySellinfo.getProductID())){
+                                                        if (item.getProductID().equals(diySellinfo.getProductID())) {
                                                             Log.e("itemProdID", item.getProductID()); //kaning item kay items na naa sa lv
                                                             Log.e("diySellPRodeID", diySellinfo.getProductID()); //prodID sa DB na ni equal sa LV
 
                                                             snapKey.add(snaps.getKey()); //get key sa diy  na naa sa diy_by_tags na ni equal sa forMeetUp items
-                                                            Log.e("keyyDIYName", snaps.getKey() );
+                                                            Log.e("keyyDIYName", snaps.getKey());
 
 
                                                             AlertDialog.Builder ab = new AlertDialog.Builder(ForMeetUpActivity.this, R.style.MyAlertDialogStyle);
@@ -455,7 +457,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                         @Override
                                                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                                                             loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
-                                                                            loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                                                                            loggedInUserName += " " + dataSnapshot.child("l_name").getValue(String.class);
 
                                                                             //DBref for buyer
                                                                             DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
@@ -492,7 +494,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                     int meetUpQty = meetUpList.get(position).getSelling_qty();
                                                                     Log.e("meetUpQty", String.valueOf(meetUpQty));
 
-                                                                    String message_price="";
+                                                                    String message_price = "";
                                                                     String message_qty = "";
                                                                     String message_dsc = "";
                                                                     List<String> message_Price = new ArrayList<String>();
@@ -500,7 +502,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                     final List<String> message_Dsc = new ArrayList<String>();
 //
                                                                     //get price key
-                                                                    for(DataSnapshot priceSnap : snaps.child("DIY Price").getChildren()){
+                                                                    for (DataSnapshot priceSnap : snaps.child("DIY Price").getChildren()) {
                                                                         Log.e("priceSnap", String.valueOf(priceSnap));
                                                                         Log.e("priceSnapKey", priceSnap.getKey());
                                                                         double price = priceSnap.child("selling_price").getValue(double.class);
@@ -513,10 +515,10 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                         message_price += price;
                                                                         message_Price.add(message_price);
 
-                                                                        message_dsc +=dsc;
+                                                                        message_dsc += dsc;
                                                                         message_Dsc.add(message_dsc);
 
-                                                                        Log.e("message_qty","" +  message_qty);
+                                                                        Log.e("message_qty", "" + message_qty);
                                                                         Log.e("message_price", "" + message_price);
 
                                                                         prices.add(message_qty);
@@ -551,10 +553,10 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             @Override
                                                                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                                                                 User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                                                                                if(loggedInUserName!=null){
+                                                                                if (loggedInUserName != null) {
                                                                                     PushNotification pushNotification = new PushNotification(getApplicationContext());
                                                                                     pushNotification.title("Completed")
-                                                                                            .message(sellerName + " already delivered your item " +  sold_diyName + ". Rate seller now!")
+                                                                                            .message(sellerName + " already delivered your item " + sold_diyName + ". Rate seller now!")
                                                                                             .accessToken(user_profile.getAccess_token())
                                                                                             .send();
                                                                                 }
@@ -609,8 +611,6 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                         });
 
 
-
-
                                     }
 
                                     @Override
@@ -635,19 +635,15 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                 });
 
 
-
-
-
                             }
 
                             //Buy and Take Promo
-                            else if(itemRef.getIdentity().equalsIgnoreCase("For Buyer Meet-up Buy and Take Item")){
+                            else if (itemRef.getIdentity().equalsIgnoreCase("For Buyer Meet-up Buy and Take Item")) {
 
                                 Toast.makeText(ForMeetUpActivity.this, "DIY name: " + itemRef.getDiyName() + " = " + position, Toast.LENGTH_SHORT).show();
 
                                 final DIYSell promoFreeItem = promoFreeList.get(position);
                                 Log.e("freeItemP", promoFreeItem.getDiyName());
-
 
                                 promoReference.addChildEventListener(new ChildEventListener() {
                                     @Override
@@ -658,44 +654,39 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                         buyTakeList.add(buyTakeSnap);
                                         Log.e("buyTakeList", String.valueOf(buyTakeSnap.getPromo_diyName()));
 
-
                                         diyReference.addValueEventListener(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                                for(final DataSnapshot snaps : dataSnapshot.getChildren()){
+                                                for (final DataSnapshot snaps : dataSnapshot.getChildren()) {
                                                     final DIYSell diySellinfo = snaps.getValue(DIYSell.class);
+                                                    Log.e("PISTE", diySellinfo.getIncomeCount()+"");
                                                     Log.e("diySellinfoID", diySellinfo.getProductID()); //tanan prodID sa DIY sa DB
 
-                                                    if(item != null){
+                                                    if (item != null) {
 
-                                                        if(buyTakeSnap.getPromo_diyName().equals(item.getDiyName())){
+                                                        if (buyTakeSnap.getPromo_diyName().equals(item.getDiyName())) {
                                                             Log.e("hoyyTawn", "Yes" + buyTakeSnap.getPromo_diyName() + " = " + item.getDiyName());
 
                                                             promoSalekey.add(buyTakeSnapshot.getKey());
                                                             Log.e("promoSalekey", buyTakeSnapshot.getKey());
 
-                                                        }else{
+                                                        } else {
                                                             Log.e("hoyyTawn", " NO " + buyTakeSnap.getPromo_diyName() + " = " + item.getDiyName());
                                                         }
 
-
-                                                        if (promoFreeItem.getDiyName().equals(diySellinfo.getDiyName())){
+                                                        if (promoFreeItem.getDiyName().equals(diySellinfo.getDiyName())) {
                                                             Log.e("Equalss?", promoFreeItem.getDiyName() + " = " + diySellinfo.getDiyName());
                                                             freeKeyxDIY.add(snaps.getKey()); //gi sud ang key sa free promo item
                                                             Log.e("freeKeyxDIY", snaps.getKey());
-
-
                                                             Log.e("proomoFreeQty", promoFreeItem.getSelling_price() + " = " + promoFreeItem.getSelling_qty());
                                                         }
 
-                                                        if(item.getProductID().equals(diySellinfo.getProductID())){
+                                                        if (item.getProductID().equals(diySellinfo.getProductID())) {
                                                             Log.e("itemProdID", item.getProductID()); //kaning item kay items na naa sa lv
                                                             Log.e("diySellPRodeID", diySellinfo.getProductID()); //prodID sa DB na ni equal sa LV
 
                                                             snapKey.add(snaps.getKey()); //get key sa diy  na naa sa diy_by_tags na ni equal sa forMeetUp items
-                                                            Log.e("keyyDIYName", snaps.getKey() );
-
+                                                            Log.e("keyyDIYName", snaps.getKey());
 
                                                             AlertDialog.Builder ab = new AlertDialog.Builder(ForMeetUpActivity.this, R.style.MyAlertDialogStyle);
                                                             ab.setTitle("Approval Meet-up");
@@ -732,8 +723,8 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                     soldReference.child(upload).child("dateAdded").setValue(sdate);
 
                                                                     //confirm promo DIY, push to meet up
-                                                                    for (int pos=0; pos < hasFree.size(); pos++) {
-                                                                        if(promokey.get(position).equals(hasFree.get(pos))){
+                                                                    for (int pos = 0; pos < hasFree.size(); pos++) {
+                                                                        if (promokey.get(position).equals(hasFree.get(pos))) {
                                                                             Log.e("equalsSilaa", "YESS" + " " + promokey.get(position) + " = " + hasFree.get(pos));
 
                                                                             soldReference.child(upload).setValue(product);
@@ -744,7 +735,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             soldReference.child(upload).child("freeItemQuantity").setValue(freeItemQty);
                                                                             soldReference.child(upload).child("dateAdded").setValue(sdate);
 
-                                                                        }else{
+                                                                        } else {
                                                                             soldReference.child(upload).setValue(product);
                                                                             soldReference.child(upload).child("userStatus").setValue("seller");
                                                                             soldReference.child(upload).child("selling_price").setValue(sold_price);
@@ -755,12 +746,11 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                                     }
 
-
                                                                     loggedInName.child(sold_buyer).addValueEventListener(new ValueEventListener() {
                                                                         @Override
                                                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                                                             loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
-                                                                            loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                                                                            loggedInUserName += " " + dataSnapshot.child("l_name").getValue(String.class);
 
                                                                             //DBref for buyer
                                                                             DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
@@ -777,8 +767,8 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             soldReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                                                             //confirm pending promo DIY, push to meet up
-                                                                            for (int post =0; post < hasFree.size(); post++) {
-                                                                                if(promokey.get(position).equals(hasFree.get(post))){
+                                                                            for (int post = 0; post < hasFree.size(); post++) {
+                                                                                if (promokey.get(position).equals(hasFree.get(post))) {
                                                                                     Log.e("equalsSilaaa", "YESS" + " " + promokey.get(position) + " = " + hasFree.get(post));
 
                                                                                     soldReference.child(buyUpload).setValue(buyProduct);
@@ -788,8 +778,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                                     soldReference.child(buyUpload).child("freeItemQuantity").setValue(freeItemQty);
                                                                                     soldReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
-                                                                                }
-                                                                                else{
+                                                                                } else {
                                                                                     soldReference.child(buyUpload).setValue(buyProduct);
                                                                                     soldReference.child(buyUpload).child("userStatus").setValue("buyer");
                                                                                     soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
@@ -821,9 +810,9 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                                     //free quantity sa promo item
                                                                     int freeQty = Integer.parseInt(String.valueOf(freeItemQty));
-                                                                    Log.e("freeQty", String.valueOf(freeQty));
+                                                                    Log.e("freeQtyUP", String.valueOf(freeQty));
 
-                                                                    String message_price="";
+                                                                    String message_price = "";
                                                                     String message_qty = "";
                                                                     String message_dsc = "";
                                                                     List<String> message_Price = new ArrayList<String>();
@@ -831,11 +820,12 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                     final List<String> message_Dsc = new ArrayList<String>();
 //
                                                                     //get price key
-                                                                    for(DataSnapshot priceSnap : snaps.child("DIY Price").getChildren()){
+                                                                    for (DataSnapshot priceSnap : snaps.child("DIY Price").getChildren()) {
                                                                         Log.e("priceSnap", String.valueOf(priceSnap));
                                                                         Log.e("priceSnapKey", priceSnap.getKey());
                                                                         double price = priceSnap.child("selling_price").getValue(double.class);
                                                                         int qty = priceSnap.child("selling_qty").getValue(int.class);
+
                                                                         String dsc = priceSnap.child("selling_descr").getValue(String.class);
 
                                                                         message_qty += qty;
@@ -844,10 +834,10 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                         message_price += price;
                                                                         message_Price.add(message_price);
 
-                                                                        message_dsc +=dsc;
+                                                                        message_dsc += dsc;
                                                                         message_Dsc.add(message_dsc);
 
-                                                                        Log.e("message_qty","" +  message_qty);
+                                                                        Log.e("message_qty", "" + message_qty);
                                                                         Log.e("message_price", "" + message_price);
 
                                                                         prices.add(message_qty);
@@ -869,42 +859,41 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                         Log.e("promKey", promKey);
 
                                                                         String buyTakeKey = promoSalekey.get(position);
-                                                                        Log.e("buyTakeKey",buyTakeKey);
+                                                                        Log.e("buyTakeKey", buyTakeKey);
+                                                                        int db_income_count_same = diySellinfo.getIncomeCount();
+                                                                        int db_expense_count_same = diySellinfo.getExpenseCount();
+
+                                                                        Log.e("GIATAYYAWA",db_income_count_same+"");
+                                                                        int db_count = snaps.child("incomeCount").getValue(int.class);
+                                                                        Log.e("GIATAY",db_count+" ");
+
 //                                                                        int meetUpQty = meetUpList.get(position).getSelling_qty();
-                                                                        int db_income_count = meetUpList.get(position).getIncomeCount();
-
-                                                                        Log.e("db_income_count1", db_income_count+"");
-                                                                        Log.e("buyQty1", buyQty+"");
-
                                                                         //if same ang promo ug gi free na item
-                                                                        if(promoFreeItem.getDiyName().equals(buyTakeSnap.getPromo_diyName())){
+                                                                        if (promoFreeItem.getDiyName().equals(buyTakeSnap.getPromo_diyName())) {
+
                                                                             Log.e("samePromoFree", promoFreeItem.getDiyName() + " = " + buyTakeSnap.getPromo_diyName());
                                                                             Log.e("samePromoFreeQTYY", freeItemQty + " = " + buyTakeSnap.getBuy_counts());
                                                                             int buyTakeQty = Integer.parseInt(buyTakeSnap.buy_counts);
+                                                                            Log.e("buyTakeQty", String.valueOf(buyTakeQty));
                                                                             int freeSameQty = Integer.parseInt(String.valueOf(freeItemQty));
                                                                             int plusQTy = freeSameQty + buyTakeQty;
                                                                             Log.e("plusQTY", String.valueOf(plusQTy));
+                                                                            Log.e("db_count",db_count+" "+db_income_count_same);
 
                                                                             int quantityCountSame = meetUpQty - plusQTy; //if same ang free ug ang gi promo
-                                                                            int updateIncomeCount = (db_income_count+quantityCountSame);
+                                                                            int updateIncomeCount = (db_income_count_same + buyTakeQty);
+                                                                            int updateExpenseCount = (db_expense_count_same + freeSameQty);
 
-                                                                            Log.e("minusQty_nonFree2", updateIncomeCount+"");
-                                                                            Log.e("db_income_count2", db_income_count+"");
-                                                                            Log.e("buyQty2", buyQty+"");
-
+                                                                            //here start
                                                                             HashMap<String, Object> resultSame = new HashMap<>();
                                                                             resultSame.put("selling_qty", quantityCountSame);
                                                                             diyReference.child(penkey).child("DIY Price")
                                                                                     .child(priceSnap.getKey()).updateChildren(resultSame);
-
-//                                                                            HashMap<String, Object> income_count_same = new HashMap<>();
-//                                                                            income_count_same.put("incomeCount", updateIncomeCount);
-//                                                                            incomeCountRef.child(penkey).updateChildren(income_count_same);
-
+////
                                                                             HashMap<String, Object> incomeCountResult = new HashMap<>();
-                                                                            incomeCountResult.put("incomeCount", buyQty);
+                                                                            incomeCountResult.put("incomeCount", updateIncomeCount);
                                                                             diyReference.child(penkey).updateChildren(incomeCountResult);
-
+//
                                                                             HashMap<String, Object> buyTakeResults = new HashMap<>();
                                                                             buyTakeResults.put("promoQuantity", quantityCountSame);
                                                                             promoReference.child(buyTakeKey).updateChildren(buyTakeResults);
@@ -914,14 +903,20 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             promoReference.child(buyTakeKey).child("freeItemList").child(priceSnap.getKey())
                                                                                     .updateChildren(buyTakeFreeResult);
 
+                                                                            HashMap<String, Object> expenseCountResult = new HashMap<>();
+                                                                            expenseCountResult.put("expenseCount", updateExpenseCount);
+                                                                            diyReference.child(penkey).updateChildren(expenseCountResult);
+                                                                            //here end
 
+                                                                            Log.e("freeItemQty", freeSameQty+"");
                                                                         }
                                                                         //if dli same ang promo ug gi free
-                                                                        else if(!promoFreeItem.getDiyName().equals(buyTakeSnap.getPromo_diyName())){
-                                                                            int minusQty_nonFree = (db_income_count + buyQty);
-                                                                            Log.e("minusQty_nonFree3", minusQty_nonFree+"");
-                                                                            Log.e("db_income_count3", db_income_count+"");
-                                                                            Log.e("buyQty3", buyQty+"");
+                                                                        else if (!promoFreeItem.getDiyName().equals(buyTakeSnap.getPromo_diyName())) {
+                                                                            int updateQtyIncomeCount = (db_income_count_same + buyQty);
+                                                                            Log.e("minusQty_nonFree3", updateQtyIncomeCount + "");
+                                                                            Log.e("db_income_count3", db_income_count_same + "");
+                                                                            Log.e("buyQty3", buyQty + "");
+                                                                            Log.e("freeQtyUP2", String.valueOf(freeQty));
 
                                                                             HashMap<String, Object> results = new HashMap<>();
                                                                             results.put("selling_qty", quantityCountMeetUp);
@@ -934,12 +929,8 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                                     .child(priceSnap.getKey()).updateChildren(freeResults);
 
                                                                             HashMap<String, Object> incomeCountResult = new HashMap<>();
-                                                                            incomeCountResult.put("incomeCount", minusQty_nonFree);
+                                                                            incomeCountResult.put("incomeCount", updateQtyIncomeCount);
                                                                             incomeCountRef.child(penkey).updateChildren(incomeCountResult);
-
-//                                                                            HashMap<String, Object> incomeCount_notSame = new HashMap<>();
-//                                                                            incomeCount_notSame.put("incomeCount", minusQty_nonFree);
-//                                                                            incomeCountRef.child(promKey).updateChildren(incomeCount_notSame);
 
                                                                             soldReference.child(upload).updateChildren(results);
 
@@ -952,8 +943,10 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             promoReference.child(buyTakeKey).child("freeItemList").child(priceSnap.getKey())
                                                                                     .updateChildren(buyTakeFreeResult);
 
+                                                                            HashMap<String, Object> expenseCountResult = new HashMap<>();
+                                                                            expenseCountResult.put("expenseCount", freeQty);
+                                                                            diyReference.child(penkey).updateChildren(expenseCountResult);
                                                                         }
-
 
                                                                         //Notification
                                                                         Log.e("buyerID", sold_buyer);
@@ -961,10 +954,10 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             @Override
                                                                             public void onDataChange(DataSnapshot dataSnapshot) {
                                                                                 User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                                                                                if(loggedInUserName!=null){
+                                                                                if (loggedInUserName != null) {
                                                                                     PushNotification pushNotification = new PushNotification(getApplicationContext());
                                                                                     pushNotification.title("Completed")
-                                                                                            .message(sellerName + " already delivered your item " +  sold_diyName + ". Rate seller now!")
+                                                                                            .message(sellerName + " already delivered your item " + sold_diyName + ". Rate seller now!")
                                                                                             .accessToken(user_profile.getAccess_token())
                                                                                             .send();
                                                                                 }
@@ -994,19 +987,13 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                             ab.create().show();
                                                         }
-
-
-
                                                     }
-
                                                 }
                                             }
-
                                             @Override
                                             public void onCancelled(DatabaseError databaseError) {
 
                                             }
-
                                         });
 
                                     }
@@ -1033,10 +1020,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                 });
 
 
-
-                            }
-
-                            else{
+                            } else {
                                 Toast.makeText(ForMeetUpActivity.this, "For seller meet-up.", Toast.LENGTH_SHORT).show();
                             }
 
@@ -1053,8 +1037,6 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
             }
         });
-
-
 
 
     }

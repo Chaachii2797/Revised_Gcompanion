@@ -109,9 +109,9 @@ public class SalesReportAdapters extends ArrayAdapter<DIYnames>{
 //                    NumberFormat.getNumberInstance(Locale.US).format(qty_sold);
                     String formatted_total_sales = NumberFormat.getNumberInstance(Locale.US).format(total_qty_sold);
                     String formatted_price = NumberFormat.getNumberInstance(Locale.US).format(fixed_price);
-                    sales_price.setText(formatted_price+"");
+                    sales_price.setText("₱ "+formatted_price);
                     sales_qty.setText(qty_sold+" ");
-                    sales_total.setText(formatted_total_sales+".00");
+                    sales_total.setText("₱ "+formatted_total_sales);
 
                 }catch (NullPointerException nPe){
                     nPe.getMessage();

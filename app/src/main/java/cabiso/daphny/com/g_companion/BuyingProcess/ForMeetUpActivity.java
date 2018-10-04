@@ -534,6 +534,9 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                                         String dscKey = discountPromokey.get(position);
                                                                         Log.e("dscKey", dscKey);
+
+                                                                        int db_income_count_same = diySellinfo.getIncomeCount();
+                                                                        int db_expense_count_same = diySellinfo.getExpenseCount();
 //
                                                                         HashMap<String, Object> results = new HashMap<>();
                                                                         results.put("selling_qty", quantityCountMeetUp);

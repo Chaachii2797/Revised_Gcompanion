@@ -551,10 +551,10 @@ public class ViewPromoActivity extends AppCompatActivity {
 
                             }
                         });
+                        String input_new_price = discountDiys.getPromo_newPrice();
+                        double new_price = Double.parseDouble(input_new_price);
 
-                        Double priceXBuy = Double.parseDouble(discountDiys.getPromo_newPrice()) * Double.parseDouble(promoDiys.buy_counts);
-
-                        viewPromoPrice.setText("New Price: " + " " + priceXBuy);
+                        viewPromoPrice.setText("New Price: " + " " + new_price);
                         tvExpiration.setText("Promo expires on: " + " " + promoExpiry + " !");
                         promo_qty.setText(totalDIYQty + " " + "pieces left");
 

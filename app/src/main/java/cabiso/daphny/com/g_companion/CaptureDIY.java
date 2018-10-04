@@ -331,8 +331,12 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
         mAdapter = new CommunityAdapter(getApplicationContext(), itemMaterial);
         pAdapter = new CommunityAdapter(getApplicationContext(), itemProcedure);
 
+
+
         materialsList.setAdapter(mAdapter);
         proceduresList.setAdapter(pAdapter);
+        materialsList.setNestedScrollingEnabled(true);
+        proceduresList.setNestedScrollingEnabled(true);
 
         String[] values = new String[] { "Quantity" };
 
@@ -512,56 +516,57 @@ public class CaptureDIY extends AppCompatActivity implements View.OnClickListene
                         final Uri downloadUrl = taskSnapshot.getDownloadUrl();
                         final Float float_this = Float.valueOf(0);
 
+                        if(selectedVideo!=null) {
+                            final UploadTask uploadTaskVideo = videoStorageRef.child(selectedVideo.toString()).putFile(selectedVideo);
 
-                        final UploadTask uploadTaskVideo = videoStorageRef.child(selectedVideo.toString()).putFile(selectedVideo);
+                            uploadTaskVideo.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    final Uri downloadUrlVideo = taskSnapshot.getDownloadUrl();
 
-                        uploadTaskVideo.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                final Uri downloadUrlVideo = taskSnapshot.getDownloadUrl();
+                                    String upload = databaseReference.push().getKey();
+                                    String productID = generateString();
 
-                                String upload = databaseReference.push().getKey();
-                                String productID = generateString();
+                                    //push data to Firebase Database - diy_by_tags node
+                                    databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
+                                            downloadUrl.toString(), userID, productID, "community",
+                                            float_this, float_this, loggedInUserName, downloadUrlVideo.toString()));
+                                    databaseReference.child(upload).child("materials").setValue(dbMaterials);
+                                    databaseReference.child(upload).child("procedures").setValue(itemProcedure);
+                                    databaseReference.child(upload).child("category").setValue(category);
+                                    databaseReference.child(upload).child("category_postition").setValue(categoryPos);
+                                    databaseReference.child(upload).child("dateAdded").setValue(sdate);
 
-                                //push data to Firebase Database - diy_by_tags node
-                                databaseReference.child(upload).setValue(new DIYnames(name.getText().toString(),
-                                        downloadUrl.toString(), userID, productID, "community",
-                                        float_this, float_this, loggedInUserName, downloadUrlVideo.toString()));
-                                databaseReference.child(upload).child("materials").setValue(dbMaterials);
-                                databaseReference.child(upload).child("procedures").setValue(itemProcedure);
-                                databaseReference.child(upload).child("category").setValue(category);
-                                databaseReference.child(upload).child("category_postition").setValue(categoryPos);
-                                databaseReference.child(upload).child("dateAdded").setValue(sdate);
-
-                                //push data to Firebase Database - diy_by_user node
-                                byuser_Reference.child(upload).setValue(new DIYnames(name.getText().toString(),
-                                        downloadUrl.toString(), userID, productID, "community",
-                                        float_this, float_this, loggedInUserName, downloadUrlVideo.toString()));
-                                byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
-                                byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
-                                byuser_Reference.child(upload).child("category").setValue(category);
-                                byuser_Reference.child(upload).child("category_postition").setValue(categoryPos);
-                                byuser_Reference.child(upload).child("dateAdded").setValue(sdate);
+                                    //push data to Firebase Database - diy_by_user node
+                                    byuser_Reference.child(upload).setValue(new DIYnames(name.getText().toString(),
+                                            downloadUrl.toString(), userID, productID, "community",
+                                            float_this, float_this, loggedInUserName, downloadUrlVideo.toString()));
+                                    byuser_Reference.child(upload).child("materials").setValue(dbMaterials);
+                                    byuser_Reference.child(upload).child("procedures").setValue(itemProcedure);
+                                    byuser_Reference.child(upload).child("category").setValue(category);
+                                    byuser_Reference.child(upload).child("category_postition").setValue(categoryPos);
+                                    byuser_Reference.child(upload).child("dateAdded").setValue(sdate);
 
 
-                                Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(CaptureDIY.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
-                                // Alert Dialog for finished uploaing DIYs
-                                AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this, R.style.MyAlertDialogStyle);
-                                ab.setMessage("Thank you for contributing to the DIY Community!");
-                                ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Intent in = new Intent(CaptureDIY.this, MainActivity.class);
-                                        startActivity(in);
-                                    }
-                                });
+                                    // Alert Dialog for finished uploaing DIYs
+                                    AlertDialog.Builder ab = new AlertDialog.Builder(CaptureDIY.this, R.style.MyAlertDialogStyle);
+                                    ab.setMessage("Thank you for contributing to the DIY Community!");
+                                    ab.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Intent in = new Intent(CaptureDIY.this, MainActivity.class);
+                                            startActivity(in);
+                                        }
+                                    });
 
-                                ab.create().show();
-                                progressDialog.dismiss();
+                                    ab.create().show();
+                                    progressDialog.dismiss();
 
-                            }
-                        });
+                                }
+                            });
+                        }
 
 
                     }

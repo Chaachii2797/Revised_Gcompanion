@@ -32,7 +32,7 @@ import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
 import cabiso.daphny.com.g_companion.PushNotification;
 
-public class PriceDiscountActivity extends AppCompatActivity implements View.OnClickListener{
+public class PriceDiscountActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String diyNameID, itemID;
     private String productID;
@@ -77,7 +77,7 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
         Log.e("buyTakeID", itemID);
 
         imgID = String.valueOf(intent.getExtras().get("diy_img"));
-        Log.e("PRICEUUUU", priceID+ "");
+        Log.e("PRICEUUUU", priceID + "");
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
@@ -113,7 +113,7 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
-        if(v==mExpiryDate){
+        if (v == mExpiryDate) {
             final Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
@@ -133,22 +133,22 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
             datePickerDialog.show();
         }
 
-        if(v==mFinish){
+        if (v == mFinish) {
             Log.e("diy_IDDDDDDDDD", productID);
             try {
                 origPrice = Double.parseDouble(priceID);
                 double discount = Integer.parseInt(mPriceDiscount.getText().toString());
-                Log.e("discountOrigP", discount+ " "+origPrice);
-                double percentDiscount = (discount/100);
-                Log.e("percentDiscount", percentDiscount+"");
-                double  percentedPrice = (origPrice*percentDiscount);
-                double finalPrice = (origPrice-percentedPrice);
-                Log.e("PRICEUUUUDISCOUNT", (origPrice*percentDiscount)+" "+ finalPrice+ "");
-                priceDiscountModel.setPromo_id(productID +"");
+                Log.e("discountOrigP", discount + " " + origPrice);
+                double percentDiscount = (discount / 100);
+                Log.e("percentDiscount", percentDiscount + "");
+                double percentedPrice = (origPrice * percentDiscount);
+                double finalPrice = (origPrice - percentedPrice);
+                Log.e("PRICEUUUUDISCOUNT", (origPrice * percentDiscount) + " " + finalPrice + "");
+                priceDiscountModel.setPromo_id(productID + "");
                 priceDiscountModel.setPromo_diyName(diyNameID);
                 priceDiscountModel.setPromo_expiry(mExpiryDate.getText() + "");
                 priceDiscountModel.setPromo_details(mDetails.getText() + "");
-                priceDiscountModel.setPercent_discount(mPriceDiscount.getText() + ""+"%");
+                priceDiscountModel.setPercent_discount(mPriceDiscount.getText() + "" + "%");
                 priceDiscountModel.setPromo_newPrice(String.valueOf(finalPrice));
                 priceDiscountModel.setPromo_image(imgID);
                 priceDiscountModel.setPromo_createdDate(sdate);
@@ -176,11 +176,11 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
 //                        if(loggedInUser!=null){
-                            PushNotification pushNotification = new PushNotification(getApplicationContext());
-                            pushNotification.title("On Sale Notification")
-                                    .message(diyNameID + " is now " + mPriceDiscount.getText() + ""+"%" + " discount!")
-                                    .accessToken(user_profile.getAccess_token())
-                                    .send();
+                        PushNotification pushNotification = new PushNotification(getApplicationContext());
+                        pushNotification.title("On Sale Notification")
+                                .message(diyNameID + " is now " + mPriceDiscount.getText() + "" + "%" + " discount!")
+                                .accessToken(user_profile.getAccess_token())
+                                .send();
 //                        }
                     }
 
@@ -205,13 +205,10 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
                     }
                 });
 
-                Intent intent = new Intent(PriceDiscountActivity.this,MainActivity.class);
+                Intent intent = new Intent(PriceDiscountActivity.this, MainActivity.class);
                 startActivity(intent);
 
-
-
-
-            }catch (NumberFormatException nFe){
+            } catch (NumberFormatException nFe) {
                 nFe.getMessage();
             }
 

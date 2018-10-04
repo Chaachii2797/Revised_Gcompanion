@@ -19,8 +19,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -53,7 +55,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
             owner_add, owner_cn;
     private Button button_sell, contact_seller, create_promo;
     private String user_name, userID;
-    private CardView selling_price, seller_info;
+    private CardView selling_price, seller_info, cardViewVid;
 
     private ArrayList<DBMaterial> dbMaterials;
     private DatabaseReference user_data;
@@ -64,7 +66,9 @@ public class Activity_View_Recommend extends AppCompatActivity {
 
     private DatabaseReference loggedInName;
     private String loggedInUserName;
-
+    private VideoView diyVideo;
+    private Uri selectedVideo;
+    private MediaController mMediaController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +90,8 @@ public class Activity_View_Recommend extends AppCompatActivity {
         owner_cn = (TextView) findViewById(R.id.diy_owner_cn);
         selling_price = (CardView) findViewById(R.id.cardView3);
         seller_info = (CardView) findViewById(R.id.cardView4);
+        diyVideo = (VideoView) findViewById(R.id.videoViewDIY);
+        cardViewVid = (CardView) findViewById(R.id.cardviewVid);
 
         final String get_name = getIntent().getStringExtra("name");
         diy_name.setText(get_name);
@@ -98,6 +104,10 @@ public class Activity_View_Recommend extends AppCompatActivity {
         pending_reference = FirebaseDatabase.getInstance().getReference("DIY Pending Items").child(userID);
 
         loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
+
+        if(mMediaController == null){
+            mMediaController = new MediaController(this);
+        }
 
         loggedInName.child(userID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -134,6 +144,9 @@ public class Activity_View_Recommend extends AppCompatActivity {
                             selling_price.setVisibility(View.VISIBLE);
                             seller_info.setVisibility(View.VISIBLE);
                             diy_name.setText(info.diyName);
+                            diyVideo.setVisibility(View.INVISIBLE);
+                            cardViewVid.setVisibility(View.INVISIBLE);
+
 
                             user_data.addChildEventListener(new ChildEventListener() {
                                 @Override
@@ -428,6 +441,22 @@ public class Activity_View_Recommend extends AppCompatActivity {
 
                                 }
                             });
+
+                            if(dataSnapshot.hasChild("diyVideo")){
+
+                                diyVideo.setMediaController(mMediaController);
+                                selectedVideo = Uri.parse(diYnames.getDiyVideo());
+                                diyVideo.setVideoURI(selectedVideo);
+                                mMediaController.setAnchorView(diyVideo);
+                                Log.e("videoURL", diYnames.getDiyVideo());
+
+                            }else{
+                                //way vid ang uban kay optional raman mo add ug vid sa DIY
+                                diyVideo.setVisibility(View.INVISIBLE);
+                                cardViewVid.setVisibility(View.INVISIBLE);
+
+                            }
+
 
                             String messageMat = "";
                             List<String> messageMaterials = new ArrayList<String>();

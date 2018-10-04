@@ -137,7 +137,11 @@ public class MainActivity extends AppCompatActivity
                 if (loggedInUser.getRole().equalsIgnoreCase("user")){
                     //invisible admin nav item
                     hideItem();
+                } else{
+                    hideUserItems();
                 }
+
+
                 Glide.with(MainActivity.this)
                         .load(loggedInUser.getUserProfileUrl())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -325,10 +329,10 @@ public class MainActivity extends AppCompatActivity
                 Intent sold = new Intent(MainActivity.this,Sold_Activity.class);
                 startActivity(sold);
                 break;
-            case R.id.nav_calendar:
-                Intent calendar = new Intent(MainActivity.this,CalendarActivity.class);
-                startActivity(calendar);
-                break;
+//            case R.id.nav_calendar:
+//                Intent calendar = new Intent(MainActivity.this,CalendarActivity.class);
+//                startActivity(calendar);
+//                break;
             case R.id.nav_report:
                 Intent sales = new Intent(MainActivity.this,SalesReport.class);
                 startActivity(sales);
@@ -375,5 +379,17 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void hideUserItems()
+    {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.nav_bookmark).setVisible(false);
+        nav_Menu.findItem(R.id.nav_pending).setVisible(false);
+        nav_Menu.findItem(R.id.nav_meetup).setVisible(false);
+        nav_Menu.findItem(R.id.nav_sold).setVisible(false);
+        nav_Menu.findItem(R.id.nav_report).setVisible(false);
+        nav_Menu.findItem(R.id.nav_inventory).setVisible(false);
+
+    }
 
 }

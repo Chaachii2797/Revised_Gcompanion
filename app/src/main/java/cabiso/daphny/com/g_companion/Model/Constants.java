@@ -47,6 +47,7 @@ public class Constants {
             "{\"name\": \"Soapbox\", \"code\": \"BP\"}, \n" +
             "{\"name\": \"Broom\", \"code\": \"BR\"}, \n" +
             "{\"name\": \"Button\", \"code\": \"BU\"}, \n" +
+            "{\"name\": \"Candle\", \"code\": \"CL\"}, \n" +
             "{\"name\": \"CalendarActivity Paper\", \"code\": \"CP\"}, \n" +
             "{\"name\": \"CalendarActivity\", \"code\": \"CA\"}, \n" +
             "{\"name\": \"Can (Small)\", \"code\": \"CA\"}, \n" +
@@ -94,6 +95,7 @@ public class Constants {
             "{\"name\": \"Plastic Cup\", \"code\": \"PC\"}, \n" +
             "{\"name\": \"Frame\", \"code\": \"FR\"}, \n" +
             "{\"name\": \"Furniture\", \"code\": \"FU\"}, \n" +
+            "{\"name\": \"Flowers\n\", \"code\": \"FW\"}, \n" +
             "{\"name\": \"Glass\", \"code\": \"GL\"}, \n" +
             "{\"name\": \"Bottle (Glass)\", \"code\": \"GB\"}, \n" +
             "{\"name\": \"Glass Fiber\", \"code\": \"GF\"}, \n" +
@@ -117,6 +119,7 @@ public class Constants {
             "{\"name\": \"Jewel\", \"code\": \"JE\"}, \n" +
             "{\"name\": \"Jug\", \"code\": \"JU\"}, \n" +
             "{\"name\": \"Key\", \"code\": \"KE\"}, \n" +
+            "{\"name\": \"Craft Knife\", \"code\": \"CK\"}, \n" +
             "{\"name\": \"Knife\", \"code\": \"KN\"}, \n" +
             "{\"name\": \"Laptop\", \"code\": \"LA\"}, \n" +
             "{\"name\": \"Lightbulb\", \"code\": \"LI\"}, \n" +
@@ -146,7 +149,6 @@ public class Constants {
             "{\"name\": \"Picture Frame\", \"code\": \"PI\"}, \n" +
             "{\"name\": \"Pin\", \"code\": \"PI\"}, \n" +
             "{\"name\": \"Pillow\", \"code\": \"PL\"}, \n" +
-            "{\"name\": \"Plywood\", \"code\": \"PW\"}, \n" +
             "{\"name\": \"Bottle (Plastic)\", \"code\": \"PS\"}, \n" +
             "{\"name\": \"Plate\", \"code\": \"PL\"}, \n" +
             "{\"name\": \"Paint\", \"code\": \"PA\"}, \n" +

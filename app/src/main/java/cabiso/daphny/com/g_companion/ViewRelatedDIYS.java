@@ -960,7 +960,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
 
                             RelativeLayout.LayoutParams related = new RelativeLayout.LayoutParams(
                                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                            related.topMargin = 1950;
+                            related.topMargin = 2400;
                             related.bottomMargin = 15;
                             related.leftMargin = 20;
                             related.rightMargin = 20;

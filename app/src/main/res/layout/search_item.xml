@@ -39,14 +39,6 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-condensed"
-                android:text="Owner"
-                android:textColor="#bdc3c7"
-                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/tv_item_name"
@@ -55,7 +47,7 @@
                 android:layout_centerVertical="true"
                 android:fontFamily="sans-serif-condensed"
                 android:text="Item Name"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:ellipsize="end"
                 android:maxLines="1"/>
 
@@ -67,9 +59,10 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:fontFamily="sans-serif-condensed"
+                android:layout_marginTop="15dp"
                 android:text="Selling"
                 android:textColor="#e67e22"
-                android:textSize="16sp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
     </RelativeLayout>

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.R;
+import cabiso.daphny.com.g_companion.ViewRelatedDIYS;
 
 public class SearchActivity extends Activity {
 
@@ -104,8 +105,8 @@ public class SearchActivity extends Activity {
                 String name = (String) selected_diy.diyName;
 
                 Log.d("name:",selected_diy.diyName);
-                Intent intent = new Intent(SearchActivity.this, SearchView.class);
-                intent.putExtra("name",name);
+                Intent intent = new Intent(SearchActivity.this, ViewRelatedDIYS.class);
+                intent.putExtra("Nname",name);
 
 //                Bundle extra = new Bundle();
 //                extra.putSerializable("dbmaterials", dbMaterials);

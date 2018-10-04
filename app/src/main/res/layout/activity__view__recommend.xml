@@ -90,12 +90,49 @@
 
             <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/cardviewVid"
+                android:layout_below="@id/diy_name"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="45dp"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="5dp"
+                app:elevation="5dp">
+
+                <TextView
+                    android:id="@+id/diyVideo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/gen_scheme1"
+                    android:paddingLeft="10dp"
+                    android:text="DIY Video:"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"/>
+
+                <VideoView
+                    android:id="@+id/videoViewDIY"
+                    android:layout_width="300dp"
+                    android:layout_height="130dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="30dp"
+                    android:background="@android:color/transparent" />
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/cardView"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/diy_name"
+                android:layout_below="@+id/cardviewVid"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="15dp"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardCornerRadius="5dp"
                 app:elevation="5dp">

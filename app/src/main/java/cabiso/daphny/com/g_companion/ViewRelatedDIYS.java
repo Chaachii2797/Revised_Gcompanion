@@ -77,7 +77,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
     private ViewImagesSearchPagerAdapter viewImagesSearchPagerAdapter;
     private TextView sview_diyName, sview_diyMaterials, sview_diyProcedures, sell_details, diyBy, diyOwner,
             diyQty, promoPrice, sellers_address, sellers_contact_no, textViewpromo, textViewPHP, tv_bid_xpire, tv_bid_price,
-            tv_bid_comment, bidding_winner_amount, bidding_winner_name, tv_bidders;
+            tv_bid_comment, bidding_winner_amount, bidding_winner_name, tv_bidders, tvIncrement;
     private CardView cardview2, cardview3, cardview4, cardView5, cardView6, cardView7, cardView8, cardView9, cardViewVid;
     private String user_name;
     private String userID;
@@ -177,6 +177,8 @@ public class ViewRelatedDIYS extends AppCompatActivity {
         tv_bid_xpire = (TextView) findViewById(R.id.et_bidding_expiration);
         tv_bid_price = (TextView) findViewById(R.id.et_bidding_price);
         tv_bid_comment = (TextView) findViewById(R.id.et_bidding_commnt);
+        tvIncrement = (TextView) findViewById(R.id.et_bidding_increment);
+
         bidding_winner_amount = (TextView) findViewById(R.id.winner_bid_amount);
         bidding_winner_name = (TextView) findViewById(R.id.winner_bid_owner);
 
@@ -912,6 +914,7 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                             DIYBidding biddingItem = insideDataSnapshot.getValue(DIYBidding.class);
                             tv_bid_xpire.setText(biddingItem.getDate());
                             tv_bid_price.setText(biddingItem.getIntial_price()+"");
+                            tvIncrement.setText(biddingItem.getIncrementPrice()+"");
                             tv_bid_comment.setText(biddingItem.getMessage());
                         }
 
@@ -1367,6 +1370,14 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                             final DIYBidding biddingItem = insideDataSnapshot.getValue(DIYBidding.class);
                             tv_bid_xpire.setText(biddingItem.getXpire_date());
                             tv_bid_price.setText("₱: " + biddingItem.getIntial_price());
+
+                            if(biddingItem.getIncrementPrice() == 0){
+                                tvIncrement.setText("Free Bidding");
+
+                            }else{
+                                tvIncrement.setText("₱: " + biddingItem.getIncrementPrice());
+                            }
+                            Log.e("incrementBidd", String.valueOf(biddingItem.getIncrementPrice()));
                             Log.e("initialBid", biddingItem.getIntial_price()+"");
 
                             tv_bid_comment.setText(biddingItem.getMessage());
@@ -1434,61 +1445,302 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                             public void onClick(View v) {
                                                 final EditText bidders_value = (EditText) dialog.findViewById(R.id.et_bidders_price);
                                                 String inputBid = bidders_value.getText().toString();
-                                                int initialBidAmount = biddingItem.getIntial_price();
+                                                int inputIncrement = biddingItem.getIncrementPrice();
+                                                Log.e("incrementAmount", String.valueOf(biddingItem.getIncrementPrice()));
+                                                final int initialBidAmount = biddingItem.getIntial_price();
 
-                                                if(inputBid.equals(" ")){
-                                                    inputBid="0";
-                                                }
+                                                if(inputIncrement == 0){ //Free bidding
+                                                    if(inputBid.equals(" ")){
+                                                        inputBid="0";
+                                                    }
 
-                                                if (inputBid.isEmpty()) {
-                                                    Log.e("EmptyAmount", "Please enter bid amount.");
-                                                    Toast.makeText(context, "Please enter bid amount." + "", Toast.LENGTH_SHORT).show();
-                                                } else if(Integer.valueOf(inputBid) <= initialBidAmount){
-                                                    Log.e("NotEnoughAmount", "NotEnoughAmount");
-                                                    Toast.makeText(context, "Bid amount must be equal or greater than " +
-                                                            "the set minimum bid amount by the seller." + "", Toast.LENGTH_LONG).show();
-                                                } else{
-                                                    biddersReference.push().setValue(new Bidders(bidders_value.getText().toString()
-                                                            , userID, loggedInUserName, sdate));
 
-                                                    //Notification
-                                                    user_reference.addChildEventListener(new ChildEventListener() {
-                                                        @Override
-                                                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                                            User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                                                            if(loggedInUserName!=null){
-                                                                PushNotification pushNotification = new PushNotification(getApplicationContext());
-                                                                pushNotification.title("Bidders Notification")
-                                                                        .message(loggedInUserName +" bid " + "₱: " + bidders_value.getText().toString() + " on your item.")
-                                                                        .accessToken(user_profile.getAccess_token())
-                                                                        .send();
+                                                    if (inputBid.isEmpty()) {
+                                                        Log.e("EmptyAmount", "Please enter bid amount.");
+                                                        Toast.makeText(context, "Please enter bid amount." + "", Toast.LENGTH_SHORT).show();
+                                                    } else if(Integer.valueOf(inputBid) < initialBidAmount){
+                                                        Log.e("NotEnoughAmount", "NotEnoughAmount");
+                                                        Toast.makeText(context, "Bid amount must be equal or greater than " +
+                                                                "the set minimum bid amount by the seller." + "", Toast.LENGTH_LONG).show();
+                                                    }
+                                                    else{
+                                                        biddersReference.push().setValue(new Bidders(bidders_value.getText().toString()
+                                                                , userID, loggedInUserName, sdate));
+
+                                                        //Notification
+                                                        user_reference.addChildEventListener(new ChildEventListener() {
+                                                            @Override
+                                                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                                                if(loggedInUserName!=null){
+                                                                    PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                                                    pushNotification.title("Bidders Notification")
+                                                                            .message(loggedInUserName +" bid " + "₱: " + bidders_value.getText().toString() + " on your item.")
+                                                                            .accessToken(user_profile.getAccess_token())
+                                                                            .send();
+                                                                }
                                                             }
-                                                        }
 
-                                                        @Override
-                                                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                                                            @Override
+                                                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                                                        }
+                                                            }
 
-                                                        @Override
-                                                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+                                                            @Override
+                                                            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                                                        }
+                                                            }
 
-                                                        @Override
-                                                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                                                            @Override
+                                                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                                                        }
+                                                            }
 
-                                                        @Override
-                                                        public void onCancelled(DatabaseError databaseError) {
+                                                            @Override
+                                                            public void onCancelled(DatabaseError databaseError) {
 
-                                                        }
-                                                    });
+                                                            }
+                                                        });
 
-                                                    Intent intent = new Intent(ViewRelatedDIYS.this, MainActivity.class);
-                                                    startActivity(intent);
+                                                        Intent intent = new Intent(ViewRelatedDIYS.this, MainActivity.class);
+                                                        startActivity(intent);
+                                                    }
+
                                                 }
+
+
+                                                else{ //incremental bidding
+
+                                                    biddingRef = FirebaseDatabase.getInstance().getReference().child("diy_by_tags")
+                                                            .child(dataSnapshot.getKey()).child("bidders");
+                                                    Log.e("biddingGetBidders", String.valueOf(biddingRef));
+
+                                                    if(inputBid.equals(" ")){
+                                                        inputBid="0";
+                                                    }
+
+                                                    if (inputBid.isEmpty()) {
+                                                        Log.e("EmptyAmount", "Please enter bid amount.");
+                                                        Toast.makeText(context, "Please enter bid amount." + "", Toast.LENGTH_SHORT).show();
+                                                    }
+
+                                                    else if(Integer.valueOf(inputBid) < initialBidAmount){
+                                                        Log.e("initialPlusIncrement", String.valueOf(initialBidAmount + inputIncrement));
+                                                        Log.e("NotEnoughIncrement", "NotEnoughIncrement");
+                                                        Toast.makeText(context, "Not enough amount." + "", Toast.LENGTH_LONG).show();
+                                                    }
+
+
+                                                    //if ang gi bid kay initail bid, okay ra kay first bid man
+                                                    //pero if mo nabalik gihapon kog type ani nga amount, masud gihapon siya, ganahan ko if mana ni siya nga amount dli na pwd
+                                                    //kani ra nuon na part ang pwd ra mabalik balik
+                                                    else if(Integer.valueOf(inputBid) == initialBidAmount){
+                                                        Toast.makeText(ViewRelatedDIYS.this, "Equals to initial bid.", Toast.LENGTH_SHORT).show();
+                                                        biddersReference.push().setValue(new Bidders(bidders_value.getText().toString()
+                                                                , userID, loggedInUserName, sdate));
+
+                                                        //Notification
+                                                        user_reference.addChildEventListener(new ChildEventListener() {
+                                                            @Override
+                                                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                                                if(loggedInUserName!=null){
+                                                                    PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                                                    pushNotification.title("Bidders Notification")
+                                                                            .message(loggedInUserName +" bid " + "₱: " + bidders_value.getText().toString() + " on your item.")
+                                                                            .accessToken(user_profile.getAccess_token())
+                                                                            .send();
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                                            }
+
+                                                            @Override
+                                                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                                            }
+
+                                                            @Override
+                                                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(DatabaseError databaseError) {
+
+                                                            }
+                                                        });
+
+                                                        Intent intent = new Intent(ViewRelatedDIYS.this, MainActivity.class);
+                                                        startActivity(intent);
+                                                    }
+
+
+                                                    else{
+
+
+                                                        biddingRef.addValueEventListener(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                for (DataSnapshot doneSnapshot: dataSnapshot.getChildren()) {
+                                                                    Log.e("doneSnapshot", doneSnapshot.getKey());
+                                                                    Object pricesBid = doneSnapshot.child("bid_price").getValue();
+                                                                    Log.e("pricesBid", String.valueOf(pricesBid));
+                                                                    final EditText bidders_value = (EditText) dialog.findViewById(R.id.et_bidders_price);
+                                                                    String inputBid = bidders_value.getText().toString();
+                                                                    int inputIncrement = biddingItem.getIncrementPrice();
+                                                                    Log.e("incrementAmount", String.valueOf(biddingItem.getIncrementPrice()));
+
+                                                                    final Bidders doneBid = doneSnapshot.getValue(Bidders.class);
+                                                                    Log.e("doneBidAmountss", doneBid.getBid_price());
+                                                                    int biddersDonePrice = Integer.parseInt(doneBid.getBid_price());
+                                                                    String Key = doneSnapshot.getKey();
+                                                                    Log.e("doneBidbidderKeyy", Key);
+
+                                                                    //if iyang gi bid kay naa nay naka bid, bawal. Dapat sundon ang incremental bid
+                                                                    if(Integer.parseInt(inputBid) == biddersDonePrice){
+                                                                        Log.e("doneee", inputBid + " = " + biddersDonePrice);
+                                                                        Toast.makeText(context, "Someone already bid that amount." + "", Toast.LENGTH_LONG).show();
+
+                                                                    }
+//                                                                    else{
+//                                                                        biddersReference.push().setValue(new Bidders(bidders_value.getText().toString()
+//                                                                                , userID, loggedInUserName, sdate));
+//
+//                                                                        //Notification
+//                                                                        user_reference.addChildEventListener(new ChildEventListener() {
+//                                                                            @Override
+//                                                                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                                                                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+//                                                                                if(loggedInUserName!=null){
+//                                                                                    PushNotification pushNotification = new PushNotification(getApplicationContext());
+//                                                                                    pushNotification.title("Bidders Notification")
+//                                                                                            .message(loggedInUserName +" bid " + "₱: " + bidders_value.getText().toString() + " on your item.")
+//                                                                                            .accessToken(user_profile.getAccess_token())
+//                                                                                            .send();
+//                                                                                }
+//                                                                            }
+//
+//                                                                            @Override
+//                                                                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//                                                                            }
+//
+//                                                                            @Override
+//                                                                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//                                                                            }
+//
+//                                                                            @Override
+//                                                                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//                                                                            }
+//
+//                                                                            @Override
+//                                                                            public void onCancelled(DatabaseError databaseError) {
+//
+//                                                                            }
+//                                                                        });
+//
+//                                                                        Intent intent = new Intent(ViewRelatedDIYS.this, MainActivity.class);
+//                                                                        startActivity(intent);
+//                                                                    }
+
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(DatabaseError databaseError) {
+
+                                                            }
+                                                        });
+
+                                                        //kani na part kay kuhaon ang pinakadako na gi bid sa DB
+                                                        biddingRef.orderByChild("bid_price").limitToLast(1).addValueEventListener(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                for (DataSnapshot getBidSnapshot: dataSnapshot.getChildren()) {
+                                                                    Log.e("getBidSnapshot", String.valueOf(getBidSnapshot));
+
+                                                                    final EditText bidders_value = (EditText) dialog.findViewById(R.id.et_bidders_price);
+                                                                    String inputBid = bidders_value.getText().toString();
+                                                                    int inputIncrement = biddingItem.getIncrementPrice();
+                                                                    Log.e("incrementAmount", String.valueOf(biddingItem.getIncrementPrice()));
+
+                                                                    final Bidders biddersss = getBidSnapshot.getValue(Bidders.class);
+                                                                    Log.e("bidAmountss", biddersss.getBid_price());
+                                                                    int biddersPrice = Integer.parseInt(biddersss.getBid_price());
+                                                                    String Key = getBidSnapshot.getKey();
+                                                                    Log.e("bidderKeyy", Key);
+
+
+                                                                    if(Integer.valueOf(inputBid) < biddersPrice + inputIncrement){
+                                                                        Log.e("biddersVal", String.valueOf(biddersPrice + inputIncrement));
+                                                                        Toast.makeText(context, "You must bid according to its increment amount." + "", Toast.LENGTH_LONG).show();
+                                                                    }
+
+                                                                    //dapat ang sunod i bid kay last bid amount plus increment amount
+                                                                    else if(Integer.valueOf(inputBid) == biddersPrice + inputIncrement){
+                                                                        biddersReference.push().setValue(new Bidders(bidders_value.getText().toString()
+                                                                                , userID, loggedInUserName, sdate));
+
+                                                                        //Notification
+                                                                        user_reference.addChildEventListener(new ChildEventListener() {
+                                                                            @Override
+                                                                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                                                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                                                                if(loggedInUserName!=null){
+                                                                                    PushNotification pushNotification = new PushNotification(getApplicationContext());
+                                                                                    pushNotification.title("Bidders Notification")
+                                                                                            .message(loggedInUserName +" bid " + "₱: " + bidders_value.getText().toString() + " on your item.")
+                                                                                            .accessToken(user_profile.getAccess_token())
+                                                                                            .send();
+                                                                                }
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onCancelled(DatabaseError databaseError) {
+
+                                                                            }
+                                                                        });
+
+                                                                        Intent intent = new Intent(ViewRelatedDIYS.this, MainActivity.class);
+                                                                        startActivity(intent);
+                                                                    }
+
+                                                                }
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(DatabaseError databaseError) {
+
+                                                            }
+                                                        });
+                                                    }
+
+
+
+
+                                                }
+
                                             }
                                         });
                                         dialog.show();
@@ -1555,40 +1807,6 @@ public class ViewRelatedDIYS extends AppCompatActivity {
                                             }
                                         });
 
-//                                        user_reference.addChildEventListener(new ChildEventListener() {
-//                                            @Override
-//                                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-//                                                if(loggedInUserName!=null){
-//                                                    PushNotification pushNotification = new PushNotification(getApplicationContext());
-//                                                    pushNotification.title("Bidding Notification")
-//                                                            .message(biddersss.getUser_name() + " is the bidding winner with the amount of "
-//                                                                    + "₱: " + biddersss.getBid_price()+  "!" )
-//                                                            .accessToken(user_profile.getAccess_token())
-//                                                            .send();
-//                                                }
-//                                            }
-//
-//                                            @Override
-//                                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//                                            }
-//
-//                                            @Override
-//                                            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//                                            }
-//
-//                                            @Override
-//                                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//                                            }
-//
-//                                            @Override
-//                                            public void onCancelled(DatabaseError databaseError) {
-//
-//                                            }
-//                                        });
 
                                     }
                                 }

@@ -38,6 +38,7 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
     private String productID;
     private String imgID;
     private String dbKey;
+    private String originalPrice;
     private String priceID, quantityID;
     private String sellerID, sellerName;
 
@@ -153,6 +154,7 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
                 priceDiscountModel.setPromo_image(imgID);
                 priceDiscountModel.setPromo_createdDate(sdate);
                 priceDiscountModel.setStatus("discount");
+                priceDiscountModel.setOriginalPrice(origPrice + "");
                 Intent back = new Intent(PriceDiscountActivity.this, MainActivity.class);
                 Log.e("PRICEEEEE", String.valueOf(origPrice));
                 startActivity(back);

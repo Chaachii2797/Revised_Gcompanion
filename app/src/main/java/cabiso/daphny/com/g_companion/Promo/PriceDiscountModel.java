@@ -14,13 +14,14 @@ public class PriceDiscountModel {
     private String promo_image;
     private String promo_createdDate;
     private String status;
+    private String originalPrice;
 
     public PriceDiscountModel(){
 
     }
 
     public PriceDiscountModel(String promo_id, String promo_diyName, String promo_expiry, String promo_details, String percent_discount,
-                               String promo_newPrice, String promo_image, String promo_createdDate, String status) {
+                               String promo_newPrice, String promo_image, String promo_createdDate, String status, String originalPrice) {
         this.promo_id = promo_id;
         this.promo_diyName = promo_diyName;
         this.promo_expiry = promo_expiry;
@@ -30,6 +31,7 @@ public class PriceDiscountModel {
         this.promo_image = promo_image;
         this.promo_createdDate = promo_createdDate;
         this.status = status;
+        this.originalPrice = originalPrice;
     }
 
     public String getPromo_id() {
@@ -84,6 +86,16 @@ public class PriceDiscountModel {
     public PriceDiscountModel setPromo_newPrice(String promo_newPrice) {
         this.promo_newPrice = promo_newPrice;
         return this;
+    }
+
+    public String getOriginalPrice() {
+        return originalPrice;
+    }
+
+    public PriceDiscountModel setOriginalPrice(String originalPrice) {
+        this.originalPrice = originalPrice;
+        return this;
+
     }
 
     public String getPromo_image() {

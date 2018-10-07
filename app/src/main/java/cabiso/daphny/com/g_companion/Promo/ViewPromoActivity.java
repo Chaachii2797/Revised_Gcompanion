@@ -3,6 +3,7 @@ package cabiso.daphny.com.g_companion.Promo;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +45,7 @@ import cabiso.daphny.com.g_companion.R;
 
 public class ViewPromoActivity extends AppCompatActivity {
 
-    private TextView viewPromoName, viewPromoPrice, buyCounts, freeItems, freeItemName, tvSellerName, tvExpiration, buyText, gettText, promo_qty;
+    private TextView viewPromoName, viewOrigPromoPrice,viewNewPromoPrice, buyCounts, freeItems, freeItemName, tvSellerName, tvExpiration, buyText, gettText, promo_qty;
     private ImageView buyThisImageView, freeImageView, freeIcon, soldOutItem;
     private DatabaseReference promoReference, userData, diyByTagsReference, pending_reference, loggedInName, diyByTagsUpdate;
     private DatabaseReference expirationReference, identityReferenceWholesale;
@@ -73,7 +74,9 @@ public class ViewPromoActivity extends AppCompatActivity {
         userID = mFirebaseUser.getUid();
 
         viewPromoName = (TextView) findViewById(R.id.view_promo_item_diyName);
-        viewPromoPrice = (TextView) findViewById(R.id.promo_selling_price);
+        viewOrigPromoPrice = (TextView) findViewById(R.id.promo_selling_orig_price);
+        viewNewPromoPrice = (TextView) findViewById(R.id.promo_selling_new_price);
+
         buyCounts = (TextView) findViewById(R.id.buyCountsQty);
         freeItems = (TextView) findViewById(R.id.freeItemQty);
         buyThisImageView = (ImageView) findViewById(R.id.img_buy_view_promo);
@@ -155,7 +158,9 @@ public class ViewPromoActivity extends AppCompatActivity {
 
                         Double priceXBuy = promoPrice * Double.parseDouble(promoDiys.buy_counts);
 
-                        viewPromoPrice.setText("Promo Price: " + " " + priceXBuy);
+                        viewOrigPromoPrice.setText("Price: " + " " + promoPrice + 0 + " each");
+                        viewNewPromoPrice.setText("New Price: " + " " + priceXBuy + 0);
+                        viewNewPromoPrice.setTextColor(Color.RED);
                         tvExpiration.setText("Promo expires on: " + " " + promoExpiry  + " !");
                         promo_qty.setText(promoQty + " " + "pieces left");
 
@@ -553,8 +558,13 @@ public class ViewPromoActivity extends AppCompatActivity {
                         });
                         String input_new_price = discountDiys.getPromo_newPrice();
                         double new_price = Double.parseDouble(input_new_price);
+                        String originalPrice = discountDiys.getOriginalPrice();
+                        Log.e("otrigPricee", originalPrice);
 
-                        viewPromoPrice.setText("New Price: " + " " + new_price);
+                        viewOrigPromoPrice.setText("P̶r̶i̶c̶e̶:̶ ̶" + " " + originalPrice + 0);
+                        viewNewPromoPrice.setText("New Price: " + " " + new_price + 0);
+                        viewNewPromoPrice.setTextColor(Color.RED);
+
                         tvExpiration.setText("Promo expires on: " + " " + promoExpiry + " !");
                         promo_qty.setText(totalDIYQty + " " + "pieces left");
 

@@ -7,6 +7,7 @@ package cabiso.daphny.com.g_companion.Bidding;
 public class DIYBidding {
     private int intial_price;
     private int quantity;
+    private int incrementPrice;
     private String date;
     private String xpire_date;
     private String bidder;
@@ -23,6 +24,16 @@ public class DIYBidding {
     public DIYBidding setInitialPrice(int intial_price) {
         this.intial_price = intial_price;
         return this;
+    }
+
+    public int getIncrementPrice() {
+        return incrementPrice;
+    }
+
+    public DIYBidding setIncrementPrice(int incrementPrice) {
+        this.incrementPrice = incrementPrice;
+        return this;
+
     }
 
     public int getQuantity() {
@@ -69,4 +80,10 @@ public class DIYBidding {
         this.message = message;
         return this;
     }
+
+    public void setIntial_price(int intial_price) {
+        this.intial_price = intial_price;
+    }
+
+
 }

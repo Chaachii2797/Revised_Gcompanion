@@ -444,7 +444,7 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/cardView6"
                 android:layout_width="330dp"
-                android:layout_height="120dp"
+                android:layout_height="150dp"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardCornerRadius="5dp"
                 app:elevation="5dp"
@@ -551,6 +551,35 @@
                     android:layout_marginTop="80dp"
                     android:scrollbars="vertical"
                     android:hint="Bidding Comment :"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/bidding_increment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/diy_material"
+                    android:layout_alignStart="@+id/diy_material"
+                    android:layout_below="@+id/diy_owner_cn"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="100dp"
+                    android:scrollbars="vertical"
+                    android:text="Increment Amount :"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/et_bidding_increment"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/diy_material"
+                    android:layout_alignStart="@+id/diy_material"
+                    android:layout_below="@+id/item_date_bidded"
+                    android:layout_marginLeft="165dp"
+                    android:layout_marginTop="100dp"
+                    android:scrollbars="vertical"
+                    android:hint="Increment Amount :"
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
 

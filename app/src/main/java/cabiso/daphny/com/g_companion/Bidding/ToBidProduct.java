@@ -33,7 +33,7 @@ import cabiso.daphny.com.g_companion.PushNotification;
 
 public class ToBidProduct extends Activity implements View.OnClickListener {
 
-    private EditText mEtPriceMin;
+    private EditText mEtPriceMin, etIncrementPrice;
     private EditText mEtPriceMessage;
     private FirebaseUser mFirebaseUser;
     private EditText mEtExpiryDate;
@@ -53,6 +53,7 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_to_bid_product);
 
         mEtPriceMin = (EditText) findViewById(R.id.etInitialPrice);
+        etIncrementPrice = (EditText) findViewById(R.id.incrementPrice);
         mEtPriceMessage = (EditText) findViewById(R.id.etMessage);
         mEtExpiryDate = (EditText) findViewById(R.id.et_xpiry_date);
         mTvDateToday = (TextView) findViewById(R.id.tv_on_date);
@@ -139,6 +140,7 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
                 .setMessage(this.mEtPriceMessage.getText() + "")
                 .setInitialPrice(Integer.parseInt(this.mEtPriceMin.getText() + ""))
                 .setQuantity(1)
+                .setIncrementPrice(Integer.parseInt(this.etIncrementPrice.getText() + ""))
                 .setDate(sdate)
                 .setXpire_date(mEtExpiryDate.getText().toString());
     }

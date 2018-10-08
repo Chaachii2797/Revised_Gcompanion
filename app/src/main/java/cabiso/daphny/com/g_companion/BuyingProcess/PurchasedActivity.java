@@ -2,7 +2,6 @@ package cabiso.daphny.com.g_companion.BuyingProcess;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -40,13 +39,13 @@ import cabiso.daphny.com.g_companion.Model.DIYSell;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.PushNotification;
 import cabiso.daphny.com.g_companion.R;
-import cabiso.daphny.com.g_companion.ViewRelatedDIYS;
 
 /**
- * Created by Lenovo on 7/31/2017.
+ * Created by Lenovo on 10/7/2018.
  */
 
-public class Sold_Activity extends AppCompatActivity implements RatingDialogListener {
+public class PurchasedActivity extends AppCompatActivity implements RatingDialogListener {
+
 
     private ArrayList<DIYSell> soldList = new ArrayList<>();
     private ListView lv;
@@ -59,7 +58,7 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
     private String userID;
     private FirebaseUser mFirebaseUser;
 
-    private DatabaseReference soldItemReference;
+    private DatabaseReference purchaedItemReference;
     private DatabaseReference userdataReference;
     private ArrayList<DBMaterial> dbMaterials;
     int count;
@@ -69,14 +68,14 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
     private User_Profile loggedInUser = null; //for notification
 
 
-    public Sold_Activity() {
+    public PurchasedActivity() {
 
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sold_);
+        setContentView(R.layout.activity_purchased_items);
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();
@@ -87,11 +86,11 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
         progressDialog.setMessage("Please Wait loading DIYs.....");
         progressDialog.show();
 
-        soldItemReference = FirebaseDatabase.getInstance().getReference().child("Sold_Items").child(userID);
+        purchaedItemReference = FirebaseDatabase.getInstance().getReference().child("PurchasedItems").child(userID);
         userdataReference = FirebaseDatabase.getInstance().getReference().child("userdata");
         user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
-        soldItemReference.addValueEventListener(new ValueEventListener() {
+        purchaedItemReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 progressDialog.dismiss();
@@ -106,7 +105,7 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
                 }
 
                 //init adapter
-                adapter = new Items_Adapter(Sold_Activity.this, R.layout.pending_item, soldList);
+                adapter = new Items_Adapter(PurchasedActivity.this, R.layout.pending_item, soldList);
                 //set adapter for listview
                 lv.setAdapter(adapter);
                 final int count =lv.getAdapter().getCount();
@@ -119,15 +118,12 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
                         final DIYSell itemRef = adapter.getItem(position);
 
                         if(itemRef.getUser_id().equals(userID)) {
-                            Toast.makeText(Sold_Activity.this, "This is your own item.", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(Sold_Activity.this, ViewRelatedDIYS.class);
-                            intent.putExtra("Nname",itemRef.getDiyName());
-                            startActivity(intent);
+                            Toast.makeText(PurchasedActivity.this, "You can't rate your own item.", Toast.LENGTH_SHORT).show();
                         }
                         else {
                             //For rating seller (If na sold nani)
                             AlertDialog.Builder alert = new AlertDialog.Builder(
-                                    Sold_Activity.this);
+                                    PurchasedActivity.this);
                             alert.setTitle("HEY!");
                             alert.setMessage("Are you sure you already received the order?");
                             alert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
@@ -148,7 +144,7 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
                                             .setCommentTextColor(R.color.commentTextColor)
                                             .setCommentBackgroundColor(R.color.gen_scheme1)
                                             .setWindowAnimation(R.style.MyDialogFadeAnimation)
-                                            .create(Sold_Activity.this)
+                                            .create(PurchasedActivity.this)
                                             .show();
 
                                     dialog.dismiss();
@@ -183,13 +179,13 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
         DecimalFormat decimalFormat = new DecimalFormat("#.#");
         curRate = Float.valueOf(decimalFormat.format((curRate * count + rate)
                 / ++count));
-        Toast.makeText(Sold_Activity.this,
+        Toast.makeText(PurchasedActivity.this,
                 "New Rating: " + curRate, Toast.LENGTH_SHORT).show();
 
         Log.e("curRatee", String.valueOf(curRate));
         Log.e("countt", String.valueOf(count));
 
-        soldItemReference.addChildEventListener(new ChildEventListener() {
+        purchaedItemReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 final DIYSell diYs = dataSnapshot.getValue(DIYSell.class);
@@ -197,7 +193,7 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
 //                final Review review = new Review().setRatings(rate).setComment(comment).setReviewer(userID).setDate_submitted(sdate);
 
                 if(diYs.getUser_id().equals(userID)){
-                    Toast.makeText(Sold_Activity.this, "USERIDIMG: "+diYs.user_id, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PurchasedActivity.this, "USERIDIMG: "+diYs.user_id, Toast.LENGTH_SHORT).show();
 
                 }else{
 
@@ -214,11 +210,11 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
 //                            if(loggedInUser!=null){
-                                PushNotification pushNotification = new PushNotification(getApplicationContext());
-                                pushNotification.title("Rate")
-                                        .message(diYs.getLoggedInUser() + " rated you!")
-                                        .accessToken(user_profile.getAccess_token())
-                                        .send();
+                            PushNotification pushNotification = new PushNotification(getApplicationContext());
+                            pushNotification.title("Rate")
+                                    .message(diYs.getLoggedInUser() + " rated you!")
+                                    .accessToken(user_profile.getAccess_token())
+                                    .send();
 //                            }
                         }
 
@@ -270,72 +266,10 @@ public class Sold_Activity extends AppCompatActivity implements RatingDialogList
 
     }
 
-//    @Override
-//    public void onPositiveButtonClicked(final int rate, @NotNull final String comment) {
-//        DecimalFormat decimalFormat = new DecimalFormat("#.##");
-//        // int rates = (5*252 + 4*124 + 3*40 + 2*29 + 1*33) / (252+124+40+29+33);
-//        curRate = Float.valueOf(decimalFormat.format((curRate * count + rate)/ count++));
-//        Log.e("curRate", String.valueOf(curRate));
-//
-//        final float curRatee = (int) (curRate * count);
-//        Log.e("curRatee", String.valueOf(curRatee));
-//
-//        float dRate= (float) ((curRatee*5) /100);
-//        Log.e("dRate", String.valueOf(dRate));
-////        curRate = Float.valueOf(decimalFormat.format((curRate + rate)));
-//        Toast.makeText(Sold_Activity.this,"Rate : " + rate + "\n Comment : " + comment ,Toast.LENGTH_SHORT).show();
-//
-//
-//        soldItemReference.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                final DIYSell diYs = dataSnapshot.getValue(DIYSell.class);
-//
-////                final Review review = new Review().setRatings(rate).setComment(comment).setReviewer(userID).setDate_submitted(sdate);
-//
-//                if(diYs.getUser_id().equals(userID)){
-//                    Toast.makeText(Sold_Activity.this, "USERIDIMG: "+diYs.user_id, Toast.LENGTH_SHORT).show();
-//
-//                }else{
-//
-//                    HashMap<String, Object> result = new HashMap<>();
-//                    result.put("userRating", rate);
-//
-//                    userdataReference.child(diYs.getUser_id()).updateChildren(result);
-//                    Log.e("ratee", String.valueOf(rate));
-//
-//
-//
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
 
     @Override
     public void onNegativeButtonClicked() {
 
     }
-
 
 }

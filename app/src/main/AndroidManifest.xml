@@ -83,6 +83,7 @@
         <activity android:name=".BuyingProcess.Pending_Activity" />
         <activity android:name=".BuyingProcess.ForMeetUpActivity" />
         <activity android:name=".BuyingProcess.Sold_Activity" />
+        <activity android:name=".BuyingProcess.PurchasedActivity" />
         <activity android:name=".CalendarActivity" />
         <activity android:name=".Search.SearchView" />
         <activity android:name=".Promo.PromoActivity" />

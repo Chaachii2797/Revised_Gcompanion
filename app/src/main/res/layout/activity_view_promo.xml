@@ -292,6 +292,8 @@
             android:textSize="18sp"
             android:layout_marginRight="14dp"
             android:layout_marginEnd="14dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_alignBaseline="@+id/btnBuyPromo"
             android:layout_alignBottom="@+id/btnBuyPromo"
             android:layout_alignParentRight="true"
@@ -308,6 +310,8 @@
             android:textSize="18sp"
             android:layout_marginLeft="23dp"
             android:layout_marginStart="23dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />

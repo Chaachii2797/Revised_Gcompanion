@@ -55,7 +55,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
     private String userID;
     private FirebaseUser mFirebaseUser;
     private UserProfileInfo userProfileInfo;
-    private DatabaseReference userdataReference, meetUpRef, soldReference, diyReference, loggedInName, promoReference, incomeCountRef;
+    private DatabaseReference userdataReference, meetUpRef, soldReference, diyReference, loggedInName, promoReference, incomeCountRef, purchasedReference;
     int count;
     private ArrayList<String> prices = new ArrayList<>();
     private ArrayList<DIYSell> diyNames = new ArrayList<>();
@@ -229,23 +229,25 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                             soldReference.child(upload).child("selling_qty").setValue(sold_qty);
                                                             soldReference.child(upload).child("dateAdded").setValue(sdate);
 
+                                                            purchasedReference = FirebaseDatabase.getInstance().getReference().child("PurchasedItems").child(sold_buyer);
+
                                                             loggedInName.child(sold_buyer).addValueEventListener(new ValueEventListener() {
                                                                 @Override
                                                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                                                     loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
                                                                     loggedInUserName += " " + dataSnapshot.child("l_name").getValue(String.class);
                                                                     //DBref for buyer
-                                                                    DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
-                                                                            .child("Sold_Items").child(sold_buyer);
+//                                                                    DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
+//                                                                            .child("Sold_Items").child(sold_buyer);
 
                                                                     DIYSell buyProduct = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
                                                                             sold_productID, "PURCHASED", float_this, float_this,
                                                                             sold_buyer, loggedInUserName, buyQty, 0, 0);
-                                                                    String buyUpload = soldReference.child(upload).getKey();
-                                                                    soldReference.child(buyUpload).setValue(buyProduct);
-                                                                    soldReference.child(buyUpload).child("userStatus").setValue("buyer");
-                                                                    soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
-                                                                    soldReference.child(buyUpload).child("dateAdded").setValue(sdate);
+                                                                    String buyUpload = purchasedReference.child(upload).getKey();
+                                                                    purchasedReference.child(buyUpload).setValue(buyProduct);
+                                                                    purchasedReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                                    purchasedReference.child(buyUpload).child("selling_price").setValue(sold_price);
+                                                                    purchasedReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                                                 }
 
@@ -311,6 +313,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                         .child(priceSnap.getKey()).updateChildren(results);
 
                                                                 soldReference.child(upload).updateChildren(results);
+                                                                purchasedReference.child(upload).updateChildren(results);
 
                                                                 //Notification
                                                                 user_reference.addChildEventListener(new ChildEventListener() {
@@ -453,6 +456,8 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                     soldReference.child(upload).child("percent_discount").setValue(itemDiscount);
                                                                     soldReference.child(upload).child("dateAdded").setValue(sdate);
 
+                                                                    purchasedReference = FirebaseDatabase.getInstance().getReference().child("PurchasedItems").child(sold_buyer);
+
                                                                     loggedInName.child(sold_buyer).addValueEventListener(new ValueEventListener() {
                                                                         @Override
                                                                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -460,19 +465,19 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             loggedInUserName += " " + dataSnapshot.child("l_name").getValue(String.class);
 
                                                                             //DBref for buyer
-                                                                            DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
-                                                                                    .child("Sold_Items").child(sold_buyer);
+//                                                                            DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
+//                                                                                    .child("Sold_Items").child(sold_buyer);
 
                                                                             DIYSell buyProduct = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
                                                                                     sold_productID, "Purchased Discount Item", float_this, float_this,
                                                                                     sold_buyer, loggedInUserName, buyQty, 0, 0);
 
-                                                                            String buyUpload = soldReference.child(upload).getKey();
-                                                                            soldReference.child(buyUpload).setValue(buyProduct);
-                                                                            soldReference.child(buyUpload).child("userStatus").setValue("buyer");
-                                                                            soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
-                                                                            soldReference.child(buyUpload).child("percent_discount").setValue(itemDiscount);
-                                                                            soldReference.child(buyUpload).child("dateAdded").setValue(sdate);
+                                                                            String buyUpload = purchasedReference.child(upload).getKey();
+                                                                            purchasedReference.child(buyUpload).setValue(buyProduct);
+                                                                            purchasedReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                                            purchasedReference.child(buyUpload).child("selling_price").setValue(sold_price);
+                                                                            purchasedReference.child(buyUpload).child("percent_discount").setValue(itemDiscount);
+                                                                            purchasedReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                                                         }
 
@@ -544,7 +549,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                                 .child(priceSnap.getKey()).updateChildren(results);
 
                                                                         soldReference.child(upload).updateChildren(results);
-
+                                                                        purchasedReference.child(upload).updateChildren(results);
 
                                                                         HashMap<String, Object> dscResults = new HashMap<>();
                                                                         dscResults.put("sellDIYqty", quantityCountMeetUp);
@@ -749,6 +754,8 @@ public class ForMeetUpActivity extends AppCompatActivity {
 
                                                                     }
 
+                                                                    purchasedReference = FirebaseDatabase.getInstance().getReference().child("PurchasedItems").child(sold_buyer);
+
                                                                     loggedInName.child(sold_buyer).addValueEventListener(new ValueEventListener() {
                                                                         @Override
                                                                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -756,36 +763,36 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             loggedInUserName += " " + dataSnapshot.child("l_name").getValue(String.class);
 
                                                                             //DBref for buyer
-                                                                            DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
-                                                                                    .child("Sold_Items").child(sold_buyer);
+//                                                                            DatabaseReference soldReference = FirebaseDatabase.getInstance().getReference()
+//                                                                                    .child("Sold_Items").child(sold_buyer);
 
                                                                             DIYSell buyProduct = new DIYSell(sold_diyName, sold_diyUrl, sold_user_id,
                                                                                     sold_productID, "Purchased Buy and Take Item", float_this, float_this,
                                                                                     sold_buyer, loggedInUserName, buyQty, 0, 0);
 //
-                                                                            String buyUpload = soldReference.child(upload).getKey();
-                                                                            soldReference.child(buyUpload).setValue(buyProduct);
-                                                                            soldReference.child(buyUpload).child("userStatus").setValue("buyer");
-                                                                            soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
-                                                                            soldReference.child(buyUpload).child("dateAdded").setValue(sdate);
+                                                                            String buyUpload = purchasedReference.child(upload).getKey();
+                                                                            purchasedReference.child(buyUpload).setValue(buyProduct);
+                                                                            purchasedReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                                            purchasedReference.child(buyUpload).child("selling_price").setValue(sold_price);
+                                                                            purchasedReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                                                             //confirm pending promo DIY, push to meet up
                                                                             for (int post = 0; post < hasFree.size(); post++) {
                                                                                 if (promokey.get(position).equals(hasFree.get(post))) {
                                                                                     Log.e("equalsSilaaa", "YESS" + " " + promokey.get(position) + " = " + hasFree.get(post));
 
-                                                                                    soldReference.child(buyUpload).setValue(buyProduct);
-                                                                                    soldReference.child(buyUpload).child("userStatus").setValue("buyer");
-                                                                                    soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
-                                                                                    soldReference.child(buyUpload).child("freeItemList").setValue(promoFreeList);
-                                                                                    soldReference.child(buyUpload).child("freeItemQuantity").setValue(freeItemQty);
-                                                                                    soldReference.child(buyUpload).child("dateAdded").setValue(sdate);
+                                                                                    purchasedReference.child(buyUpload).setValue(buyProduct);
+                                                                                    purchasedReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                                                    purchasedReference.child(buyUpload).child("selling_price").setValue(sold_price);
+                                                                                    purchasedReference.child(buyUpload).child("freeItemList").setValue(promoFreeList);
+                                                                                    purchasedReference.child(buyUpload).child("freeItemQuantity").setValue(freeItemQty);
+                                                                                    purchasedReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                                                                 } else {
-                                                                                    soldReference.child(buyUpload).setValue(buyProduct);
-                                                                                    soldReference.child(buyUpload).child("userStatus").setValue("buyer");
-                                                                                    soldReference.child(buyUpload).child("selling_price").setValue(sold_price);
-                                                                                    soldReference.child(buyUpload).child("dateAdded").setValue(sdate);
+                                                                                    purchasedReference.child(buyUpload).setValue(buyProduct);
+                                                                                    purchasedReference.child(buyUpload).child("userStatus").setValue("buyer");
+                                                                                    purchasedReference.child(buyUpload).child("selling_price").setValue(sold_price);
+                                                                                    purchasedReference.child(buyUpload).child("dateAdded").setValue(sdate);
 
                                                                                 }
                                                                             }
@@ -936,6 +943,7 @@ public class ForMeetUpActivity extends AppCompatActivity {
                                                                             incomeCountRef.child(penkey).updateChildren(incomeCountResult);
 
                                                                             soldReference.child(upload).updateChildren(results);
+                                                                            purchasedReference.child(upload).updateChildren(results);
 
                                                                             HashMap<String, Object> buyTakeResults = new HashMap<>();
                                                                             buyTakeResults.put("promoQuantity", quantityCountMeetUp);

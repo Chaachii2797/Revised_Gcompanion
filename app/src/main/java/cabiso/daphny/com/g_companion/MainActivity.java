@@ -36,6 +36,7 @@ import java.util.ArrayList;
 
 import cabiso.daphny.com.g_companion.BuyingProcess.ForMeetUpActivity;
 import cabiso.daphny.com.g_companion.BuyingProcess.Pending_Activity;
+import cabiso.daphny.com.g_companion.BuyingProcess.PurchasedActivity;
 import cabiso.daphny.com.g_companion.BuyingProcess.Sold_Activity;
 import cabiso.daphny.com.g_companion.GCAdmin.AdminActivity;
 import cabiso.daphny.com.g_companion.GCAdmin.LogsOfAllTransactionsActivity;
@@ -329,6 +330,12 @@ public class MainActivity extends AppCompatActivity
                 Intent sold = new Intent(MainActivity.this,Sold_Activity.class);
                 startActivity(sold);
                 break;
+
+            case R.id.nav_purchased:
+                Intent purchased = new Intent(MainActivity.this,PurchasedActivity.class);
+                startActivity(purchased);
+                break;
+
 //            case R.id.nav_calendar:
 //                Intent calendar = new Intent(MainActivity.this,CalendarActivity.class);
 //                startActivity(calendar);
@@ -387,6 +394,7 @@ public class MainActivity extends AppCompatActivity
         nav_Menu.findItem(R.id.nav_pending).setVisible(false);
         nav_Menu.findItem(R.id.nav_meetup).setVisible(false);
         nav_Menu.findItem(R.id.nav_sold).setVisible(false);
+        nav_Menu.findItem(R.id.nav_purchased).setVisible(false);
         nav_Menu.findItem(R.id.nav_report).setVisible(false);
         nav_Menu.findItem(R.id.nav_inventory).setVisible(false);
 

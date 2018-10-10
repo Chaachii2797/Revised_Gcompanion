@@ -158,7 +158,7 @@ public class YouItemsFragment extends Fragment {
                                 }else if(model.identity.equalsIgnoreCase("community")){
                                     viewHolder.user_Identity.setText("Community");
                                     viewHolder.user_Identity.setBackgroundColor(Color.YELLOW);
-                                }else if(model.identity.equalsIgnoreCase("on bid!")){
+                                }else if(model.identity.equalsIgnoreCase("ON BID!")){
                                     viewHolder.user_Identity.setText("On BID!");
                                     viewHolder.user_Identity.setBackgroundColor(Color.GREEN);
                                 }else if(model.identity.equalsIgnoreCase("Promo")){

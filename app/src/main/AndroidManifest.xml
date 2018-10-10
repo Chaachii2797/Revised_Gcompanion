@@ -111,6 +111,7 @@
         <activity android:name=".GCAdmin.LogsOfAllTransactionsActivity" />
         <activity android:name=".GCAdmin.AdminActivity" />
         <activity android:name=".GCAdmin.ViewComplaintsActivity" />
+        <activity android:name=".ItemBidActivity" />
         <activity android:name=".OtherUserProfileActivity" />
         <activity android:name=".ProductDetailViewActivity" />
         <activity android:name=".ChatWithSellerActivity" />

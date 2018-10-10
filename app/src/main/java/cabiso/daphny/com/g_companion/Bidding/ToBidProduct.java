@@ -39,7 +39,7 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
     private EditText mEtExpiryDate;
     private TextView mTvDateToday;
     private String userID;
-    private String itemId, sellerName;
+    private String itemId, sellerName, bidInitialPrice;
     private Button mBtnAddBid;
     private DatabaseReference itemReference;
     private DatabaseReference identityReference, itemReferenceByUser;
@@ -66,6 +66,9 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
         Log.e("itemId", itemId);
         sellerName = intent.getExtras().getString("sellerName");
         Log.e("sellerName", sellerName);
+        bidInitialPrice = intent.getExtras().getString("diyPrice");
+        Log.e("bidInitialPrice", bidInitialPrice);
+        mEtPriceMin.setText(bidInitialPrice); // pass price for initial price
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         userID = mFirebaseUser.getUid();

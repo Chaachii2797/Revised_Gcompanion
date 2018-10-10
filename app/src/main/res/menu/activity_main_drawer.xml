@@ -24,6 +24,11 @@
             android:title="Bookmark" />
 
         <item
+            android:id="@+id/nav_item_bid"
+            android:icon="@drawable/bid_icon"
+            android:title="Item Bid" />
+
+        <item
             android:id="@+id/nav_chat"
             android:icon="@drawable/chat_icon"
             android:title="Chat" />

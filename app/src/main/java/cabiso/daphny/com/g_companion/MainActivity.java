@@ -314,6 +314,12 @@ public class MainActivity extends AppCompatActivity
                 Intent wishlist = new Intent(MainActivity.this,Wishlists.class);
                 startActivity(wishlist);
                 break;
+
+            case R.id.nav_item_bid:
+                Intent itemBid = new Intent(MainActivity.this,ItemBidActivity.class);
+                startActivity(itemBid);
+                break;
+
             case R.id.nav_chat:
                 Intent chat = new Intent(MainActivity.this, ChatSplashActivity.class);
                 startActivity(chat);

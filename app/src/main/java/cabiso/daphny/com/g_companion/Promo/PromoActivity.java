@@ -144,7 +144,7 @@ public class PromoActivity extends AppCompatActivity implements View.OnClickList
                             addPromoReference.child(upload_info).child("sellerID").setValue(sellerUserID);
                             addPromoReference.child(upload_info).child("sellerName").setValue(sellerName);
                             addPromoReference.child(upload_info).child("promoPrice").setValue(promoPrice);
-                            addPromoReference.child(upload_info).child("promoQuantity").setValue(promoQty);
+                            addPromoReference.child(upload_info).child("sellDIYqty").setValue(promoQty);
 
                             HashMap<String, Object> result = new HashMap<>();
                             result.put("identity", "Promo");

@@ -170,7 +170,7 @@ public class PriceDiscountActivity extends AppCompatActivity implements View.OnC
                 HashMap<String, Object> result = new HashMap<>();
                 result.put("identity", "Promo");
                 identityReference.updateChildren(result);
-                identityReferenceByUser.updateChildren(result);
+//                identityReference.updateChildren(result);
 
                 //Notification
                 user_reference.addChildEventListener(new ChildEventListener() {

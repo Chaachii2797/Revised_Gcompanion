@@ -117,7 +117,6 @@ public class DiysFragment extends Fragment {
 //        diy_recycler_new_added.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
 //        diy_recycler_new_added.setNestedScrollingEnabled(true);
 
-
         SimpleDateFormat curFormater = new SimpleDateFormat("EEEE, MMMM dd, yyyy");
         final GregorianCalendar date = new GregorianCalendar();
         final String[] dateStringArray = new String[7];
@@ -133,7 +132,6 @@ public class DiysFragment extends Fragment {
         mDIYSOnBidAdapter = new DIYSCardListAdapter(view.getContext(), diysOnBidList);
         mDIYSCommunityAdapter = new DIYSCardListAdapter(view.getContext(), diysComunityList);
 //        mDIYSNewAddedAdapter = new DIYSCardListAdapter(view.getContext(), diysNewAddedList);
-
 
         moreDiysBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,7 +170,6 @@ public class DiysFragment extends Fragment {
 //        });
 
         Toast.makeText(getActivity(), "Hi! Welcome to G-Companion version 2.0", Toast.LENGTH_SHORT).show();
-
         diys_recycler_selling.setAdapter(mDIYSRecyclerViewAdapter);
         diy_recycler_bidCategory.setAdapter(mDIYSOnBidAdapter);
         diy_recycler_community.setAdapter(mDIYSCommunityAdapter);

@@ -1313,7 +1313,7 @@ public class DIYDetailViewActivity extends AppCompatActivity {
                 else if (diyInfo.getIdentity().equalsIgnoreCase("on bid!")) {
                     diy_sell.setVisibility(View.VISIBLE);
                     user_owner_name.setVisibility(View.VISIBLE);
-                    diy_qty.setVisibility(View.INVISIBLE);
+                    diy_qty.setVisibility(View.VISIBLE);
                     create_promo.setVisibility(View.INVISIBLE);
                     php.setVisibility(View.VISIBLE);
                     sellers_address.setVisibility(View.VISIBLE);
@@ -1446,6 +1446,7 @@ public class DIYDetailViewActivity extends AppCompatActivity {
                         message_Price.add(message_price);
 
                     }
+                    diy_qty.setText(message_qty+" "+"piece/s");
 
                     //bidding expiration
                     for (final DataSnapshot insideDataSnapshot : itemSnapshot.child("bidding").getChildren()) {

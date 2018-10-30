@@ -2,8 +2,11 @@ package cabiso.daphny.com.g_companion.Bidding;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -28,6 +32,7 @@ import java.util.Locale;
 
 import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
+import cabiso.daphny.com.g_companion.Promo.ViewPromoActivity;
 import cabiso.daphny.com.g_companion.R;
 import cabiso.daphny.com.g_companion.PushNotification;
 
@@ -46,6 +51,8 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
     String sdate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
     private DatabaseReference user_reference;
     private User_Profile loggedInUser = null;
+    int sellingQty = 0;
+    int sellingPrice = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,21 +84,65 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
 
         itemReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.itemId);
         identityReference = FirebaseDatabase.getInstance().getReference().child("diy_by_tags").child(this.itemId);
-        itemReferenceByUser = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID).child(this.itemId);
+//        itemReferenceByUser = FirebaseDatabase.getInstance().getReference().child("diy_by_users").child(userID).child(this.itemId);
         Log.e("itemReferenecByUser", String.valueOf(itemReferenceByUser));
         user_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
 
         mBtnAddBid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DIYBidding formBidding = getFormInput();
-                itemReference.child("bidding").push().setValue(formBidding);
-                itemReferenceByUser.child("bidding").push().setValue(formBidding);
+                if (itemId.equals(itemReference.getKey())) {
+                    itemReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
+                                sellingQty = postSnapshot.child("selling_qty").getValue(int.class);
+                                sellingPrice = postSnapshot.child("selling_price").getValue(int.class);
+                            }
+                            if (sellingPrice > Integer.parseInt(mEtPriceMin.getText().toString())) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(ToBidProduct.this);
+                                builder.setTitle("Are you sure you want to Bid this Item," +
+                                        "Lesser than the Selling Price?");
 
-                HashMap<String, Object> result = new HashMap<>();
-                result.put("identity", "ON BID!");
-                identityReference.updateChildren(result);
-                itemReferenceByUser.updateChildren(result);
+                                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        DIYBidding formBidding = getFormInput();
+                                        formBidding.setInitialPrice(Integer.parseInt(mEtPriceMin.getText().toString()) * sellingQty);
+                                        itemReference.child("bidding").push().setValue(formBidding);
+
+                                        HashMap<String, Object> result = new HashMap<>();
+                                        result.put("identity", "ON BID!");
+                                        identityReference.updateChildren(result);
+                                    }
+                                });
+                                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                });
+                                Log.e("SELLINGPRICE", sellingPrice + "");
+                                builder.show();
+                            } else {
+                                DIYBidding formBidding = getFormInput();
+                                formBidding.setInitialPrice(Integer.parseInt(mEtPriceMin.getText().toString()) * sellingQty);
+                                itemReference.child("bidding").push().setValue(formBidding);
+
+                                HashMap<String, Object> result = new HashMap<>();
+                                result.put("identity", "ON BID!");
+                                identityReference.updateChildren(result);
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                }
 
                 //Notification
                 user_reference.addChildEventListener(new ChildEventListener() {
@@ -138,10 +189,10 @@ public class ToBidProduct extends Activity implements View.OnClickListener {
     }
 
     private DIYBidding getFormInput() {
+
         return new DIYBidding()
                 .setBidder(this.userID)
                 .setMessage(this.mEtPriceMessage.getText() + "")
-                .setInitialPrice(Integer.parseInt(this.mEtPriceMin.getText() + ""))
                 .setQuantity(1)
                 .setIncrementPrice(Integer.parseInt(this.etIncrementPrice.getText() + ""))
                 .setDate(sdate)

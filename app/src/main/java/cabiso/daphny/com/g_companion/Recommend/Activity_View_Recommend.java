@@ -51,7 +51,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
 
     private ViewPager imgview;
     private ViewImagesRecommendationPagerAdapter diyImagesViewPagerAdapter;
-    private TextView diy_name, diy_materials, diy_procedures, diy_sell, php, user_owner_name,txtBy,
+    private TextView diy_name, diy_materials, diy_procedures, diy_sell, php, user_owner_name, txtBy,
             owner_add, owner_cn;
     private Button button_sell, contact_seller, create_promo;
     private String user_name, userID;
@@ -105,7 +105,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
 
         loggedInName = FirebaseDatabase.getInstance().getReference().child("userdata");
 
-        if(mMediaController == null){
+        if (mMediaController == null) {
             mMediaController = new MediaController(this);
         }
 
@@ -113,7 +113,7 @@ public class Activity_View_Recommend extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
-                loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                loggedInUserName += " " + dataSnapshot.child("l_name").getValue(String.class);
             }
 
             @Override
@@ -123,35 +123,35 @@ public class Activity_View_Recommend extends AppCompatActivity {
         });
 
         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("diy_by_tags");
-            myRef.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        myRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    final DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
-                    final DIYSell info = dataSnapshot.getValue(DIYSell.class);
+                final DIYnames diYnames = dataSnapshot.getValue(DIYnames.class);
+                final DIYSell info = dataSnapshot.getValue(DIYSell.class);
 
-                    if(get_name.equals(diYnames.getDiyName())){
-                        if(diYnames.getIdentity().equalsIgnoreCase("selling")) {
+                if (get_name.equals(diYnames.getDiyName())) {
+                    if (diYnames.getIdentity().equalsIgnoreCase("selling")) {
 
-                            diy_sell.setVisibility(View.VISIBLE);
-                            user_owner_name.setVisibility(View.VISIBLE);
-                            button_sell.setVisibility(View.VISIBLE);
-                            contact_seller.setVisibility(View.VISIBLE);
-                            //create_promo.setVisibility(View.VISIBLE);
-                            php.setVisibility(View.VISIBLE);
-                            owner_add.setVisibility(View.VISIBLE);
-                            owner_cn.setVisibility(View.VISIBLE);
-                            selling_price.setVisibility(View.VISIBLE);
-                            seller_info.setVisibility(View.VISIBLE);
-                            diy_name.setText(info.diyName);
-                            diyVideo.setVisibility(View.INVISIBLE);
-                            cardViewVid.setVisibility(View.INVISIBLE);
+                        diy_sell.setVisibility(View.VISIBLE);
+                        user_owner_name.setVisibility(View.VISIBLE);
+                        button_sell.setVisibility(View.VISIBLE);
+                        contact_seller.setVisibility(View.VISIBLE);
+                        //create_promo.setVisibility(View.VISIBLE);
+                        php.setVisibility(View.VISIBLE);
+                        owner_add.setVisibility(View.VISIBLE);
+                        owner_cn.setVisibility(View.VISIBLE);
+                        selling_price.setVisibility(View.VISIBLE);
+                        seller_info.setVisibility(View.VISIBLE);
+                        diy_name.setText(info.diyName);
+                        diyVideo.setVisibility(View.INVISIBLE);
+                        cardViewVid.setVisibility(View.INVISIBLE);
 
 
-                            user_data.addChildEventListener(new ChildEventListener() {
-                                @Override
-                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                    User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                        user_data.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
 //                                    if(diYnames.getUser_id().equals(user_profile.getUserID())){
 //                                        user_name = user_profile.getF_name()+" "+user_profile.getL_name();
 //                                        user_owner_name.setText(user_name);
@@ -160,379 +160,361 @@ public class Activity_View_Recommend extends AppCompatActivity {
 //                                        user_name = user_profile.getF_name()+" "+user_profile.getL_name();
 //                                        user_owner_name.setText(user_name);
 //                                    }
-                                    if(diYnames.user_id.equals(user_profile.getUserID())){
-                                        user_name = user_profile.getF_name()+" "+user_profile.getL_name();
-                                        user_owner_name.setText(user_name);
-                                        owner_cn.setText(user_profile.getContact_no());
-                                        owner_add.setText(user_profile.getAddress());
+                                if (diYnames.user_id.equals(user_profile.getUserID())) {
+                                    user_name = user_profile.getF_name() + " " + user_profile.getL_name();
+                                    user_owner_name.setText(user_name);
+                                    owner_cn.setText(user_profile.getContact_no());
+                                    owner_add.setText(user_profile.getAddress());
+                                }
+                            }
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                        String message_price = "";
+                        List<String> message_Price = new ArrayList<String>();
+                        for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
+                            int price = postSnapshot.child("selling_price").getValue(int.class);
+                            message_price += price;
+                            message_Price.add(message_price);
+                        }
+
+
+                        final String finalMessage_price = message_price;
+                        button_sell.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                myRef.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        final Float float_this = Float.valueOf(0);
+
+                                        DIYSell productInfo = dataSnapshot.getValue(DIYSell.class);
+                                        final String diyName = productInfo.getDiyName();
+                                        final String diyUrl = productInfo.getDiyUrl();
+                                        final String user_id = productInfo.getUser_id();
+                                        final String productID = productInfo.getProductID();
+                                        final String status = productInfo.getIdentity();
+
+                                        if (!userID.equals(info.getUser_id())) {
+                                            Log.e("pending_not_same", String.valueOf("" + userID != info.getUser_id()));
+                                            Log.e("userid", String.valueOf("" + userID));
+                                            Log.e("info_userid", String.valueOf("" + info.getUser_id()));
+
+                                            pending_reference.orderByChild("productID").equalTo(info.productID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                                    if (dataSnapshot.exists()) {
+                                                        Log.e("same_prodID", "" + dataSnapshot.exists());
+                                                        Log.e("same_data", "" + dataSnapshot);
+
+                                                        final Dialog dialog = new Dialog(Activity_View_Recommend.this);
+                                                        dialog.setContentView(R.layout.exist_dialog);
+                                                        TextView text = (TextView) dialog.findViewById(R.id.et_email);
+                                                        text.setText("DIY already added to pending list!");
+                                                        ImageView image = (ImageView) dialog.findViewById(R.id.exist_dialog_imageview);
+                                                        image.setImageResource(R.drawable.exist);
+
+                                                        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOKI);
+                                                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View v) {
+                                                                Intent intent = new Intent(Activity_View_Recommend.this, Recommendation.class);
+                                                                startActivity(intent);
+                                                            }
+                                                        });
+                                                        dialog.show();
+                                                    } else {
+
+                                                        DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this,
+                                                                float_this, "seller", " ", 0, 0, 0);
+                                                        String upload_info = pending_reference.push().getKey();
+                                                        pending_reference.child(upload_info).setValue(info);
+                                                        pending_reference.child(upload_info).child("DIY Price").setValue(finalMessage_price);
+
+                                                        final Dialog dialog = new Dialog(Activity_View_Recommend.this);
+                                                        dialog.setContentView(R.layout.done_dialog);
+                                                        TextView text = (TextView) dialog.findViewById(R.id.text);
+                                                        text.setText("DIY added to pending list!");
+                                                        ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
+                                                        image.setImageResource(R.drawable.done);
+
+                                                        Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
+                                                        dialogButton.setOnClickListener(new View.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(View v) {
+                                                                Intent intent = new Intent(Activity_View_Recommend.this, Recommendation.class);
+                                                                startActivity(intent);
+                                                            }
+                                                        });
+                                                        dialog.show();
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+                                                }
+                                            });
+                                        } else if (userID.equals(info.getUser_id())) {
+                                            Log.e("pending_same", String.valueOf("" + userID.equals(info.getUser_id())));
+                                            Toast.makeText(Activity_View_Recommend.this, "It's your own product!", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
-                                }
 
-                                @Override
-                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                }
-
-                                @Override
-                                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                }
-
-                                @Override
-                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-
-
-                            String message_price="";
-                            List<String> message_Price = new ArrayList<String>();
-                            for (DataSnapshot postSnapshot : dataSnapshot.child("DIY Price").getChildren()) {
-                                int price= postSnapshot.child("selling_price").getValue(int.class);
-                                message_price += price;
-                                message_Price.add(message_price);
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                    }
+                                });
                             }
+                        });
 
+                        contact_seller.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(Activity_View_Recommend.this, "Contact Seller button clicked!", Toast.LENGTH_SHORT).show();
 
-                            final String finalMessage_price = message_price;
-                            button_sell.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    myRef.addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(DataSnapshot dataSnapshot) {
-                                            final Float float_this = Float.valueOf(0);
+                                final Dialog myDialog = new Dialog(context);
+                                myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                myDialog.setContentView(R.layout.contact_seller);
+                                myDialog.setCancelable(false);
+                                Button chat = (Button) myDialog.findViewById(R.id.chat);
+                                Button call = (Button) myDialog.findViewById(R.id.call);
+                                Button sms = (Button) myDialog.findViewById(R.id.sms);
+                                TextView cancel = (TextView) myDialog.findViewById(R.id.cancel);
 
-                                            DIYSell productInfo = dataSnapshot.getValue(DIYSell.class);
-                                            final String diyName = productInfo.getDiyName();
-                                            final String diyUrl = productInfo.getDiyUrl();
-                                            final String user_id = productInfo.getUser_id();
-                                            final String productID = productInfo.getProductID();
-                                            final String status = productInfo.getIdentity();
+                                chat.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Toast.makeText(Activity_View_Recommend.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                call.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Toast.makeText(Activity_View_Recommend.this, "Call button clicked!", Toast.LENGTH_SHORT).show();
 
-                                            if (!userID.equals(info.getUser_id())) {
-                                                Log.e("pending_not_same", String.valueOf("" + userID != info.getUser_id()));
-                                                Log.e("userid", String.valueOf("" + userID));
-                                                Log.e("info_userid", String.valueOf("" + info.getUser_id()));
+                                        String phone = owner_cn.getText().toString();
+                                        Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
+                                                "tel", phone, null));
+                                        startActivity(phoneIntent);
+                                    }
+                                });
+                                sms.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Toast.makeText(Activity_View_Recommend.this, "SMS button clicked!", Toast.LENGTH_SHORT).show();
 
-                                                pending_reference.orderByChild("productID").equalTo(info.productID).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                                        if (dataSnapshot.exists()) {
-                                                            Log.e("same_prodID", "" + dataSnapshot.exists());
-                                                            Log.e("same_data", "" + dataSnapshot);
+                                        String phone = owner_cn.getText().toString();
+                                        Intent smsMsgAppVar = new Intent(Intent.ACTION_VIEW);
+                                        smsMsgAppVar.setData(Uri.parse("sms:" + phone));
+                                        smsMsgAppVar.putExtra("sms_body", "Hi, Good Day! ");
+                                        startActivity(smsMsgAppVar);
+                                    }
+                                });
+                                cancel.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        myDialog.cancel();
+                                    }
+                                });
 
-                                                            final Dialog dialog = new Dialog(Activity_View_Recommend.this);
-                                                            dialog.setContentView(R.layout.exist_dialog);
-                                                            TextView text = (TextView) dialog.findViewById(R.id.et_email);
-                                                            text.setText("DIY already added to pending list!");
-                                                            ImageView image = (ImageView) dialog.findViewById(R.id.exist_dialog_imageview);
-                                                            image.setImageResource(R.drawable.exist);
-
-                                                            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOKI);
-                                                            dialogButton.setOnClickListener(new View.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(View v) {
-                                                                    Intent intent = new Intent(Activity_View_Recommend.this, Recommendation.class);
-                                                                    startActivity(intent);
-                                                                }
-                                                            });
-                                                            dialog.show();
-                                                        } else {
-
-                                                            DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, status, float_this,
-                                                                    float_this, "seller", " ", 0,0 ,0);
-                                                            String upload_info = pending_reference.push().getKey();
-                                                            pending_reference.child(upload_info).setValue(info);
-                                                            pending_reference.child(upload_info).child("DIY Price").setValue(finalMessage_price);
-
-                                                            final Dialog dialog = new Dialog(Activity_View_Recommend.this);
-                                                            dialog.setContentView(R.layout.done_dialog);
-                                                            TextView text = (TextView) dialog.findViewById(R.id.text);
-                                                            text.setText("DIY added to pending list!");
-                                                            ImageView image = (ImageView) dialog.findViewById(R.id.dialog_imageview);
-                                                            image.setImageResource(R.drawable.done);
-
-                                                            Button dialogButton = (Button) dialog.findViewById(R.id.dialogButtonOK);
-                                                            dialogButton.setOnClickListener(new View.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(View v) {
-                                                                    Intent intent = new Intent(Activity_View_Recommend.this, Recommendation.class);
-                                                                    startActivity(intent);
-                                                                }
-                                                            });
-                                                            dialog.show();
-                                                        }
-                                                    }
-                                                    @Override
-                                                    public void onCancelled(DatabaseError databaseError) {
-                                                    }
-                                                });
-                                            }else if(userID.equals(info.getUser_id())) {
-                                                Log.e("pending_same", String.valueOf("" + userID.equals(info.getUser_id())));
-                                                Toast.makeText(Activity_View_Recommend.this, "It's your own product!", Toast.LENGTH_SHORT).show();
-                                            }
+                                myDialog.show();
+                                myDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                                    @Override
+                                    public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                                        if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                            dialog.cancel();
+                                            return true;
                                         }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError databaseError) {
-                                        }
-                                    });
-                                }
-                            });
-
-                            contact_seller.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Toast.makeText(Activity_View_Recommend.this, "Contact Seller button clicked!", Toast.LENGTH_SHORT).show();
-
-                                    final Dialog myDialog = new Dialog(context);
-                                    myDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    myDialog.setContentView(R.layout.contact_seller);
-                                    myDialog.setCancelable(false);
-                                    Button chat = (Button) myDialog.findViewById(R.id.chat);
-                                    Button call = (Button) myDialog.findViewById(R.id.call);
-                                    Button sms = (Button) myDialog.findViewById(R.id.sms);
-                                    TextView cancel = (TextView) myDialog.findViewById(R.id.cancel);
-
-                                    chat.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Toast.makeText(Activity_View_Recommend.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                    call.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Toast.makeText(Activity_View_Recommend.this, "Call button clicked!", Toast.LENGTH_SHORT).show();
-
-                                            String phone = owner_cn.getText().toString();
-                                            Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
-                                                    "tel", phone, null));
-                                            startActivity(phoneIntent);
-                                        }
-                                    });
-                                    sms.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Toast.makeText(Activity_View_Recommend.this, "SMS button clicked!", Toast.LENGTH_SHORT).show();
-
-                                            String phone = owner_cn.getText().toString();
-                                            Intent smsMsgAppVar = new Intent(Intent.ACTION_VIEW);
-                                            smsMsgAppVar.setData(Uri.parse("sms:" +  phone));
-                                            smsMsgAppVar.putExtra("sms_body", "Hi, Good Day! ");
-                                            startActivity(smsMsgAppVar);
-                                        }
-                                    });
-                                    cancel.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            myDialog.cancel();
-                                        }
-                                    });
-
-                                    myDialog.show();
-                                    myDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-                                        @Override
-                                        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                                            if (keyCode == KeyEvent.KEYCODE_BACK) {
-                                                dialog.cancel();
-                                                return true;
-                                            }
-                                            return false;
-                                        }
-                                    });
-                                }
-                            });
+                                        return false;
+                                    }
+                                });
+                            }
+                        });
 
 
-                            String messageMat = "";
-                            List<String> messageMaterials = new ArrayList<String>();
-                            //int count = 1;
-                            for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-                                String dbMaterialName = postSnapshot.child("name").getValue(String.class).toLowerCase();
-                                String dbMaterialUnit = postSnapshot.child("unit").getValue(String.class);
-                                Long dbMaterialQuantity = postSnapshot.child("quantity").getValue(Long.class);
+                        String messageMat = "";
+                        List<String> messageMaterials = new ArrayList<String>();
+                        //int count = 1;
+                        for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
+                            String dbMaterialName = postSnapshot.child("name").getValue(String.class).toLowerCase();
+                            String dbMaterialUnit = postSnapshot.child("unit").getValue(String.class);
+                            Long dbMaterialQuantity = postSnapshot.child("quantity").getValue(Long.class);
 //                                messageMat += "\n" + dbMaterialName + " = " + dbMaterialQuantity + " " + dbMaterialUnit;
-                                messageMat += "\n" + dbMaterialQuantity + " " + dbMaterialUnit+ " " +dbMaterialName;
-                                messageMaterials.add(messageMat);
-                                //count++;
-                            }
+                            messageMat += "\n" + dbMaterialQuantity + " " + dbMaterialUnit + " " + dbMaterialName;
+                            messageMaterials.add(messageMat);
+                            //count++;
+                        }
 
-                            String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
-                            Log.e("splits", "" + splits);
+                        String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
+                        Log.e("splits", "" + splits);
 
-                            String messageProd = "";
-                            List<String> messageProcedure = new ArrayList<String>();
-                            for (int i = 0; i < splits.length; i++) {
-                                Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
-                                String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
-                                messageProd += "\n" + message;
-                                messageProcedure.add(message);
-                                Log.d("messageProd", messageProd);
-                            }
+                        String messageProd = "";
+                        List<String> messageProcedure = new ArrayList<String>();
+                        for (int i = 0; i < splits.length; i++) {
+                            Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
+                            String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
+                            messageProd += "\n" + message;
+                            messageProcedure.add(message);
+                            Log.d("messageProd", messageProd);
+                        }
 
-                            diy_materials.setText(messageMat);
+                        diy_materials.setText(messageMat);
 //                            tv_procedures.setText("NOT APPLICABLE! BUY THE ITEM FIRST OR ASK PERMISSION TO THE OWNER!");
-                            diy_procedures.setText(messageProd);
-                            diy_procedures.setTextColor(Color.BLACK);
-                            diy_sell.setText(message_price);
+                        diy_procedures.setText(messageProd);
+                        diy_procedures.setTextColor(Color.BLACK);
+                        diy_sell.setText(message_price);
 
-                            if (diYnames.diyUrl != null) {
-                                imgview = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
-                                diyImagesViewPagerAdapter = new ViewImagesRecommendationPagerAdapter(getBaseContext(), diYnames.diyUrl);
-                                imgview.setAdapter(diyImagesViewPagerAdapter);
+                        if (diYnames.diyUrl != null) {
+                            imgview = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
+                            diyImagesViewPagerAdapter = new ViewImagesRecommendationPagerAdapter(getBaseContext(), diYnames.diyUrl);
+                            imgview.setAdapter(diyImagesViewPagerAdapter);
+                        }
+
+
+                    } else if (diYnames.getIdentity().equalsIgnoreCase("community")) {
+
+                        diy_sell.setVisibility(View.INVISIBLE);
+                        button_sell.setVisibility(View.INVISIBLE);
+                        contact_seller.setVisibility(View.INVISIBLE);
+                        //create_promo.setVisibility(View.INVISIBLE);
+                        php.setVisibility(View.INVISIBLE);
+                        owner_add.setVisibility(View.INVISIBLE);
+                        owner_cn.setVisibility(View.INVISIBLE);
+                        selling_price.setVisibility(View.INVISIBLE);
+                        seller_info.setVisibility(View.INVISIBLE);
+                        user_owner_name.setVisibility(View.VISIBLE);
+                        txtBy.setVisibility(View.VISIBLE);
+                        diy_name.setText(diYnames.diyName);
+
+                        user_data.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
+                                if (diYnames.getUser_id().equals(user_profile.getUserID())) {
+                                    user_name = user_profile.getF_name() + " " + user_profile.getL_name();
+                                    user_owner_name.setText(user_name);
+                                    Log.e("user_name", "" + user_name);
+                                } else if (diYnames.user_id.equals(user_profile.getUserID())) {
+                                    user_name = user_profile.getF_name() + " " + user_profile.getL_name();
+                                    user_owner_name.setText(user_name);
+                                }
                             }
 
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        if (dataSnapshot.hasChild("diyVideo")) {
+
+                            diyVideo.setMediaController(mMediaController);
+                            selectedVideo = Uri.parse(diYnames.getDiyVideo());
+                            diyVideo.setVideoURI(selectedVideo);
+                            mMediaController.setAnchorView(diyVideo);
+                            Log.e("videoURL", diYnames.getDiyVideo());
+
+                        } else {
+                            //way vid ang uban kay optional raman mo add ug vid sa DIY
+                            diyVideo.setVisibility(View.INVISIBLE);
+                            cardViewVid.setVisibility(View.INVISIBLE);
 
                         }
-                        else if(diYnames.getIdentity().equalsIgnoreCase("community")) {
 
-                            diy_sell.setVisibility(View.INVISIBLE);
-                            button_sell.setVisibility(View.INVISIBLE);
-                            contact_seller.setVisibility(View.INVISIBLE);
-                            //create_promo.setVisibility(View.INVISIBLE);
-                            php.setVisibility(View.INVISIBLE);
-                            owner_add.setVisibility(View.INVISIBLE);
-                            owner_cn.setVisibility(View.INVISIBLE);
-                            selling_price.setVisibility(View.INVISIBLE);
-                            seller_info.setVisibility(View.INVISIBLE);
-                            user_owner_name.setVisibility(View.VISIBLE);
-                            txtBy.setVisibility(View.VISIBLE);
-                            diy_name.setText(diYnames.diyName);
-
-                            user_data.addChildEventListener(new ChildEventListener() {
-                                @Override
-                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                    User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                                    if(diYnames.getUser_id().equals(user_profile.getUserID())){
-                                        user_name = user_profile.getF_name()+" "+user_profile.getL_name();
-                                        user_owner_name.setText(user_name);
-                                        Log.e("user_name", "" + user_name);
-                                    }else if(diYnames.user_id.equals(user_profile.getUserID())){
-                                        user_name = user_profile.getF_name()+" "+user_profile.getL_name();
-                                        user_owner_name.setText(user_name);
-                                    }
-                                }
-
-                                @Override
-                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                                }
-
-                                @Override
-                                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                }
-
-                                @Override
-                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
-
-                            if(dataSnapshot.hasChild("diyVideo")){
-
-                                diyVideo.setMediaController(mMediaController);
-                                selectedVideo = Uri.parse(diYnames.getDiyVideo());
-                                diyVideo.setVideoURI(selectedVideo);
-                                mMediaController.setAnchorView(diyVideo);
-                                Log.e("videoURL", diYnames.getDiyVideo());
-
-                            }else{
-                                //way vid ang uban kay optional raman mo add ug vid sa DIY
-                                diyVideo.setVisibility(View.INVISIBLE);
-                                cardViewVid.setVisibility(View.INVISIBLE);
-
-                            }
-
-
-                            String messageMat = "";
-                            List<String> messageMaterials = new ArrayList<String>();
-                            //int count = 1;
-                            for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-                                String dbMaterialName = postSnapshot.child("name").getValue(String.class).toLowerCase();
-                                String dbMaterialUnit = postSnapshot.child("unit").getValue(String.class);
-                                Long dbMaterialQuantity = postSnapshot.child("quantity").getValue(Long.class);
+                        String messageMat = "";
+                        List<String> messageMaterials = new ArrayList<String>();
+                        //int count = 1;
+                        for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
+                            String dbMaterialName = postSnapshot.child("name").getValue(String.class).toLowerCase();
+                            String dbMaterialUnit = postSnapshot.child("unit").getValue(String.class);
+                            Long dbMaterialQuantity = postSnapshot.child("quantity").getValue(Long.class);
 //                                messageMat += "\n" + dbMaterialName + " = " + dbMaterialQuantity + " " + dbMaterialUnit;
-                                messageMat += "\n" + dbMaterialQuantity + " " + dbMaterialUnit+ " "+ dbMaterialName;
-                                messageMaterials.add(messageMat);
-                                //count++;
-                            }
+                            messageMat += "\n" + dbMaterialQuantity + " " + dbMaterialUnit + " " + dbMaterialName;
+                            messageMaterials.add(messageMat);
+                            //count++;
+                        }
 
-                            String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
-                            Log.e("splits", "" + splits);
+                        String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
+                        Log.e("splits", "" + splits);
 
-//                            String messageMat = "";
-//                            List<String> messageMaterials = new ArrayList<String>();
-//                            int count = 1;
-//                            for (DataSnapshot postSnapshot : dataSnapshot.child("materials").getChildren()) {
-//                                DataSnapshot dbMaterialNode = postSnapshot;
-//                                String dbMaterialName = dbMaterialNode.child("name").getValue(String.class).toLowerCase();
-//                                String dbMaterialUnit = dbMaterialNode.child("unit").getValue(String.class);
-//                                long dbMaterialQuantity = dbMaterialNode.child("quantity").getValue(Long.class);
-//                                messageMat = dbMaterialQuantity + " " + dbMaterialUnit + " " + dbMaterialName;
-//                                messageMaterials.add(messageMat);
-//                                count++;
-//                            }
-//
-//                            String[] splits = dataSnapshot.child("procedures").getValue().toString().split(",");
-//                            Log.e("splits", "" + splits);
+                        String messageProd = "";
+                        List<String> messageProcedure = new ArrayList<String>();
+                        for (int i = 0; i < splits.length; i++) {
+                            Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
+                            String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
+                            messageProd += "\n" + message;
+                            messageProcedure.add(message);
 
-                            String messageProd = "";
-                            List<String> messageProcedure = new ArrayList<String>();
-                            for (int i = 0; i < splits.length; i++) {
-                                Log.d("splitVal", splits[i].substring(5, splits[i].length() - 1));
-                                String message = i + 1 + ". " + splits[i].substring(5, splits[i].length() - 1).replaceAll("\\}", "").replaceAll("=", "");
-                                messageProd += "\n" + message;
-                                messageProcedure.add(message);
+                            Log.d("messageProd", messageProd);
+                        }
+                        diy_materials.setText(messageMat);
+                        diy_procedures.setText(messageProd);
 
-                                Log.d("messageProd", messageProd);
-                            }
-                            diy_materials.setText(messageMat);
-                            diy_procedures.setText(messageProd);
-
-                            if (diYnames.diyUrl != null) {
-                                imgview = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
-                                diyImagesViewPagerAdapter = new ViewImagesRecommendationPagerAdapter(getBaseContext(), diYnames.diyUrl);
-                                imgview.setAdapter(diyImagesViewPagerAdapter);
-                            }
+                        if (diYnames.diyUrl != null) {
+                            imgview = (ViewPager) findViewById(R.id.diyImagesViewPagers_sell);
+                            diyImagesViewPagerAdapter = new ViewImagesRecommendationPagerAdapter(getBaseContext(), diYnames.diyUrl);
+                            imgview.setAdapter(diyImagesViewPagerAdapter);
                         }
                     }
                 }
+            }
 
 
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                }
+            }
 
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                }
+            }
 
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
+            }
+        });
     }
 
     private class ViewImagesRecommendationPagerAdapter extends PagerAdapter {

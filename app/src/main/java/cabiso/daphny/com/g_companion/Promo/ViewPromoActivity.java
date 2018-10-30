@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import cabiso.daphny.com.g_companion.Bidding.ToBidProduct;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatActivity;
 import cabiso.daphny.com.g_companion.MainActivity;
 import cabiso.daphny.com.g_companion.Model.DIYSell;
@@ -42,10 +43,11 @@ import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.PushNotification;
 import cabiso.daphny.com.g_companion.R;
+import cabiso.daphny.com.g_companion.ViewRelatedDIYS;
 
 public class ViewPromoActivity extends AppCompatActivity {
 
-    private TextView viewPromoName, viewOrigPromoPrice,viewNewPromoPrice, buyCounts, freeItems, freeItemName, tvSellerName, tvExpiration, buyText, gettText, promo_qty;
+    private TextView viewPromoName, viewOrigPromoPrice, viewNewPromoPrice, buyCounts, freeItems, freeItemName, tvSellerName, tvExpiration, buyText, gettText, promo_qty;
     private ImageView buyThisImageView, freeImageView, freeIcon, soldOutItem;
     private DatabaseReference promoReference, userData, diyByTagsReference, pending_reference, loggedInName, diyByTagsUpdate;
     private DatabaseReference expirationReference, identityReferenceWholesale;
@@ -64,6 +66,7 @@ public class ViewPromoActivity extends AppCompatActivity {
     private ArrayList<String> statusKey = new ArrayList<>();
     private DatabaseReference user_reference;
     private User_Profile relOwner;
+    private Button bid_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +95,7 @@ public class ViewPromoActivity extends AppCompatActivity {
         gettText = (TextView) findViewById(R.id.gettText);
         promo_qty = (TextView) findViewById(R.id.promoQty);
         soldOutItem = (ImageView) findViewById(R.id.sold_out_sign);
+        bid_btn = (Button) findViewById(R.id.btn_bid_item);
 
         promoReference = FirebaseDatabase.getInstance().getReference().child("promo_sale");
         expirationReference = FirebaseDatabase.getInstance().getReference().child("promo_sale");
@@ -111,7 +115,7 @@ public class ViewPromoActivity extends AppCompatActivity {
 
         promoReference.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            public void onChildAdded(final DataSnapshot dataSnapshot, String s) {
                 final PromoModel promoDiys = dataSnapshot.getValue(PromoModel.class);
                 final PriceDiscountModel discountDiys = dataSnapshot.getValue(PriceDiscountModel.class);
 //                identityReferenceDiscount = FirebaseDatabase.getInstance().getReference().child(dataSnapshot.getKey());
@@ -121,9 +125,8 @@ public class ViewPromoActivity extends AppCompatActivity {
 
                 boolean isExpired = false;
 
-                if(get_name.equalsIgnoreCase(promoDiys.getPromo_diyName())){
-
-                    if(promoDiys.getStatus().equalsIgnoreCase("wholesale")){
+                if (get_name.equalsIgnoreCase(promoDiys.getPromo_diyName())) {
+                    if (promoDiys.getStatus().equalsIgnoreCase("wholesale")) {
 
                         Log.e("wholesaleDetails", promoDiys.getPromo_details() + " = " + promoDiys.getPromo_id());
                         soldOutItem.setVisibility(View.INVISIBLE);
@@ -153,7 +156,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                         });
 
                         final double promoPrice = dataSnapshot.child("promoPrice").getValue(double.class);
-                        final int promoQty = dataSnapshot.child("promoQuantity").getValue(int.class);
+                        final int promoQty = dataSnapshot.child("sellDIYqty").getValue(int.class);
                         String promoExpiry = dataSnapshot.child("promo_expiry").getValue().toString();
 
                         Double priceXBuy = promoPrice * Double.parseDouble(promoDiys.buy_counts);
@@ -161,37 +164,36 @@ public class ViewPromoActivity extends AppCompatActivity {
                         viewOrigPromoPrice.setText("Price: " + " " + promoPrice + 0 + " each");
                         viewNewPromoPrice.setText("New Price: " + " " + priceXBuy + 0);
                         viewNewPromoPrice.setTextColor(Color.RED);
-                        tvExpiration.setText("Promo expires on: " + " " + promoExpiry  + " !");
+                        tvExpiration.setText("Promo expires on: " + " " + promoExpiry + " !");
                         promo_qty.setText(promoQty + " " + "pieces left");
 
-                        if(promoQty == 0){
+                        if (promoQty == 0) {
                             soldOutItem.setVisibility(View.VISIBLE);
                         }
 
-                        try{
+                        try {
                             // check expiry
                             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
                             Date strDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(promoExpiry);
                             if (new Date().after(strDate)) {
                                 isExpired = true;
                             }
-                        } catch(ParseException e){
-                            Log.e("expiryException",e.getMessage());
+                        } catch (ParseException e) {
+                            Log.e("expiryException", e.getMessage());
                         }
-                        Log.e("CHECKEXPIRATION",isExpired+"" + " = " + viewPromoName.getText());
+                        Log.e("CHECKEXPIRATION", isExpired + "" + " = " + viewPromoName.getText());
 
 
-                        if(isExpired){
-
+                        if (isExpired) {
                             expirationReference.addChildEventListener(new ChildEventListener() {
-                                    @Override
+                                @Override
                                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                     Log.e("keysss", dataSnapshot.getKey());
 
                                     final PriceDiscountModel diyPrice = dataSnapshot.getValue(PriceDiscountModel.class);
                                     Log.e("diyPricee", diyPrice.getPromo_diyName());
 
-                                    if (get_name.equals(diyPrice.getPromo_diyName())){
+                                    if (get_name.equals(diyPrice.getPromo_diyName())) {
                                         Log.e("equalss", get_name + " = " + diyPrice.getPromo_diyName());
 
                                         statusKey.add(dataSnapshot.getKey());
@@ -270,7 +272,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                     DIYSell sellUpdate = dataSnapshot.getValue(DIYSell.class);
                                     Log.e("sellUpdate", sellUpdate.getDiyName());
 
-                                    if(get_name.equals(sellUpdate.getDiyName())){
+                                    if (get_name.equals(sellUpdate.getDiyName())) {
                                         Log.e("equalsBa", get_name + " = " + sellUpdate.getDiyName());
                                         statusKey.add(dataSnapshot.getKey());
                                         Log.e("statusKeyy", dataSnapshot.getKey());
@@ -304,7 +306,6 @@ public class ViewPromoActivity extends AppCompatActivity {
                             });
 
 
-
                             tvExpiration.setVisibility(View.INVISIBLE);
                         }
 
@@ -335,7 +336,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                 @Override
                                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                     User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                                    if(sellerID.equals(user_profile.getUserID())) {
+                                    if (sellerID.equals(user_profile.getUserID())) {
                                         user_name = user_profile.getF_name() + " " + user_profile.getL_name();
                                         Log.e("user_owner_name", user_name);
                                         sellerContactNo = user_profile.getContact_no();
@@ -371,23 +372,33 @@ public class ViewPromoActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
-                                    loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                                    loggedInUserName += " " + dataSnapshot.child("l_name").getValue(String.class);
                                     Log.e("loggedInUser", loggedInUserName);
-                                    if(sellerName.equals(loggedInUserName)){
+                                    if (sellerName.equals(loggedInUserName)) {
                                         buyPromoBtn.setVisibility(View.INVISIBLE);
                                         contactPromoSellerBtn.setVisibility(View.INVISIBLE);
-                                    }
-                                    else{
+                                    } else {
                                         buyPromoBtn.setVisibility(View.VISIBLE);
                                         contactPromoSellerBtn.setVisibility(View.VISIBLE);
                                     }
                                 }
 
 
-
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
 
+                                }
+                            });
+
+                            bid_btn.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Toast.makeText(ViewPromoActivity.this,"clicked!",Toast.LENGTH_SHORT);
+                                    Intent item = new Intent(ViewPromoActivity.this,ToBidProduct.class);
+                                    item.putExtra("itemId", dataSnapshot.getKey());
+                                    item.putExtra("sellerName", loggedInUserName);
+                                    Log.e("sellerNameBid", loggedInUserName);
+                                    startActivity(item);
                                 }
                             });
 
@@ -402,11 +413,11 @@ public class ViewPromoActivity extends AppCompatActivity {
                                             Toast.makeText(ViewPromoActivity.this, "Buy button clicked!", Toast.LENGTH_SHORT).show();
                                             final Float float_this = Float.valueOf(0);
 
-                                            for (DataSnapshot forPromoSnapshot : dataSnapshot.getChildren()){
-                                                DIYSell productInfo =  forPromoSnapshot.getValue(DIYSell.class);
+                                            for (DataSnapshot forPromoSnapshot : dataSnapshot.getChildren()) {
+                                                DIYSell productInfo = forPromoSnapshot.getValue(DIYSell.class);
                                                 Log.e("diySellInfoName", productInfo.getDiyName());
 
-                                                if(productInfo.diyName.equalsIgnoreCase(get_name)){
+                                                if (productInfo.diyName.equalsIgnoreCase(get_name)) {
 
                                                     final String diyName = productInfo.getDiyName();
                                                     final String diyUrl = productInfo.getDiyUrl();
@@ -417,7 +428,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                                     final String buyerid = userID;
 
 
-                                                    if(productID.equals(promoDiys.getPromo_id())){
+                                                    if (productID.equals(promoDiys.getPromo_id())) {
                                                         Log.e("diyProdID", productID);
                                                         Log.e("promoProdID", promoDiys.getPromo_id());
 
@@ -451,15 +462,13 @@ public class ViewPromoActivity extends AppCompatActivity {
                                                                             }
                                                                         });
                                                                         dialog.show();
-                                                                    }
-
-                                                                    else {
+                                                                    } else {
 
                                                                         int freeItemCount = Integer.parseInt(freeItems.getText().toString());
                                                                         int buyItemCount = Integer.parseInt(promoDiys.buy_counts);
 
                                                                         DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, "Pending Buy and Take Promo Item", float_this,
-                                                                                float_this, buyerid, loggedInUserName, buyItemCount,0 ,0);
+                                                                                float_this, buyerid, loggedInUserName, buyItemCount, 0, 0);
                                                                         final String upload_info = pending_reference.push().getKey();
                                                                         pending_reference.child(upload_info).setValue(info);
                                                                         pending_reference.child(upload_info).child("selling_price").setValue(promoPrice);
@@ -477,7 +486,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                                                         Log.e("userIDDD", userID);
 
                                                                         DIYSell buyer = new DIYSell(diyName, diyUrl, user_id, productID, "For Confirmation Buy and Take Promo Item", float_this,
-                                                                                float_this, buyerid, sellerName, buyItemCount,0 ,0);
+                                                                                float_this, buyerid, sellerName, buyItemCount, 0, 0);
                                                                         final String uploadBuyerInfo = pendingRefByOwner.child(upload_info).getKey();
                                                                         pendingRefByOwner.child(uploadBuyerInfo).setValue(buyer);
                                                                         pendingRefByOwner.child(uploadBuyerInfo).child("selling_price").setValue(promoPrice);
@@ -505,6 +514,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                                                         dialog.show();
                                                                     }
                                                                 }
+
                                                                 @Override
                                                                 public void onCancelled(DatabaseError databaseError) {
                                                                 }
@@ -514,6 +524,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                                 }
                                             }
                                         }
+
                                         @Override
                                         public void onCancelled(DatabaseError databaseError) {
                                         }
@@ -524,9 +535,8 @@ public class ViewPromoActivity extends AppCompatActivity {
                     }
                 }
 
-
-                if(get_name.equalsIgnoreCase(discountDiys.getPromo_diyName())){
-                    if(discountDiys.getStatus().equalsIgnoreCase("discount")){
+                if (get_name.equalsIgnoreCase(discountDiys.getPromo_diyName())) {
+                    if (discountDiys.getStatus().equalsIgnoreCase("discount")) {
                         Log.e("discountDetails", discountDiys.getPromo_details() + " = " + discountDiys.getPromo_id());
                         buyCounts.setVisibility(View.INVISIBLE);
                         freeItems.setVisibility(View.INVISIBLE);
@@ -570,24 +580,27 @@ public class ViewPromoActivity extends AppCompatActivity {
 
                         int qtyLeft = Integer.parseInt(totalDIYQty);
 
-                        if(qtyLeft == 0){
+                        if (qtyLeft == 0) {
                             soldOutItem.setVisibility(View.VISIBLE);
+                            buyPromoBtn.setVisibility(View.INVISIBLE);
+                            bid_btn.setVisibility(View.INVISIBLE);
+                            contactPromoSellerBtn.setVisibility(View.INVISIBLE);
                         }
 
-                        try{
+                        try {
                             // check expiry
                             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
                             Date strDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(promoExpiry);
                             if (new Date().after(strDate)) {
                                 isExpired = true;
                             }
-                        } catch(ParseException e){
-                            Log.e("expiryException",e.getMessage());
+                        } catch (ParseException e) {
+                            Log.e("expiryException", e.getMessage());
                         }
-                        Log.e("CHECKEXPIRATION",isExpired+"" + " = " +viewPromoName.getText());
+                        Log.e("CHECKEXPIRATION", isExpired + "" + " = " + viewPromoName.getText());
 
 
-                        if(isExpired){
+                        if (isExpired) {
 
                             expirationReference.addChildEventListener(new ChildEventListener() {
                                 @Override
@@ -597,7 +610,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                     PriceDiscountModel diyPrice = dataSnapshot.getValue(PriceDiscountModel.class);
                                     Log.e("diyPricee", diyPrice.getPromo_diyName());
 
-                                    if (get_name.equals(diyPrice.getPromo_diyName())){
+                                    if (get_name.equals(diyPrice.getPromo_diyName())) {
                                         Log.e("equalss", get_name + " = " + diyPrice.getPromo_diyName());
 
                                         statusKey.add(dataSnapshot.getKey());
@@ -642,7 +655,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                     DIYSell sellUpdate = dataSnapshot.getValue(DIYSell.class);
                                     Log.e("sellUpdate", sellUpdate.getDiyName());
 
-                                    if(get_name.equals(sellUpdate.getDiyName())){
+                                    if (get_name.equals(sellUpdate.getDiyName())) {
                                         Log.e("equalsBa", get_name + " = " + sellUpdate.getDiyName());
                                         statusKey.add(dataSnapshot.getKey());
                                         Log.e("statusKeyy", dataSnapshot.getKey());
@@ -686,17 +699,17 @@ public class ViewPromoActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 loggedInUserName = dataSnapshot.child("f_name").getValue(String.class);
-                                loggedInUserName +=" "+dataSnapshot.child("l_name").getValue(String.class);
+                                loggedInUserName += " " + dataSnapshot.child("l_name").getValue(String.class);
 
-                                if(sellerName.equals(loggedInUserName)){
+                                if (sellerName.equals(loggedInUserName)) {
                                     buyPromoBtn.setVisibility(View.INVISIBLE);
                                     contactPromoSellerBtn.setVisibility(View.INVISIBLE);
-                                }
-                                else{
+                                } else {
                                     buyPromoBtn.setVisibility(View.VISIBLE);
                                     contactPromoSellerBtn.setVisibility(View.VISIBLE);
                                 }
                             }
+
                             @Override
                             public void onCancelled(DatabaseError databaseError) {
 
@@ -707,7 +720,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                 User_Profile user_profile = dataSnapshot.getValue(User_Profile.class);
-                                if(discountSellerID.equals(user_profile.getUserID())) {
+                                if (discountSellerID.equals(user_profile.getUserID())) {
                                     user_name = user_profile.getF_name() + " " + user_profile.getL_name();
                                     Log.e("user_owner_name", user_name);
                                     sellerContactNo = user_profile.getContact_no();
@@ -739,6 +752,18 @@ public class ViewPromoActivity extends AppCompatActivity {
                             }
                         });
 
+                        bid_btn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Toast.makeText(ViewPromoActivity.this,"clicked!",Toast.LENGTH_SHORT);
+                                Intent item = new Intent(ViewPromoActivity.this,ToBidProduct.class);
+                                item.putExtra("itemId", dataSnapshot.child("promo_id").getValue(String.class));
+                                item.putExtra("sellerName", loggedInUserName);
+                                Log.e("sellerNameBid", loggedInUserName);
+                                startActivity(item);
+                            }
+                        });
+
                         buyPromoBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -749,11 +774,11 @@ public class ViewPromoActivity extends AppCompatActivity {
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         final Float float_this = Float.valueOf(0);
 
-                                        for (DataSnapshot forPromoSnapshot : dataSnapshot.getChildren()){
-                                            DIYSell productInfo =  forPromoSnapshot.getValue(DIYSell.class);
+                                        for (DataSnapshot forPromoSnapshot : dataSnapshot.getChildren()) {
+                                            DIYSell productInfo = forPromoSnapshot.getValue(DIYSell.class);
                                             Log.e("diySellInfoName", productInfo.getDiyName());
 
-                                            if(productInfo.diyName.equalsIgnoreCase(get_name)){
+                                            if (productInfo.diyName.equalsIgnoreCase(get_name)) {
 
                                                 final String diyName = productInfo.getDiyName();
                                                 final String diyUrl = productInfo.getDiyUrl();
@@ -764,7 +789,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                                 final String buyerid = userID;
 
 
-                                                if(productID.equals(discountDiys.getPromo_id())){
+                                                if (productID.equals(discountDiys.getPromo_id())) {
                                                     Log.e("diyProdID", productID);
                                                     Log.e("promoProdID", discountDiys.getPromo_id());
 
@@ -797,9 +822,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                                                         }
                                                                     });
                                                                     dialog.show();
-                                                                }
-
-                                                                else {
+                                                                } else {
 
                                                                     final Dialog buyDialog = new Dialog(ViewPromoActivity.this);
                                                                     buyDialog.setContentView(R.layout.buying_quantity);
@@ -820,18 +843,18 @@ public class ViewPromoActivity extends AppCompatActivity {
 
                                                                             int buyItemCount = Integer.parseInt(totalDIYQty);
 
-                                                                            if(inputQty.equals(" ")){
-                                                                                inputQty="0";
+                                                                            if (inputQty.equals(" ")) {
+                                                                                inputQty = "0";
                                                                             }
 
                                                                             if (inputQty.isEmpty()) {
                                                                                 Log.e("EmptyQty", "Please enter the quantity of item you want to buy.");
-                                                                                Toast.makeText(ViewPromoActivity.this, "Please enter how many DIY " + diyName  + " you want to buy." + "", Toast.LENGTH_SHORT).show();
-                                                                            } else if(Integer.valueOf(inputQty) > buyItemCount){
+                                                                                Toast.makeText(ViewPromoActivity.this, "Please enter how many DIY " + diyName + " you want to buy." + "", Toast.LENGTH_SHORT).show();
+                                                                            } else if (Integer.valueOf(inputQty) > buyItemCount) {
                                                                                 Log.e("NotEnoughQty", "NotEnoughQty");
                                                                                 Toast.makeText(ViewPromoActivity.this, "Not enough total DIY quantity. We only have " + " " + buyItemCount
                                                                                         + " DIY " + diyName + ".", Toast.LENGTH_LONG).show();
-                                                                            } else{
+                                                                            } else {
 
                                                                                 String promoPrice = discountDiys.getPromo_newPrice();
                                                                                 String discount = discountDiys.getPercent_discount();
@@ -839,7 +862,7 @@ public class ViewPromoActivity extends AppCompatActivity {
 
 
                                                                                 DIYSell info = new DIYSell(diyName, diyUrl, user_id, productID, "Pending Discount Promo Item", float_this,
-                                                                                        float_this, buyerid, loggedInUserName, buyQty,0 ,0);
+                                                                                        float_this, buyerid, loggedInUserName, buyQty, 0, 0);
 
                                                                                 final String upload_info = pending_reference.push().getKey();
                                                                                 pending_reference.child(upload_info).setValue(info);
@@ -857,7 +880,7 @@ public class ViewPromoActivity extends AppCompatActivity {
                                                                                 Log.e("userIDDD", userID);
 
                                                                                 DIYSell buyer = new DIYSell(diyName, diyUrl, user_id, productID, "For Confirmation Discount Promo Item", float_this,
-                                                                                        float_this, buyerid, sellerName, buyQty,0 ,0);
+                                                                                        float_this, buyerid, sellerName, buyQty, 0, 0);
                                                                                 final String uploadBuyerInfo = pendingRefByOwner.child(upload_info).getKey();
                                                                                 pendingRefByOwner.child(uploadBuyerInfo).setValue(buyer);
                                                                                 pendingRefByOwner.child(uploadBuyerInfo).child("selling_price").setValue(Double.parseDouble(promoPrice));
@@ -885,7 +908,6 @@ public class ViewPromoActivity extends AppCompatActivity {
                                                                                 dialog.show();
 
 
-
                                                                             }
 
 
@@ -895,6 +917,7 @@ public class ViewPromoActivity extends AppCompatActivity {
 
                                                                 }
                                                             }
+
                                                             @Override
                                                             public void onCancelled(DatabaseError databaseError) {
                                                             }
@@ -917,12 +940,8 @@ public class ViewPromoActivity extends AppCompatActivity {
                         });
 
 
-
-
                     }
                 }
-
-
 
 
             }
@@ -949,8 +968,6 @@ public class ViewPromoActivity extends AppCompatActivity {
         });
 
 
-
-
         contactPromoSellerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -970,8 +987,8 @@ public class ViewPromoActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         Toast.makeText(ViewPromoActivity.this, "Chat button clicked!", Toast.LENGTH_SHORT).show();
 
-                        Log.e("CHAAAAATTTTTT",relOwner.getEmail());
-                        ChatActivity.startActivity(getApplicationContext(),relOwner.getEmail(),relOwner.getUserID(), relOwner.getAccess_token());
+                        Log.e("CHAAAAATTTTTT", relOwner.getEmail());
+                        ChatActivity.startActivity(getApplicationContext(), relOwner.getEmail(), relOwner.getUserID(), relOwner.getAccess_token());
 
                     }
                 });
@@ -993,7 +1010,7 @@ public class ViewPromoActivity extends AppCompatActivity {
 
                         String phone = sellerContactNo;
                         Intent smsMsgAppVar = new Intent(Intent.ACTION_VIEW);
-                        smsMsgAppVar.setData(Uri.parse("sms:" +  phone));
+                        smsMsgAppVar.setData(Uri.parse("sms:" + phone));
                         smsMsgAppVar.putExtra("sms_body", "Hi, Good Day! ");
                         startActivity(smsMsgAppVar);
                     }
@@ -1018,8 +1035,6 @@ public class ViewPromoActivity extends AppCompatActivity {
                 });
             }
         });
-
-
 
 
     }

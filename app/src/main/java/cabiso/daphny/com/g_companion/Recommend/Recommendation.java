@@ -21,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,7 @@ import cabiso.daphny.com.g_companion.Model.CommunityItem;
 import cabiso.daphny.com.g_companion.Model.DBMaterial;
 import cabiso.daphny.com.g_companion.Model.DIYnames;
 import cabiso.daphny.com.g_companion.Model.QuantityItem;
+import cabiso.daphny.com.g_companion.Model.User_Profile;
 import cabiso.daphny.com.g_companion.R;
 
 
@@ -50,6 +52,7 @@ public class Recommendation extends AppCompatActivity {
     private ArrayList<DBMaterial> dbMaterials;
 
     private ListView lv;
+    private View messageView;
     private ImageView loadview;
     private RecommendDIYAdapter adapter;
     private ProgressDialog progressDialog;
@@ -73,6 +76,7 @@ public class Recommendation extends AppCompatActivity {
     List<String> arrayList_qty = new ArrayList<String>();
     List<String> check = new ArrayList<String>();
 
+    private User_Profile user;
     Boolean addDiy;
 
     public Recommendation() {
@@ -90,6 +94,7 @@ public class Recommendation extends AppCompatActivity {
         userID = mFirebaseUser.getUid();
         database = FirebaseDatabase.getInstance();
         lv = (ListView) findViewById(R.id.recommendLvView);
+        messageView = (View) findViewById(R.id.showMessageView);
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Processing...");
@@ -102,9 +107,22 @@ public class Recommendation extends AppCompatActivity {
         adapter = new RecommendDIYAdapter(Recommendation.this, R.layout.pending_layout, diyList);
         lv.setAdapter(adapter);
 
-        Recommend recommend = new Recommend(dbMaterials,userID);
-        recommend.setRecommendedItems(diyList).setAdapter(adapter);
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("userdata");
+        userRef.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User_Profile.class);
 
+                Recommend recommend = new Recommend(dbMaterials,user);
+                recommend.setRecommendedItems(diyList).setAdapter(adapter).setListView(lv).setMessageView(messageView);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

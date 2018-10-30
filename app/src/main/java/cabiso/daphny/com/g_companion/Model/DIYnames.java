@@ -29,6 +29,7 @@ public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serial
     public int totalMaterialItems;
     public int incomeCount;
     public int expenseCount;
+    public double recommendationScore;
     private static DIYnames diyInfo = null;
     private ArrayList<DBMaterial> dbMaterials = new ArrayList<>();
     private String diyVideo;
@@ -48,13 +49,23 @@ public class DIYnames extends SellingDIY implements Comparable<DIYnames>, Serial
         this.matchScoreRate = 0;
         this.totalMaterialItems = 0;
         this.diyVideo = diyVideo;
+        this.recommendationScore = 0;
     }
 
     public DIYnames() {
+        this.recommendationScore = 0;
         this.databaseReference = FirebaseDatabase.getInstance().getReference("diy_by_tags");
     }
 
     public DIYnames(String s, String s1) {
+    }
+
+    public void setRecommendationScore(double score){
+        this.recommendationScore = score;
+    }
+
+    public double getRecommendationScore(){
+        return this.recommendationScore;
     }
 
     public void copy(DIYnames diYnames){

@@ -69,7 +69,7 @@ public class PromoFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.promo_sale_fragment, container, false);
+        final View view = inflater.inflate(R.layout.promo_sale_fragment, container, false);
 
         moreDiysPromoBtn = (Button) view.findViewById(R.id.viewMorePromoDiysBtn);
 
@@ -94,6 +94,7 @@ public class PromoFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 promoModel = dataSnapshot.getValue(PromoModel.class);
+
 
 //                promoModel.setPromo_diyName(dataSnapshot.child("promo_diyName").getValue(String.class));
 //                promoModel.setPromo_image(dataSnapshot.child("promo_image").getValue(String.class));

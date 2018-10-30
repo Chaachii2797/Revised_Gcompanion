@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -39,6 +42,7 @@ public class ViewMorePromoDIYSAdapter extends RecyclerView.Adapter<ViewMorePromo
     private String userID;
     int GRID = 0;
     String itemDetails;
+    private DatabaseReference promoReference;
 
 
     public ViewMorePromoDIYSAdapter(Context context, List<PromoModel> diyPromoList, int GRID){
@@ -58,7 +62,7 @@ public class ViewMorePromoDIYSAdapter extends RecyclerView.Adapter<ViewMorePromo
 
 
     @Override
-    public void onBindViewHolder(ViewMorePromoDIYSAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewMorePromoDIYSAdapter.ViewHolder holder, final int position) {
         int itemRef = position;
 
         mFirebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -66,6 +70,42 @@ public class ViewMorePromoDIYSAdapter extends RecyclerView.Adapter<ViewMorePromo
 
         userdata_reference = FirebaseDatabase.getInstance().getReference().child("userdata");
         diyPromoReference = FirebaseDatabase.getInstance().getReference().child("promo_sale");
+
+        promoReference = FirebaseDatabase.getInstance().getReference().child("promo_sale");
+        promoReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if(dataSnapshot.child("promo_id").getValue(String.class).equals(diyPromoList.get(position).getPromo_id())){
+                    int sold_qty = dataSnapshot.child("sellDIYqty").getValue(int.class);
+                    Log.e("soldQuatity",sold_qty+"");
+                    if(sold_qty == 0 ){
+                        holder.tvSoldOutImage.setVisibility(View.VISIBLE);
+                    }else{
+                        holder.tvSoldOutImage.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         PromoModel item = diyPromoList.get(position);
         itemDetails = "Free: ";
@@ -97,6 +137,7 @@ public class ViewMorePromoDIYSAdapter extends RecyclerView.Adapter<ViewMorePromo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
+        ImageView tvSoldOutImage;
         ImageView tvPromoMainImage;
         TextView tvPromoProductName;
         TextView tvPromoDetail;
@@ -106,6 +147,8 @@ public class ViewMorePromoDIYSAdapter extends RecyclerView.Adapter<ViewMorePromo
             tvPromoProductName = (TextView) itemView.findViewById(R.id.promo_item_name);
             tvPromoDetail = (TextView) itemView.findViewById(R.id.promo_item_name_owner);
             tvPromoMainImage = (ImageView) itemView.findViewById(R.id.promo_main_item_image);
+            tvSoldOutImage = (ImageView) itemView.findViewById(R.id.img_sold_out);
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

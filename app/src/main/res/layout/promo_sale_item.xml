@@ -29,6 +29,12 @@
             android:background="@drawable/r_gradient_black_overlay"
             android:padding="12dp">
 
+            <ImageView
+                android:id="@+id/img_sold_out"
+                android:layout_width="wrap_content"
+                android:layout_height="180dp"
+                app:srcCompat="@drawable/sold_out" />
+
             <LinearLayout
                 android:id="@+id/promo_details"
                 android:layout_width="wrap_content"

@@ -12,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -55,11 +58,46 @@ public class PromoCardListAdapter extends RecyclerView.Adapter<PromoCardListAdap
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         promoReference = FirebaseDatabase.getInstance().getReference().child("promo_sale");
+        promoReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if(dataSnapshot.child("promo_id").getValue(String.class).equals(mPromoModels.get(position).getPromo_id())){
+                    int sold_qty = dataSnapshot.child("sellDIYqty").getValue(int.class);
+                    Log.e("soldQuatity",sold_qty+"");
+                    if(sold_qty == 0 ){
+                        holder.sold_out_view.setVisibility(View.VISIBLE);
+                    }else{
+                        holder.sold_out_view.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         final PromoModel item = mPromoModels.get(position);
 
         //Buy this get this promo
         itemDetails = "Free: ";
+
         if (item != null) {
             holder.tvPromoProductName.setText("Buy (" + item.getBuy_counts() + ") " + item.getPromo_diyName());
             ArrayList<DIYnames> freeItems = item.getFreeItemList();
@@ -92,13 +130,14 @@ public class PromoCardListAdapter extends RecyclerView.Adapter<PromoCardListAdap
         ImageView tvPromoMainImage;
         TextView tvPromoProductName;
         TextView tvPromoDetail;
+        ImageView sold_out_view;
 
         ViewHolder(final View itemView) {
             super(itemView);
             tvPromoProductName = (TextView) itemView.findViewById(R.id.promo_item_name);
             tvPromoDetail = (TextView) itemView.findViewById(R.id.promo_item_name_owner);
             tvPromoMainImage = (ImageView) itemView.findViewById(R.id.promo_main_item_image);
-
+            sold_out_view = (ImageView) itemView.findViewById(R.id.img_sold_out);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

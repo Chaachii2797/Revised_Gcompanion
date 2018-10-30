@@ -1,6 +1,7 @@
 package cabiso.daphny.com.g_companion;
 
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -24,6 +25,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +43,7 @@ import cabiso.daphny.com.g_companion.BuyingProcess.PurchasedActivity;
 import cabiso.daphny.com.g_companion.BuyingProcess.Sold_Activity;
 import cabiso.daphny.com.g_companion.GCAdmin.AdminActivity;
 import cabiso.daphny.com.g_companion.GCAdmin.LogsOfAllTransactionsActivity;
+import cabiso.daphny.com.g_companion.Geofencing.LocationService;
 import cabiso.daphny.com.g_companion.InstantMessaging.ui.activities.ChatSplashActivity;
 import cabiso.daphny.com.g_companion.SalesReport.SalesReport;
 import cabiso.daphny.com.g_companion.MainDIYS.DiysFragment;
@@ -116,6 +120,8 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         toggle.syncState();
+
+
         drawer.setDrawerListener(toggle);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -160,6 +166,27 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+
+
+        LocationService locationService = new LocationService()
+                .setContext(getApplicationContext())
+                .setActivity(this)
+                .start().onChange(new LocationService.LocationServiceCallback() {
+                    @Override
+                    public void onChange(Location location) {
+                        Location other = new Location("location1");
+                        other.setLatitude(10.296573);
+                        other.setLongitude(123.893688);
+                        user_reference.child(userID).child("current_lng").setValue(location.getLongitude());
+                        user_reference.child(userID).child("current_lat").setValue(location.getLatitude());
+                        Log.e("LocationCheck","LAT: "+location.getLatitude());
+                        Log.e("LocationCheck","LNG: "+location.getLongitude());
+                        Log.e("LocationDIstance","LNG: "+location.distanceTo(other));
+
+                        //distanceTo returns in meters
+                    }
+                });
 
 //        //Notification
 //        user_reference.addChildEventListener(new ChildEventListener() {

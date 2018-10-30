@@ -1,5 +1,7 @@
 package cabiso.daphny.com.g_companion.Model;
 
+import android.location.Location;
+
 /**
  * Created by cicctuser on 4/8/2018.
  */
@@ -19,9 +21,13 @@ public class User_Profile {
     String role;
     String report_status;
     String access_token;
+    double current_lng;
+    double current_lat;
 
 
     public User_Profile() {
+        current_lat = 0;
+        current_lng = 0;
     }
 
     public User_Profile(String address, String contact_no, String f_name, String l_name, String email, String password,
@@ -39,6 +45,18 @@ public class User_Profile {
         this.userRating = userRating;
         this.role = role;
         this.report_status = report_status;
+        this.current_lat = 0;
+        this.current_lng = 0;
+    }
+
+    public Location getLocation(){
+        if(current_lng > 0 && current_lat > 0) {
+            Location mylocation = new Location("myLocation");
+            mylocation.setLatitude(current_lat);
+            mylocation.setLongitude(current_lng);
+            return mylocation;
+        }
+        return null;
     }
 
 

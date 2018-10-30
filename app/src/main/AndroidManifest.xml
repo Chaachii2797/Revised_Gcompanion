@@ -74,7 +74,7 @@
         <activity android:name=".Calendar" />
         <activity android:name=".Wishlists" />
         <activity android:name=".InventoryReport.InventoryReport" />
-        <activity android:name=".SalesReport.SalesReport"/>
+        <activity android:name=".SalesReport.SalesReport" />
         <activity android:name=".About" />
         <activity android:name=".CaptureDIY" />
         <activity android:name=".MyProfileActivity" />
@@ -151,6 +151,9 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+        <service
+            android:name=".Geofencing$FetchAddressIntentService"
+            android:exported="false" />
 
         <activity android:name=".Promo.ListPromoActivity" />
         <activity android:name=".Promo.ViewPromoActivity" />
@@ -167,6 +170,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBL2z1Wo8n8AgRcPsbMdHlaUSg6N21g4VI" />
 
+        <activity android:name=".BuyingProcess.PurchasedItem"></activity>
     </application>
 
 </manifest>
